@@ -1,32 +1,30 @@
 import R from "ramda"
 import {Observable} from "rxjs/Observable"
 import {Subject} from "rxjs/Subject"
+import {ReplaySubject} from "rxjs/ReplaySubject"
 
 // Import RxJS Observable functions
-import 'rxjs/add/observable/combineLatest'
-import 'rxjs/add/observable/merge'
+import "rxjs/add/observable/combineLatest"
+import "rxjs/add/observable/merge"
 
 // Import RxJS Observable methods
-import 'rxjs/add/operator/map'
-import 'rxjs/add/operator/scan'
-import 'rxjs/add/operator/distinctUntilChanged'
-import 'rxjs/add/operator/shareReplay'
+import "rxjs/add/operator/distinctUntilChanged"
+import "rxjs/add/operator/map"
+import "rxjs/add/operator/scan"
+import "rxjs/add/operator/shareReplay"
+import "rxjs/add/operator/withLatestFrom"
 
-import React, { Component } from "react"
+import React, {Component} from "react"
 
 import connect from "./connect"
 
-// Helpers
-let isOdd = (d) => d % 2
-
 // App =============================================================================================
-let stateCycle = new Subject()
+let stateCycle = new ReplaySubject(1)
 
 // INTENTS
 let intents = {
   addTodo: new Subject(),
-  // decrement: new Subject(),
-  // incrementIfOdd: new Subject(),
+  setFilter: new Subject(),
 }
 
 // ACTIONS
@@ -39,39 +37,48 @@ let actions = {
         text,
       }, state.todos), state)
     }
-  })
+  }),
+
+  setFilter: intents.setFilter.map((filter) => (state) => {
+    return R.assoc("filter", filter, state)
+  }),
 }
 
 // STATE
 let initialState = {
-  todos: [],
-  visibilityFilter: "all",
+  todos: [{
+    id: "1",
+    text: "Write a TODO",
+    completed: false,
+  }],
+  filter: "all",
 }
 
 let state = Observable.merge(
   actions.addTodo,
-  // actions.decrement
+  actions.setFilter,
 )
  .startWith(initialState)
  .scan((state, fn) => fn(state))
- .distinctUntilChanged()
- .shareReplay(1)
- .do((state) => {
+ .do(state => {
+   console.log("state spy:", state)
    stateCycle.next(state)
  })
+ .distinctUntilChanged()
+ .shareReplay(1)
 
 // Derive state IS state (not some memoized shit), so you can
 // depend on it actions (unlike so in Redux!)
 let visibleTodos = state.map((state) => {
-  switch (state.visibilityFilter) {
-    case 'all':
+  switch (state.filter) {
+    case "all":
       return state.todos
-    case 'completed':
+    case "completed":
       return state.todos.filter(t => t.completed)
-    case 'active':
+    case "active":
       return state.todos.filter(t => !t.completed)
     default:
-      throw Error('Unknown filter: ' + filter)
+      throw Error("Unknown filter: " + filter)
   }
 })
 
@@ -85,7 +92,7 @@ function AddTodo(props) {
         return
       }
       intents.addTodo.next(input.value)
-      input.value = ''
+      input.value = ""
     }}>
       <input ref={node => {
         input = node
@@ -98,10 +105,10 @@ function AddTodo(props) {
 }
 
 let TodoList = connect(
-  {todos: state.pluck("todos")},
-  ({todos}) =>
+  {state: state},
+  (props) =>
     <ul>
-      {todos.map(todo =>
+      {props.state.todos.map(todo =>
         <TodoItem key={todo.id} todo={todo}/>
       )}
     </ul>

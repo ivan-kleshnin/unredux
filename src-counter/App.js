@@ -1,18 +1,19 @@
 import R from "ramda"
 import {Observable} from "rxjs/Observable"
 import {Subject} from "rxjs/Subject"
+import {ReplaySubject} from "rxjs/ReplaySubject"
 
 // Import RxJS Observable functions
-import 'rxjs/add/observable/combineLatest'
-import 'rxjs/add/observable/merge'
+import "rxjs/add/observable/combineLatest"
+import "rxjs/add/observable/merge"
 
 // Import RxJS Observable methods
-import 'rxjs/add/operator/map'
-import 'rxjs/add/operator/scan'
-import 'rxjs/add/operator/distinctUntilChanged'
-import 'rxjs/add/operator/shareReplay'
+import "rxjs/add/operator/distinctUntilChanged"
+import "rxjs/add/operator/map"
+import "rxjs/add/operator/scan"
+import "rxjs/add/operator/shareReplay"
 
-import React, { Component } from "react"
+import React, {Component} from "react"
 
 import connect from "./connect"
 
@@ -20,7 +21,7 @@ import connect from "./connect"
 let isOdd = (d) => d % 2
 
 // App =============================================================================================
-let stateCycle = new Subject()
+let stateCycle = new ReplaySubject(1)
 
 // User intents
 let intents = {
@@ -44,15 +45,16 @@ let initialState = {counter: 0}
 
 let state = Observable.merge(
   actions.increment,
-  actions.decrement
+  actions.decrement,
 )
  .startWith(initialState)
  .scan((state, fn) => fn(state))
- .distinctUntilChanged()
- .shareReplay(1)
- .do((state) => {
+ .do(state => {
+   console.log("state spy:", state)
    stateCycle.next(state)
  })
+ .distinctUntilChanged()
+ .shareReplay(1)
 
 export default connect(
   {counter: state.pluck("counter")},

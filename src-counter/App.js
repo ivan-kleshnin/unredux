@@ -54,33 +54,12 @@ let state = Observable.merge(
    stateCycle.next(state)
  })
 
-function connect(streamsToProps, Component) {
-  class Container extends Component {
-    state = {} // will be replaced with initialState on componentWillMount (before first render)
-
-    componentWillMount() {
-      let props = combineLatestObj(streamsToProps)
-      this.$ = props.subscribe((data) => {
-        this.setState(data)
-      })
-    }
-
-    componentWillUnmount() {
-      this.$.unsubscribe()
-    }
-
-    render() {
-      return React.createElement(Component, R.merge(this.props, this.state), this.props.children)
-    }
-  }
-  return Container
-}
-
-class App extends Component {
-  render() {
-    return <div className={this.props.className}>
+export default connect(
+  {counter: state.pluck("counter")},
+  (props) =>
+    <div className={props.className}>
       <p>
-        Clicked: <span id="value">{this.props.counter}</span> times
+        Clicked: <span id="value">{props.counter}</span> times
         <button id="increment" onClick={() => intents.increment.next()}>+</button>
         <button id="decrement" onClick={() => intents.decrement.next()}>-</button>
         <button id="incrementIfOdd" onClick={() => intents.incrementIfOdd.next()}>Increment if odd</button>
@@ -89,7 +68,4 @@ class App extends Component {
         }}>Increment async</button>
       </p>
     </div>
-  }
-}
-
-export default connect({counter: state.pluck("counter")}, App)
+)

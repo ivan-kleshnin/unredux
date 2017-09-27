@@ -97,15 +97,15 @@ function AddTodo(props) {
   </div>
 }
 
-function _TodoList(props) {
-  return <ul>
-    {props.todos.map(todo =>
-      <TodoItem key={todo.id} todo={todo}/>
-    )}
-  </ul>
-}
-
-let TodoList = connect({todos: state.pluck("todos")}, _TodoList)
+let TodoList = connect(
+  {todos: state.pluck("todos")},
+  ({todos}) =>
+    <ul>
+      {todos.map(todo =>
+        <TodoItem key={todo.id} todo={todo}/>
+      )}
+    </ul>
+)
 
 function TodoItem(props) {
   return <li
@@ -117,32 +117,26 @@ function TodoItem(props) {
 }
 
 function Footer(props) {
-  return <div>== Footer ==</div>
-  //   <p>
-  //   Show:
-  //   {" "}
-  //   <a onClick={() => intents.setFilter.next("all")}>
-  //     All
-  //   </a>
-  //   {", "}
-  //   <a onClick={() => intents.setFilter.next("active")}>
-  //     Active
-  //   </a>
-  //   {", "}
-  //   <a onClick={() => intents.setFilter.next("completed")}>
-  //     Completed
-  //   </a>
-  // </p>
+  return <p>
+    Show:
+    {" "}
+    <a onClick={() => intents.setFilter.next("all")}>
+      All
+    </a>
+    {", "}
+    <a onClick={() => intents.setFilter.next("active")}>
+      Active
+    </a>
+    {", "}
+    <a onClick={() => intents.setFilter.next("completed")}>
+      Completed
+    </a>
+  </p>
 }
 
-class App extends Component {
-  render() {
-    return <div>
-      <AddTodo/>
-      <TodoList/>
-      <Footer/>
-    </div>
-  }
-}
-
-export default connect({counter: state.map(s => s.counter)}, App)
+export default (props) =>
+  <div>
+    <AddTodo/>
+    <TodoList/>
+    <Footer/>
+  </div>

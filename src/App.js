@@ -64,7 +64,7 @@ function connect(streamsToProps, Component) {
 
 class App extends Component {
   render() {
-    return <div>
+    return <div className={this.props.className}>
       <p>
         Clicked: <span id="value">{this.props.counter}</span> times
         <button id="increment" onClick={() => intents.increment.next()}>+</button>

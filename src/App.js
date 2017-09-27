@@ -16,29 +16,43 @@ import React, { Component } from "react"
 
 import combineLatestObj from "./combineLatestObj"
 
+// Helpers
+let isOdd = (d) => d % 2
+
+// App =============================================================================================
+let stateCycle = new Subject()
+
+// User intents
 let intents = {
   increment: new Subject(),
   decrement: new Subject(),
   incrementIfOdd: new Subject(),
 }
 
+// State actions
 let actions = {
-  increment: intents.increment.map(() => (state) => R.assoc("counter", state.counter + 1, state)),
-  decrement: intents.decrement.map(() => (state) => R.assoc("counter", state.counter - 1, state)),
-  incrementIfOdd: intents.incrementIfOdd.map(() => (state) => {
-    return R.assoc("counter", state.counter % 2 ? state.counter + 1 : state.counter, state)
-  }),
+  increment: Observable.merge(
+    intents.increment,
+    stateCycle.sample(intents.incrementIfOdd).filter(state => isOdd(state.counter))
+  )
+    .map(() => (state) => R.assoc("counter", state.counter + 1, state)),
+  decrement: intents.decrement
+    .map(() => (state) => R.assoc("counter", state.counter - 1, state)),
 }
 
 let initialState = {counter: 0}
 
 let state = Observable.merge(
-  actions.increment, actions.decrement, actions.incrementIfOdd,
+  actions.increment,
+  actions.decrement
 )
  .startWith(initialState)
  .scan((state, fn) => fn(state))
  .distinctUntilChanged()
  .shareReplay(1)
+ .do((state) => {
+   stateCycle.next(state)
+ })
 
 function connect(streamsToProps, Component) {
   class Container extends Component {

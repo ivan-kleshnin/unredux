@@ -10,7 +10,7 @@ RxJS seems to be dead. No activity on repo.
 
 ### 2. Lenses
 
-```
+```js
 let actions = {
   increment: intents.increment.map(() => (state) => R.assoc("counter", state.counter + 1, state)),
   decrement: intents.decrement.map(() => (state) => R.assoc("counter", state.counter + 1, state)),
@@ -24,7 +24,7 @@ raw approach is too noisy. Solutions:
 
 * wrap Ramda lenses (too verbose by default)?
 * use Partial.Lenses (too big)?
-* use Rx-Utils (what about MostJS)
+* use Rx-Utils (what about MostJS)?
 
 ### 3. Connection
 

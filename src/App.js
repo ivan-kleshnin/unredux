@@ -14,7 +14,7 @@ import 'rxjs/add/operator/shareReplay'
 
 import React, { Component } from "react"
 
-import combineLatestObj from "./combineLatestObj"
+import connect from "./connect"
 
 // Helpers
 let isOdd = (d) => d % 2
@@ -22,29 +22,35 @@ let isOdd = (d) => d % 2
 // App =============================================================================================
 let stateCycle = new Subject()
 
-// User intents
+// INTENTS
 let intents = {
-  increment: new Subject(),
-  decrement: new Subject(),
-  incrementIfOdd: new Subject(),
+  addTodo: new Subject(),
+  // decrement: new Subject(),
+  // incrementIfOdd: new Subject(),
 }
 
-// State actions
+// ACTIONS
 let actions = {
-  increment: Observable.merge(
-    intents.increment,
-    stateCycle.sample(intents.incrementIfOdd).filter(state => isOdd(state.counter))
-  )
-    .map(() => (state) => R.assoc("counter", state.counter + 1, state)),
-  decrement: intents.decrement
-    .map(() => (state) => R.assoc("counter", state.counter - 1, state)),
+  addTodo: intents.addTodo.withLatestFrom(stateCycle, (text, state) => {
+    return (state) => {
+      return R.assoc("todos", R.append({
+        id: state.todos.length + 1, // try to do that at Redux :)
+        completed: false,
+        text,
+      }, state.todos), state)
+    }
+  })
 }
 
-let initialState = {counter: 0}
+// STATE
+let initialState = {
+  todos: [],
+  visibilityFilter: "all",
+}
 
 let state = Observable.merge(
-  actions.increment,
-  actions.decrement
+  actions.addTodo,
+  // actions.decrement
 )
  .startWith(initialState)
  .scan((state, fn) => fn(state))
@@ -54,40 +60,87 @@ let state = Observable.merge(
    stateCycle.next(state)
  })
 
-function connect(streamsToProps, Component) {
-  class Container extends Component {
-    state = {} // will be replaced with initialState on componentWillMount (before first render)
-
-    componentWillMount() {
-      let props = combineLatestObj(streamsToProps)
-      this.$ = props.subscribe((data) => {
-        this.setState(data)
-      })
-    }
-
-    componentWillUnmount() {
-      this.$.unsubscribe()
-    }
-
-    render() {
-      return React.createElement(Component, R.merge(this.props, this.state), this.props.children)
-    }
+// Derive state IS state (not some memoized shit), so you can
+// depend on it actions (unlike so in Redux!)
+let visibleTodos = state.map((state) => {
+  switch (state.visibilityFilter) {
+    case 'all':
+      return state.todos
+    case 'completed':
+      return state.todos.filter(t => t.completed)
+    case 'active':
+      return state.todos.filter(t => !t.completed)
+    default:
+      throw Error('Unknown filter: ' + filter)
   }
-  return Container
+})
+
+// COMPONENTS
+function AddTodo(props) {
+  let input
+  return <div>
+    <form onSubmit={e => {
+      e.preventDefault()
+      if (!input.value.trim()) {
+        return
+      }
+      intents.addTodo.next(input.value)
+      input.value = ''
+    }}>
+      <input ref={node => {
+        input = node
+      }} />
+      <button type="submit">
+        Add Todo
+      </button>
+    </form>
+  </div>
+}
+
+function _TodoList(props) {
+  return <ul>
+    {props.todos.map(todo =>
+      <TodoItem key={todo.id} todo={todo}/>
+    )}
+  </ul>
+}
+
+let TodoList = connect({todos: state.pluck("todos")}, _TodoList)
+
+function TodoItem(props) {
+  return <li
+    onClick={() => intents.toggleTodo.next(props.todo.id)}
+    style={{textDecoration: props.todo.completed ? "line-through" : "none"}}
+  >
+    {props.todo.text}
+  </li>
+}
+
+function Footer(props) {
+  return <div>== Footer ==</div>
+  //   <p>
+  //   Show:
+  //   {" "}
+  //   <a onClick={() => intents.setFilter.next("all")}>
+  //     All
+  //   </a>
+  //   {", "}
+  //   <a onClick={() => intents.setFilter.next("active")}>
+  //     Active
+  //   </a>
+  //   {", "}
+  //   <a onClick={() => intents.setFilter.next("completed")}>
+  //     Completed
+  //   </a>
+  // </p>
 }
 
 class App extends Component {
   render() {
-    return <div className={this.props.className}>
-      <p>
-        Clicked: <span id="value">{this.props.counter}</span> times
-        <button id="increment" onClick={() => intents.increment.next()}>+</button>
-        <button id="decrement" onClick={() => intents.decrement.next()}>-</button>
-        <button id="incrementIfOdd" onClick={() => intents.incrementIfOdd.next()}>Increment if odd</button>
-        <button id="incrementAsync" onClick={() => {
-          setTimeout(() => intents.increment.next(), 500)
-        }}>Increment async</button>
-      </p>
+    return <div>
+      <AddTodo/>
+      <TodoList/>
+      <Footer/>
     </div>
   }
 }

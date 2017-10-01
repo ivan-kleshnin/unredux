@@ -1,9 +1,19 @@
 // RAMDA ===========================================================================================
-import append from "ramda/src/append"
 import assoc from "ramda/src/assoc"
+import assocPath from "ramda/src/assocPath"
+import compose from "ramda/src/compose"
+import curry from "ramda/src/curry"
+import identity from "ramda/src/identity"
+import lens from "ramda/src/lens"
+import lensIndex from "ramda/src/lensIndex"
+import lensProp from "ramda/src/lensProp"
 import merge from "ramda/src/merge"
+import over from "ramda/src/over"
+import set from "ramda/src/set"
+import sortBy from "ramda/src/sortBy"
+import view from "ramda/src/view"
 
-window.R = {append, assoc, merge}
+window.R = {assoc, assocPath, compose, curry, id: identity, identity, lens, lensIndex, lensProp, merge, over, set, sortBy, view}
 
 // RXJS ============================================================================================
 import {Observable} from "rxjs/Observable"

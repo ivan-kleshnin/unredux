@@ -77,8 +77,8 @@
 
 
 var root_1 = __webpack_require__(/*! ./util/root */ 9);
-var toSubscriber_1 = __webpack_require__(/*! ./util/toSubscriber */ 166);
-var observable_1 = __webpack_require__(/*! ./symbol/observable */ 42);
+var toSubscriber_1 = __webpack_require__(/*! ./util/toSubscriber */ 167);
+var observable_1 = __webpack_require__(/*! ./symbol/observable */ 43);
 /**
  * A representation of any set of values over any amount of time. This is the most basic building block
  * of RxJS.
@@ -391,7 +391,7 @@ var __extends = undefined && undefined.__extends || function (d, b) {
 var Observable_1 = __webpack_require__(/*! ./Observable */ 0);
 var Subscriber_1 = __webpack_require__(/*! ./Subscriber */ 2);
 var Subscription_1 = __webpack_require__(/*! ./Subscription */ 7);
-var ObjectUnsubscribedError_1 = __webpack_require__(/*! ./util/ObjectUnsubscribedError */ 43);
+var ObjectUnsubscribedError_1 = __webpack_require__(/*! ./util/ObjectUnsubscribedError */ 44);
 var SubjectSubscription_1 = __webpack_require__(/*! ./SubjectSubscription */ 80);
 var rxSubscriber_1 = __webpack_require__(/*! ./symbol/rxSubscriber */ 36);
 /**
@@ -548,7 +548,183 @@ exports.AnonymousSubject = AnonymousSubject;
 
 /***/ }),
 
+/***/ 100:
+/*!*********************************************!*\
+  !*** ./node_modules/rxjs/util/isPromise.js ***!
+  \*********************************************/
+/*! no static exports found */
+/*! all exports used */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+function isPromise(value) {
+    return value && typeof value.subscribe !== 'function' && typeof value.then === 'function';
+}
+exports.isPromise = isPromise;
+//# sourceMappingURL=isPromise.js.map
+
+/***/ }),
+
 /***/ 101:
+/*!*********************************************!*\
+  !*** ./node_modules/rxjs/operator/merge.js ***!
+  \*********************************************/
+/*! no static exports found */
+/*! all exports used */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var Observable_1 = __webpack_require__(/*! ../Observable */ 0);
+var ArrayObservable_1 = __webpack_require__(/*! ../observable/ArrayObservable */ 20);
+var mergeAll_1 = __webpack_require__(/*! ./mergeAll */ 45);
+var isScheduler_1 = __webpack_require__(/*! ../util/isScheduler */ 19);
+/* tslint:enable:max-line-length */
+/**
+ * Creates an output Observable which concurrently emits all values from every
+ * given input Observable.
+ *
+ * <span class="informal">Flattens multiple Observables together by blending
+ * their values into one Observable.</span>
+ *
+ * <img src="./img/merge.png" width="100%">
+ *
+ * `merge` subscribes to each given input Observable (either the source or an
+ * Observable given as argument), and simply forwards (without doing any
+ * transformation) all the values from all the input Observables to the output
+ * Observable. The output Observable only completes once all input Observables
+ * have completed. Any error delivered by an input Observable will be immediately
+ * emitted on the output Observable.
+ *
+ * @example <caption>Merge together two Observables: 1s interval and clicks</caption>
+ * var clicks = Rx.Observable.fromEvent(document, 'click');
+ * var timer = Rx.Observable.interval(1000);
+ * var clicksOrTimer = clicks.merge(timer);
+ * clicksOrTimer.subscribe(x => console.log(x));
+ *
+ * @example <caption>Merge together 3 Observables, but only 2 run concurrently</caption>
+ * var timer1 = Rx.Observable.interval(1000).take(10);
+ * var timer2 = Rx.Observable.interval(2000).take(6);
+ * var timer3 = Rx.Observable.interval(500).take(10);
+ * var concurrent = 2; // the argument
+ * var merged = timer1.merge(timer2, timer3, concurrent);
+ * merged.subscribe(x => console.log(x));
+ *
+ * @see {@link mergeAll}
+ * @see {@link mergeMap}
+ * @see {@link mergeMapTo}
+ * @see {@link mergeScan}
+ *
+ * @param {ObservableInput} other An input Observable to merge with the source
+ * Observable. More than one input Observables may be given as argument.
+ * @param {number} [concurrent=Number.POSITIVE_INFINITY] Maximum number of input
+ * Observables being subscribed to concurrently.
+ * @param {Scheduler} [scheduler=null] The IScheduler to use for managing
+ * concurrency of input Observables.
+ * @return {Observable} An Observable that emits items that are the result of
+ * every input Observable.
+ * @method merge
+ * @owner Observable
+ */
+function merge() {
+    var observables = [];
+    for (var _i = 0; _i < arguments.length; _i++) {
+        observables[_i - 0] = arguments[_i];
+    }
+    return this.lift.call(mergeStatic.apply(void 0, [this].concat(observables)));
+}
+exports.merge = merge;
+/* tslint:enable:max-line-length */
+/**
+ * Creates an output Observable which concurrently emits all values from every
+ * given input Observable.
+ *
+ * <span class="informal">Flattens multiple Observables together by blending
+ * their values into one Observable.</span>
+ *
+ * <img src="./img/merge.png" width="100%">
+ *
+ * `merge` subscribes to each given input Observable (as arguments), and simply
+ * forwards (without doing any transformation) all the values from all the input
+ * Observables to the output Observable. The output Observable only completes
+ * once all input Observables have completed. Any error delivered by an input
+ * Observable will be immediately emitted on the output Observable.
+ *
+ * @example <caption>Merge together two Observables: 1s interval and clicks</caption>
+ * var clicks = Rx.Observable.fromEvent(document, 'click');
+ * var timer = Rx.Observable.interval(1000);
+ * var clicksOrTimer = Rx.Observable.merge(clicks, timer);
+ * clicksOrTimer.subscribe(x => console.log(x));
+ *
+ * // Results in the following:
+ * // timer will emit ascending values, one every second(1000ms) to console
+ * // clicks logs MouseEvents to console everytime the "document" is clicked
+ * // Since the two streams are merged you see these happening
+ * // as they occur.
+ *
+ * @example <caption>Merge together 3 Observables, but only 2 run concurrently</caption>
+ * var timer1 = Rx.Observable.interval(1000).take(10);
+ * var timer2 = Rx.Observable.interval(2000).take(6);
+ * var timer3 = Rx.Observable.interval(500).take(10);
+ * var concurrent = 2; // the argument
+ * var merged = Rx.Observable.merge(timer1, timer2, timer3, concurrent);
+ * merged.subscribe(x => console.log(x));
+ *
+ * // Results in the following:
+ * // - First timer1 and timer2 will run concurrently
+ * // - timer1 will emit a value every 1000ms for 10 iterations
+ * // - timer2 will emit a value every 2000ms for 6 iterations
+ * // - after timer1 hits it's max iteration, timer2 will
+ * //   continue, and timer3 will start to run concurrently with timer2
+ * // - when timer2 hits it's max iteration it terminates, and
+ * //   timer3 will continue to emit a value every 500ms until it is complete
+ *
+ * @see {@link mergeAll}
+ * @see {@link mergeMap}
+ * @see {@link mergeMapTo}
+ * @see {@link mergeScan}
+ *
+ * @param {...ObservableInput} observables Input Observables to merge together.
+ * @param {number} [concurrent=Number.POSITIVE_INFINITY] Maximum number of input
+ * Observables being subscribed to concurrently.
+ * @param {Scheduler} [scheduler=null] The IScheduler to use for managing
+ * concurrency of input Observables.
+ * @return {Observable} an Observable that emits items that are the result of
+ * every input Observable.
+ * @static true
+ * @name merge
+ * @owner Observable
+ */
+function mergeStatic() {
+    var observables = [];
+    for (var _i = 0; _i < arguments.length; _i++) {
+        observables[_i - 0] = arguments[_i];
+    }
+    var concurrent = Number.POSITIVE_INFINITY;
+    var scheduler = null;
+    var last = observables[observables.length - 1];
+    if (isScheduler_1.isScheduler(last)) {
+        scheduler = observables.pop();
+        if (observables.length > 1 && typeof observables[observables.length - 1] === 'number') {
+            concurrent = observables.pop();
+        }
+    } else if (typeof last === 'number') {
+        concurrent = observables.pop();
+    }
+    if (scheduler === null && observables.length === 1 && observables[0] instanceof Observable_1.Observable) {
+        return observables[0];
+    }
+    return new ArrayObservable_1.ArrayObservable(observables, scheduler).lift(new mergeAll_1.MergeAllOperator(concurrent));
+}
+exports.mergeStatic = mergeStatic;
+//# sourceMappingURL=merge.js.map
+
+/***/ }),
+
+/***/ 103:
 /*!**********************************************!*\
   !*** ./node_modules/rxjs/scheduler/queue.js ***!
   \**********************************************/
@@ -559,8 +735,8 @@ exports.AnonymousSubject = AnonymousSubject;
 "use strict";
 
 
-var QueueAction_1 = __webpack_require__(/*! ./QueueAction */ 180);
-var QueueScheduler_1 = __webpack_require__(/*! ./QueueScheduler */ 181);
+var QueueAction_1 = __webpack_require__(/*! ./QueueAction */ 181);
+var QueueScheduler_1 = __webpack_require__(/*! ./QueueScheduler */ 182);
 /**
  *
  * Queue Scheduler
@@ -627,7 +803,7 @@ exports.queue = new QueueScheduler_1.QueueScheduler(QueueAction_1.QueueAction);
 
 /***/ }),
 
-/***/ 102:
+/***/ 104:
 /*!************************************************************!*\
   !*** ./node_modules/rxjs/operator/distinctUntilChanged.js ***!
   \************************************************************/
@@ -750,7 +926,7 @@ var DistinctUntilChangedSubscriber = function (_super) {
 
 /***/ }),
 
-/***/ 103:
+/***/ 105:
 /*!**********************************************!*\
   !*** ./node_modules/rxjs/operator/filter.js ***!
   \**********************************************/
@@ -857,7 +1033,7 @@ var FilterSubscriber = function (_super) {
 
 /***/ }),
 
-/***/ 105:
+/***/ 107:
 /*!***************************************************************!*\
   !*** ./node_modules/rxjs/observable/ConnectableObservable.js ***!
   \***************************************************************/
@@ -1040,6 +1216,55 @@ var RefCountSubscriber = function (_super) {
 
 /***/ }),
 
+/***/ 109:
+/*!************************************************************!*\
+  !*** /Users/ivankleshnin/node_modules/ramda/src/adjust.js ***!
+  \************************************************************/
+/*! no static exports found */
+/*! all exports used */
+/***/ (function(module, exports, __webpack_require__) {
+
+var _concat = __webpack_require__(/*! ./internal/_concat */ 21);
+var _curry3 = __webpack_require__(/*! ./internal/_curry3 */ 4);
+
+/**
+ * Applies a function to the value at the given index of an array, returning a
+ * new copy of the array with the element at the given index replaced with the
+ * result of the function application.
+ *
+ * @func
+ * @memberOf R
+ * @since v0.14.0
+ * @category List
+ * @sig (a -> a) -> Number -> [a] -> [a]
+ * @param {Function} fn The function to apply.
+ * @param {Number} idx The index.
+ * @param {Array|Arguments} list An array-like object whose value
+ *        at the supplied index will be replaced.
+ * @return {Array} A copy of the supplied array-like object with
+ *         the element at index `idx` replaced with the value
+ *         returned by applying `fn` to the existing element.
+ * @see R.update
+ * @example
+ *
+ *      R.adjust(R.add(10), 1, [1, 2, 3]);     //=> [1, 12, 3]
+ *      R.adjust(R.add(10))(1)([1, 2, 3]);     //=> [1, 12, 3]
+ * @symb R.adjust(f, -1, [a, b]) = [a, f(b)]
+ * @symb R.adjust(f, 0, [a, b]) = [f(a), b]
+ */
+module.exports = _curry3(function adjust(fn, idx, list) {
+  if (idx >= list.length || idx < -list.length) {
+    return list;
+  }
+  var start = idx < 0 ? list.length : 0;
+  var _idx = start + idx;
+  var _list = _concat(list);
+  _list[_idx] = fn(list[_idx]);
+  return _list;
+});
+
+/***/ }),
+
 /***/ 11:
 /*!***********************************************!*\
   !*** ./node_modules/rxjs/util/errorObject.js ***!
@@ -1054,6 +1279,161 @@ var RefCountSubscriber = function (_super) {
 
 exports.errorObject = { e: {} };
 //# sourceMappingURL=errorObject.js.map
+
+/***/ }),
+
+/***/ 110:
+/*!*********************************************************************!*\
+  !*** /Users/ivankleshnin/node_modules/ramda/src/internal/_xwrap.js ***!
+  \*********************************************************************/
+/*! no static exports found */
+/*! all exports used */
+/***/ (function(module, exports) {
+
+module.exports = function () {
+  function XWrap(fn) {
+    this.f = fn;
+  }
+  XWrap.prototype['@@transducer/init'] = function () {
+    throw new Error('init not implemented on XWrap');
+  };
+  XWrap.prototype['@@transducer/result'] = function (acc) {
+    return acc;
+  };
+  XWrap.prototype['@@transducer/step'] = function (acc, x) {
+    return this.f(acc, x);
+  };
+
+  return function _xwrap(fn) {
+    return new XWrap(fn);
+  };
+}();
+
+/***/ }),
+
+/***/ 111:
+/*!**********************************************************!*\
+  !*** /Users/ivankleshnin/node_modules/ramda/src/bind.js ***!
+  \**********************************************************/
+/*! no static exports found */
+/*! all exports used */
+/***/ (function(module, exports, __webpack_require__) {
+
+var _arity = __webpack_require__(/*! ./internal/_arity */ 23);
+var _curry2 = __webpack_require__(/*! ./internal/_curry2 */ 1);
+
+/**
+ * Creates a function that is bound to a context.
+ * Note: `R.bind` does not provide the additional argument-binding capabilities of
+ * [Function.prototype.bind](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/bind).
+ *
+ * @func
+ * @memberOf R
+ * @since v0.6.0
+ * @category Function
+ * @category Object
+ * @sig (* -> *) -> {*} -> (* -> *)
+ * @param {Function} fn The function to bind to context
+ * @param {Object} thisObj The context to bind `fn` to
+ * @return {Function} A function that will execute in the context of `thisObj`.
+ * @see R.partial
+ * @example
+ *
+ *      var log = R.bind(console.log, console);
+ *      R.pipe(R.assoc('a', 2), R.tap(log), R.assoc('a', 3))({a: 1}); //=> {a: 3}
+ *      // logs {a: 2}
+ * @symb R.bind(f, o)(a, b) = f.call(o, a, b)
+ */
+module.exports = _curry2(function bind(fn, thisObj) {
+  return _arity(fn.length, function () {
+    return fn.apply(thisObj, arguments);
+  });
+});
+
+/***/ }),
+
+/***/ 112:
+/*!***************************************************************************!*\
+  !*** /Users/ivankleshnin/node_modules/ramda/src/internal/_isArguments.js ***!
+  \***************************************************************************/
+/*! no static exports found */
+/*! all exports used */
+/***/ (function(module, exports, __webpack_require__) {
+
+var _has = __webpack_require__(/*! ./_has */ 14);
+
+module.exports = function () {
+  var toString = Object.prototype.toString;
+  return toString.call(arguments) === '[object Arguments]' ? function _isArguments(x) {
+    return toString.call(x) === '[object Arguments]';
+  } : function _isArguments(x) {
+    return _has('callee', x);
+  };
+}();
+
+/***/ }),
+
+/***/ 12:
+/*!**********************************************************************!*\
+  !*** /Users/ivankleshnin/node_modules/ramda/src/internal/_xfBase.js ***!
+  \**********************************************************************/
+/*! no static exports found */
+/*! all exports used */
+/***/ (function(module, exports) {
+
+module.exports = {
+  init: function () {
+    return this.xf['@@transducer/init']();
+  },
+  result: function (result) {
+    return this.xf['@@transducer/result'](result);
+  }
+};
+
+/***/ }),
+
+/***/ 123:
+/*!**********************************************************!*\
+  !*** /Users/ivankleshnin/node_modules/ramda/src/pipe.js ***!
+  \**********************************************************/
+/*! no static exports found */
+/*! all exports used */
+/***/ (function(module, exports, __webpack_require__) {
+
+var _arity = __webpack_require__(/*! ./internal/_arity */ 23);
+var _pipe = __webpack_require__(/*! ./internal/_pipe */ 243);
+var reduce = __webpack_require__(/*! ./reduce */ 25);
+var tail = __webpack_require__(/*! ./tail */ 89);
+
+/**
+ * Performs left-to-right function composition. The leftmost function may have
+ * any arity; the remaining functions must be unary.
+ *
+ * In some libraries this function is named `sequence`.
+ *
+ * **Note:** The result of pipe is not automatically curried.
+ *
+ * @func
+ * @memberOf R
+ * @since v0.1.0
+ * @category Function
+ * @sig (((a, b, ..., n) -> o), (o -> p), ..., (x -> y), (y -> z)) -> ((a, b, ..., n) -> z)
+ * @param {...Function} functions
+ * @return {Function}
+ * @see R.compose
+ * @example
+ *
+ *      var f = R.pipe(Math.pow, R.negate, R.inc);
+ *
+ *      f(3, 4); // -(3^4) + 1
+ * @symb R.pipe(f, g, h)(a, b) = h(g(f(a, b)))
+ */
+module.exports = function pipe() {
+  if (arguments.length === 0) {
+    throw new Error('pipe requires at least one argument');
+  }
+  return _arity(arguments[0].length, reduce(_pipe, arguments[0], tail(arguments)));
+};
 
 /***/ }),
 
@@ -1088,6 +1468,20 @@ exports.tryCatch = tryCatch;
 
 /***/ }),
 
+/***/ 14:
+/*!*******************************************************************!*\
+  !*** /Users/ivankleshnin/node_modules/ramda/src/internal/_has.js ***!
+  \*******************************************************************/
+/*! no static exports found */
+/*! all exports used */
+/***/ (function(module, exports) {
+
+module.exports = function _has(prop, obj) {
+  return Object.prototype.hasOwnProperty.call(obj, prop);
+};
+
+/***/ }),
+
 /***/ 145:
 /*!****************************************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/internal/_objectAssign.js ***!
@@ -1096,7 +1490,7 @@ exports.tryCatch = tryCatch;
 /*! all exports used */
 /***/ (function(module, exports, __webpack_require__) {
 
-var _has = __webpack_require__(/*! ./_has */ 15);
+var _has = __webpack_require__(/*! ./_has */ 14);
 
 // Based on https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Object/assign
 module.exports = function _objectAssign(target) {
@@ -1124,16 +1518,106 @@ module.exports = function _objectAssign(target) {
 /***/ }),
 
 /***/ 15:
-/*!*******************************************************************!*\
-  !*** /Users/ivankleshnin/node_modules/ramda/src/internal/_has.js ***!
-  \*******************************************************************/
+/*!************************************************************!*\
+  !*** /Users/ivankleshnin/node_modules/ramda/src/curryN.js ***!
+  \************************************************************/
 /*! no static exports found */
 /*! all exports used */
-/***/ (function(module, exports) {
+/***/ (function(module, exports, __webpack_require__) {
 
-module.exports = function _has(prop, obj) {
-  return Object.prototype.hasOwnProperty.call(obj, prop);
-};
+var _arity = __webpack_require__(/*! ./internal/_arity */ 23);
+var _curry1 = __webpack_require__(/*! ./internal/_curry1 */ 3);
+var _curry2 = __webpack_require__(/*! ./internal/_curry2 */ 1);
+var _curryN = __webpack_require__(/*! ./internal/_curryN */ 58);
+
+/**
+ * Returns a curried equivalent of the provided function, with the specified
+ * arity. The curried function has two unusual capabilities. First, its
+ * arguments needn't be provided one at a time. If `g` is `R.curryN(3, f)`, the
+ * following are equivalent:
+ *
+ *   - `g(1)(2)(3)`
+ *   - `g(1)(2, 3)`
+ *   - `g(1, 2)(3)`
+ *   - `g(1, 2, 3)`
+ *
+ * Secondly, the special placeholder value `R.__` may be used to specify
+ * "gaps", allowing partial application of any combination of arguments,
+ * regardless of their positions. If `g` is as above and `_` is `R.__`, the
+ * following are equivalent:
+ *
+ *   - `g(1, 2, 3)`
+ *   - `g(_, 2, 3)(1)`
+ *   - `g(_, _, 3)(1)(2)`
+ *   - `g(_, _, 3)(1, 2)`
+ *   - `g(_, 2)(1)(3)`
+ *   - `g(_, 2)(1, 3)`
+ *   - `g(_, 2)(_, 3)(1)`
+ *
+ * @func
+ * @memberOf R
+ * @since v0.5.0
+ * @category Function
+ * @sig Number -> (* -> a) -> (* -> a)
+ * @param {Number} length The arity for the returned function.
+ * @param {Function} fn The function to curry.
+ * @return {Function} A new, curried function.
+ * @see R.curry
+ * @example
+ *
+ *      var sumArgs = (...args) => R.sum(args);
+ *
+ *      var curriedAddFourNumbers = R.curryN(4, sumArgs);
+ *      var f = curriedAddFourNumbers(1, 2);
+ *      var g = f(3);
+ *      g(4); //=> 10
+ */
+module.exports = _curry2(function curryN(length, fn) {
+  if (length === 1) {
+    return _curry1(fn);
+  }
+  return _arity(length, _curryN(length, [], fn));
+});
+
+/***/ }),
+
+/***/ 151:
+/*!************************************************************!*\
+  !*** /Users/ivankleshnin/node_modules/ramda/src/update.js ***!
+  \************************************************************/
+/*! no static exports found */
+/*! all exports used */
+/***/ (function(module, exports, __webpack_require__) {
+
+var _curry3 = __webpack_require__(/*! ./internal/_curry3 */ 4);
+var adjust = __webpack_require__(/*! ./adjust */ 109);
+var always = __webpack_require__(/*! ./always */ 33);
+
+/**
+ * Returns a new copy of the array with the element at the provided index
+ * replaced with the given value.
+ *
+ * @func
+ * @memberOf R
+ * @since v0.14.0
+ * @category List
+ * @sig Number -> a -> [a] -> [a]
+ * @param {Number} idx The index to update.
+ * @param {*} x The value to exist at the given index of the returned array.
+ * @param {Array|Arguments} list The source array-like object to be updated.
+ * @return {Array} A copy of `list` with the value at index `idx` replaced with `x`.
+ * @see R.adjust
+ * @example
+ *
+ *      R.update(1, 11, [0, 1, 2]);     //=> [0, 11, 2]
+ *      R.update(1)(11)([0, 1, 2]);     //=> [0, 11, 2]
+ * @symb R.update(-1, a, [b, c]) = [b, a]
+ * @symb R.update(0, a, [b, c]) = [a, c]
+ * @symb R.update(1, a, [b, c]) = [b, a]
+ */
+module.exports = _curry3(function update(idx, x, list) {
+  return adjust(always(x), idx, list);
+});
 
 /***/ }),
 
@@ -1177,7 +1661,112 @@ module.exports = _curry2(function merge(l, r) {
 
 /***/ }),
 
-/***/ 166:
+/***/ 157:
+/*!**********************************************************!*\
+  !*** /Users/ivankleshnin/node_modules/ramda/src/over.js ***!
+  \**********************************************************/
+/*! no static exports found */
+/*! all exports used */
+/***/ (function(module, exports, __webpack_require__) {
+
+var _curry3 = __webpack_require__(/*! ./internal/_curry3 */ 4);
+
+/**
+ * Returns the result of "setting" the portion of the given data structure
+ * focused by the given lens to the result of applying the given function to
+ * the focused value.
+ *
+ * @func
+ * @memberOf R
+ * @since v0.16.0
+ * @category Object
+ * @typedefn Lens s a = Functor f => (a -> f a) -> s -> f s
+ * @sig Lens s a -> (a -> a) -> s -> s
+ * @param {Lens} lens
+ * @param {*} v
+ * @param {*} x
+ * @return {*}
+ * @see R.prop, R.lensIndex, R.lensProp
+ * @example
+ *
+ *      var headLens = R.lensIndex(0);
+ *
+ *      R.over(headLens, R.toUpper, ['foo', 'bar', 'baz']); //=> ['FOO', 'bar', 'baz']
+ */
+module.exports = function () {
+  // `Identity` is a functor that holds a single value, where `map` simply
+  // transforms the held value with the provided function.
+  var Identity = function (x) {
+    return { value: x, map: function (f) {
+        return Identity(f(x));
+      } };
+  };
+
+  return _curry3(function over(lens, f, x) {
+    // The value returned by the getter function is first transformed with `f`,
+    // then set as the value of an `Identity`. This is then mapped over with the
+    // setter function of the lens.
+    return lens(function (y) {
+      return Identity(f(y));
+    })(x).value;
+  });
+}();
+
+/***/ }),
+
+/***/ 165:
+/*!************************************************************!*\
+  !*** /Users/ivankleshnin/node_modules/ramda/src/sortBy.js ***!
+  \************************************************************/
+/*! no static exports found */
+/*! all exports used */
+/***/ (function(module, exports, __webpack_require__) {
+
+var _curry2 = __webpack_require__(/*! ./internal/_curry2 */ 1);
+
+/**
+ * Sorts the list according to the supplied function.
+ *
+ * @func
+ * @memberOf R
+ * @since v0.1.0
+ * @category Relation
+ * @sig Ord b => (a -> b) -> [a] -> [a]
+ * @param {Function} fn
+ * @param {Array} list The list to sort.
+ * @return {Array} A new list sorted by the keys generated by `fn`.
+ * @example
+ *
+ *      var sortByFirstItem = R.sortBy(R.prop(0));
+ *      var sortByNameCaseInsensitive = R.sortBy(R.compose(R.toLower, R.prop('name')));
+ *      var pairs = [[-1, 1], [-2, 2], [-3, 3]];
+ *      sortByFirstItem(pairs); //=> [[-3, 3], [-2, 2], [-1, 1]]
+ *      var alice = {
+ *        name: 'ALICE',
+ *        age: 101
+ *      };
+ *      var bob = {
+ *        name: 'Bob',
+ *        age: -10
+ *      };
+ *      var clara = {
+ *        name: 'clara',
+ *        age: 314.159
+ *      };
+ *      var people = [clara, bob, alice];
+ *      sortByNameCaseInsensitive(people); //=> [alice, bob, clara]
+ */
+module.exports = _curry2(function sortBy(fn, list) {
+  return Array.prototype.slice.call(list, 0).sort(function (a, b) {
+    var aa = fn(a);
+    var bb = fn(b);
+    return aa < bb ? -1 : aa > bb ? 1 : 0;
+  });
+});
+
+/***/ }),
+
+/***/ 167:
 /*!************************************************!*\
   !*** ./node_modules/rxjs/util/toSubscriber.js ***!
   \************************************************/
@@ -1210,7 +1799,7 @@ exports.toSubscriber = toSubscriber;
 
 /***/ }),
 
-/***/ 167:
+/***/ 168:
 /*!***********************************************************!*\
   !*** ./node_modules/rxjs/add/observable/combineLatest.js ***!
   \***********************************************************/
@@ -1222,13 +1811,13 @@ exports.toSubscriber = toSubscriber;
 
 
 var Observable_1 = __webpack_require__(/*! ../../Observable */ 0);
-var combineLatest_1 = __webpack_require__(/*! ../../observable/combineLatest */ 168);
+var combineLatest_1 = __webpack_require__(/*! ../../observable/combineLatest */ 169);
 Observable_1.Observable.combineLatest = combineLatest_1.combineLatest;
 //# sourceMappingURL=combineLatest.js.map
 
 /***/ }),
 
-/***/ 168:
+/***/ 169:
 /*!*******************************************************!*\
   !*** ./node_modules/rxjs/observable/combineLatest.js ***!
   \*******************************************************/
@@ -1377,7 +1966,76 @@ exports.combineLatest = combineLatest;
 
 /***/ }),
 
-/***/ 169:
+/***/ 17:
+/*!*********************************************************!*\
+  !*** /Users/ivankleshnin/node_modules/ramda/src/map.js ***!
+  \*********************************************************/
+/*! no static exports found */
+/*! all exports used */
+/***/ (function(module, exports, __webpack_require__) {
+
+var _curry2 = __webpack_require__(/*! ./internal/_curry2 */ 1);
+var _dispatchable = __webpack_require__(/*! ./internal/_dispatchable */ 8);
+var _map = __webpack_require__(/*! ./internal/_map */ 59);
+var _reduce = __webpack_require__(/*! ./internal/_reduce */ 18);
+var _xmap = __webpack_require__(/*! ./internal/_xmap */ 225);
+var curryN = __webpack_require__(/*! ./curryN */ 15);
+var keys = __webpack_require__(/*! ./keys */ 24);
+
+/**
+ * Takes a function and
+ * a [functor](https://github.com/fantasyland/fantasy-land#functor),
+ * applies the function to each of the functor's values, and returns
+ * a functor of the same shape.
+ *
+ * Ramda provides suitable `map` implementations for `Array` and `Object`,
+ * so this function may be applied to `[1, 2, 3]` or `{x: 1, y: 2, z: 3}`.
+ *
+ * Dispatches to the `map` method of the second argument, if present.
+ *
+ * Acts as a transducer if a transformer is given in list position.
+ *
+ * Also treats functions as functors and will compose them together.
+ *
+ * @func
+ * @memberOf R
+ * @since v0.1.0
+ * @category List
+ * @sig Functor f => (a -> b) -> f a -> f b
+ * @param {Function} fn The function to be called on every element of the input `list`.
+ * @param {Array} list The list to be iterated over.
+ * @return {Array} The new list.
+ * @see R.transduce, R.addIndex
+ * @example
+ *
+ *      var double = x => x * 2;
+ *
+ *      R.map(double, [1, 2, 3]); //=> [2, 4, 6]
+ *
+ *      R.map(double, {x: 1, y: 2, z: 3}); //=> {x: 2, y: 4, z: 6}
+ * @symb R.map(f, [a, b]) = [f(a), f(b)]
+ * @symb R.map(f, { x: a, y: b }) = { x: f(a), y: f(b) }
+ * @symb R.map(f, functor_o) = functor_o.map(f)
+ */
+module.exports = _curry2(_dispatchable(['map'], _xmap, function map(fn, functor) {
+  switch (Object.prototype.toString.call(functor)) {
+    case '[object Function]':
+      return curryN(functor.length, function () {
+        return fn.call(this, functor.apply(this, arguments));
+      });
+    case '[object Object]':
+      return _reduce(function (acc, key) {
+        acc[key] = fn(functor[key]);
+        return acc;
+      }, {}, keys(functor));
+    default:
+      return _map(fn, functor);
+  }
+}));
+
+/***/ }),
+
+/***/ 170:
 /*!**********************************************!*\
   !*** ./node_modules/rxjs/InnerSubscriber.js ***!
   \**********************************************/
@@ -1429,7 +2087,7 @@ exports.InnerSubscriber = InnerSubscriber;
 
 /***/ }),
 
-/***/ 172:
+/***/ 173:
 /*!***********************************************!*\
   !*** ./node_modules/rxjs/scheduler/Action.js ***!
   \***********************************************/
@@ -1491,7 +2149,7 @@ exports.Action = Action;
 
 /***/ }),
 
-/***/ 173:
+/***/ 174:
 /*!****************************************!*\
   !*** ./node_modules/rxjs/Scheduler.js ***!
   \****************************************/
@@ -1559,7 +2217,7 @@ exports.Scheduler = Scheduler;
 
 /***/ }),
 
-/***/ 174:
+/***/ 175:
 /*!***************************************************!*\
   !*** ./node_modules/rxjs/add/observable/merge.js ***!
   \***************************************************/
@@ -1571,13 +2229,13 @@ exports.Scheduler = Scheduler;
 
 
 var Observable_1 = __webpack_require__(/*! ../../Observable */ 0);
-var merge_1 = __webpack_require__(/*! ../../observable/merge */ 175);
+var merge_1 = __webpack_require__(/*! ../../observable/merge */ 176);
 Observable_1.Observable.merge = merge_1.merge;
 //# sourceMappingURL=merge.js.map
 
 /***/ }),
 
-/***/ 175:
+/***/ 176:
 /*!***********************************************!*\
   !*** ./node_modules/rxjs/observable/merge.js ***!
   \***********************************************/
@@ -1588,13 +2246,80 @@ Observable_1.Observable.merge = merge_1.merge;
 "use strict";
 
 
-var merge_1 = __webpack_require__(/*! ../operator/merge */ 99);
+var merge_1 = __webpack_require__(/*! ../operator/merge */ 101);
 exports.merge = merge_1.mergeStatic;
 //# sourceMappingURL=merge.js.map
 
 /***/ }),
 
-/***/ 180:
+/***/ 18:
+/*!**********************************************************************!*\
+  !*** /Users/ivankleshnin/node_modules/ramda/src/internal/_reduce.js ***!
+  \**********************************************************************/
+/*! no static exports found */
+/*! all exports used */
+/***/ (function(module, exports, __webpack_require__) {
+
+var _xwrap = __webpack_require__(/*! ./_xwrap */ 110);
+var bind = __webpack_require__(/*! ../bind */ 111);
+var isArrayLike = __webpack_require__(/*! ../isArrayLike */ 48);
+
+module.exports = function () {
+  function _arrayReduce(xf, acc, list) {
+    var idx = 0;
+    var len = list.length;
+    while (idx < len) {
+      acc = xf['@@transducer/step'](acc, list[idx]);
+      if (acc && acc['@@transducer/reduced']) {
+        acc = acc['@@transducer/value'];
+        break;
+      }
+      idx += 1;
+    }
+    return xf['@@transducer/result'](acc);
+  }
+
+  function _iterableReduce(xf, acc, iter) {
+    var step = iter.next();
+    while (!step.done) {
+      acc = xf['@@transducer/step'](acc, step.value);
+      if (acc && acc['@@transducer/reduced']) {
+        acc = acc['@@transducer/value'];
+        break;
+      }
+      step = iter.next();
+    }
+    return xf['@@transducer/result'](acc);
+  }
+
+  function _methodReduce(xf, acc, obj) {
+    return xf['@@transducer/result'](obj.reduce(bind(xf['@@transducer/step'], xf), acc));
+  }
+
+  var symIterator = typeof Symbol !== 'undefined' ? Symbol.iterator : '@@iterator';
+  return function _reduce(fn, acc, list) {
+    if (typeof fn === 'function') {
+      fn = _xwrap(fn);
+    }
+    if (isArrayLike(list)) {
+      return _arrayReduce(fn, acc, list);
+    }
+    if (typeof list.reduce === 'function') {
+      return _methodReduce(fn, acc, list);
+    }
+    if (list[symIterator] != null) {
+      return _iterableReduce(fn, acc, list[symIterator]());
+    }
+    if (typeof list.next === 'function') {
+      return _iterableReduce(fn, acc, list);
+    }
+    throw new TypeError('reduce: list must be array or iterable');
+  };
+}();
+
+/***/ }),
+
+/***/ 181:
 /*!****************************************************!*\
   !*** ./node_modules/rxjs/scheduler/QueueAction.js ***!
   \****************************************************/
@@ -1661,7 +2386,7 @@ exports.QueueAction = QueueAction;
 
 /***/ }),
 
-/***/ 181:
+/***/ 182:
 /*!*******************************************************!*\
   !*** ./node_modules/rxjs/scheduler/QueueScheduler.js ***!
   \*******************************************************/
@@ -1693,7 +2418,7 @@ exports.QueueScheduler = QueueScheduler;
 
 /***/ }),
 
-/***/ 184:
+/***/ 185:
 /*!****************************************************************!*\
   !*** ./node_modules/rxjs/add/operator/distinctUntilChanged.js ***!
   \****************************************************************/
@@ -1705,13 +2430,13 @@ exports.QueueScheduler = QueueScheduler;
 
 
 var Observable_1 = __webpack_require__(/*! ../../Observable */ 0);
-var distinctUntilChanged_1 = __webpack_require__(/*! ../../operator/distinctUntilChanged */ 102);
+var distinctUntilChanged_1 = __webpack_require__(/*! ../../operator/distinctUntilChanged */ 104);
 Observable_1.Observable.prototype.distinctUntilChanged = distinctUntilChanged_1.distinctUntilChanged;
 //# sourceMappingURL=distinctUntilChanged.js.map
 
 /***/ }),
 
-/***/ 185:
+/***/ 186:
 /*!**********************************************!*\
   !*** ./node_modules/rxjs/add/operator/do.js ***!
   \**********************************************/
@@ -1723,14 +2448,14 @@ Observable_1.Observable.prototype.distinctUntilChanged = distinctUntilChanged_1.
 
 
 var Observable_1 = __webpack_require__(/*! ../../Observable */ 0);
-var do_1 = __webpack_require__(/*! ../../operator/do */ 186);
+var do_1 = __webpack_require__(/*! ../../operator/do */ 187);
 Observable_1.Observable.prototype.do = do_1._do;
 Observable_1.Observable.prototype._do = do_1._do;
 //# sourceMappingURL=do.js.map
 
 /***/ }),
 
-/***/ 186:
+/***/ 187:
 /*!******************************************!*\
   !*** ./node_modules/rxjs/operator/do.js ***!
   \******************************************/
@@ -1856,7 +2581,7 @@ var DoSubscriber = function (_super) {
 
 /***/ }),
 
-/***/ 187:
+/***/ 188:
 /*!**************************************************!*\
   !*** ./node_modules/rxjs/add/operator/filter.js ***!
   \**************************************************/
@@ -1868,27 +2593,9 @@ var DoSubscriber = function (_super) {
 
 
 var Observable_1 = __webpack_require__(/*! ../../Observable */ 0);
-var filter_1 = __webpack_require__(/*! ../../operator/filter */ 103);
+var filter_1 = __webpack_require__(/*! ../../operator/filter */ 105);
 Observable_1.Observable.prototype.filter = filter_1.filter;
 //# sourceMappingURL=filter.js.map
-
-/***/ }),
-
-/***/ 189:
-/*!***********************************************!*\
-  !*** ./node_modules/rxjs/add/operator/map.js ***!
-  \***********************************************/
-/*! no static exports found */
-/*! all exports used */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var Observable_1 = __webpack_require__(/*! ../../Observable */ 0);
-var map_1 = __webpack_require__(/*! ../../operator/map */ 56);
-Observable_1.Observable.prototype.map = map_1.map;
-//# sourceMappingURL=map.js.map
 
 /***/ }),
 
@@ -1912,6 +2619,24 @@ exports.isScheduler = isScheduler;
 /***/ }),
 
 /***/ 190:
+/*!***********************************************!*\
+  !*** ./node_modules/rxjs/add/operator/map.js ***!
+  \***********************************************/
+/*! no static exports found */
+/*! all exports used */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var Observable_1 = __webpack_require__(/*! ../../Observable */ 0);
+var map_1 = __webpack_require__(/*! ../../operator/map */ 56);
+Observable_1.Observable.prototype.map = map_1.map;
+//# sourceMappingURL=map.js.map
+
+/***/ }),
+
+/***/ 191:
 /*!*************************************************!*\
   !*** ./node_modules/rxjs/add/operator/pluck.js ***!
   \*************************************************/
@@ -1923,13 +2648,13 @@ exports.isScheduler = isScheduler;
 
 
 var Observable_1 = __webpack_require__(/*! ../../Observable */ 0);
-var pluck_1 = __webpack_require__(/*! ../../operator/pluck */ 191);
+var pluck_1 = __webpack_require__(/*! ../../operator/pluck */ 192);
 Observable_1.Observable.prototype.pluck = pluck_1.pluck;
 //# sourceMappingURL=pluck.js.map
 
 /***/ }),
 
-/***/ 191:
+/***/ 192:
 /*!*********************************************!*\
   !*** ./node_modules/rxjs/operator/pluck.js ***!
   \*********************************************/
@@ -1998,7 +2723,7 @@ function plucker(props, length) {
 
 /***/ }),
 
-/***/ 193:
+/***/ 194:
 /*!**************************************************!*\
   !*** ./node_modules/rxjs/add/operator/sample.js ***!
   \**************************************************/
@@ -2010,13 +2735,13 @@ function plucker(props, length) {
 
 
 var Observable_1 = __webpack_require__(/*! ../../Observable */ 0);
-var sample_1 = __webpack_require__(/*! ../../operator/sample */ 194);
+var sample_1 = __webpack_require__(/*! ../../operator/sample */ 195);
 Observable_1.Observable.prototype.sample = sample_1.sample;
 //# sourceMappingURL=sample.js.map
 
 /***/ }),
 
-/***/ 194:
+/***/ 195:
 /*!**********************************************!*\
   !*** ./node_modules/rxjs/operator/sample.js ***!
   \**********************************************/
@@ -2120,7 +2845,7 @@ var SampleSubscriber = function (_super) {
 
 /***/ }),
 
-/***/ 195:
+/***/ 196:
 /*!************************************************!*\
   !*** ./node_modules/rxjs/add/operator/scan.js ***!
   \************************************************/
@@ -2132,13 +2857,13 @@ var SampleSubscriber = function (_super) {
 
 
 var Observable_1 = __webpack_require__(/*! ../../Observable */ 0);
-var scan_1 = __webpack_require__(/*! ../../operator/scan */ 196);
+var scan_1 = __webpack_require__(/*! ../../operator/scan */ 197);
 Observable_1.Observable.prototype.scan = scan_1.scan;
 //# sourceMappingURL=scan.js.map
 
 /***/ }),
 
-/***/ 196:
+/***/ 197:
 /*!********************************************!*\
   !*** ./node_modules/rxjs/operator/scan.js ***!
   \********************************************/
@@ -2273,7 +2998,7 @@ var ScanSubscriber = function (_super) {
 
 /***/ }),
 
-/***/ 197:
+/***/ 198:
 /*!*******************************************************!*\
   !*** ./node_modules/rxjs/add/operator/shareReplay.js ***!
   \*******************************************************/
@@ -2285,13 +3010,13 @@ var ScanSubscriber = function (_super) {
 
 
 var Observable_1 = __webpack_require__(/*! ../../Observable */ 0);
-var shareReplay_1 = __webpack_require__(/*! ../../operator/shareReplay */ 198);
+var shareReplay_1 = __webpack_require__(/*! ../../operator/shareReplay */ 199);
 Observable_1.Observable.prototype.shareReplay = shareReplay_1.shareReplay;
 //# sourceMappingURL=shareReplay.js.map
 
 /***/ }),
 
-/***/ 198:
+/***/ 199:
 /*!***************************************************!*\
   !*** ./node_modules/rxjs/operator/shareReplay.js ***!
   \***************************************************/
@@ -2303,7 +3028,7 @@ Observable_1.Observable.prototype.shareReplay = shareReplay_1.shareReplay;
 
 
 var multicast_1 = __webpack_require__(/*! ./multicast */ 30);
-var ReplaySubject_1 = __webpack_require__(/*! ../ReplaySubject */ 45);
+var ReplaySubject_1 = __webpack_require__(/*! ../ReplaySubject */ 46);
 /**
  * @method shareReplay
  * @owner Observable
@@ -2322,24 +3047,6 @@ function shareReplay(bufferSize, windowTime, scheduler) {
 exports.shareReplay = shareReplay;
 ;
 //# sourceMappingURL=shareReplay.js.map
-
-/***/ }),
-
-/***/ 199:
-/*!*****************************************************!*\
-  !*** ./node_modules/rxjs/add/operator/startWith.js ***!
-  \*****************************************************/
-/*! no static exports found */
-/*! all exports used */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var Observable_1 = __webpack_require__(/*! ../../Observable */ 0);
-var startWith_1 = __webpack_require__(/*! ../../operator/startWith */ 200);
-Observable_1.Observable.prototype.startWith = startWith_1.startWith;
-//# sourceMappingURL=startWith.js.map
 
 /***/ }),
 
@@ -2364,7 +3071,7 @@ var __extends = undefined && undefined.__extends || function (d, b) {
     }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var isFunction_1 = __webpack_require__(/*! ./util/isFunction */ 41);
+var isFunction_1 = __webpack_require__(/*! ./util/isFunction */ 42);
 var Subscription_1 = __webpack_require__(/*! ./Subscription */ 7);
 var Observer_1 = __webpack_require__(/*! ./Observer */ 79);
 var rxSubscriber_1 = __webpack_require__(/*! ./symbol/rxSubscriber */ 36);
@@ -2759,6 +3466,24 @@ exports.ArrayObservable = ArrayObservable;
 /***/ }),
 
 /***/ 200:
+/*!*****************************************************!*\
+  !*** ./node_modules/rxjs/add/operator/startWith.js ***!
+  \*****************************************************/
+/*! no static exports found */
+/*! all exports used */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var Observable_1 = __webpack_require__(/*! ../../Observable */ 0);
+var startWith_1 = __webpack_require__(/*! ../../operator/startWith */ 201);
+Observable_1.Observable.prototype.startWith = startWith_1.startWith;
+//# sourceMappingURL=startWith.js.map
+
+/***/ }),
+
+/***/ 201:
 /*!*************************************************!*\
   !*** ./node_modules/rxjs/operator/startWith.js ***!
   \*************************************************/
@@ -2811,6 +3536,168 @@ function startWith() {
 }
 exports.startWith = startWith;
 //# sourceMappingURL=startWith.js.map
+
+/***/ }),
+
+/***/ 208:
+/*!**********************************************************!*\
+  !*** ./node_modules/rxjs/add/operator/withLatestFrom.js ***!
+  \**********************************************************/
+/*! no static exports found */
+/*! all exports used */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var Observable_1 = __webpack_require__(/*! ../../Observable */ 0);
+var withLatestFrom_1 = __webpack_require__(/*! ../../operator/withLatestFrom */ 209);
+Observable_1.Observable.prototype.withLatestFrom = withLatestFrom_1.withLatestFrom;
+//# sourceMappingURL=withLatestFrom.js.map
+
+/***/ }),
+
+/***/ 209:
+/*!******************************************************!*\
+  !*** ./node_modules/rxjs/operator/withLatestFrom.js ***!
+  \******************************************************/
+/*! no static exports found */
+/*! all exports used */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var __extends = undefined && undefined.__extends || function (d, b) {
+    for (var p in b) {
+        if (b.hasOwnProperty(p)) d[p] = b[p];
+    }function __() {
+        this.constructor = d;
+    }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+};
+var OuterSubscriber_1 = __webpack_require__(/*! ../OuterSubscriber */ 5);
+var subscribeToResult_1 = __webpack_require__(/*! ../util/subscribeToResult */ 6);
+/* tslint:enable:max-line-length */
+/**
+ * Combines the source Observable with other Observables to create an Observable
+ * whose values are calculated from the latest values of each, only when the
+ * source emits.
+ *
+ * <span class="informal">Whenever the source Observable emits a value, it
+ * computes a formula using that value plus the latest values from other input
+ * Observables, then emits the output of that formula.</span>
+ *
+ * <img src="./img/withLatestFrom.png" width="100%">
+ *
+ * `withLatestFrom` combines each value from the source Observable (the
+ * instance) with the latest values from the other input Observables only when
+ * the source emits a value, optionally using a `project` function to determine
+ * the value to be emitted on the output Observable. All input Observables must
+ * emit at least one value before the output Observable will emit a value.
+ *
+ * @example <caption>On every click event, emit an array with the latest timer event plus the click event</caption>
+ * var clicks = Rx.Observable.fromEvent(document, 'click');
+ * var timer = Rx.Observable.interval(1000);
+ * var result = clicks.withLatestFrom(timer);
+ * result.subscribe(x => console.log(x));
+ *
+ * @see {@link combineLatest}
+ *
+ * @param {ObservableInput} other An input Observable to combine with the source
+ * Observable. More than one input Observables may be given as argument.
+ * @param {Function} [project] Projection function for combining values
+ * together. Receives all values in order of the Observables passed, where the
+ * first parameter is a value from the source Observable. (e.g.
+ * `a.withLatestFrom(b, c, (a1, b1, c1) => a1 + b1 + c1)`). If this is not
+ * passed, arrays will be emitted on the output Observable.
+ * @return {Observable} An Observable of projected values from the most recent
+ * values from each input Observable, or an array of the most recent values from
+ * each input Observable.
+ * @method withLatestFrom
+ * @owner Observable
+ */
+function withLatestFrom() {
+    var args = [];
+    for (var _i = 0; _i < arguments.length; _i++) {
+        args[_i - 0] = arguments[_i];
+    }
+    var project;
+    if (typeof args[args.length - 1] === 'function') {
+        project = args.pop();
+    }
+    var observables = args;
+    return this.lift(new WithLatestFromOperator(observables, project));
+}
+exports.withLatestFrom = withLatestFrom;
+var WithLatestFromOperator = function () {
+    function WithLatestFromOperator(observables, project) {
+        this.observables = observables;
+        this.project = project;
+    }
+    WithLatestFromOperator.prototype.call = function (subscriber, source) {
+        return source.subscribe(new WithLatestFromSubscriber(subscriber, this.observables, this.project));
+    };
+    return WithLatestFromOperator;
+}();
+/**
+ * We need this JSDoc comment for affecting ESDoc.
+ * @ignore
+ * @extends {Ignored}
+ */
+var WithLatestFromSubscriber = function (_super) {
+    __extends(WithLatestFromSubscriber, _super);
+    function WithLatestFromSubscriber(destination, observables, project) {
+        _super.call(this, destination);
+        this.observables = observables;
+        this.project = project;
+        this.toRespond = [];
+        var len = observables.length;
+        this.values = new Array(len);
+        for (var i = 0; i < len; i++) {
+            this.toRespond.push(i);
+        }
+        for (var i = 0; i < len; i++) {
+            var observable = observables[i];
+            this.add(subscribeToResult_1.subscribeToResult(this, observable, observable, i));
+        }
+    }
+    WithLatestFromSubscriber.prototype.notifyNext = function (outerValue, innerValue, outerIndex, innerIndex, innerSub) {
+        this.values[outerIndex] = innerValue;
+        var toRespond = this.toRespond;
+        if (toRespond.length > 0) {
+            var found = toRespond.indexOf(outerIndex);
+            if (found !== -1) {
+                toRespond.splice(found, 1);
+            }
+        }
+    };
+    WithLatestFromSubscriber.prototype.notifyComplete = function () {
+        // noop
+    };
+    WithLatestFromSubscriber.prototype._next = function (value) {
+        if (this.toRespond.length === 0) {
+            var args = [value].concat(this.values);
+            if (this.project) {
+                this._tryProject(args);
+            } else {
+                this.destination.next(args);
+            }
+        }
+    };
+    WithLatestFromSubscriber.prototype._tryProject = function (args) {
+        var result;
+        try {
+            result = this.project.apply(this, args);
+        } catch (err) {
+            this.destination.error(err);
+            return;
+        }
+        this.destination.next(result);
+    };
+    return WithLatestFromSubscriber;
+}(OuterSubscriber_1.OuterSubscriber);
+//# sourceMappingURL=withLatestFrom.js.map
 
 /***/ }),
 
@@ -2874,40 +3761,249 @@ exports.isArray = Array.isArray || function (x) {
 
 /***/ }),
 
-/***/ 227:
+/***/ 225:
+/*!********************************************************************!*\
+  !*** /Users/ivankleshnin/node_modules/ramda/src/internal/_xmap.js ***!
+  \********************************************************************/
+/*! no static exports found */
+/*! all exports used */
+/***/ (function(module, exports, __webpack_require__) {
+
+var _curry2 = __webpack_require__(/*! ./_curry2 */ 1);
+var _xfBase = __webpack_require__(/*! ./_xfBase */ 12);
+
+module.exports = function () {
+  function XMap(f, xf) {
+    this.xf = xf;
+    this.f = f;
+  }
+  XMap.prototype['@@transducer/init'] = _xfBase.init;
+  XMap.prototype['@@transducer/result'] = _xfBase.result;
+  XMap.prototype['@@transducer/step'] = function (result, input) {
+    return this.xf['@@transducer/step'](result, this.f(input));
+  };
+
+  return _curry2(function _xmap(f, xf) {
+    return new XMap(f, xf);
+  });
+}();
+
+/***/ }),
+
+/***/ 23:
+/*!*********************************************************************!*\
+  !*** /Users/ivankleshnin/node_modules/ramda/src/internal/_arity.js ***!
+  \*********************************************************************/
+/*! no static exports found */
+/*! all exports used */
+/***/ (function(module, exports) {
+
+module.exports = function _arity(n, fn) {
+  /* eslint-disable no-unused-vars */
+  switch (n) {
+    case 0:
+      return function () {
+        return fn.apply(this, arguments);
+      };
+    case 1:
+      return function (a0) {
+        return fn.apply(this, arguments);
+      };
+    case 2:
+      return function (a0, a1) {
+        return fn.apply(this, arguments);
+      };
+    case 3:
+      return function (a0, a1, a2) {
+        return fn.apply(this, arguments);
+      };
+    case 4:
+      return function (a0, a1, a2, a3) {
+        return fn.apply(this, arguments);
+      };
+    case 5:
+      return function (a0, a1, a2, a3, a4) {
+        return fn.apply(this, arguments);
+      };
+    case 6:
+      return function (a0, a1, a2, a3, a4, a5) {
+        return fn.apply(this, arguments);
+      };
+    case 7:
+      return function (a0, a1, a2, a3, a4, a5, a6) {
+        return fn.apply(this, arguments);
+      };
+    case 8:
+      return function (a0, a1, a2, a3, a4, a5, a6, a7) {
+        return fn.apply(this, arguments);
+      };
+    case 9:
+      return function (a0, a1, a2, a3, a4, a5, a6, a7, a8) {
+        return fn.apply(this, arguments);
+      };
+    case 10:
+      return function (a0, a1, a2, a3, a4, a5, a6, a7, a8, a9) {
+        return fn.apply(this, arguments);
+      };
+    default:
+      throw new Error('First argument to _arity must be a non-negative integer no greater than ten');
+  }
+};
+
+/***/ }),
+
+/***/ 24:
+/*!**********************************************************!*\
+  !*** /Users/ivankleshnin/node_modules/ramda/src/keys.js ***!
+  \**********************************************************/
+/*! no static exports found */
+/*! all exports used */
+/***/ (function(module, exports, __webpack_require__) {
+
+var _curry1 = __webpack_require__(/*! ./internal/_curry1 */ 3);
+var _has = __webpack_require__(/*! ./internal/_has */ 14);
+var _isArguments = __webpack_require__(/*! ./internal/_isArguments */ 112);
+
+/**
+ * Returns a list containing the names of all the enumerable own properties of
+ * the supplied object.
+ * Note that the order of the output array is not guaranteed to be consistent
+ * across different JS platforms.
+ *
+ * @func
+ * @memberOf R
+ * @since v0.1.0
+ * @category Object
+ * @sig {k: v} -> [k]
+ * @param {Object} obj The object to extract properties from
+ * @return {Array} An array of the object's own properties.
+ * @example
+ *
+ *      R.keys({a: 1, b: 2, c: 3}); //=> ['a', 'b', 'c']
+ */
+module.exports = function () {
+  // cover IE < 9 keys issues
+  var hasEnumBug = !{ toString: null }.propertyIsEnumerable('toString');
+  var nonEnumerableProps = ['constructor', 'valueOf', 'isPrototypeOf', 'toString', 'propertyIsEnumerable', 'hasOwnProperty', 'toLocaleString'];
+  // Safari bug
+  var hasArgsEnumBug = function () {
+    'use strict';
+
+    return arguments.propertyIsEnumerable('length');
+  }();
+
+  var contains = function contains(list, item) {
+    var idx = 0;
+    while (idx < list.length) {
+      if (list[idx] === item) {
+        return true;
+      }
+      idx += 1;
+    }
+    return false;
+  };
+
+  return typeof Object.keys === 'function' && !hasArgsEnumBug ? _curry1(function keys(obj) {
+    return Object(obj) !== obj ? [] : Object.keys(obj);
+  }) : _curry1(function keys(obj) {
+    if (Object(obj) !== obj) {
+      return [];
+    }
+    var prop, nIdx;
+    var ks = [];
+    var checkArgsLength = hasArgsEnumBug && _isArguments(obj);
+    for (prop in obj) {
+      if (_has(prop, obj) && (!checkArgsLength || prop !== 'length')) {
+        ks[ks.length] = prop;
+      }
+    }
+    if (hasEnumBug) {
+      nIdx = nonEnumerableProps.length - 1;
+      while (nIdx >= 0) {
+        prop = nonEnumerableProps[nIdx];
+        if (_has(prop, obj) && !contains(ks, prop)) {
+          ks[ks.length] = prop;
+        }
+        nIdx -= 1;
+      }
+    }
+    return ks;
+  });
+}();
+
+/***/ }),
+
+/***/ 243:
+/*!********************************************************************!*\
+  !*** /Users/ivankleshnin/node_modules/ramda/src/internal/_pipe.js ***!
+  \********************************************************************/
+/*! no static exports found */
+/*! all exports used */
+/***/ (function(module, exports) {
+
+module.exports = function _pipe(f, g) {
+  return function () {
+    return g.call(this, f.apply(this, arguments));
+  };
+};
+
+/***/ }),
+
+/***/ 25:
 /*!************************************************************!*\
-  !*** /Users/ivankleshnin/node_modules/ramda/src/append.js ***!
+  !*** /Users/ivankleshnin/node_modules/ramda/src/reduce.js ***!
   \************************************************************/
 /*! no static exports found */
 /*! all exports used */
 /***/ (function(module, exports, __webpack_require__) {
 
-var _concat = __webpack_require__(/*! ./internal/_concat */ 21);
-var _curry2 = __webpack_require__(/*! ./internal/_curry2 */ 1);
+var _curry3 = __webpack_require__(/*! ./internal/_curry3 */ 4);
+var _reduce = __webpack_require__(/*! ./internal/_reduce */ 18);
 
 /**
- * Returns a new list containing the contents of the given list, followed by
- * the given element.
+ * Returns a single item by iterating through the list, successively calling
+ * the iterator function and passing it an accumulator value and the current
+ * value from the array, and then passing the result to the next call.
+ *
+ * The iterator function receives two values: *(acc, value)*. It may use
+ * `R.reduced` to shortcut the iteration.
+ *
+ * The arguments' order of `reduceRight`'s iterator function is *(value, acc)*.
+ *
+ * Note: `R.reduce` does not skip deleted or unassigned indices (sparse
+ * arrays), unlike the native `Array.prototype.reduce` method. For more details
+ * on this behavior, see:
+ * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/reduce#Description
+ *
+ * Dispatches to the `reduce` method of the third argument, if present.
  *
  * @func
  * @memberOf R
  * @since v0.1.0
  * @category List
- * @sig a -> [a] -> [a]
- * @param {*} el The element to add to the end of the new list.
- * @param {Array} list The list of elements to add a new item to.
- *        list.
- * @return {Array} A new list containing the elements of the old list followed by `el`.
- * @see R.prepend
+ * @sig ((a, b) -> a) -> a -> [b] -> a
+ * @param {Function} fn The iterator function. Receives two values, the accumulator and the
+ *        current element from the array.
+ * @param {*} acc The accumulator value.
+ * @param {Array} list The list to iterate over.
+ * @return {*} The final, accumulated value.
+ * @see R.reduced, R.addIndex, R.reduceRight
  * @example
  *
- *      R.append('tests', ['write', 'more']); //=> ['write', 'more', 'tests']
- *      R.append('tests', []); //=> ['tests']
- *      R.append(['tests'], ['write', 'more']); //=> ['write', 'more', ['tests']]
+ *      R.reduce(R.subtract, 0, [1, 2, 3, 4]) // => ((((0 - 1) - 2) - 3) - 4) = -10
+ *                -               -10
+ *               / \              / \
+ *              -   4           -6   4
+ *             / \              / \
+ *            -   3   ==>     -3   3
+ *           / \              / \
+ *          -   2           -1   2
+ *         / \              / \
+ *        0   1            0   1
+ *
+ * @symb R.reduce(f, a, [b, c, d]) = f(f(f(a, b), c), d)
  */
-module.exports = _curry2(function append(el, list) {
-  return _concat(list, [el]);
-});
+module.exports = _curry3(_reduce);
 
 /***/ }),
 
@@ -3007,6 +4103,32 @@ exports.EmptyObservable = EmptyObservable;
 
 /***/ }),
 
+/***/ 28:
+/*!***********************************************************************!*\
+  !*** /Users/ivankleshnin/node_modules/ramda/src/internal/_isArray.js ***!
+  \***********************************************************************/
+/*! no static exports found */
+/*! all exports used */
+/***/ (function(module, exports) {
+
+/**
+ * Tests whether or not an object is an array.
+ *
+ * @private
+ * @param {*} val The object to test.
+ * @return {Boolean} `true` if `val` is an array, `false` otherwise.
+ * @example
+ *
+ *      _isArray([]); //=> true
+ *      _isArray(null); //=> false
+ *      _isArray({}); //=> false
+ */
+module.exports = Array.isArray || function _isArray(val) {
+  return val != null && val.length >= 0 && Object.prototype.toString.call(val) === '[object Array]';
+};
+
+/***/ }),
+
 /***/ 3:
 /*!**********************************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/internal/_curry1.js ***!
@@ -3048,7 +4170,7 @@ module.exports = function _curry1(fn) {
 "use strict";
 
 
-var ConnectableObservable_1 = __webpack_require__(/*! ../observable/ConnectableObservable */ 105);
+var ConnectableObservable_1 = __webpack_require__(/*! ../observable/ConnectableObservable */ 107);
 /* tslint:enable:max-line-length */
 /**
  * Returns an Observable that emits the results of invoking a specified selector on items
@@ -3106,6 +4228,162 @@ exports.MulticastOperator = MulticastOperator;
 
 /***/ }),
 
+/***/ 31:
+/*!***********************************************************!*\
+  !*** /Users/ivankleshnin/node_modules/ramda/src/slice.js ***!
+  \***********************************************************/
+/*! no static exports found */
+/*! all exports used */
+/***/ (function(module, exports, __webpack_require__) {
+
+var _checkForMethod = __webpack_require__(/*! ./internal/_checkForMethod */ 49);
+var _curry3 = __webpack_require__(/*! ./internal/_curry3 */ 4);
+
+/**
+ * Returns the elements of the given list or string (or object with a `slice`
+ * method) from `fromIndex` (inclusive) to `toIndex` (exclusive).
+ *
+ * Dispatches to the `slice` method of the third argument, if present.
+ *
+ * @func
+ * @memberOf R
+ * @since v0.1.4
+ * @category List
+ * @sig Number -> Number -> [a] -> [a]
+ * @sig Number -> Number -> String -> String
+ * @param {Number} fromIndex The start index (inclusive).
+ * @param {Number} toIndex The end index (exclusive).
+ * @param {*} list
+ * @return {*}
+ * @example
+ *
+ *      R.slice(1, 3, ['a', 'b', 'c', 'd']);        //=> ['b', 'c']
+ *      R.slice(1, Infinity, ['a', 'b', 'c', 'd']); //=> ['b', 'c', 'd']
+ *      R.slice(0, -1, ['a', 'b', 'c', 'd']);       //=> ['a', 'b', 'c']
+ *      R.slice(-3, -1, ['a', 'b', 'c', 'd']);      //=> ['b', 'c']
+ *      R.slice(0, 3, 'ramda');                     //=> 'ram'
+ */
+module.exports = _curry3(_checkForMethod('slice', function slice(fromIndex, toIndex, list) {
+  return Array.prototype.slice.call(list, fromIndex, toIndex);
+}));
+
+/***/ }),
+
+/***/ 316:
+/*!***************************************************************!*\
+  !*** /Users/ivankleshnin/node_modules/ramda/src/lensIndex.js ***!
+  \***************************************************************/
+/*! no static exports found */
+/*! all exports used */
+/***/ (function(module, exports, __webpack_require__) {
+
+var _curry1 = __webpack_require__(/*! ./internal/_curry1 */ 3);
+var lens = __webpack_require__(/*! ./lens */ 70);
+var nth = __webpack_require__(/*! ./nth */ 51);
+var update = __webpack_require__(/*! ./update */ 151);
+
+/**
+ * Returns a lens whose focus is the specified index.
+ *
+ * @func
+ * @memberOf R
+ * @since v0.14.0
+ * @category Object
+ * @typedefn Lens s a = Functor f => (a -> f a) -> s -> f s
+ * @sig Number -> Lens s a
+ * @param {Number} n
+ * @return {Lens}
+ * @see R.view, R.set, R.over
+ * @example
+ *
+ *      var headLens = R.lensIndex(0);
+ *
+ *      R.view(headLens, ['a', 'b', 'c']);            //=> 'a'
+ *      R.set(headLens, 'x', ['a', 'b', 'c']);        //=> ['x', 'b', 'c']
+ *      R.over(headLens, R.toUpper, ['a', 'b', 'c']); //=> ['A', 'b', 'c']
+ */
+module.exports = _curry1(function lensIndex(n) {
+  return lens(nth(n), update(n));
+});
+
+/***/ }),
+
+/***/ 318:
+/*!**************************************************************!*\
+  !*** /Users/ivankleshnin/node_modules/ramda/src/lensProp.js ***!
+  \**************************************************************/
+/*! no static exports found */
+/*! all exports used */
+/***/ (function(module, exports, __webpack_require__) {
+
+var _curry1 = __webpack_require__(/*! ./internal/_curry1 */ 3);
+var assoc = __webpack_require__(/*! ./assoc */ 41);
+var lens = __webpack_require__(/*! ./lens */ 70);
+var prop = __webpack_require__(/*! ./prop */ 82);
+
+/**
+ * Returns a lens whose focus is the specified property.
+ *
+ * @func
+ * @memberOf R
+ * @since v0.14.0
+ * @category Object
+ * @typedefn Lens s a = Functor f => (a -> f a) -> s -> f s
+ * @sig String -> Lens s a
+ * @param {String} k
+ * @return {Lens}
+ * @see R.view, R.set, R.over
+ * @example
+ *
+ *      var xLens = R.lensProp('x');
+ *
+ *      R.view(xLens, {x: 1, y: 2});            //=> 1
+ *      R.set(xLens, 4, {x: 1, y: 2});          //=> {x: 4, y: 2}
+ *      R.over(xLens, R.negate, {x: 1, y: 2});  //=> {x: -1, y: 2}
+ */
+module.exports = _curry1(function lensProp(k) {
+  return lens(prop(k), assoc(k));
+});
+
+/***/ }),
+
+/***/ 33:
+/*!************************************************************!*\
+  !*** /Users/ivankleshnin/node_modules/ramda/src/always.js ***!
+  \************************************************************/
+/*! no static exports found */
+/*! all exports used */
+/***/ (function(module, exports, __webpack_require__) {
+
+var _curry1 = __webpack_require__(/*! ./internal/_curry1 */ 3);
+
+/**
+ * Returns a function that always returns the given value. Note that for
+ * non-primitives the value returned is a reference to the original value.
+ *
+ * This function is known as `const`, `constant`, or `K` (for K combinator) in
+ * other languages and libraries.
+ *
+ * @func
+ * @memberOf R
+ * @since v0.1.0
+ * @category Function
+ * @sig a -> (* -> a)
+ * @param {*} val The value to wrap in a function
+ * @return {Function} A Function :: * -> val.
+ * @example
+ *
+ *      var t = R.always('Tee');
+ *      t(); //=> 'Tee'
+ */
+module.exports = _curry1(function always(val) {
+  return function () {
+    return val;
+  };
+});
+
+/***/ }),
+
 /***/ 34:
 /*!*****************************************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/internal/_isPlaceholder.js ***!
@@ -3139,6 +4417,46 @@ exports.rxSubscriber = typeof _Symbol === 'function' && typeof _Symbol.for === '
  */
 exports.$$rxSubscriber = exports.rxSubscriber;
 //# sourceMappingURL=rxSubscriber.js.map
+
+/***/ }),
+
+/***/ 365:
+/*!*********************************************************!*\
+  !*** /Users/ivankleshnin/node_modules/ramda/src/set.js ***!
+  \*********************************************************/
+/*! no static exports found */
+/*! all exports used */
+/***/ (function(module, exports, __webpack_require__) {
+
+var _curry3 = __webpack_require__(/*! ./internal/_curry3 */ 4);
+var always = __webpack_require__(/*! ./always */ 33);
+var over = __webpack_require__(/*! ./over */ 157);
+
+/**
+ * Returns the result of "setting" the portion of the given data structure
+ * focused by the given lens to the given value.
+ *
+ * @func
+ * @memberOf R
+ * @since v0.16.0
+ * @category Object
+ * @typedefn Lens s a = Functor f => (a -> f a) -> s -> f s
+ * @sig Lens s a -> a -> s -> s
+ * @param {Lens} lens
+ * @param {*} v
+ * @param {*} x
+ * @return {*}
+ * @see R.prop, R.lensIndex, R.lensProp
+ * @example
+ *
+ *      var xLens = R.lensProp('x');
+ *
+ *      R.set(xLens, 4, {x: 1, y: 2});  //=> {x: 4, y: 2}
+ *      R.set(xLens, 8, {x: 1, y: 2});  //=> {x: 8, y: 2}
+ */
+module.exports = _curry3(function set(lens, v, x) {
+  return over(lens, always(v), x);
+});
 
 /***/ }),
 
@@ -3351,7 +4669,7 @@ var __extends = undefined && undefined.__extends || function (d, b) {
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 var root_1 = __webpack_require__(/*! ../util/root */ 9);
-var Action_1 = __webpack_require__(/*! ./Action */ 172);
+var Action_1 = __webpack_require__(/*! ./Action */ 173);
 /**
  * We need this JSDoc comment for affecting ESDoc.
  * @ignore
@@ -3569,7 +4887,7 @@ var __extends = undefined && undefined.__extends || function (d, b) {
     }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var Scheduler_1 = __webpack_require__(/*! ../Scheduler */ 173);
+var Scheduler_1 = __webpack_require__(/*! ../Scheduler */ 174);
 var AsyncScheduler = function (_super) {
     __extends(AsyncScheduler, _super);
     function AsyncScheduler() {
@@ -3617,7 +4935,96 @@ exports.AsyncScheduler = AsyncScheduler;
 
 /***/ }),
 
+/***/ 401:
+/*!**********************************************************!*\
+  !*** /Users/ivankleshnin/node_modules/ramda/src/view.js ***!
+  \**********************************************************/
+/*! no static exports found */
+/*! all exports used */
+/***/ (function(module, exports, __webpack_require__) {
+
+var _curry2 = __webpack_require__(/*! ./internal/_curry2 */ 1);
+
+/**
+ * Returns a "view" of the given data structure, determined by the given lens.
+ * The lens's focus determines which portion of the data structure is visible.
+ *
+ * @func
+ * @memberOf R
+ * @since v0.16.0
+ * @category Object
+ * @typedefn Lens s a = Functor f => (a -> f a) -> s -> f s
+ * @sig Lens s a -> s -> a
+ * @param {Lens} lens
+ * @param {*} x
+ * @return {*}
+ * @see R.prop, R.lensIndex, R.lensProp
+ * @example
+ *
+ *      var xLens = R.lensProp('x');
+ *
+ *      R.view(xLens, {x: 1, y: 2});  //=> 1
+ *      R.view(xLens, {x: 4, y: 2});  //=> 4
+ */
+module.exports = function () {
+  // `Const` is a functor that effectively ignores the function given to `map`.
+  var Const = function (x) {
+    return { value: x, map: function () {
+        return this;
+      } };
+  };
+
+  return _curry2(function view(lens, x) {
+    // Using `Const` effectively ignores the setter function of the `lens`,
+    // leaving the value returned by the getter function unmodified.
+    return lens(Const)(x).value;
+  });
+}();
+
+/***/ }),
+
 /***/ 41:
+/*!***********************************************************!*\
+  !*** /Users/ivankleshnin/node_modules/ramda/src/assoc.js ***!
+  \***********************************************************/
+/*! no static exports found */
+/*! all exports used */
+/***/ (function(module, exports, __webpack_require__) {
+
+var _curry3 = __webpack_require__(/*! ./internal/_curry3 */ 4);
+
+/**
+ * Makes a shallow clone of an object, setting or overriding the specified
+ * property with the given value. Note that this copies and flattens prototype
+ * properties onto the new object as well. All non-primitive properties are
+ * copied by reference.
+ *
+ * @func
+ * @memberOf R
+ * @since v0.8.0
+ * @category Object
+ * @sig String -> a -> {k: v} -> {k: v}
+ * @param {String} prop The property name to set
+ * @param {*} val The new value
+ * @param {Object} obj The object to clone
+ * @return {Object} A new object equivalent to the original except for the changed property.
+ * @see R.dissoc
+ * @example
+ *
+ *      R.assoc('c', 3, {a: 1, b: 2}); //=> {a: 1, b: 2, c: 3}
+ */
+module.exports = _curry3(function assoc(prop, val, obj) {
+  var result = {};
+  for (var p in obj) {
+    result[p] = obj[p];
+  }
+  result[prop] = val;
+  return result;
+});
+
+/***/ }),
+
+/***/ 42:
 /*!**********************************************!*\
   !*** ./node_modules/rxjs/util/isFunction.js ***!
   \**********************************************/
@@ -3636,7 +5043,7 @@ exports.isFunction = isFunction;
 
 /***/ }),
 
-/***/ 42:
+/***/ 43:
 /*!************************************************!*\
   !*** ./node_modules/rxjs/symbol/observable.js ***!
   \************************************************/
@@ -3673,7 +5080,7 @@ exports.$$observable = exports.observable;
 
 /***/ }),
 
-/***/ 43:
+/***/ 44:
 /*!***********************************************************!*\
   !*** ./node_modules/rxjs/util/ObjectUnsubscribedError.js ***!
   \***********************************************************/
@@ -3716,7 +5123,7 @@ exports.ObjectUnsubscribedError = ObjectUnsubscribedError;
 
 /***/ }),
 
-/***/ 44:
+/***/ 45:
 /*!************************************************!*\
   !*** ./node_modules/rxjs/operator/mergeAll.js ***!
   \************************************************/
@@ -3843,7 +5250,7 @@ exports.MergeAllSubscriber = MergeAllSubscriber;
 
 /***/ }),
 
-/***/ 45:
+/***/ 46:
 /*!********************************************!*\
   !*** ./node_modules/rxjs/ReplaySubject.js ***!
   \********************************************/
@@ -3863,10 +5270,10 @@ var __extends = undefined && undefined.__extends || function (d, b) {
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 var Subject_1 = __webpack_require__(/*! ./Subject */ 10);
-var queue_1 = __webpack_require__(/*! ./scheduler/queue */ 101);
+var queue_1 = __webpack_require__(/*! ./scheduler/queue */ 103);
 var Subscription_1 = __webpack_require__(/*! ./Subscription */ 7);
 var observeOn_1 = __webpack_require__(/*! ./operator/observeOn */ 74);
-var ObjectUnsubscribedError_1 = __webpack_require__(/*! ./util/ObjectUnsubscribedError */ 43);
+var ObjectUnsubscribedError_1 = __webpack_require__(/*! ./util/ObjectUnsubscribedError */ 44);
 var SubjectSubscription_1 = __webpack_require__(/*! ./SubjectSubscription */ 80);
 /**
  * @class ReplaySubject<T>
@@ -3962,43 +5369,94 @@ var ReplayEvent = function () {
 /***/ }),
 
 /***/ 48:
-/*!***********************************************************!*\
-  !*** /Users/ivankleshnin/node_modules/ramda/src/assoc.js ***!
-  \***********************************************************/
+/*!*****************************************************************!*\
+  !*** /Users/ivankleshnin/node_modules/ramda/src/isArrayLike.js ***!
+  \*****************************************************************/
 /*! no static exports found */
 /*! all exports used */
 /***/ (function(module, exports, __webpack_require__) {
 
-var _curry3 = __webpack_require__(/*! ./internal/_curry3 */ 4);
+var _curry1 = __webpack_require__(/*! ./internal/_curry1 */ 3);
+var _isArray = __webpack_require__(/*! ./internal/_isArray */ 28);
+var _isString = __webpack_require__(/*! ./internal/_isString */ 60);
 
 /**
- * Makes a shallow clone of an object, setting or overriding the specified
- * property with the given value. Note that this copies and flattens prototype
- * properties onto the new object as well. All non-primitive properties are
- * copied by reference.
+ * Tests whether or not an object is similar to an array.
  *
  * @func
  * @memberOf R
- * @since v0.8.0
- * @category Object
- * @sig String -> a -> {k: v} -> {k: v}
- * @param {String} prop The property name to set
- * @param {*} val The new value
- * @param {Object} obj The object to clone
- * @return {Object} A new object equivalent to the original except for the changed property.
- * @see R.dissoc
+ * @since v0.5.0
+ * @category Type
+ * @category List
+ * @sig * -> Boolean
+ * @param {*} x The object to test.
+ * @return {Boolean} `true` if `x` has a numeric length property and extreme indices defined; `false` otherwise.
+ * @deprecated since v0.23.0
  * @example
  *
- *      R.assoc('c', 3, {a: 1, b: 2}); //=> {a: 1, b: 2, c: 3}
+ *      R.isArrayLike([]); //=> true
+ *      R.isArrayLike(true); //=> false
+ *      R.isArrayLike({}); //=> false
+ *      R.isArrayLike({length: 10}); //=> false
+ *      R.isArrayLike({0: 'zero', 9: 'nine', length: 10}); //=> true
  */
-module.exports = _curry3(function assoc(prop, val, obj) {
-  var result = {};
-  for (var p in obj) {
-    result[p] = obj[p];
+module.exports = _curry1(function isArrayLike(x) {
+  if (_isArray(x)) {
+    return true;
   }
-  result[prop] = val;
-  return result;
+  if (!x) {
+    return false;
+  }
+  if (typeof x !== 'object') {
+    return false;
+  }
+  if (_isString(x)) {
+    return false;
+  }
+  if (x.nodeType === 1) {
+    return !!x.length;
+  }
+  if (x.length === 0) {
+    return true;
+  }
+  if (x.length > 0) {
+    return x.hasOwnProperty(0) && x.hasOwnProperty(x.length - 1);
+  }
+  return false;
 });
+
+/***/ }),
+
+/***/ 49:
+/*!******************************************************************************!*\
+  !*** /Users/ivankleshnin/node_modules/ramda/src/internal/_checkForMethod.js ***!
+  \******************************************************************************/
+/*! no static exports found */
+/*! all exports used */
+/***/ (function(module, exports, __webpack_require__) {
+
+var _isArray = __webpack_require__(/*! ./_isArray */ 28);
+
+/**
+ * This checks whether a function has a [methodname] function. If it isn't an
+ * array it will execute that function otherwise it will default to the ramda
+ * implementation.
+ *
+ * @private
+ * @param {Function} fn ramda implemtation
+ * @param {String} methodname property to check for a custom implementation
+ * @return {Object} Whatever the return value of the method is.
+ */
+module.exports = function _checkForMethod(methodname, fn) {
+  return function () {
+    var length = arguments.length;
+    if (length === 0) {
+      return fn();
+    }
+    var obj = arguments[length - 1];
+    return _isArray(obj) || typeof obj[methodname] !== 'function' ? fn.apply(this, arguments) : obj[methodname].apply(obj, Array.prototype.slice.call(arguments, 0, length - 1));
+  };
+};
 
 /***/ }),
 
@@ -4045,6 +5503,50 @@ var OuterSubscriber = function (_super) {
 }(Subscriber_1.Subscriber);
 exports.OuterSubscriber = OuterSubscriber;
 //# sourceMappingURL=OuterSubscriber.js.map
+
+/***/ }),
+
+/***/ 51:
+/*!*********************************************************!*\
+  !*** /Users/ivankleshnin/node_modules/ramda/src/nth.js ***!
+  \*********************************************************/
+/*! no static exports found */
+/*! all exports used */
+/***/ (function(module, exports, __webpack_require__) {
+
+var _curry2 = __webpack_require__(/*! ./internal/_curry2 */ 1);
+var _isString = __webpack_require__(/*! ./internal/_isString */ 60);
+
+/**
+ * Returns the nth element of the given list or string. If n is negative the
+ * element at index length + n is returned.
+ *
+ * @func
+ * @memberOf R
+ * @since v0.1.0
+ * @category List
+ * @sig Number -> [a] -> a | Undefined
+ * @sig Number -> String -> String
+ * @param {Number} offset
+ * @param {*} list
+ * @return {*}
+ * @example
+ *
+ *      var list = ['foo', 'bar', 'baz', 'quux'];
+ *      R.nth(1, list); //=> 'bar'
+ *      R.nth(-1, list); //=> 'quux'
+ *      R.nth(-99, list); //=> undefined
+ *
+ *      R.nth(2, 'abc'); //=> 'c'
+ *      R.nth(3, 'abc'); //=> ''
+ * @symb R.nth(-1, [a, b, c]) = c
+ * @symb R.nth(0, [a, b, c]) = a
+ * @symb R.nth(1, [a, b, c]) = b
+ */
+module.exports = _curry2(function nth(offset, list) {
+  var idx = offset < 0 ? list.length + offset : offset;
+  return _isString(list) ? list.charAt(idx) : list[idx];
+});
 
 /***/ }),
 
@@ -4225,6 +5727,74 @@ var MapSubscriber = function (_super) {
 
 /***/ }),
 
+/***/ 58:
+/*!**********************************************************************!*\
+  !*** /Users/ivankleshnin/node_modules/ramda/src/internal/_curryN.js ***!
+  \**********************************************************************/
+/*! no static exports found */
+/*! all exports used */
+/***/ (function(module, exports, __webpack_require__) {
+
+var _arity = __webpack_require__(/*! ./_arity */ 23);
+var _isPlaceholder = __webpack_require__(/*! ./_isPlaceholder */ 34);
+
+/**
+ * Internal curryN function.
+ *
+ * @private
+ * @category Function
+ * @param {Number} length The arity of the curried function.
+ * @param {Array} received An array of arguments received thus far.
+ * @param {Function} fn The function to curry.
+ * @return {Function} The curried function.
+ */
+module.exports = function _curryN(length, received, fn) {
+  return function () {
+    var combined = [];
+    var argsIdx = 0;
+    var left = length;
+    var combinedIdx = 0;
+    while (combinedIdx < received.length || argsIdx < arguments.length) {
+      var result;
+      if (combinedIdx < received.length && (!_isPlaceholder(received[combinedIdx]) || argsIdx >= arguments.length)) {
+        result = received[combinedIdx];
+      } else {
+        result = arguments[argsIdx];
+        argsIdx += 1;
+      }
+      combined[combinedIdx] = result;
+      if (!_isPlaceholder(result)) {
+        left -= 1;
+      }
+      combinedIdx += 1;
+    }
+    return left <= 0 ? fn.apply(this, combined) : _arity(left, _curryN(length, combined, fn));
+  };
+};
+
+/***/ }),
+
+/***/ 59:
+/*!*******************************************************************!*\
+  !*** /Users/ivankleshnin/node_modules/ramda/src/internal/_map.js ***!
+  \*******************************************************************/
+/*! no static exports found */
+/*! all exports used */
+/***/ (function(module, exports) {
+
+module.exports = function _map(fn, functor) {
+  var idx = 0;
+  var len = functor.length;
+  var result = Array(len);
+  while (idx < len) {
+    result[idx] = fn(functor[idx]);
+    idx += 1;
+  }
+  return result;
+};
+
+/***/ }),
+
 /***/ 6:
 /*!*****************************************************!*\
   !*** ./node_modules/rxjs/util/subscribeToResult.js ***!
@@ -4237,13 +5807,13 @@ var MapSubscriber = function (_super) {
 
 
 var root_1 = __webpack_require__(/*! ./root */ 9);
-var isArrayLike_1 = __webpack_require__(/*! ./isArrayLike */ 97);
-var isPromise_1 = __webpack_require__(/*! ./isPromise */ 98);
+var isArrayLike_1 = __webpack_require__(/*! ./isArrayLike */ 99);
+var isPromise_1 = __webpack_require__(/*! ./isPromise */ 100);
 var isObject_1 = __webpack_require__(/*! ./isObject */ 78);
 var Observable_1 = __webpack_require__(/*! ../Observable */ 0);
 var iterator_1 = __webpack_require__(/*! ../symbol/iterator */ 37);
-var InnerSubscriber_1 = __webpack_require__(/*! ../InnerSubscriber */ 169);
-var observable_1 = __webpack_require__(/*! ../symbol/observable */ 42);
+var InnerSubscriber_1 = __webpack_require__(/*! ../InnerSubscriber */ 170);
+var observable_1 = __webpack_require__(/*! ../symbol/observable */ 43);
 function subscribeToResult(outerSubscriber, result, outerValue, outerIndex) {
     var destination = new InnerSubscriber_1.InnerSubscriber(outerSubscriber, outerValue, outerIndex);
     if (destination.closed) {
@@ -4311,165 +5881,116 @@ exports.subscribeToResult = subscribeToResult;
 
 /***/ }),
 
-/***/ 653:
-/*!**********************************************************!*\
-  !*** ./node_modules/rxjs/add/operator/withLatestFrom.js ***!
-  \**********************************************************/
+/***/ 60:
+/*!************************************************************************!*\
+  !*** /Users/ivankleshnin/node_modules/ramda/src/internal/_isString.js ***!
+  \************************************************************************/
 /*! no static exports found */
 /*! all exports used */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ (function(module, exports) {
 
-"use strict";
-
-
-var Observable_1 = __webpack_require__(/*! ../../Observable */ 0);
-var withLatestFrom_1 = __webpack_require__(/*! ../../operator/withLatestFrom */ 654);
-Observable_1.Observable.prototype.withLatestFrom = withLatestFrom_1.withLatestFrom;
-//# sourceMappingURL=withLatestFrom.js.map
+module.exports = function _isString(x) {
+  return Object.prototype.toString.call(x) === '[object String]';
+};
 
 /***/ }),
 
-/***/ 654:
-/*!******************************************************!*\
-  !*** ./node_modules/rxjs/operator/withLatestFrom.js ***!
-  \******************************************************/
+/***/ 64:
+/*!***********************************************************!*\
+  !*** /Users/ivankleshnin/node_modules/ramda/src/curry.js ***!
+  \***********************************************************/
 /*! no static exports found */
 /*! all exports used */
 /***/ (function(module, exports, __webpack_require__) {
 
-"use strict";
+var _curry1 = __webpack_require__(/*! ./internal/_curry1 */ 3);
+var curryN = __webpack_require__(/*! ./curryN */ 15);
 
+/**
+ * Returns a curried equivalent of the provided function. The curried function
+ * has two unusual capabilities. First, its arguments needn't be provided one
+ * at a time. If `f` is a ternary function and `g` is `R.curry(f)`, the
+ * following are equivalent:
+ *
+ *   - `g(1)(2)(3)`
+ *   - `g(1)(2, 3)`
+ *   - `g(1, 2)(3)`
+ *   - `g(1, 2, 3)`
+ *
+ * Secondly, the special placeholder value `R.__` may be used to specify
+ * "gaps", allowing partial application of any combination of arguments,
+ * regardless of their positions. If `g` is as above and `_` is `R.__`, the
+ * following are equivalent:
+ *
+ *   - `g(1, 2, 3)`
+ *   - `g(_, 2, 3)(1)`
+ *   - `g(_, _, 3)(1)(2)`
+ *   - `g(_, _, 3)(1, 2)`
+ *   - `g(_, 2)(1)(3)`
+ *   - `g(_, 2)(1, 3)`
+ *   - `g(_, 2)(_, 3)(1)`
+ *
+ * @func
+ * @memberOf R
+ * @since v0.1.0
+ * @category Function
+ * @sig (* -> a) -> (* -> a)
+ * @param {Function} fn The function to curry.
+ * @return {Function} A new, curried function.
+ * @see R.curryN
+ * @example
+ *
+ *      var addFourNumbers = (a, b, c, d) => a + b + c + d;
+ *
+ *      var curriedAddFourNumbers = R.curry(addFourNumbers);
+ *      var f = curriedAddFourNumbers(1, 2);
+ *      var g = f(3);
+ *      g(4); //=> 10
+ */
+module.exports = _curry1(function curry(fn) {
+  return curryN(fn.length, fn);
+});
 
-var __extends = undefined && undefined.__extends || function (d, b) {
-    for (var p in b) {
-        if (b.hasOwnProperty(p)) d[p] = b[p];
-    }function __() {
-        this.constructor = d;
-    }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
-var OuterSubscriber_1 = __webpack_require__(/*! ../OuterSubscriber */ 5);
-var subscribeToResult_1 = __webpack_require__(/*! ../util/subscribeToResult */ 6);
-/* tslint:enable:max-line-length */
+/***/ }),
+
+/***/ 65:
+/*!*************************************************************!*\
+  !*** /Users/ivankleshnin/node_modules/ramda/src/reverse.js ***!
+  \*************************************************************/
+/*! no static exports found */
+/*! all exports used */
+/***/ (function(module, exports, __webpack_require__) {
+
+var _curry1 = __webpack_require__(/*! ./internal/_curry1 */ 3);
+var _isString = __webpack_require__(/*! ./internal/_isString */ 60);
+
 /**
- * Combines the source Observable with other Observables to create an Observable
- * whose values are calculated from the latest values of each, only when the
- * source emits.
+ * Returns a new list or string with the elements or characters in reverse
+ * order.
  *
- * <span class="informal">Whenever the source Observable emits a value, it
- * computes a formula using that value plus the latest values from other input
- * Observables, then emits the output of that formula.</span>
+ * @func
+ * @memberOf R
+ * @since v0.1.0
+ * @category List
+ * @sig [a] -> [a]
+ * @sig String -> String
+ * @param {Array|String} list
+ * @return {Array|String}
+ * @example
  *
- * <img src="./img/withLatestFrom.png" width="100%">
+ *      R.reverse([1, 2, 3]);  //=> [3, 2, 1]
+ *      R.reverse([1, 2]);     //=> [2, 1]
+ *      R.reverse([1]);        //=> [1]
+ *      R.reverse([]);         //=> []
  *
- * `withLatestFrom` combines each value from the source Observable (the
- * instance) with the latest values from the other input Observables only when
- * the source emits a value, optionally using a `project` function to determine
- * the value to be emitted on the output Observable. All input Observables must
- * emit at least one value before the output Observable will emit a value.
- *
- * @example <caption>On every click event, emit an array with the latest timer event plus the click event</caption>
- * var clicks = Rx.Observable.fromEvent(document, 'click');
- * var timer = Rx.Observable.interval(1000);
- * var result = clicks.withLatestFrom(timer);
- * result.subscribe(x => console.log(x));
- *
- * @see {@link combineLatest}
- *
- * @param {ObservableInput} other An input Observable to combine with the source
- * Observable. More than one input Observables may be given as argument.
- * @param {Function} [project] Projection function for combining values
- * together. Receives all values in order of the Observables passed, where the
- * first parameter is a value from the source Observable. (e.g.
- * `a.withLatestFrom(b, c, (a1, b1, c1) => a1 + b1 + c1)`). If this is not
- * passed, arrays will be emitted on the output Observable.
- * @return {Observable} An Observable of projected values from the most recent
- * values from each input Observable, or an array of the most recent values from
- * each input Observable.
- * @method withLatestFrom
- * @owner Observable
+ *      R.reverse('abc');      //=> 'cba'
+ *      R.reverse('ab');       //=> 'ba'
+ *      R.reverse('a');        //=> 'a'
+ *      R.reverse('');         //=> ''
  */
-function withLatestFrom() {
-    var args = [];
-    for (var _i = 0; _i < arguments.length; _i++) {
-        args[_i - 0] = arguments[_i];
-    }
-    var project;
-    if (typeof args[args.length - 1] === 'function') {
-        project = args.pop();
-    }
-    var observables = args;
-    return this.lift(new WithLatestFromOperator(observables, project));
-}
-exports.withLatestFrom = withLatestFrom;
-var WithLatestFromOperator = function () {
-    function WithLatestFromOperator(observables, project) {
-        this.observables = observables;
-        this.project = project;
-    }
-    WithLatestFromOperator.prototype.call = function (subscriber, source) {
-        return source.subscribe(new WithLatestFromSubscriber(subscriber, this.observables, this.project));
-    };
-    return WithLatestFromOperator;
-}();
-/**
- * We need this JSDoc comment for affecting ESDoc.
- * @ignore
- * @extends {Ignored}
- */
-var WithLatestFromSubscriber = function (_super) {
-    __extends(WithLatestFromSubscriber, _super);
-    function WithLatestFromSubscriber(destination, observables, project) {
-        _super.call(this, destination);
-        this.observables = observables;
-        this.project = project;
-        this.toRespond = [];
-        var len = observables.length;
-        this.values = new Array(len);
-        for (var i = 0; i < len; i++) {
-            this.toRespond.push(i);
-        }
-        for (var i = 0; i < len; i++) {
-            var observable = observables[i];
-            this.add(subscribeToResult_1.subscribeToResult(this, observable, observable, i));
-        }
-    }
-    WithLatestFromSubscriber.prototype.notifyNext = function (outerValue, innerValue, outerIndex, innerIndex, innerSub) {
-        this.values[outerIndex] = innerValue;
-        var toRespond = this.toRespond;
-        if (toRespond.length > 0) {
-            var found = toRespond.indexOf(outerIndex);
-            if (found !== -1) {
-                toRespond.splice(found, 1);
-            }
-        }
-    };
-    WithLatestFromSubscriber.prototype.notifyComplete = function () {
-        // noop
-    };
-    WithLatestFromSubscriber.prototype._next = function (value) {
-        if (this.toRespond.length === 0) {
-            var args = [value].concat(this.values);
-            if (this.project) {
-                this._tryProject(args);
-            } else {
-                this.destination.next(args);
-            }
-        }
-    };
-    WithLatestFromSubscriber.prototype._tryProject = function (args) {
-        var result;
-        try {
-            result = this.project.apply(this, args);
-        } catch (err) {
-            this.destination.error(err);
-            return;
-        }
-        this.destination.next(result);
-    };
-    return WithLatestFromSubscriber;
-}(OuterSubscriber_1.OuterSubscriber);
-//# sourceMappingURL=withLatestFrom.js.map
+module.exports = _curry1(function reverse(list) {
+  return _isString(list) ? list.split('').reverse().join('') : Array.prototype.slice.call(list, 0).reverse();
+});
 
 /***/ }),
 
@@ -4484,51 +6005,91 @@ var WithLatestFromSubscriber = function (_super) {
 "use strict";
 
 
-var _append = __webpack_require__(/*! ramda/src/append */ 227);
-
-var _append2 = _interopRequireDefault(_append);
-
-var _assoc = __webpack_require__(/*! ramda/src/assoc */ 48);
+var _assoc = __webpack_require__(/*! ramda/src/assoc */ 41);
 
 var _assoc2 = _interopRequireDefault(_assoc);
+
+var _assocPath = __webpack_require__(/*! ramda/src/assocPath */ 84);
+
+var _assocPath2 = _interopRequireDefault(_assocPath);
+
+var _compose = __webpack_require__(/*! ramda/src/compose */ 88);
+
+var _compose2 = _interopRequireDefault(_compose);
+
+var _curry = __webpack_require__(/*! ramda/src/curry */ 64);
+
+var _curry2 = _interopRequireDefault(_curry);
+
+var _identity = __webpack_require__(/*! ramda/src/identity */ 93);
+
+var _identity2 = _interopRequireDefault(_identity);
+
+var _lens = __webpack_require__(/*! ramda/src/lens */ 70);
+
+var _lens2 = _interopRequireDefault(_lens);
+
+var _lensIndex = __webpack_require__(/*! ramda/src/lensIndex */ 316);
+
+var _lensIndex2 = _interopRequireDefault(_lensIndex);
+
+var _lensProp = __webpack_require__(/*! ramda/src/lensProp */ 318);
+
+var _lensProp2 = _interopRequireDefault(_lensProp);
 
 var _merge = __webpack_require__(/*! ramda/src/merge */ 154);
 
 var _merge2 = _interopRequireDefault(_merge);
 
+var _over = __webpack_require__(/*! ramda/src/over */ 157);
+
+var _over2 = _interopRequireDefault(_over);
+
+var _set = __webpack_require__(/*! ramda/src/set */ 365);
+
+var _set2 = _interopRequireDefault(_set);
+
+var _sortBy = __webpack_require__(/*! ramda/src/sortBy */ 165);
+
+var _sortBy2 = _interopRequireDefault(_sortBy);
+
+var _view = __webpack_require__(/*! ramda/src/view */ 401);
+
+var _view2 = _interopRequireDefault(_view);
+
 var _Observable = __webpack_require__(/*! rxjs/Observable */ 0);
 
 var _Subject = __webpack_require__(/*! rxjs/Subject */ 10);
 
-var _ReplaySubject = __webpack_require__(/*! rxjs/ReplaySubject */ 45);
+var _ReplaySubject = __webpack_require__(/*! rxjs/ReplaySubject */ 46);
 
-__webpack_require__(/*! rxjs/add/observable/combineLatest */ 167);
+__webpack_require__(/*! rxjs/add/observable/combineLatest */ 168);
 
-__webpack_require__(/*! rxjs/add/observable/merge */ 174);
+__webpack_require__(/*! rxjs/add/observable/merge */ 175);
 
-__webpack_require__(/*! rxjs/add/operator/distinctUntilChanged */ 184);
+__webpack_require__(/*! rxjs/add/operator/distinctUntilChanged */ 185);
 
-__webpack_require__(/*! rxjs/add/operator/do */ 185);
+__webpack_require__(/*! rxjs/add/operator/do */ 186);
 
-__webpack_require__(/*! rxjs/add/operator/filter */ 187);
+__webpack_require__(/*! rxjs/add/operator/filter */ 188);
 
-__webpack_require__(/*! rxjs/add/operator/map */ 189);
+__webpack_require__(/*! rxjs/add/operator/map */ 190);
 
-__webpack_require__(/*! rxjs/add/operator/pluck */ 190);
+__webpack_require__(/*! rxjs/add/operator/pluck */ 191);
 
-__webpack_require__(/*! rxjs/add/operator/sample */ 193);
+__webpack_require__(/*! rxjs/add/operator/sample */ 194);
 
-__webpack_require__(/*! rxjs/add/operator/scan */ 195);
+__webpack_require__(/*! rxjs/add/operator/scan */ 196);
 
-__webpack_require__(/*! rxjs/add/operator/shareReplay */ 197);
+__webpack_require__(/*! rxjs/add/operator/shareReplay */ 198);
 
-__webpack_require__(/*! rxjs/add/operator/startWith */ 199);
+__webpack_require__(/*! rxjs/add/operator/startWith */ 200);
 
-__webpack_require__(/*! rxjs/add/operator/withLatestFrom */ 653);
+__webpack_require__(/*! rxjs/add/operator/withLatestFrom */ 208);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-window.R = { append: _append2.default, assoc: _assoc2.default, merge: _merge2.default
+window.R = { assoc: _assoc2.default, assocPath: _assocPath2.default, compose: _compose2.default, curry: _curry2.default, id: _identity2.default, identity: _identity2.default, lens: _lens2.default, lensIndex: _lensIndex2.default, lensProp: _lensProp2.default, merge: _merge2.default, over: _over2.default, set: _set2.default, sortBy: _sortBy2.default, view: _view2.default
 
   // RXJS ============================================================================================
 }; // RAMDA ===========================================================================================
@@ -4575,10 +6136,10 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
 var isArray_1 = __webpack_require__(/*! ./util/isArray */ 22);
 var isObject_1 = __webpack_require__(/*! ./util/isObject */ 78);
-var isFunction_1 = __webpack_require__(/*! ./util/isFunction */ 41);
+var isFunction_1 = __webpack_require__(/*! ./util/isFunction */ 42);
 var tryCatch_1 = __webpack_require__(/*! ./util/tryCatch */ 13);
 var errorObject_1 = __webpack_require__(/*! ./util/errorObject */ 11);
-var UnsubscriptionError_1 = __webpack_require__(/*! ./util/UnsubscriptionError */ 96);
+var UnsubscriptionError_1 = __webpack_require__(/*! ./util/UnsubscriptionError */ 98);
 /**
  * Represents a disposable resource, such as the execution of an Observable. A
  * Subscription has one important method, `unsubscribe`, that takes no argument
@@ -4770,6 +6331,52 @@ function flattenUnsubscriptionErrors(errors) {
 
 /***/ }),
 
+/***/ 70:
+/*!**********************************************************!*\
+  !*** /Users/ivankleshnin/node_modules/ramda/src/lens.js ***!
+  \**********************************************************/
+/*! no static exports found */
+/*! all exports used */
+/***/ (function(module, exports, __webpack_require__) {
+
+var _curry2 = __webpack_require__(/*! ./internal/_curry2 */ 1);
+var map = __webpack_require__(/*! ./map */ 17);
+
+/**
+ * Returns a lens for the given getter and setter functions. The getter "gets"
+ * the value of the focus; the setter "sets" the value of the focus. The setter
+ * should not mutate the data structure.
+ *
+ * @func
+ * @memberOf R
+ * @since v0.8.0
+ * @category Object
+ * @typedefn Lens s a = Functor f => (a -> f a) -> s -> f s
+ * @sig (s -> a) -> ((a, s) -> s) -> Lens s a
+ * @param {Function} getter
+ * @param {Function} setter
+ * @return {Lens}
+ * @see R.view, R.set, R.over, R.lensIndex, R.lensProp
+ * @example
+ *
+ *      var xLens = R.lens(R.prop('x'), R.assoc('x'));
+ *
+ *      R.view(xLens, {x: 1, y: 2});            //=> 1
+ *      R.set(xLens, 4, {x: 1, y: 2});          //=> {x: 4, y: 2}
+ *      R.over(xLens, R.negate, {x: 1, y: 2});  //=> {x: -1, y: 2}
+ */
+module.exports = _curry2(function lens(getter, setter) {
+  return function (toFunctorFn) {
+    return function (target) {
+      return map(function (focus) {
+        return setter(focus, target);
+      }, toFunctorFn(getter(target)));
+    };
+  };
+});
+
+/***/ }),
+
 /***/ 72:
 /*!*****************************************************!*\
   !*** ./node_modules/rxjs/operator/combineLatest.js ***!
@@ -4947,7 +6554,7 @@ exports.CombineLatestSubscriber = CombineLatestSubscriber;
 var Observable_1 = __webpack_require__(/*! ../Observable */ 0);
 var isScheduler_1 = __webpack_require__(/*! ../util/isScheduler */ 19);
 var ArrayObservable_1 = __webpack_require__(/*! ../observable/ArrayObservable */ 20);
-var mergeAll_1 = __webpack_require__(/*! ./mergeAll */ 44);
+var mergeAll_1 = __webpack_require__(/*! ./mergeAll */ 45);
 /* tslint:enable:max-line-length */
 /**
  * Creates an output Observable which sequentially emits all values from every
@@ -5300,6 +6907,57 @@ exports.empty = {
 
 /***/ }),
 
+/***/ 8:
+/*!****************************************************************************!*\
+  !*** /Users/ivankleshnin/node_modules/ramda/src/internal/_dispatchable.js ***!
+  \****************************************************************************/
+/*! no static exports found */
+/*! all exports used */
+/***/ (function(module, exports, __webpack_require__) {
+
+var _isArray = __webpack_require__(/*! ./_isArray */ 28);
+var _isTransformer = __webpack_require__(/*! ./_isTransformer */ 81);
+
+/**
+ * Returns a function that dispatches with different strategies based on the
+ * object in list position (last argument). If it is an array, executes [fn].
+ * Otherwise, if it has a function with one of the given method names, it will
+ * execute that function (functor case). Otherwise, if it is a transformer,
+ * uses transducer [xf] to return a new transformer (transducer case).
+ * Otherwise, it will default to executing [fn].
+ *
+ * @private
+ * @param {Array} methodNames properties to check for a custom implementation
+ * @param {Function} xf transducer to initialize if object is transformer
+ * @param {Function} fn default ramda implementation
+ * @return {Function} A function that dispatches on object in list position
+ */
+module.exports = function _dispatchable(methodNames, xf, fn) {
+  return function () {
+    if (arguments.length === 0) {
+      return fn();
+    }
+    var args = Array.prototype.slice.call(arguments, 0);
+    var obj = args.pop();
+    if (!_isArray(obj)) {
+      var idx = 0;
+      while (idx < methodNames.length) {
+        if (typeof obj[methodNames[idx]] === 'function') {
+          return obj[methodNames[idx]].apply(obj, args);
+        }
+        idx += 1;
+      }
+      if (_isTransformer(obj)) {
+        var transducer = xf.apply(null, args);
+        return transducer(obj);
+      }
+    }
+    return fn.apply(this, arguments);
+  };
+};
+
+/***/ }),
+
 /***/ 80:
 /*!**************************************************!*\
   !*** ./node_modules/rxjs/SubjectSubscription.js ***!
@@ -5356,6 +7014,221 @@ exports.SubjectSubscription = SubjectSubscription;
 
 /***/ }),
 
+/***/ 81:
+/*!*****************************************************************************!*\
+  !*** /Users/ivankleshnin/node_modules/ramda/src/internal/_isTransformer.js ***!
+  \*****************************************************************************/
+/*! no static exports found */
+/*! all exports used */
+/***/ (function(module, exports) {
+
+module.exports = function _isTransformer(obj) {
+  return typeof obj['@@transducer/step'] === 'function';
+};
+
+/***/ }),
+
+/***/ 82:
+/*!**********************************************************!*\
+  !*** /Users/ivankleshnin/node_modules/ramda/src/prop.js ***!
+  \**********************************************************/
+/*! no static exports found */
+/*! all exports used */
+/***/ (function(module, exports, __webpack_require__) {
+
+var _curry2 = __webpack_require__(/*! ./internal/_curry2 */ 1);
+
+/**
+ * Returns a function that when supplied an object returns the indicated
+ * property of that object, if it exists.
+ *
+ * @func
+ * @memberOf R
+ * @since v0.1.0
+ * @category Object
+ * @sig s -> {s: a} -> a | Undefined
+ * @param {String} p The property name
+ * @param {Object} obj The object to query
+ * @return {*} The value at `obj.p`.
+ * @see R.path
+ * @example
+ *
+ *      R.prop('x', {x: 100}); //=> 100
+ *      R.prop('x', {}); //=> undefined
+ */
+module.exports = _curry2(function prop(p, obj) {
+  return obj[p];
+});
+
+/***/ }),
+
+/***/ 84:
+/*!***************************************************************!*\
+  !*** /Users/ivankleshnin/node_modules/ramda/src/assocPath.js ***!
+  \***************************************************************/
+/*! no static exports found */
+/*! all exports used */
+/***/ (function(module, exports, __webpack_require__) {
+
+var _curry3 = __webpack_require__(/*! ./internal/_curry3 */ 4);
+var _has = __webpack_require__(/*! ./internal/_has */ 14);
+var _isArray = __webpack_require__(/*! ./internal/_isArray */ 28);
+var _isInteger = __webpack_require__(/*! ./internal/_isInteger */ 85);
+var assoc = __webpack_require__(/*! ./assoc */ 41);
+
+/**
+ * Makes a shallow clone of an object, setting or overriding the nodes required
+ * to create the given path, and placing the specific value at the tail end of
+ * that path. Note that this copies and flattens prototype properties onto the
+ * new object as well. All non-primitive properties are copied by reference.
+ *
+ * @func
+ * @memberOf R
+ * @since v0.8.0
+ * @category Object
+ * @typedefn Idx = String | Int
+ * @sig [Idx] -> a -> {a} -> {a}
+ * @param {Array} path the path to set
+ * @param {*} val The new value
+ * @param {Object} obj The object to clone
+ * @return {Object} A new object equivalent to the original except along the specified path.
+ * @see R.dissocPath
+ * @example
+ *
+ *      R.assocPath(['a', 'b', 'c'], 42, {a: {b: {c: 0}}}); //=> {a: {b: {c: 42}}}
+ *
+ *      // Any missing or non-object keys in path will be overridden
+ *      R.assocPath(['a', 'b', 'c'], 42, {a: 5}); //=> {a: {b: {c: 42}}}
+ */
+module.exports = _curry3(function assocPath(path, val, obj) {
+  if (path.length === 0) {
+    return val;
+  }
+  var idx = path[0];
+  if (path.length > 1) {
+    var nextObj = _has(idx, obj) ? obj[idx] : _isInteger(path[1]) ? [] : {};
+    val = assocPath(Array.prototype.slice.call(path, 1), val, nextObj);
+  }
+  if (_isInteger(idx) && _isArray(obj)) {
+    var arr = [].concat(obj);
+    arr[idx] = val;
+    return arr;
+  } else {
+    return assoc(idx, val, obj);
+  }
+});
+
+/***/ }),
+
+/***/ 85:
+/*!*************************************************************************!*\
+  !*** /Users/ivankleshnin/node_modules/ramda/src/internal/_isInteger.js ***!
+  \*************************************************************************/
+/*! no static exports found */
+/*! all exports used */
+/***/ (function(module, exports) {
+
+/**
+ * Determine if the passed argument is an integer.
+ *
+ * @private
+ * @param {*} n
+ * @category Type
+ * @return {Boolean}
+ */
+module.exports = Number.isInteger || function _isInteger(n) {
+  return n << 0 === n;
+};
+
+/***/ }),
+
+/***/ 88:
+/*!*************************************************************!*\
+  !*** /Users/ivankleshnin/node_modules/ramda/src/compose.js ***!
+  \*************************************************************/
+/*! no static exports found */
+/*! all exports used */
+/***/ (function(module, exports, __webpack_require__) {
+
+var pipe = __webpack_require__(/*! ./pipe */ 123);
+var reverse = __webpack_require__(/*! ./reverse */ 65);
+
+/**
+ * Performs right-to-left function composition. The rightmost function may have
+ * any arity; the remaining functions must be unary.
+ *
+ * **Note:** The result of compose is not automatically curried.
+ *
+ * @func
+ * @memberOf R
+ * @since v0.1.0
+ * @category Function
+ * @sig ((y -> z), (x -> y), ..., (o -> p), ((a, b, ..., n) -> o)) -> ((a, b, ..., n) -> z)
+ * @param {...Function} ...functions The functions to compose
+ * @return {Function}
+ * @see R.pipe
+ * @example
+ *
+ *      var classyGreeting = (firstName, lastName) => "The name's " + lastName + ", " + firstName + " " + lastName
+ *      var yellGreeting = R.compose(R.toUpper, classyGreeting);
+ *      yellGreeting('James', 'Bond'); //=> "THE NAME'S BOND, JAMES BOND"
+ *
+ *      R.compose(Math.abs, R.add(1), R.multiply(2))(-4) //=> 7
+ *
+ * @symb R.compose(f, g, h)(a, b) = f(g(h(a, b)))
+ */
+module.exports = function compose() {
+  if (arguments.length === 0) {
+    throw new Error('compose requires at least one argument');
+  }
+  return pipe.apply(this, reverse(arguments));
+};
+
+/***/ }),
+
+/***/ 89:
+/*!**********************************************************!*\
+  !*** /Users/ivankleshnin/node_modules/ramda/src/tail.js ***!
+  \**********************************************************/
+/*! no static exports found */
+/*! all exports used */
+/***/ (function(module, exports, __webpack_require__) {
+
+var _checkForMethod = __webpack_require__(/*! ./internal/_checkForMethod */ 49);
+var _curry1 = __webpack_require__(/*! ./internal/_curry1 */ 3);
+var slice = __webpack_require__(/*! ./slice */ 31);
+
+/**
+ * Returns all but the first element of the given list or string (or object
+ * with a `tail` method).
+ *
+ * Dispatches to the `slice` method of the first argument, if present.
+ *
+ * @func
+ * @memberOf R
+ * @since v0.1.0
+ * @category List
+ * @sig [a] -> [a]
+ * @sig String -> String
+ * @param {*} list
+ * @return {*}
+ * @see R.head, R.init, R.last
+ * @example
+ *
+ *      R.tail([1, 2, 3]);  //=> [2, 3]
+ *      R.tail([1, 2]);     //=> [2]
+ *      R.tail([1]);        //=> []
+ *      R.tail([]);         //=> []
+ *
+ *      R.tail('abc');  //=> 'bc'
+ *      R.tail('ab');   //=> 'b'
+ *      R.tail('a');    //=> ''
+ *      R.tail('');     //=> ''
+ */
+module.exports = _curry1(_checkForMethod('tail', slice(1, Infinity)));
+
+/***/ }),
+
 /***/ 9:
 /*!****************************************!*\
   !*** ./node_modules/rxjs/util/root.js ***!
@@ -5384,11 +7257,59 @@ exports.root = _root;
     }
 })();
 //# sourceMappingURL=root.js.map
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(/*! ./../../webpack/buildin/global.js */ 95)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(/*! ./../../webpack/buildin/global.js */ 97)))
 
 /***/ }),
 
-/***/ 95:
+/***/ 93:
+/*!**************************************************************!*\
+  !*** /Users/ivankleshnin/node_modules/ramda/src/identity.js ***!
+  \**************************************************************/
+/*! no static exports found */
+/*! all exports used */
+/***/ (function(module, exports, __webpack_require__) {
+
+var _curry1 = __webpack_require__(/*! ./internal/_curry1 */ 3);
+var _identity = __webpack_require__(/*! ./internal/_identity */ 94);
+
+/**
+ * A function that does nothing but return the parameter supplied to it. Good
+ * as a default or placeholder function.
+ *
+ * @func
+ * @memberOf R
+ * @since v0.1.0
+ * @category Function
+ * @sig a -> a
+ * @param {*} x The value to return.
+ * @return {*} The input value, `x`.
+ * @example
+ *
+ *      R.identity(1); //=> 1
+ *
+ *      var obj = {};
+ *      R.identity(obj) === obj; //=> true
+ * @symb R.identity(a) = a
+ */
+module.exports = _curry1(_identity);
+
+/***/ }),
+
+/***/ 94:
+/*!************************************************************************!*\
+  !*** /Users/ivankleshnin/node_modules/ramda/src/internal/_identity.js ***!
+  \************************************************************************/
+/*! no static exports found */
+/*! all exports used */
+/***/ (function(module, exports) {
+
+module.exports = function _identity(x) {
+  return x;
+};
+
+/***/ }),
+
+/***/ 97:
 /*!***********************************!*\
   !*** (webpack)/buildin/global.js ***!
   \***********************************/
@@ -5424,7 +7345,7 @@ module.exports = g;
 
 /***/ }),
 
-/***/ 96:
+/***/ 98:
 /*!*******************************************************!*\
   !*** ./node_modules/rxjs/util/UnsubscriptionError.js ***!
   \*******************************************************/
@@ -5466,7 +7387,7 @@ exports.UnsubscriptionError = UnsubscriptionError;
 
 /***/ }),
 
-/***/ 97:
+/***/ 99:
 /*!***********************************************!*\
   !*** ./node_modules/rxjs/util/isArrayLike.js ***!
   \***********************************************/
@@ -5481,182 +7402,6 @@ exports.isArrayLike = function (x) {
   return x && typeof x.length === 'number';
 };
 //# sourceMappingURL=isArrayLike.js.map
-
-/***/ }),
-
-/***/ 98:
-/*!*********************************************!*\
-  !*** ./node_modules/rxjs/util/isPromise.js ***!
-  \*********************************************/
-/*! no static exports found */
-/*! all exports used */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-function isPromise(value) {
-    return value && typeof value.subscribe !== 'function' && typeof value.then === 'function';
-}
-exports.isPromise = isPromise;
-//# sourceMappingURL=isPromise.js.map
-
-/***/ }),
-
-/***/ 99:
-/*!*********************************************!*\
-  !*** ./node_modules/rxjs/operator/merge.js ***!
-  \*********************************************/
-/*! no static exports found */
-/*! all exports used */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var Observable_1 = __webpack_require__(/*! ../Observable */ 0);
-var ArrayObservable_1 = __webpack_require__(/*! ../observable/ArrayObservable */ 20);
-var mergeAll_1 = __webpack_require__(/*! ./mergeAll */ 44);
-var isScheduler_1 = __webpack_require__(/*! ../util/isScheduler */ 19);
-/* tslint:enable:max-line-length */
-/**
- * Creates an output Observable which concurrently emits all values from every
- * given input Observable.
- *
- * <span class="informal">Flattens multiple Observables together by blending
- * their values into one Observable.</span>
- *
- * <img src="./img/merge.png" width="100%">
- *
- * `merge` subscribes to each given input Observable (either the source or an
- * Observable given as argument), and simply forwards (without doing any
- * transformation) all the values from all the input Observables to the output
- * Observable. The output Observable only completes once all input Observables
- * have completed. Any error delivered by an input Observable will be immediately
- * emitted on the output Observable.
- *
- * @example <caption>Merge together two Observables: 1s interval and clicks</caption>
- * var clicks = Rx.Observable.fromEvent(document, 'click');
- * var timer = Rx.Observable.interval(1000);
- * var clicksOrTimer = clicks.merge(timer);
- * clicksOrTimer.subscribe(x => console.log(x));
- *
- * @example <caption>Merge together 3 Observables, but only 2 run concurrently</caption>
- * var timer1 = Rx.Observable.interval(1000).take(10);
- * var timer2 = Rx.Observable.interval(2000).take(6);
- * var timer3 = Rx.Observable.interval(500).take(10);
- * var concurrent = 2; // the argument
- * var merged = timer1.merge(timer2, timer3, concurrent);
- * merged.subscribe(x => console.log(x));
- *
- * @see {@link mergeAll}
- * @see {@link mergeMap}
- * @see {@link mergeMapTo}
- * @see {@link mergeScan}
- *
- * @param {ObservableInput} other An input Observable to merge with the source
- * Observable. More than one input Observables may be given as argument.
- * @param {number} [concurrent=Number.POSITIVE_INFINITY] Maximum number of input
- * Observables being subscribed to concurrently.
- * @param {Scheduler} [scheduler=null] The IScheduler to use for managing
- * concurrency of input Observables.
- * @return {Observable} An Observable that emits items that are the result of
- * every input Observable.
- * @method merge
- * @owner Observable
- */
-function merge() {
-    var observables = [];
-    for (var _i = 0; _i < arguments.length; _i++) {
-        observables[_i - 0] = arguments[_i];
-    }
-    return this.lift.call(mergeStatic.apply(void 0, [this].concat(observables)));
-}
-exports.merge = merge;
-/* tslint:enable:max-line-length */
-/**
- * Creates an output Observable which concurrently emits all values from every
- * given input Observable.
- *
- * <span class="informal">Flattens multiple Observables together by blending
- * their values into one Observable.</span>
- *
- * <img src="./img/merge.png" width="100%">
- *
- * `merge` subscribes to each given input Observable (as arguments), and simply
- * forwards (without doing any transformation) all the values from all the input
- * Observables to the output Observable. The output Observable only completes
- * once all input Observables have completed. Any error delivered by an input
- * Observable will be immediately emitted on the output Observable.
- *
- * @example <caption>Merge together two Observables: 1s interval and clicks</caption>
- * var clicks = Rx.Observable.fromEvent(document, 'click');
- * var timer = Rx.Observable.interval(1000);
- * var clicksOrTimer = Rx.Observable.merge(clicks, timer);
- * clicksOrTimer.subscribe(x => console.log(x));
- *
- * // Results in the following:
- * // timer will emit ascending values, one every second(1000ms) to console
- * // clicks logs MouseEvents to console everytime the "document" is clicked
- * // Since the two streams are merged you see these happening
- * // as they occur.
- *
- * @example <caption>Merge together 3 Observables, but only 2 run concurrently</caption>
- * var timer1 = Rx.Observable.interval(1000).take(10);
- * var timer2 = Rx.Observable.interval(2000).take(6);
- * var timer3 = Rx.Observable.interval(500).take(10);
- * var concurrent = 2; // the argument
- * var merged = Rx.Observable.merge(timer1, timer2, timer3, concurrent);
- * merged.subscribe(x => console.log(x));
- *
- * // Results in the following:
- * // - First timer1 and timer2 will run concurrently
- * // - timer1 will emit a value every 1000ms for 10 iterations
- * // - timer2 will emit a value every 2000ms for 6 iterations
- * // - after timer1 hits it's max iteration, timer2 will
- * //   continue, and timer3 will start to run concurrently with timer2
- * // - when timer2 hits it's max iteration it terminates, and
- * //   timer3 will continue to emit a value every 500ms until it is complete
- *
- * @see {@link mergeAll}
- * @see {@link mergeMap}
- * @see {@link mergeMapTo}
- * @see {@link mergeScan}
- *
- * @param {...ObservableInput} observables Input Observables to merge together.
- * @param {number} [concurrent=Number.POSITIVE_INFINITY] Maximum number of input
- * Observables being subscribed to concurrently.
- * @param {Scheduler} [scheduler=null] The IScheduler to use for managing
- * concurrency of input Observables.
- * @return {Observable} an Observable that emits items that are the result of
- * every input Observable.
- * @static true
- * @name merge
- * @owner Observable
- */
-function mergeStatic() {
-    var observables = [];
-    for (var _i = 0; _i < arguments.length; _i++) {
-        observables[_i - 0] = arguments[_i];
-    }
-    var concurrent = Number.POSITIVE_INFINITY;
-    var scheduler = null;
-    var last = observables[observables.length - 1];
-    if (isScheduler_1.isScheduler(last)) {
-        scheduler = observables.pop();
-        if (observables.length > 1 && typeof observables[observables.length - 1] === 'number') {
-            concurrent = observables.pop();
-        }
-    } else if (typeof last === 'number') {
-        concurrent = observables.pop();
-    }
-    if (scheduler === null && observables.length === 1 && observables[0] instanceof Observable_1.Observable) {
-        return observables[0];
-    }
-    return new ArrayObservable_1.ArrayObservable(observables, scheduler).lift(new mergeAll_1.MergeAllOperator(concurrent));
-}
-exports.mergeStatic = mergeStatic;
-//# sourceMappingURL=merge.js.map
 
 /***/ })
 

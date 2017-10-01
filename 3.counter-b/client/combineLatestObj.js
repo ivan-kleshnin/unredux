@@ -3,7 +3,7 @@
 let R = require("ramda")
 let {Observable} = require("rxjs")
 
-function combineLatestObj(obj) {
+let combineLatestObj = (obj) => {
   let keys = Object.keys(obj)     // stream names
   let values = Object.values(obj) // streams
   return Observable.combineLatest(values, (...args) => {

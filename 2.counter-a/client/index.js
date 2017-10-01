@@ -1,7 +1,5 @@
 import {Component} from "react"
 
-let stateCycle = new ReplaySubject(1)
-
 // User intents
 let intents = {
   increment: new Subject(),
@@ -10,14 +8,16 @@ let intents = {
 }
 
 // State actions
+let stateCycle = new ReplaySubject(1)
+
 let actions = {
   increment: Observable.merge(
     intents.increment,
     stateCycle.sample(intents.incrementIfOdd).filter(state => state.counter % 2)
   )
-    .map(() => (state) => R.assoc("counter", state.counter + 1, state)),
+    .map(() => R.assoc("counter", state.counter + 1)),
   decrement: intents.decrement
-    .map(() => (state) => R.assoc("counter", state.counter - 1, state)),
+    .map(() => R.assoc("counter", state.counter - 1)),
 }
 
 // State stream

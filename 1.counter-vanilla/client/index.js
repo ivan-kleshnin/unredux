@@ -1,5 +1,3 @@
-let stateCycle = new ReplaySubject(1)
-
 // User intents
 let intents = {
   increment: new Subject(),
@@ -8,14 +6,16 @@ let intents = {
 }
 
 // State actions
+let stateCycle = new ReplaySubject(1)
+
 let actions = {
   increment: Observable.merge(
     intents.increment,
     stateCycle.sample(intents.incrementIfOdd).filter(state => state.counter % 2)
   )
-    .map(() => (state) => R.assoc("counter", state.counter + 1, state)),
+    .map(() => R.assoc("counter", state.counter + 1)),
   decrement: intents.decrement
-    .map(() => (state) => R.assoc("counter", state.counter - 1, state)),
+    .map(() => R.assoc("counter", state.counter - 1)),
 }
 
 // State stream
@@ -35,8 +35,8 @@ let state = Observable.merge(
  .shareReplay(1)
 
 // Rendering & Events
-function App(state) {
-  return `<div>
+let App = (state) =>
+  `<div>
     <p>
       Clicked: <span id="value">${state.counter}</span> times
       <button id="increment">+</button>
@@ -45,9 +45,8 @@ function App(state) {
       <button id="incrementAsync">Increment async</button>
     </p>
   </div>`
-}
 
-function bindEvents() {
+let bindEvents = () => {
   document.querySelector("#increment").addEventListener("click", () => {
     intents.increment.next()
   })

@@ -1,10 +1,12 @@
-import R from "ramda"
 import React, {Component} from "react"
 import combineLatestObj from "./combineLatestObj"
 
 export default function connect(streamsToProps, ComponentToWrap) {
   class Container extends Component {
-    state = {} // will be replaced with initialState on componentWillMount (before first render)
+    constructor(props) {
+      super(props)
+      this.state = {} // will be replaced with initialState on componentWillMount (before first render)
+    }
 
     componentWillMount() {
       let props = combineLatestObj(streamsToProps)

@@ -1,26 +1,7 @@
-import R from "ramda"
-import {Observable} from "rxjs/Observable"
-import {Subject} from "rxjs/Subject"
-import {ReplaySubject} from "rxjs/ReplaySubject"
-
-// Import RxJS Observable functions
-import "rxjs/add/observable/combineLatest"
-import "rxjs/add/observable/merge"
-
-// Import RxJS Observable methods
-import "rxjs/add/operator/distinctUntilChanged"
-import "rxjs/add/operator/map"
-import "rxjs/add/operator/scan"
-import "rxjs/add/operator/shareReplay"
-
 import React, {Component} from "react"
-
+import ReactDOM from "react-dom"
 import connect from "./connect"
 
-// Helpers
-let isOdd = (d) => d % 2
-
-// App =============================================================================================
 let stateCycle = new ReplaySubject(1)
 
 // User intents
@@ -34,13 +15,14 @@ let intents = {
 let actions = {
   increment: Observable.merge(
     intents.increment,
-    stateCycle.sample(intents.incrementIfOdd).filter(state => isOdd(state.counter))
+    stateCycle.sample(intents.incrementIfOdd).filter(state => state.counter % 2)
   )
     .map(() => (state) => R.assoc("counter", state.counter + 1, state)),
   decrement: intents.decrement
     .map(() => (state) => R.assoc("counter", state.counter - 1, state)),
 }
 
+// State stream
 let initialState = {counter: 0}
 
 let state = Observable.merge(
@@ -56,7 +38,8 @@ let state = Observable.merge(
  .distinctUntilChanged()
  .shareReplay(1)
 
-export default connect(
+// Rendering & Events
+let App = connect(
   {counter: state.pluck("counter")},
   (props) =>
     <div className={props.className}>
@@ -71,3 +54,5 @@ export default connect(
       </p>
     </div>
 )
+
+ReactDOM.render(<App/>, document.getElementById("root"))

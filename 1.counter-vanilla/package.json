@@ -1,0 +1,13 @@
+{
+  "name": "1.counter-vanilla",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "react-dom": "^16.0.0",
+    "rxjs": "^5.4.3",
+    "webpack": "^3.6.0"
+  },
+  "scripts": {
+    "start": "webpack --watch ./client & http-server"
+  }
+}

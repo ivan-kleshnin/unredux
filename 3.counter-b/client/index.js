@@ -1,5 +1,4 @@
-import React, {Component} from "react"
-import ReactDOM from "react-dom"
+import {Component} from "react"
 import connect from "./connect"
 
 let stateCycle = new ReplaySubject(1)

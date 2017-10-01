@@ -15,5 +15,9 @@ module.exports = {
     rules: [
       {test: /\.js$/, use: "babel-loader"},
     ]
+  },
+  externals: {
+    "react": "React",
+    "react-dom": "ReactDOM",
   }
 }

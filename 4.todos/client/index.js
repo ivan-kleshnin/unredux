@@ -1,33 +1,15 @@
-import R from "ramda"
-import {Observable} from "rxjs/Observable"
-import {Subject} from "rxjs/Subject"
-import {ReplaySubject} from "rxjs/ReplaySubject"
-
-// Import RxJS Observable functions
-import "rxjs/add/observable/combineLatest"
-import "rxjs/add/observable/merge"
-
-// Import RxJS Observable methods
-import "rxjs/add/operator/distinctUntilChanged"
-import "rxjs/add/operator/map"
-import "rxjs/add/operator/scan"
-import "rxjs/add/operator/shareReplay"
-import "rxjs/add/operator/withLatestFrom"
-
-import React, {Component} from "react"
-
+import {Component} from "react"
 import connect from "./connect"
 
-// App =============================================================================================
 let stateCycle = new ReplaySubject(1)
 
-// INTENTS
+// User intents
 let intents = {
   addTodo: new Subject(),
   setFilter: new Subject(),
 }
 
-// ACTIONS
+// State actions
 let actions = {
   addTodo: intents.addTodo.withLatestFrom(stateCycle, (text, state) => {
     return (state) => {
@@ -44,7 +26,7 @@ let actions = {
   }),
 }
 
-// STATE
+// State stream
 let initialState = {
   todos: [{
     id: "1",
@@ -67,7 +49,7 @@ let state = Observable.merge(
  .distinctUntilChanged()
  .shareReplay(1)
 
-// Derive state IS state (not some memoized shit), so you can
+// Derived state IS state (not some memoized shit), so you can
 // depend on it actions (unlike so in Redux!)
 let visibleTodos = state.map((state) => {
   switch (state.filter) {
@@ -82,7 +64,7 @@ let visibleTodos = state.map((state) => {
   }
 })
 
-// COMPONENTS
+// Rendering & Events
 function AddTodo(props) {
   let input
   return <div>
@@ -104,6 +86,15 @@ function AddTodo(props) {
   </div>
 }
 
+function TodoItem(props) {
+  return <li
+    onClick={() => intents.toggleTodo.next(props.todo.id)}
+    style={{textDecoration: props.todo.completed ? "line-through" : "none"}}
+  >
+    {props.todo.text}
+  </li>
+}
+
 let TodoList = connect(
   {state: state},
   (props) =>
@@ -113,15 +104,6 @@ let TodoList = connect(
       )}
     </ul>
 )
-
-function TodoItem(props) {
-  return <li
-    onClick={() => intents.toggleTodo.next(props.todo.id)}
-    style={{textDecoration: props.todo.completed ? "line-through" : "none"}}
-  >
-    {props.todo.text}
-  </li>
-}
 
 function Footer(props) {
   return <p>
@@ -141,9 +123,12 @@ function Footer(props) {
   </p>
 }
 
-export default (props) =>
-  <div>
+function App(props) {
+  return <div>
     <AddTodo/>
     <TodoList/>
     <Footer/>
   </div>
+}
+
+ReactDOM.render(<App/>, document.getElementById("root"))

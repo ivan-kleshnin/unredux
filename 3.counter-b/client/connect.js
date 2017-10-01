@@ -1,4 +1,4 @@
-import React, {Component} from "react"
+import {Component} from "react"
 import combineLatestObj from "./combineLatestObj"
 
 export default function connect(streamsToProps, ComponentToWrap) {

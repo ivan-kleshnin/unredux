@@ -27,11 +27,11 @@ let state = Observable.merge(
 )
  .startWith(initialState)
  .scan((state, fn) => fn(state))
+ .distinctUntilChanged(R.equals)
  .do(state => {
    console.log("state spy:", state)
    stateCycle.next(state)
  })
- .distinctUntilChanged()
  .shareReplay(1)
 
 // Rendering & Events

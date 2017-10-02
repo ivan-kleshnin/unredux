@@ -3,7 +3,9 @@ import assoc from "ramda/src/assoc"
 import assocPath from "ramda/src/assocPath"
 import compose from "ramda/src/compose"
 import curry from "ramda/src/curry"
+import equals from "ramda/src/equals"
 import identity from "ramda/src/identity"
+import filter from "ramda/src/filter"
 import lens from "ramda/src/lens"
 import lensIndex from "ramda/src/lensIndex"
 import lensProp from "ramda/src/lensProp"
@@ -13,7 +15,8 @@ import set from "ramda/src/set"
 import sortBy from "ramda/src/sortBy"
 import view from "ramda/src/view"
 
-window.R = {assoc, assocPath, compose, curry, id: identity, identity, lens, lensIndex, lensProp, merge, over, set, sortBy, view}
+window.R = {assoc, assocPath, compose, curry, equals, id: identity, identity, filter,
+            lens, lensIndex, lensProp, merge, over, set, sortBy, view}
 
 // RXJS ============================================================================================
 import {Observable} from "rxjs/Observable"

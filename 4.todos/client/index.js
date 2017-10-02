@@ -65,27 +65,29 @@ let state = Observable.merge(
 )
  .startWith(initialState)
  .scan((state, fn) => fn(state))
+ .distinctUntilChanged(R.equals)
  .do(state => {
    console.log("state spy:", state)
    stateCycle.next(state)
  })
- .distinctUntilChanged()
  .shareReplay(1)
 
 // Derived state should act like normal (instead of some memoized shit), so you can
 // depend on it in actions (unlike so in Redux!)
-let filteredTodos = state.map((state) => {
-  switch (state.filter) {
-    case "all":
-      return Object.values(state.todos)
-    case "completed":
-      return R.sortBy(t => t.addedAt, R.filter(t => t.completed, Object.values(state.todos)))
-    case "active":
-      return R.sortBy(t => t.addedAt, R.filter(t => !t.completed, Object.values(state.todos)))
-    default:
-      throw Error("Unknown filter: " + state.filter)
-  }
-})
+let derived = {
+  filteredTodos: state.map((state) => {
+    switch (state.filter) {
+      case "all":
+        return Object.values(state.todos)
+      case "completed":
+        return R.sortBy(t => t.addedAt, R.filter(t => t.completed, Object.values(state.todos)))
+      case "active":
+        return R.sortBy(t => t.addedAt, R.filter(t => !t.completed, Object.values(state.todos)))
+      default:
+        throw Error("Unknown filter: " + state.filter)
+    }
+  })
+}
 
 // Rendering & Events
 let AddTodo = (props) => {
@@ -118,7 +120,7 @@ let TodoItem = (props) =>
   </li>
 
 let TodoList = connect(
-  {todos: filteredTodos},
+  {todos: derived.filteredTodos},
   (props) =>
     <ul>
       {props.todos.map(todo =>
@@ -131,15 +133,15 @@ let Footer = (props) =>
   <p>
     Show:
     {" "}
-    <a onClick={() => intents.setFilter.next("all")}>
+    <a id="all" href="#all" onClick={(e) => { e.preventDefault(); intents.setFilter.next("all"); }}>
       All
     </a>
     {", "}
-    <a onClick={() => intents.setFilter.next("active")}>
+    <a id="active" href="#active" onClick={(e) => { e.preventDefault(); intents.setFilter.next("active"); }}>
       Active
     </a>
     {", "}
-    <a onClick={() => intents.setFilter.next("completed")}>
+    <a id="completed" href="#completed" onClick={(e) => { e.preventDefault(); intents.setFilter.next("completed"); }}>
       Completed
     </a>
   </p>

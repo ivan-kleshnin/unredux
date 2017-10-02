@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "/";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 214);
+/******/ 	return __webpack_require__(__webpack_require__.s = 224);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -75,9 +75,9 @@
 "use strict";
 
 
-var root_1 = __webpack_require__(/*! ./util/root */ 9);
-var toSubscriber_1 = __webpack_require__(/*! ./util/toSubscriber */ 167);
-var observable_1 = __webpack_require__(/*! ./symbol/observable */ 43);
+var root_1 = __webpack_require__(/*! ./util/root */ 10);
+var toSubscriber_1 = __webpack_require__(/*! ./util/toSubscriber */ 177);
+var observable_1 = __webpack_require__(/*! ./symbol/observable */ 48);
 /**
  * A representation of any set of values over any amount of time. This is the most basic building block
  * of RxJS.
@@ -335,7 +335,7 @@ exports.Observable = Observable;
 /*! all exports used */
 /***/ (function(module, exports, __webpack_require__) {
 
-var _curry1 = __webpack_require__(/*! ./_curry1 */ 3);
+var _curry1 = __webpack_require__(/*! ./_curry1 */ 2);
 var _isPlaceholder = __webpack_require__(/*! ./_isPlaceholder */ 34);
 
 /**
@@ -367,6 +367,35 @@ module.exports = function _curry2(fn) {
 
 /***/ }),
 /* 2 */
+/*!**********************************************************************!*\
+  !*** /Users/ivankleshnin/node_modules/ramda/src/internal/_curry1.js ***!
+  \**********************************************************************/
+/*! no static exports found */
+/*! all exports used */
+/***/ (function(module, exports, __webpack_require__) {
+
+var _isPlaceholder = __webpack_require__(/*! ./_isPlaceholder */ 34);
+
+/**
+ * Optimized internal one-arity curry function.
+ *
+ * @private
+ * @category Function
+ * @param {Function} fn The function to curry.
+ * @return {Function} The curried function.
+ */
+module.exports = function _curry1(fn) {
+  return function f1(a) {
+    if (arguments.length === 0 || _isPlaceholder(a)) {
+      return f1;
+    } else {
+      return fn.apply(this, arguments);
+    }
+  };
+};
+
+/***/ }),
+/* 3 */
 /*!*****************************************!*\
   !*** ./node_modules/rxjs/Subscriber.js ***!
   \*****************************************/
@@ -387,10 +416,10 @@ var __extends = undefined && undefined.__extends || function (d, b) {
     }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var isFunction_1 = __webpack_require__(/*! ./util/isFunction */ 42);
-var Subscription_1 = __webpack_require__(/*! ./Subscription */ 7);
-var Observer_1 = __webpack_require__(/*! ./Observer */ 79);
-var rxSubscriber_1 = __webpack_require__(/*! ./symbol/rxSubscriber */ 36);
+var isFunction_1 = __webpack_require__(/*! ./util/isFunction */ 47);
+var Subscription_1 = __webpack_require__(/*! ./Subscription */ 8);
+var Observer_1 = __webpack_require__(/*! ./Observer */ 88);
+var rxSubscriber_1 = __webpack_require__(/*! ./symbol/rxSubscriber */ 42);
 /**
  * Implements the {@link Observer} interface and extends the
  * {@link Subscription} class. While the {@link Observer} is the public API for
@@ -643,35 +672,6 @@ var SafeSubscriber = function (_super) {
 //# sourceMappingURL=Subscriber.js.map
 
 /***/ }),
-/* 3 */
-/*!**********************************************************************!*\
-  !*** /Users/ivankleshnin/node_modules/ramda/src/internal/_curry1.js ***!
-  \**********************************************************************/
-/*! no static exports found */
-/*! all exports used */
-/***/ (function(module, exports, __webpack_require__) {
-
-var _isPlaceholder = __webpack_require__(/*! ./_isPlaceholder */ 34);
-
-/**
- * Optimized internal one-arity curry function.
- *
- * @private
- * @category Function
- * @param {Function} fn The function to curry.
- * @return {Function} The curried function.
- */
-module.exports = function _curry1(fn) {
-  return function f1(a) {
-    if (arguments.length === 0 || _isPlaceholder(a)) {
-      return f1;
-    } else {
-      return fn.apply(this, arguments);
-    }
-  };
-};
-
-/***/ }),
 /* 4 */
 /*!**********************************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/internal/_curry3.js ***!
@@ -680,7 +680,7 @@ module.exports = function _curry1(fn) {
 /*! all exports used */
 /***/ (function(module, exports, __webpack_require__) {
 
-var _curry1 = __webpack_require__(/*! ./_curry1 */ 3);
+var _curry1 = __webpack_require__(/*! ./_curry1 */ 2);
 var _curry2 = __webpack_require__(/*! ./_curry2 */ 1);
 var _isPlaceholder = __webpack_require__(/*! ./_isPlaceholder */ 34);
 
@@ -747,7 +747,7 @@ var __extends = undefined && undefined.__extends || function (d, b) {
     }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var Subscriber_1 = __webpack_require__(/*! ./Subscriber */ 2);
+var Subscriber_1 = __webpack_require__(/*! ./Subscriber */ 3);
 /**
  * We need this JSDoc comment for affecting ESDoc.
  * @ignore
@@ -784,14 +784,14 @@ exports.OuterSubscriber = OuterSubscriber;
 "use strict";
 
 
-var root_1 = __webpack_require__(/*! ./root */ 9);
-var isArrayLike_1 = __webpack_require__(/*! ./isArrayLike */ 99);
-var isPromise_1 = __webpack_require__(/*! ./isPromise */ 100);
-var isObject_1 = __webpack_require__(/*! ./isObject */ 78);
+var root_1 = __webpack_require__(/*! ./root */ 10);
+var isArrayLike_1 = __webpack_require__(/*! ./isArrayLike */ 109);
+var isPromise_1 = __webpack_require__(/*! ./isPromise */ 110);
+var isObject_1 = __webpack_require__(/*! ./isObject */ 87);
 var Observable_1 = __webpack_require__(/*! ../Observable */ 0);
-var iterator_1 = __webpack_require__(/*! ../symbol/iterator */ 37);
-var InnerSubscriber_1 = __webpack_require__(/*! ../InnerSubscriber */ 170);
-var observable_1 = __webpack_require__(/*! ../symbol/observable */ 43);
+var iterator_1 = __webpack_require__(/*! ../symbol/iterator */ 43);
+var InnerSubscriber_1 = __webpack_require__(/*! ../InnerSubscriber */ 180);
+var observable_1 = __webpack_require__(/*! ../symbol/observable */ 48);
 function subscribeToResult(outerSubscriber, result, outerValue, outerIndex) {
     var destination = new InnerSubscriber_1.InnerSubscriber(outerSubscriber, outerValue, outerIndex);
     if (destination.closed) {
@@ -859,6 +859,56 @@ exports.subscribeToResult = subscribeToResult;
 
 /***/ }),
 /* 7 */
+/*!****************************************************************************!*\
+  !*** /Users/ivankleshnin/node_modules/ramda/src/internal/_dispatchable.js ***!
+  \****************************************************************************/
+/*! no static exports found */
+/*! all exports used */
+/***/ (function(module, exports, __webpack_require__) {
+
+var _isArray = __webpack_require__(/*! ./_isArray */ 27);
+var _isTransformer = __webpack_require__(/*! ./_isTransformer */ 64);
+
+/**
+ * Returns a function that dispatches with different strategies based on the
+ * object in list position (last argument). If it is an array, executes [fn].
+ * Otherwise, if it has a function with one of the given method names, it will
+ * execute that function (functor case). Otherwise, if it is a transformer,
+ * uses transducer [xf] to return a new transformer (transducer case).
+ * Otherwise, it will default to executing [fn].
+ *
+ * @private
+ * @param {Array} methodNames properties to check for a custom implementation
+ * @param {Function} xf transducer to initialize if object is transformer
+ * @param {Function} fn default ramda implementation
+ * @return {Function} A function that dispatches on object in list position
+ */
+module.exports = function _dispatchable(methodNames, xf, fn) {
+  return function () {
+    if (arguments.length === 0) {
+      return fn();
+    }
+    var args = Array.prototype.slice.call(arguments, 0);
+    var obj = args.pop();
+    if (!_isArray(obj)) {
+      var idx = 0;
+      while (idx < methodNames.length) {
+        if (typeof obj[methodNames[idx]] === 'function') {
+          return obj[methodNames[idx]].apply(obj, args);
+        }
+        idx += 1;
+      }
+      if (_isTransformer(obj)) {
+        var transducer = xf.apply(null, args);
+        return transducer(obj);
+      }
+    }
+    return fn.apply(this, arguments);
+  };
+};
+
+/***/ }),
+/* 8 */
 /*!*******************************************!*\
   !*** ./node_modules/rxjs/Subscription.js ***!
   \*******************************************/
@@ -871,12 +921,12 @@ exports.subscribeToResult = subscribeToResult;
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
-var isArray_1 = __webpack_require__(/*! ./util/isArray */ 22);
-var isObject_1 = __webpack_require__(/*! ./util/isObject */ 78);
-var isFunction_1 = __webpack_require__(/*! ./util/isFunction */ 42);
+var isArray_1 = __webpack_require__(/*! ./util/isArray */ 26);
+var isObject_1 = __webpack_require__(/*! ./util/isObject */ 87);
+var isFunction_1 = __webpack_require__(/*! ./util/isFunction */ 47);
 var tryCatch_1 = __webpack_require__(/*! ./util/tryCatch */ 13);
-var errorObject_1 = __webpack_require__(/*! ./util/errorObject */ 11);
-var UnsubscriptionError_1 = __webpack_require__(/*! ./util/UnsubscriptionError */ 98);
+var errorObject_1 = __webpack_require__(/*! ./util/errorObject */ 12);
+var UnsubscriptionError_1 = __webpack_require__(/*! ./util/UnsubscriptionError */ 108);
 /**
  * Represents a disposable resource, such as the execution of an Observable. A
  * Subscription has one important method, `unsubscribe`, that takes no argument
@@ -1067,57 +1117,25 @@ function flattenUnsubscriptionErrors(errors) {
 //# sourceMappingURL=Subscription.js.map
 
 /***/ }),
-/* 8 */
-/*!****************************************************************************!*\
-  !*** /Users/ivankleshnin/node_modules/ramda/src/internal/_dispatchable.js ***!
-  \****************************************************************************/
+/* 9 */
+/*!**********************************************************************!*\
+  !*** /Users/ivankleshnin/node_modules/ramda/src/internal/_xfBase.js ***!
+  \**********************************************************************/
 /*! no static exports found */
 /*! all exports used */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ (function(module, exports) {
 
-var _isArray = __webpack_require__(/*! ./_isArray */ 28);
-var _isTransformer = __webpack_require__(/*! ./_isTransformer */ 81);
-
-/**
- * Returns a function that dispatches with different strategies based on the
- * object in list position (last argument). If it is an array, executes [fn].
- * Otherwise, if it has a function with one of the given method names, it will
- * execute that function (functor case). Otherwise, if it is a transformer,
- * uses transducer [xf] to return a new transformer (transducer case).
- * Otherwise, it will default to executing [fn].
- *
- * @private
- * @param {Array} methodNames properties to check for a custom implementation
- * @param {Function} xf transducer to initialize if object is transformer
- * @param {Function} fn default ramda implementation
- * @return {Function} A function that dispatches on object in list position
- */
-module.exports = function _dispatchable(methodNames, xf, fn) {
-  return function () {
-    if (arguments.length === 0) {
-      return fn();
-    }
-    var args = Array.prototype.slice.call(arguments, 0);
-    var obj = args.pop();
-    if (!_isArray(obj)) {
-      var idx = 0;
-      while (idx < methodNames.length) {
-        if (typeof obj[methodNames[idx]] === 'function') {
-          return obj[methodNames[idx]].apply(obj, args);
-        }
-        idx += 1;
-      }
-      if (_isTransformer(obj)) {
-        var transducer = xf.apply(null, args);
-        return transducer(obj);
-      }
-    }
-    return fn.apply(this, arguments);
-  };
+module.exports = {
+  init: function () {
+    return this.xf['@@transducer/init']();
+  },
+  result: function (result) {
+    return this.xf['@@transducer/result'](result);
+  }
 };
 
 /***/ }),
-/* 9 */
+/* 10 */
 /*!****************************************!*\
   !*** ./node_modules/rxjs/util/root.js ***!
   \****************************************/
@@ -1145,10 +1163,10 @@ exports.root = _root;
     }
 })();
 //# sourceMappingURL=root.js.map
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(/*! ./../../webpack/buildin/global.js */ 97)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(/*! ./../../webpack/buildin/global.js */ 107)))
 
 /***/ }),
-/* 10 */
+/* 11 */
 /*!**************************************!*\
   !*** ./node_modules/rxjs/Subject.js ***!
   \**************************************/
@@ -1168,11 +1186,11 @@ var __extends = undefined && undefined.__extends || function (d, b) {
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 var Observable_1 = __webpack_require__(/*! ./Observable */ 0);
-var Subscriber_1 = __webpack_require__(/*! ./Subscriber */ 2);
-var Subscription_1 = __webpack_require__(/*! ./Subscription */ 7);
-var ObjectUnsubscribedError_1 = __webpack_require__(/*! ./util/ObjectUnsubscribedError */ 44);
-var SubjectSubscription_1 = __webpack_require__(/*! ./SubjectSubscription */ 80);
-var rxSubscriber_1 = __webpack_require__(/*! ./symbol/rxSubscriber */ 36);
+var Subscriber_1 = __webpack_require__(/*! ./Subscriber */ 3);
+var Subscription_1 = __webpack_require__(/*! ./Subscription */ 8);
+var ObjectUnsubscribedError_1 = __webpack_require__(/*! ./util/ObjectUnsubscribedError */ 49);
+var SubjectSubscription_1 = __webpack_require__(/*! ./SubjectSubscription */ 89);
+var rxSubscriber_1 = __webpack_require__(/*! ./symbol/rxSubscriber */ 42);
 /**
  * @class SubjectSubscriber<T>
  */
@@ -1326,7 +1344,7 @@ exports.AnonymousSubject = AnonymousSubject;
 //# sourceMappingURL=Subject.js.map
 
 /***/ }),
-/* 11 */
+/* 12 */
 /*!***********************************************!*\
   !*** ./node_modules/rxjs/util/errorObject.js ***!
   \***********************************************/
@@ -1342,24 +1360,6 @@ exports.errorObject = { e: {} };
 //# sourceMappingURL=errorObject.js.map
 
 /***/ }),
-/* 12 */
-/*!**********************************************************************!*\
-  !*** /Users/ivankleshnin/node_modules/ramda/src/internal/_xfBase.js ***!
-  \**********************************************************************/
-/*! no static exports found */
-/*! all exports used */
-/***/ (function(module, exports) {
-
-module.exports = {
-  init: function () {
-    return this.xf['@@transducer/init']();
-  },
-  result: function (result) {
-    return this.xf['@@transducer/result'](result);
-  }
-};
-
-/***/ }),
 /* 13 */
 /*!********************************************!*\
   !*** ./node_modules/rxjs/util/tryCatch.js ***!
@@ -1371,7 +1371,7 @@ module.exports = {
 "use strict";
 
 
-var errorObject_1 = __webpack_require__(/*! ./errorObject */ 11);
+var errorObject_1 = __webpack_require__(/*! ./errorObject */ 12);
 var tryCatchTarget;
 function tryCatcher() {
     try {
@@ -1411,10 +1411,10 @@ module.exports = function _has(prop, obj) {
 /*! all exports used */
 /***/ (function(module, exports, __webpack_require__) {
 
-var _arity = __webpack_require__(/*! ./internal/_arity */ 23);
-var _curry1 = __webpack_require__(/*! ./internal/_curry1 */ 3);
+var _arity = __webpack_require__(/*! ./internal/_arity */ 19);
+var _curry1 = __webpack_require__(/*! ./internal/_curry1 */ 2);
 var _curry2 = __webpack_require__(/*! ./internal/_curry2 */ 1);
-var _curryN = __webpack_require__(/*! ./internal/_curryN */ 58);
+var _curryN = __webpack_require__(/*! ./internal/_curryN */ 52);
 
 /**
  * Returns a curried equivalent of the provided function, with the specified
@@ -1467,65 +1467,6 @@ module.exports = _curry2(function curryN(length, fn) {
 
 /***/ }),
 /* 16 */
-/*!**********************************************!*\
-  !*** ./node_modules/rxjs/scheduler/async.js ***!
-  \**********************************************/
-/*! no static exports found */
-/*! all exports used */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var AsyncAction_1 = __webpack_require__(/*! ./AsyncAction */ 39);
-var AsyncScheduler_1 = __webpack_require__(/*! ./AsyncScheduler */ 40);
-/**
- *
- * Async Scheduler
- *
- * <span class="informal">Schedule task as if you used setTimeout(task, duration)</span>
- *
- * `async` scheduler schedules tasks asynchronously, by putting them on the JavaScript
- * event loop queue. It is best used to delay tasks in time or to schedule tasks repeating
- * in intervals.
- *
- * If you just want to "defer" task, that is to perform it right after currently
- * executing synchronous code ends (commonly achieved by `setTimeout(deferredTask, 0)`),
- * better choice will be the {@link asap} scheduler.
- *
- * @example <caption>Use async scheduler to delay task</caption>
- * const task = () => console.log('it works!');
- *
- * Rx.Scheduler.async.schedule(task, 2000);
- *
- * // After 2 seconds logs:
- * // "it works!"
- *
- *
- * @example <caption>Use async scheduler to repeat task in intervals</caption>
- * function task(state) {
- *   console.log(state);
- *   this.schedule(state + 1, 1000); // `this` references currently executing Action,
- *                                   // which we reschedule with new state and delay
- * }
- *
- * Rx.Scheduler.async.schedule(task, 3000, 0);
- *
- * // Logs:
- * // 0 after 3s
- * // 1 after 4s
- * // 2 after 5s
- * // 3 after 6s
- *
- * @static true
- * @name async
- * @owner Scheduler
- */
-exports.async = new AsyncScheduler_1.AsyncScheduler(AsyncAction_1.AsyncAction);
-//# sourceMappingURL=async.js.map
-
-/***/ }),
-/* 17 */
 /*!*********************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/map.js ***!
   \*********************************************************/
@@ -1534,12 +1475,12 @@ exports.async = new AsyncScheduler_1.AsyncScheduler(AsyncAction_1.AsyncAction);
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry2 = __webpack_require__(/*! ./internal/_curry2 */ 1);
-var _dispatchable = __webpack_require__(/*! ./internal/_dispatchable */ 8);
-var _map = __webpack_require__(/*! ./internal/_map */ 59);
-var _reduce = __webpack_require__(/*! ./internal/_reduce */ 18);
-var _xmap = __webpack_require__(/*! ./internal/_xmap */ 225);
+var _dispatchable = __webpack_require__(/*! ./internal/_dispatchable */ 7);
+var _map = __webpack_require__(/*! ./internal/_map */ 54);
+var _reduce = __webpack_require__(/*! ./internal/_reduce */ 17);
+var _xmap = __webpack_require__(/*! ./internal/_xmap */ 119);
 var curryN = __webpack_require__(/*! ./curryN */ 15);
-var keys = __webpack_require__(/*! ./keys */ 24);
+var keys = __webpack_require__(/*! ./keys */ 21);
 
 /**
  * Takes a function and
@@ -1593,7 +1534,7 @@ module.exports = _curry2(_dispatchable(['map'], _xmap, function map(fn, functor)
 }));
 
 /***/ }),
-/* 18 */
+/* 17 */
 /*!**********************************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/internal/_reduce.js ***!
   \**********************************************************************/
@@ -1601,9 +1542,9 @@ module.exports = _curry2(_dispatchable(['map'], _xmap, function map(fn, functor)
 /*! all exports used */
 /***/ (function(module, exports, __webpack_require__) {
 
-var _xwrap = __webpack_require__(/*! ./_xwrap */ 110);
-var bind = __webpack_require__(/*! ../bind */ 111);
-var isArrayLike = __webpack_require__(/*! ../isArrayLike */ 48);
+var _xwrap = __webpack_require__(/*! ./_xwrap */ 91);
+var bind = __webpack_require__(/*! ../bind */ 92);
+var isArrayLike = __webpack_require__(/*! ../isArrayLike */ 37);
 
 module.exports = function () {
   function _arrayReduce(xf, acc, list) {
@@ -1659,7 +1600,248 @@ module.exports = function () {
 }();
 
 /***/ }),
+/* 18 */
+/*!**********************************************!*\
+  !*** ./node_modules/rxjs/scheduler/async.js ***!
+  \**********************************************/
+/*! no static exports found */
+/*! all exports used */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var AsyncAction_1 = __webpack_require__(/*! ./AsyncAction */ 45);
+var AsyncScheduler_1 = __webpack_require__(/*! ./AsyncScheduler */ 46);
+/**
+ *
+ * Async Scheduler
+ *
+ * <span class="informal">Schedule task as if you used setTimeout(task, duration)</span>
+ *
+ * `async` scheduler schedules tasks asynchronously, by putting them on the JavaScript
+ * event loop queue. It is best used to delay tasks in time or to schedule tasks repeating
+ * in intervals.
+ *
+ * If you just want to "defer" task, that is to perform it right after currently
+ * executing synchronous code ends (commonly achieved by `setTimeout(deferredTask, 0)`),
+ * better choice will be the {@link asap} scheduler.
+ *
+ * @example <caption>Use async scheduler to delay task</caption>
+ * const task = () => console.log('it works!');
+ *
+ * Rx.Scheduler.async.schedule(task, 2000);
+ *
+ * // After 2 seconds logs:
+ * // "it works!"
+ *
+ *
+ * @example <caption>Use async scheduler to repeat task in intervals</caption>
+ * function task(state) {
+ *   console.log(state);
+ *   this.schedule(state + 1, 1000); // `this` references currently executing Action,
+ *                                   // which we reschedule with new state and delay
+ * }
+ *
+ * Rx.Scheduler.async.schedule(task, 3000, 0);
+ *
+ * // Logs:
+ * // 0 after 3s
+ * // 1 after 4s
+ * // 2 after 5s
+ * // 3 after 6s
+ *
+ * @static true
+ * @name async
+ * @owner Scheduler
+ */
+exports.async = new AsyncScheduler_1.AsyncScheduler(AsyncAction_1.AsyncAction);
+//# sourceMappingURL=async.js.map
+
+/***/ }),
 /* 19 */
+/*!*********************************************************************!*\
+  !*** /Users/ivankleshnin/node_modules/ramda/src/internal/_arity.js ***!
+  \*********************************************************************/
+/*! no static exports found */
+/*! all exports used */
+/***/ (function(module, exports) {
+
+module.exports = function _arity(n, fn) {
+  /* eslint-disable no-unused-vars */
+  switch (n) {
+    case 0:
+      return function () {
+        return fn.apply(this, arguments);
+      };
+    case 1:
+      return function (a0) {
+        return fn.apply(this, arguments);
+      };
+    case 2:
+      return function (a0, a1) {
+        return fn.apply(this, arguments);
+      };
+    case 3:
+      return function (a0, a1, a2) {
+        return fn.apply(this, arguments);
+      };
+    case 4:
+      return function (a0, a1, a2, a3) {
+        return fn.apply(this, arguments);
+      };
+    case 5:
+      return function (a0, a1, a2, a3, a4) {
+        return fn.apply(this, arguments);
+      };
+    case 6:
+      return function (a0, a1, a2, a3, a4, a5) {
+        return fn.apply(this, arguments);
+      };
+    case 7:
+      return function (a0, a1, a2, a3, a4, a5, a6) {
+        return fn.apply(this, arguments);
+      };
+    case 8:
+      return function (a0, a1, a2, a3, a4, a5, a6, a7) {
+        return fn.apply(this, arguments);
+      };
+    case 9:
+      return function (a0, a1, a2, a3, a4, a5, a6, a7, a8) {
+        return fn.apply(this, arguments);
+      };
+    case 10:
+      return function (a0, a1, a2, a3, a4, a5, a6, a7, a8, a9) {
+        return fn.apply(this, arguments);
+      };
+    default:
+      throw new Error('First argument to _arity must be a non-negative integer no greater than ten');
+  }
+};
+
+/***/ }),
+/* 20 */
+/*!**********************************************************************!*\
+  !*** /Users/ivankleshnin/node_modules/ramda/src/internal/_concat.js ***!
+  \**********************************************************************/
+/*! no static exports found */
+/*! all exports used */
+/***/ (function(module, exports) {
+
+/**
+ * Private `concat` function to merge two array-like objects.
+ *
+ * @private
+ * @param {Array|Arguments} [set1=[]] An array-like object.
+ * @param {Array|Arguments} [set2=[]] An array-like object.
+ * @return {Array} A new, merged array.
+ * @example
+ *
+ *      _concat([4, 5, 6], [1, 2, 3]); //=> [4, 5, 6, 1, 2, 3]
+ */
+module.exports = function _concat(set1, set2) {
+  set1 = set1 || [];
+  set2 = set2 || [];
+  var idx;
+  var len1 = set1.length;
+  var len2 = set2.length;
+  var result = [];
+
+  idx = 0;
+  while (idx < len1) {
+    result[result.length] = set1[idx];
+    idx += 1;
+  }
+  idx = 0;
+  while (idx < len2) {
+    result[result.length] = set2[idx];
+    idx += 1;
+  }
+  return result;
+};
+
+/***/ }),
+/* 21 */
+/*!**********************************************************!*\
+  !*** /Users/ivankleshnin/node_modules/ramda/src/keys.js ***!
+  \**********************************************************/
+/*! no static exports found */
+/*! all exports used */
+/***/ (function(module, exports, __webpack_require__) {
+
+var _curry1 = __webpack_require__(/*! ./internal/_curry1 */ 2);
+var _has = __webpack_require__(/*! ./internal/_has */ 14);
+var _isArguments = __webpack_require__(/*! ./internal/_isArguments */ 93);
+
+/**
+ * Returns a list containing the names of all the enumerable own properties of
+ * the supplied object.
+ * Note that the order of the output array is not guaranteed to be consistent
+ * across different JS platforms.
+ *
+ * @func
+ * @memberOf R
+ * @since v0.1.0
+ * @category Object
+ * @sig {k: v} -> [k]
+ * @param {Object} obj The object to extract properties from
+ * @return {Array} An array of the object's own properties.
+ * @example
+ *
+ *      R.keys({a: 1, b: 2, c: 3}); //=> ['a', 'b', 'c']
+ */
+module.exports = function () {
+  // cover IE < 9 keys issues
+  var hasEnumBug = !{ toString: null }.propertyIsEnumerable('toString');
+  var nonEnumerableProps = ['constructor', 'valueOf', 'isPrototypeOf', 'toString', 'propertyIsEnumerable', 'hasOwnProperty', 'toLocaleString'];
+  // Safari bug
+  var hasArgsEnumBug = function () {
+    'use strict';
+
+    return arguments.propertyIsEnumerable('length');
+  }();
+
+  var contains = function contains(list, item) {
+    var idx = 0;
+    while (idx < list.length) {
+      if (list[idx] === item) {
+        return true;
+      }
+      idx += 1;
+    }
+    return false;
+  };
+
+  return typeof Object.keys === 'function' && !hasArgsEnumBug ? _curry1(function keys(obj) {
+    return Object(obj) !== obj ? [] : Object.keys(obj);
+  }) : _curry1(function keys(obj) {
+    if (Object(obj) !== obj) {
+      return [];
+    }
+    var prop, nIdx;
+    var ks = [];
+    var checkArgsLength = hasArgsEnumBug && _isArguments(obj);
+    for (prop in obj) {
+      if (_has(prop, obj) && (!checkArgsLength || prop !== 'length')) {
+        ks[ks.length] = prop;
+      }
+    }
+    if (hasEnumBug) {
+      nIdx = nonEnumerableProps.length - 1;
+      while (nIdx >= 0) {
+        prop = nonEnumerableProps[nIdx];
+        if (_has(prop, obj) && !contains(ks, prop)) {
+          ks[ks.length] = prop;
+        }
+        nIdx -= 1;
+      }
+    }
+    return ks;
+  });
+}();
+
+/***/ }),
+/* 22 */
 /*!***********************************************!*\
   !*** ./node_modules/rxjs/util/isScheduler.js ***!
   \***********************************************/
@@ -1677,7 +1859,7 @@ exports.isScheduler = isScheduler;
 //# sourceMappingURL=isScheduler.js.map
 
 /***/ }),
-/* 20 */
+/* 23 */
 /*!*********************************************************!*\
   !*** ./node_modules/rxjs/observable/ArrayObservable.js ***!
   \*********************************************************/
@@ -1697,9 +1879,9 @@ var __extends = undefined && undefined.__extends || function (d, b) {
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 var Observable_1 = __webpack_require__(/*! ../Observable */ 0);
-var ScalarObservable_1 = __webpack_require__(/*! ./ScalarObservable */ 55);
-var EmptyObservable_1 = __webpack_require__(/*! ./EmptyObservable */ 27);
-var isScheduler_1 = __webpack_require__(/*! ../util/isScheduler */ 19);
+var ScalarObservable_1 = __webpack_require__(/*! ./ScalarObservable */ 61);
+var EmptyObservable_1 = __webpack_require__(/*! ./EmptyObservable */ 28);
+var isScheduler_1 = __webpack_require__(/*! ../util/isScheduler */ 22);
 /**
  * We need this JSDoc comment for affecting ESDoc.
  * @extends {Ignored}
@@ -1813,206 +1995,7 @@ exports.ArrayObservable = ArrayObservable;
 //# sourceMappingURL=ArrayObservable.js.map
 
 /***/ }),
-/* 21 */
-/*!**********************************************************************!*\
-  !*** /Users/ivankleshnin/node_modules/ramda/src/internal/_concat.js ***!
-  \**********************************************************************/
-/*! no static exports found */
-/*! all exports used */
-/***/ (function(module, exports) {
-
-/**
- * Private `concat` function to merge two array-like objects.
- *
- * @private
- * @param {Array|Arguments} [set1=[]] An array-like object.
- * @param {Array|Arguments} [set2=[]] An array-like object.
- * @return {Array} A new, merged array.
- * @example
- *
- *      _concat([4, 5, 6], [1, 2, 3]); //=> [4, 5, 6, 1, 2, 3]
- */
-module.exports = function _concat(set1, set2) {
-  set1 = set1 || [];
-  set2 = set2 || [];
-  var idx;
-  var len1 = set1.length;
-  var len2 = set2.length;
-  var result = [];
-
-  idx = 0;
-  while (idx < len1) {
-    result[result.length] = set1[idx];
-    idx += 1;
-  }
-  idx = 0;
-  while (idx < len2) {
-    result[result.length] = set2[idx];
-    idx += 1;
-  }
-  return result;
-};
-
-/***/ }),
-/* 22 */
-/*!*******************************************!*\
-  !*** ./node_modules/rxjs/util/isArray.js ***!
-  \*******************************************/
-/*! no static exports found */
-/*! all exports used */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-exports.isArray = Array.isArray || function (x) {
-  return x && typeof x.length === 'number';
-};
-//# sourceMappingURL=isArray.js.map
-
-/***/ }),
-/* 23 */
-/*!*********************************************************************!*\
-  !*** /Users/ivankleshnin/node_modules/ramda/src/internal/_arity.js ***!
-  \*********************************************************************/
-/*! no static exports found */
-/*! all exports used */
-/***/ (function(module, exports) {
-
-module.exports = function _arity(n, fn) {
-  /* eslint-disable no-unused-vars */
-  switch (n) {
-    case 0:
-      return function () {
-        return fn.apply(this, arguments);
-      };
-    case 1:
-      return function (a0) {
-        return fn.apply(this, arguments);
-      };
-    case 2:
-      return function (a0, a1) {
-        return fn.apply(this, arguments);
-      };
-    case 3:
-      return function (a0, a1, a2) {
-        return fn.apply(this, arguments);
-      };
-    case 4:
-      return function (a0, a1, a2, a3) {
-        return fn.apply(this, arguments);
-      };
-    case 5:
-      return function (a0, a1, a2, a3, a4) {
-        return fn.apply(this, arguments);
-      };
-    case 6:
-      return function (a0, a1, a2, a3, a4, a5) {
-        return fn.apply(this, arguments);
-      };
-    case 7:
-      return function (a0, a1, a2, a3, a4, a5, a6) {
-        return fn.apply(this, arguments);
-      };
-    case 8:
-      return function (a0, a1, a2, a3, a4, a5, a6, a7) {
-        return fn.apply(this, arguments);
-      };
-    case 9:
-      return function (a0, a1, a2, a3, a4, a5, a6, a7, a8) {
-        return fn.apply(this, arguments);
-      };
-    case 10:
-      return function (a0, a1, a2, a3, a4, a5, a6, a7, a8, a9) {
-        return fn.apply(this, arguments);
-      };
-    default:
-      throw new Error('First argument to _arity must be a non-negative integer no greater than ten');
-  }
-};
-
-/***/ }),
 /* 24 */
-/*!**********************************************************!*\
-  !*** /Users/ivankleshnin/node_modules/ramda/src/keys.js ***!
-  \**********************************************************/
-/*! no static exports found */
-/*! all exports used */
-/***/ (function(module, exports, __webpack_require__) {
-
-var _curry1 = __webpack_require__(/*! ./internal/_curry1 */ 3);
-var _has = __webpack_require__(/*! ./internal/_has */ 14);
-var _isArguments = __webpack_require__(/*! ./internal/_isArguments */ 112);
-
-/**
- * Returns a list containing the names of all the enumerable own properties of
- * the supplied object.
- * Note that the order of the output array is not guaranteed to be consistent
- * across different JS platforms.
- *
- * @func
- * @memberOf R
- * @since v0.1.0
- * @category Object
- * @sig {k: v} -> [k]
- * @param {Object} obj The object to extract properties from
- * @return {Array} An array of the object's own properties.
- * @example
- *
- *      R.keys({a: 1, b: 2, c: 3}); //=> ['a', 'b', 'c']
- */
-module.exports = function () {
-  // cover IE < 9 keys issues
-  var hasEnumBug = !{ toString: null }.propertyIsEnumerable('toString');
-  var nonEnumerableProps = ['constructor', 'valueOf', 'isPrototypeOf', 'toString', 'propertyIsEnumerable', 'hasOwnProperty', 'toLocaleString'];
-  // Safari bug
-  var hasArgsEnumBug = function () {
-    'use strict';
-
-    return arguments.propertyIsEnumerable('length');
-  }();
-
-  var contains = function contains(list, item) {
-    var idx = 0;
-    while (idx < list.length) {
-      if (list[idx] === item) {
-        return true;
-      }
-      idx += 1;
-    }
-    return false;
-  };
-
-  return typeof Object.keys === 'function' && !hasArgsEnumBug ? _curry1(function keys(obj) {
-    return Object(obj) !== obj ? [] : Object.keys(obj);
-  }) : _curry1(function keys(obj) {
-    if (Object(obj) !== obj) {
-      return [];
-    }
-    var prop, nIdx;
-    var ks = [];
-    var checkArgsLength = hasArgsEnumBug && _isArguments(obj);
-    for (prop in obj) {
-      if (_has(prop, obj) && (!checkArgsLength || prop !== 'length')) {
-        ks[ks.length] = prop;
-      }
-    }
-    if (hasEnumBug) {
-      nIdx = nonEnumerableProps.length - 1;
-      while (nIdx >= 0) {
-        prop = nonEnumerableProps[nIdx];
-        if (_has(prop, obj) && !contains(ks, prop)) {
-          ks[ks.length] = prop;
-        }
-        nIdx -= 1;
-      }
-    }
-    return ks;
-  });
-}();
-
-/***/ }),
-/* 25 */
 /*!************************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/reduce.js ***!
   \************************************************************/
@@ -2021,7 +2004,7 @@ module.exports = function () {
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry3 = __webpack_require__(/*! ./internal/_curry3 */ 4);
-var _reduce = __webpack_require__(/*! ./internal/_reduce */ 18);
+var _reduce = __webpack_require__(/*! ./internal/_reduce */ 17);
 
 /**
  * Returns a single item by iterating through the list, successively calling
@@ -2069,7 +2052,7 @@ var _reduce = __webpack_require__(/*! ./internal/_reduce */ 18);
 module.exports = _curry3(_reduce);
 
 /***/ }),
-/* 26 */
+/* 25 */
 /*!************************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/equals.js ***!
   \************************************************************/
@@ -2078,7 +2061,7 @@ module.exports = _curry3(_reduce);
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry2 = __webpack_require__(/*! ./internal/_curry2 */ 1);
-var _equals = __webpack_require__(/*! ./internal/_equals */ 247);
+var _equals = __webpack_require__(/*! ./internal/_equals */ 134);
 
 /**
  * Returns `true` if its arguments are equivalent, `false` otherwise. Handles
@@ -2110,7 +2093,49 @@ module.exports = _curry2(function equals(a, b) {
 });
 
 /***/ }),
+/* 26 */
+/*!*******************************************!*\
+  !*** ./node_modules/rxjs/util/isArray.js ***!
+  \*******************************************/
+/*! no static exports found */
+/*! all exports used */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+exports.isArray = Array.isArray || function (x) {
+  return x && typeof x.length === 'number';
+};
+//# sourceMappingURL=isArray.js.map
+
+/***/ }),
 /* 27 */
+/*!***********************************************************************!*\
+  !*** /Users/ivankleshnin/node_modules/ramda/src/internal/_isArray.js ***!
+  \***********************************************************************/
+/*! no static exports found */
+/*! all exports used */
+/***/ (function(module, exports) {
+
+/**
+ * Tests whether or not an object is an array.
+ *
+ * @private
+ * @param {*} val The object to test.
+ * @return {Boolean} `true` if `val` is an array, `false` otherwise.
+ * @example
+ *
+ *      _isArray([]); //=> true
+ *      _isArray(null); //=> false
+ *      _isArray({}); //=> false
+ */
+module.exports = Array.isArray || function _isArray(val) {
+  return val != null && val.length >= 0 && Object.prototype.toString.call(val) === '[object Array]';
+};
+
+/***/ }),
+/* 28 */
 /*!*********************************************************!*\
   !*** ./node_modules/rxjs/observable/EmptyObservable.js ***!
   \*********************************************************/
@@ -2205,31 +2230,6 @@ exports.EmptyObservable = EmptyObservable;
 //# sourceMappingURL=EmptyObservable.js.map
 
 /***/ }),
-/* 28 */
-/*!***********************************************************************!*\
-  !*** /Users/ivankleshnin/node_modules/ramda/src/internal/_isArray.js ***!
-  \***********************************************************************/
-/*! no static exports found */
-/*! all exports used */
-/***/ (function(module, exports) {
-
-/**
- * Tests whether or not an object is an array.
- *
- * @private
- * @param {*} val The object to test.
- * @return {Boolean} `true` if `val` is an array, `false` otherwise.
- * @example
- *
- *      _isArray([]); //=> true
- *      _isArray(null); //=> false
- *      _isArray({}); //=> false
- */
-module.exports = Array.isArray || function _isArray(val) {
-  return val != null && val.length >= 0 && Object.prototype.toString.call(val) === '[object Array]';
-};
-
-/***/ }),
 /* 29 */
 /*!***********************************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/internal/_reduced.js ***!
@@ -2247,6 +2247,46 @@ module.exports = function _reduced(x) {
 
 /***/ }),
 /* 30 */
+/*!***********************************************************!*\
+  !*** /Users/ivankleshnin/node_modules/ramda/src/slice.js ***!
+  \***********************************************************/
+/*! no static exports found */
+/*! all exports used */
+/***/ (function(module, exports, __webpack_require__) {
+
+var _checkForMethod = __webpack_require__(/*! ./internal/_checkForMethod */ 35);
+var _curry3 = __webpack_require__(/*! ./internal/_curry3 */ 4);
+
+/**
+ * Returns the elements of the given list or string (or object with a `slice`
+ * method) from `fromIndex` (inclusive) to `toIndex` (exclusive).
+ *
+ * Dispatches to the `slice` method of the third argument, if present.
+ *
+ * @func
+ * @memberOf R
+ * @since v0.1.4
+ * @category List
+ * @sig Number -> Number -> [a] -> [a]
+ * @sig Number -> Number -> String -> String
+ * @param {Number} fromIndex The start index (inclusive).
+ * @param {Number} toIndex The end index (exclusive).
+ * @param {*} list
+ * @return {*}
+ * @example
+ *
+ *      R.slice(1, 3, ['a', 'b', 'c', 'd']);        //=> ['b', 'c']
+ *      R.slice(1, Infinity, ['a', 'b', 'c', 'd']); //=> ['b', 'c', 'd']
+ *      R.slice(0, -1, ['a', 'b', 'c', 'd']);       //=> ['a', 'b', 'c']
+ *      R.slice(-3, -1, ['a', 'b', 'c', 'd']);      //=> ['b', 'c']
+ *      R.slice(0, 3, 'ramda');                     //=> 'ram'
+ */
+module.exports = _curry3(_checkForMethod('slice', function slice(fromIndex, toIndex, list) {
+  return Array.prototype.slice.call(list, fromIndex, toIndex);
+}));
+
+/***/ }),
+/* 31 */
 /*!*************************************************!*\
   !*** ./node_modules/rxjs/operator/multicast.js ***!
   \*************************************************/
@@ -2257,7 +2297,7 @@ module.exports = function _reduced(x) {
 "use strict";
 
 
-var ConnectableObservable_1 = __webpack_require__(/*! ../observable/ConnectableObservable */ 107);
+var ConnectableObservable_1 = __webpack_require__(/*! ../observable/ConnectableObservable */ 117);
 /* tslint:enable:max-line-length */
 /**
  * Returns an Observable that emits the results of invoking a specified selector on items
@@ -2314,62 +2354,7 @@ exports.MulticastOperator = MulticastOperator;
 //# sourceMappingURL=multicast.js.map
 
 /***/ }),
-/* 31 */
-/*!***********************************************************!*\
-  !*** /Users/ivankleshnin/node_modules/ramda/src/slice.js ***!
-  \***********************************************************/
-/*! no static exports found */
-/*! all exports used */
-/***/ (function(module, exports, __webpack_require__) {
-
-var _checkForMethod = __webpack_require__(/*! ./internal/_checkForMethod */ 49);
-var _curry3 = __webpack_require__(/*! ./internal/_curry3 */ 4);
-
-/**
- * Returns the elements of the given list or string (or object with a `slice`
- * method) from `fromIndex` (inclusive) to `toIndex` (exclusive).
- *
- * Dispatches to the `slice` method of the third argument, if present.
- *
- * @func
- * @memberOf R
- * @since v0.1.4
- * @category List
- * @sig Number -> Number -> [a] -> [a]
- * @sig Number -> Number -> String -> String
- * @param {Number} fromIndex The start index (inclusive).
- * @param {Number} toIndex The end index (exclusive).
- * @param {*} list
- * @return {*}
- * @example
- *
- *      R.slice(1, 3, ['a', 'b', 'c', 'd']);        //=> ['b', 'c']
- *      R.slice(1, Infinity, ['a', 'b', 'c', 'd']); //=> ['b', 'c', 'd']
- *      R.slice(0, -1, ['a', 'b', 'c', 'd']);       //=> ['a', 'b', 'c']
- *      R.slice(-3, -1, ['a', 'b', 'c', 'd']);      //=> ['b', 'c']
- *      R.slice(0, 3, 'ramda');                     //=> 'ram'
- */
-module.exports = _curry3(_checkForMethod('slice', function slice(fromIndex, toIndex, list) {
-  return Array.prototype.slice.call(list, fromIndex, toIndex);
-}));
-
-/***/ }),
 /* 32 */
-/*!************************************************************************!*\
-  !*** /Users/ivankleshnin/node_modules/ramda/src/internal/_contains.js ***!
-  \************************************************************************/
-/*! no static exports found */
-/*! all exports used */
-/***/ (function(module, exports, __webpack_require__) {
-
-var _indexOf = __webpack_require__(/*! ./_indexOf */ 126);
-
-module.exports = function _contains(a, list) {
-  return _indexOf(list, a, 0) >= 0;
-};
-
-/***/ }),
-/* 33 */
 /*!************************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/always.js ***!
   \************************************************************/
@@ -2377,7 +2362,7 @@ module.exports = function _contains(a, list) {
 /*! all exports used */
 /***/ (function(module, exports, __webpack_require__) {
 
-var _curry1 = __webpack_require__(/*! ./internal/_curry1 */ 3);
+var _curry1 = __webpack_require__(/*! ./internal/_curry1 */ 2);
 
 /**
  * Returns a function that always returns the given value. Note that for
@@ -2405,6 +2390,21 @@ module.exports = _curry1(function always(val) {
 });
 
 /***/ }),
+/* 33 */
+/*!************************************************************************!*\
+  !*** /Users/ivankleshnin/node_modules/ramda/src/internal/_contains.js ***!
+  \************************************************************************/
+/*! no static exports found */
+/*! all exports used */
+/***/ (function(module, exports, __webpack_require__) {
+
+var _indexOf = __webpack_require__(/*! ./_indexOf */ 133);
+
+module.exports = function _contains(a, list) {
+  return _indexOf(list, a, 0) >= 0;
+};
+
+/***/ }),
 /* 34 */
 /*!*****************************************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/internal/_isPlaceholder.js ***!
@@ -2419,6 +2419,38 @@ module.exports = function _isPlaceholder(a) {
 
 /***/ }),
 /* 35 */
+/*!******************************************************************************!*\
+  !*** /Users/ivankleshnin/node_modules/ramda/src/internal/_checkForMethod.js ***!
+  \******************************************************************************/
+/*! no static exports found */
+/*! all exports used */
+/***/ (function(module, exports, __webpack_require__) {
+
+var _isArray = __webpack_require__(/*! ./_isArray */ 27);
+
+/**
+ * This checks whether a function has a [methodname] function. If it isn't an
+ * array it will execute that function otherwise it will default to the ramda
+ * implementation.
+ *
+ * @private
+ * @param {Function} fn ramda implemtation
+ * @param {String} methodname property to check for a custom implementation
+ * @return {Object} Whatever the return value of the method is.
+ */
+module.exports = function _checkForMethod(methodname, fn) {
+  return function () {
+    var length = arguments.length;
+    if (length === 0) {
+      return fn();
+    }
+    var obj = arguments[length - 1];
+    return _isArray(obj) || typeof obj[methodname] !== 'function' ? fn.apply(this, arguments) : obj[methodname].apply(obj, Array.prototype.slice.call(arguments, 0, length - 1));
+  };
+};
+
+/***/ }),
+/* 36 */
 /*!*********************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/max.js ***!
   \*********************************************************/
@@ -2450,7 +2482,206 @@ module.exports = _curry2(function max(a, b) {
 });
 
 /***/ }),
-/* 36 */
+/* 37 */
+/*!*****************************************************************!*\
+  !*** /Users/ivankleshnin/node_modules/ramda/src/isArrayLike.js ***!
+  \*****************************************************************/
+/*! no static exports found */
+/*! all exports used */
+/***/ (function(module, exports, __webpack_require__) {
+
+var _curry1 = __webpack_require__(/*! ./internal/_curry1 */ 2);
+var _isArray = __webpack_require__(/*! ./internal/_isArray */ 27);
+var _isString = __webpack_require__(/*! ./internal/_isString */ 38);
+
+/**
+ * Tests whether or not an object is similar to an array.
+ *
+ * @func
+ * @memberOf R
+ * @since v0.5.0
+ * @category Type
+ * @category List
+ * @sig * -> Boolean
+ * @param {*} x The object to test.
+ * @return {Boolean} `true` if `x` has a numeric length property and extreme indices defined; `false` otherwise.
+ * @deprecated since v0.23.0
+ * @example
+ *
+ *      R.isArrayLike([]); //=> true
+ *      R.isArrayLike(true); //=> false
+ *      R.isArrayLike({}); //=> false
+ *      R.isArrayLike({length: 10}); //=> false
+ *      R.isArrayLike({0: 'zero', 9: 'nine', length: 10}); //=> true
+ */
+module.exports = _curry1(function isArrayLike(x) {
+  if (_isArray(x)) {
+    return true;
+  }
+  if (!x) {
+    return false;
+  }
+  if (typeof x !== 'object') {
+    return false;
+  }
+  if (_isString(x)) {
+    return false;
+  }
+  if (x.nodeType === 1) {
+    return !!x.length;
+  }
+  if (x.length === 0) {
+    return true;
+  }
+  if (x.length > 0) {
+    return x.hasOwnProperty(0) && x.hasOwnProperty(x.length - 1);
+  }
+  return false;
+});
+
+/***/ }),
+/* 38 */
+/*!************************************************************************!*\
+  !*** /Users/ivankleshnin/node_modules/ramda/src/internal/_isString.js ***!
+  \************************************************************************/
+/*! no static exports found */
+/*! all exports used */
+/***/ (function(module, exports) {
+
+module.exports = function _isString(x) {
+  return Object.prototype.toString.call(x) === '[object String]';
+};
+
+/***/ }),
+/* 39 */
+/*!***********************************************************!*\
+  !*** /Users/ivankleshnin/node_modules/ramda/src/assoc.js ***!
+  \***********************************************************/
+/*! no static exports found */
+/*! all exports used */
+/***/ (function(module, exports, __webpack_require__) {
+
+var _curry3 = __webpack_require__(/*! ./internal/_curry3 */ 4);
+
+/**
+ * Makes a shallow clone of an object, setting or overriding the specified
+ * property with the given value. Note that this copies and flattens prototype
+ * properties onto the new object as well. All non-primitive properties are
+ * copied by reference.
+ *
+ * @func
+ * @memberOf R
+ * @since v0.8.0
+ * @category Object
+ * @sig String -> a -> {k: v} -> {k: v}
+ * @param {String} prop The property name to set
+ * @param {*} val The new value
+ * @param {Object} obj The object to clone
+ * @return {Object} A new object equivalent to the original except for the changed property.
+ * @see R.dissoc
+ * @example
+ *
+ *      R.assoc('c', 3, {a: 1, b: 2}); //=> {a: 1, b: 2, c: 3}
+ */
+module.exports = _curry3(function assoc(prop, val, obj) {
+  var result = {};
+  for (var p in obj) {
+    result[p] = obj[p];
+  }
+  result[prop] = val;
+  return result;
+});
+
+/***/ }),
+/* 40 */
+/*!*********************************************************!*\
+  !*** /Users/ivankleshnin/node_modules/ramda/src/nth.js ***!
+  \*********************************************************/
+/*! no static exports found */
+/*! all exports used */
+/***/ (function(module, exports, __webpack_require__) {
+
+var _curry2 = __webpack_require__(/*! ./internal/_curry2 */ 1);
+var _isString = __webpack_require__(/*! ./internal/_isString */ 38);
+
+/**
+ * Returns the nth element of the given list or string. If n is negative the
+ * element at index length + n is returned.
+ *
+ * @func
+ * @memberOf R
+ * @since v0.1.0
+ * @category List
+ * @sig Number -> [a] -> a | Undefined
+ * @sig Number -> String -> String
+ * @param {Number} offset
+ * @param {*} list
+ * @return {*}
+ * @example
+ *
+ *      var list = ['foo', 'bar', 'baz', 'quux'];
+ *      R.nth(1, list); //=> 'bar'
+ *      R.nth(-1, list); //=> 'quux'
+ *      R.nth(-99, list); //=> undefined
+ *
+ *      R.nth(2, 'abc'); //=> 'c'
+ *      R.nth(3, 'abc'); //=> ''
+ * @symb R.nth(-1, [a, b, c]) = c
+ * @symb R.nth(0, [a, b, c]) = a
+ * @symb R.nth(1, [a, b, c]) = b
+ */
+module.exports = _curry2(function nth(offset, list) {
+  var idx = offset < 0 ? list.length + offset : offset;
+  return _isString(list) ? list.charAt(idx) : list[idx];
+});
+
+/***/ }),
+/* 41 */
+/*!**********************************************************!*\
+  !*** /Users/ivankleshnin/node_modules/ramda/src/lens.js ***!
+  \**********************************************************/
+/*! no static exports found */
+/*! all exports used */
+/***/ (function(module, exports, __webpack_require__) {
+
+var _curry2 = __webpack_require__(/*! ./internal/_curry2 */ 1);
+var map = __webpack_require__(/*! ./map */ 16);
+
+/**
+ * Returns a lens for the given getter and setter functions. The getter "gets"
+ * the value of the focus; the setter "sets" the value of the focus. The setter
+ * should not mutate the data structure.
+ *
+ * @func
+ * @memberOf R
+ * @since v0.8.0
+ * @category Object
+ * @typedefn Lens s a = Functor f => (a -> f a) -> s -> f s
+ * @sig (s -> a) -> ((a, s) -> s) -> Lens s a
+ * @param {Function} getter
+ * @param {Function} setter
+ * @return {Lens}
+ * @see R.view, R.set, R.over, R.lensIndex, R.lensProp
+ * @example
+ *
+ *      var xLens = R.lens(R.prop('x'), R.assoc('x'));
+ *
+ *      R.view(xLens, {x: 1, y: 2});            //=> 1
+ *      R.set(xLens, 4, {x: 1, y: 2});          //=> {x: 4, y: 2}
+ *      R.over(xLens, R.negate, {x: 1, y: 2});  //=> {x: -1, y: 2}
+ */
+module.exports = _curry2(function lens(getter, setter) {
+  return function (toFunctorFn) {
+    return function (target) {
+      return map(function (focus) {
+        return setter(focus, target);
+      }, toFunctorFn(getter(target)));
+    };
+  };
+});
+
+/***/ }),
+/* 42 */
 /*!**************************************************!*\
   !*** ./node_modules/rxjs/symbol/rxSubscriber.js ***!
   \**************************************************/
@@ -2461,7 +2692,7 @@ module.exports = _curry2(function max(a, b) {
 "use strict";
 
 
-var root_1 = __webpack_require__(/*! ../util/root */ 9);
+var root_1 = __webpack_require__(/*! ../util/root */ 10);
 var _Symbol = root_1.root.Symbol;
 exports.rxSubscriber = typeof _Symbol === 'function' && typeof _Symbol.for === 'function' ? _Symbol.for('rxSubscriber') : '@@rxSubscriber';
 /**
@@ -2471,7 +2702,7 @@ exports.$$rxSubscriber = exports.rxSubscriber;
 //# sourceMappingURL=rxSubscriber.js.map
 
 /***/ }),
-/* 37 */
+/* 43 */
 /*!**********************************************!*\
   !*** ./node_modules/rxjs/symbol/iterator.js ***!
   \**********************************************/
@@ -2482,7 +2713,7 @@ exports.$$rxSubscriber = exports.rxSubscriber;
 "use strict";
 
 
-var root_1 = __webpack_require__(/*! ../util/root */ 9);
+var root_1 = __webpack_require__(/*! ../util/root */ 10);
 function symbolIteratorPonyfill(root) {
     var _Symbol = root.Symbol;
     if (typeof _Symbol === 'function') {
@@ -2520,7 +2751,7 @@ exports.$$iterator = exports.iterator;
 //# sourceMappingURL=iterator.js.map
 
 /***/ }),
-/* 38 */
+/* 44 */
 /*!*******************************************!*\
   !*** ./node_modules/rxjs/Notification.js ***!
   \*******************************************/
@@ -2658,7 +2889,7 @@ exports.Notification = Notification;
 //# sourceMappingURL=Notification.js.map
 
 /***/ }),
-/* 39 */
+/* 45 */
 /*!****************************************************!*\
   !*** ./node_modules/rxjs/scheduler/AsyncAction.js ***!
   \****************************************************/
@@ -2677,8 +2908,8 @@ var __extends = undefined && undefined.__extends || function (d, b) {
     }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var root_1 = __webpack_require__(/*! ../util/root */ 9);
-var Action_1 = __webpack_require__(/*! ./Action */ 173);
+var root_1 = __webpack_require__(/*! ../util/root */ 10);
+var Action_1 = __webpack_require__(/*! ./Action */ 183);
 /**
  * We need this JSDoc comment for affecting ESDoc.
  * @ignore
@@ -2819,7 +3050,7 @@ exports.AsyncAction = AsyncAction;
 //# sourceMappingURL=AsyncAction.js.map
 
 /***/ }),
-/* 40 */
+/* 46 */
 /*!*******************************************************!*\
   !*** ./node_modules/rxjs/scheduler/AsyncScheduler.js ***!
   \*******************************************************/
@@ -2838,7 +3069,7 @@ var __extends = undefined && undefined.__extends || function (d, b) {
     }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var Scheduler_1 = __webpack_require__(/*! ../Scheduler */ 174);
+var Scheduler_1 = __webpack_require__(/*! ../Scheduler */ 184);
 var AsyncScheduler = function (_super) {
     __extends(AsyncScheduler, _super);
     function AsyncScheduler() {
@@ -2885,47 +3116,7 @@ exports.AsyncScheduler = AsyncScheduler;
 //# sourceMappingURL=AsyncScheduler.js.map
 
 /***/ }),
-/* 41 */
-/*!***********************************************************!*\
-  !*** /Users/ivankleshnin/node_modules/ramda/src/assoc.js ***!
-  \***********************************************************/
-/*! no static exports found */
-/*! all exports used */
-/***/ (function(module, exports, __webpack_require__) {
-
-var _curry3 = __webpack_require__(/*! ./internal/_curry3 */ 4);
-
-/**
- * Makes a shallow clone of an object, setting or overriding the specified
- * property with the given value. Note that this copies and flattens prototype
- * properties onto the new object as well. All non-primitive properties are
- * copied by reference.
- *
- * @func
- * @memberOf R
- * @since v0.8.0
- * @category Object
- * @sig String -> a -> {k: v} -> {k: v}
- * @param {String} prop The property name to set
- * @param {*} val The new value
- * @param {Object} obj The object to clone
- * @return {Object} A new object equivalent to the original except for the changed property.
- * @see R.dissoc
- * @example
- *
- *      R.assoc('c', 3, {a: 1, b: 2}); //=> {a: 1, b: 2, c: 3}
- */
-module.exports = _curry3(function assoc(prop, val, obj) {
-  var result = {};
-  for (var p in obj) {
-    result[p] = obj[p];
-  }
-  result[prop] = val;
-  return result;
-});
-
-/***/ }),
-/* 42 */
+/* 47 */
 /*!**********************************************!*\
   !*** ./node_modules/rxjs/util/isFunction.js ***!
   \**********************************************/
@@ -2943,7 +3134,7 @@ exports.isFunction = isFunction;
 //# sourceMappingURL=isFunction.js.map
 
 /***/ }),
-/* 43 */
+/* 48 */
 /*!************************************************!*\
   !*** ./node_modules/rxjs/symbol/observable.js ***!
   \************************************************/
@@ -2954,7 +3145,7 @@ exports.isFunction = isFunction;
 "use strict";
 
 
-var root_1 = __webpack_require__(/*! ../util/root */ 9);
+var root_1 = __webpack_require__(/*! ../util/root */ 10);
 function getSymbolObservable(context) {
     var $$observable;
     var _Symbol = context.Symbol;
@@ -2979,7 +3170,7 @@ exports.$$observable = exports.observable;
 //# sourceMappingURL=observable.js.map
 
 /***/ }),
-/* 44 */
+/* 49 */
 /*!***********************************************************!*\
   !*** ./node_modules/rxjs/util/ObjectUnsubscribedError.js ***!
   \***********************************************************/
@@ -3021,7 +3212,7 @@ exports.ObjectUnsubscribedError = ObjectUnsubscribedError;
 //# sourceMappingURL=ObjectUnsubscribedError.js.map
 
 /***/ }),
-/* 45 */
+/* 50 */
 /*!************************************************!*\
   !*** ./node_modules/rxjs/operator/mergeAll.js ***!
   \************************************************/
@@ -3147,7 +3338,7 @@ exports.MergeAllSubscriber = MergeAllSubscriber;
 //# sourceMappingURL=mergeAll.js.map
 
 /***/ }),
-/* 46 */
+/* 51 */
 /*!********************************************!*\
   !*** ./node_modules/rxjs/ReplaySubject.js ***!
   \********************************************/
@@ -3166,12 +3357,12 @@ var __extends = undefined && undefined.__extends || function (d, b) {
     }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var Subject_1 = __webpack_require__(/*! ./Subject */ 10);
-var queue_1 = __webpack_require__(/*! ./scheduler/queue */ 103);
-var Subscription_1 = __webpack_require__(/*! ./Subscription */ 7);
-var observeOn_1 = __webpack_require__(/*! ./operator/observeOn */ 74);
-var ObjectUnsubscribedError_1 = __webpack_require__(/*! ./util/ObjectUnsubscribedError */ 44);
-var SubjectSubscription_1 = __webpack_require__(/*! ./SubjectSubscription */ 80);
+var Subject_1 = __webpack_require__(/*! ./Subject */ 11);
+var queue_1 = __webpack_require__(/*! ./scheduler/queue */ 113);
+var Subscription_1 = __webpack_require__(/*! ./Subscription */ 8);
+var observeOn_1 = __webpack_require__(/*! ./operator/observeOn */ 82);
+var ObjectUnsubscribedError_1 = __webpack_require__(/*! ./util/ObjectUnsubscribedError */ 49);
+var SubjectSubscription_1 = __webpack_require__(/*! ./SubjectSubscription */ 89);
 /**
  * @class ReplaySubject<T>
  */
@@ -3264,7 +3455,53 @@ var ReplayEvent = function () {
 //# sourceMappingURL=ReplaySubject.js.map
 
 /***/ }),
-/* 47 */
+/* 52 */
+/*!**********************************************************************!*\
+  !*** /Users/ivankleshnin/node_modules/ramda/src/internal/_curryN.js ***!
+  \**********************************************************************/
+/*! no static exports found */
+/*! all exports used */
+/***/ (function(module, exports, __webpack_require__) {
+
+var _arity = __webpack_require__(/*! ./_arity */ 19);
+var _isPlaceholder = __webpack_require__(/*! ./_isPlaceholder */ 34);
+
+/**
+ * Internal curryN function.
+ *
+ * @private
+ * @category Function
+ * @param {Number} length The arity of the curried function.
+ * @param {Array} received An array of arguments received thus far.
+ * @param {Function} fn The function to curry.
+ * @return {Function} The curried function.
+ */
+module.exports = function _curryN(length, received, fn) {
+  return function () {
+    var combined = [];
+    var argsIdx = 0;
+    var left = length;
+    var combinedIdx = 0;
+    while (combinedIdx < received.length || argsIdx < arguments.length) {
+      var result;
+      if (combinedIdx < received.length && (!_isPlaceholder(received[combinedIdx]) || argsIdx >= arguments.length)) {
+        result = received[combinedIdx];
+      } else {
+        result = arguments[argsIdx];
+        argsIdx += 1;
+      }
+      combined[combinedIdx] = result;
+      if (!_isPlaceholder(result)) {
+        left -= 1;
+      }
+      combinedIdx += 1;
+    }
+    return left <= 0 ? fn.apply(this, combined) : _arity(left, _curryN(length, combined, fn));
+  };
+};
+
+/***/ }),
+/* 53 */
 /*!***********************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/pluck.js ***!
   \***********************************************************/
@@ -3273,8 +3510,8 @@ var ReplayEvent = function () {
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry2 = __webpack_require__(/*! ./internal/_curry2 */ 1);
-var map = __webpack_require__(/*! ./map */ 17);
-var prop = __webpack_require__(/*! ./prop */ 82);
+var map = __webpack_require__(/*! ./map */ 16);
+var prop = __webpack_require__(/*! ./prop */ 65);
 
 /**
  * Returns a new list by plucking the same named property off all objects in
@@ -3301,97 +3538,124 @@ module.exports = _curry2(function pluck(p, list) {
 });
 
 /***/ }),
-/* 48 */
-/*!*****************************************************************!*\
-  !*** /Users/ivankleshnin/node_modules/ramda/src/isArrayLike.js ***!
-  \*****************************************************************/
+/* 54 */
+/*!*******************************************************************!*\
+  !*** /Users/ivankleshnin/node_modules/ramda/src/internal/_map.js ***!
+  \*******************************************************************/
 /*! no static exports found */
 /*! all exports used */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ (function(module, exports) {
 
-var _curry1 = __webpack_require__(/*! ./internal/_curry1 */ 3);
-var _isArray = __webpack_require__(/*! ./internal/_isArray */ 28);
-var _isString = __webpack_require__(/*! ./internal/_isString */ 60);
-
-/**
- * Tests whether or not an object is similar to an array.
- *
- * @func
- * @memberOf R
- * @since v0.5.0
- * @category Type
- * @category List
- * @sig * -> Boolean
- * @param {*} x The object to test.
- * @return {Boolean} `true` if `x` has a numeric length property and extreme indices defined; `false` otherwise.
- * @deprecated since v0.23.0
- * @example
- *
- *      R.isArrayLike([]); //=> true
- *      R.isArrayLike(true); //=> false
- *      R.isArrayLike({}); //=> false
- *      R.isArrayLike({length: 10}); //=> false
- *      R.isArrayLike({0: 'zero', 9: 'nine', length: 10}); //=> true
- */
-module.exports = _curry1(function isArrayLike(x) {
-  if (_isArray(x)) {
-    return true;
+module.exports = function _map(fn, functor) {
+  var idx = 0;
+  var len = functor.length;
+  var result = Array(len);
+  while (idx < len) {
+    result[idx] = fn(functor[idx]);
+    idx += 1;
   }
-  if (!x) {
-    return false;
-  }
-  if (typeof x !== 'object') {
-    return false;
-  }
-  if (_isString(x)) {
-    return false;
-  }
-  if (x.nodeType === 1) {
-    return !!x.length;
-  }
-  if (x.length === 0) {
-    return true;
-  }
-  if (x.length > 0) {
-    return x.hasOwnProperty(0) && x.hasOwnProperty(x.length - 1);
-  }
-  return false;
-});
-
-/***/ }),
-/* 49 */
-/*!******************************************************************************!*\
-  !*** /Users/ivankleshnin/node_modules/ramda/src/internal/_checkForMethod.js ***!
-  \******************************************************************************/
-/*! no static exports found */
-/*! all exports used */
-/***/ (function(module, exports, __webpack_require__) {
-
-var _isArray = __webpack_require__(/*! ./_isArray */ 28);
-
-/**
- * This checks whether a function has a [methodname] function. If it isn't an
- * array it will execute that function otherwise it will default to the ramda
- * implementation.
- *
- * @private
- * @param {Function} fn ramda implemtation
- * @param {String} methodname property to check for a custom implementation
- * @return {Object} Whatever the return value of the method is.
- */
-module.exports = function _checkForMethod(methodname, fn) {
-  return function () {
-    var length = arguments.length;
-    if (length === 0) {
-      return fn();
-    }
-    var obj = arguments[length - 1];
-    return _isArray(obj) || typeof obj[methodname] !== 'function' ? fn.apply(this, arguments) : obj[methodname].apply(obj, Array.prototype.slice.call(arguments, 0, length - 1));
-  };
+  return result;
 };
 
 /***/ }),
-/* 50 */
+/* 55 */
+/*!***********************************************************!*\
+  !*** /Users/ivankleshnin/node_modules/ramda/src/curry.js ***!
+  \***********************************************************/
+/*! no static exports found */
+/*! all exports used */
+/***/ (function(module, exports, __webpack_require__) {
+
+var _curry1 = __webpack_require__(/*! ./internal/_curry1 */ 2);
+var curryN = __webpack_require__(/*! ./curryN */ 15);
+
+/**
+ * Returns a curried equivalent of the provided function. The curried function
+ * has two unusual capabilities. First, its arguments needn't be provided one
+ * at a time. If `f` is a ternary function and `g` is `R.curry(f)`, the
+ * following are equivalent:
+ *
+ *   - `g(1)(2)(3)`
+ *   - `g(1)(2, 3)`
+ *   - `g(1, 2)(3)`
+ *   - `g(1, 2, 3)`
+ *
+ * Secondly, the special placeholder value `R.__` may be used to specify
+ * "gaps", allowing partial application of any combination of arguments,
+ * regardless of their positions. If `g` is as above and `_` is `R.__`, the
+ * following are equivalent:
+ *
+ *   - `g(1, 2, 3)`
+ *   - `g(_, 2, 3)(1)`
+ *   - `g(_, _, 3)(1)(2)`
+ *   - `g(_, _, 3)(1, 2)`
+ *   - `g(_, 2)(1)(3)`
+ *   - `g(_, 2)(1, 3)`
+ *   - `g(_, 2)(_, 3)(1)`
+ *
+ * @func
+ * @memberOf R
+ * @since v0.1.0
+ * @category Function
+ * @sig (* -> a) -> (* -> a)
+ * @param {Function} fn The function to curry.
+ * @return {Function} A new, curried function.
+ * @see R.curryN
+ * @example
+ *
+ *      var addFourNumbers = (a, b, c, d) => a + b + c + d;
+ *
+ *      var curriedAddFourNumbers = R.curry(addFourNumbers);
+ *      var f = curriedAddFourNumbers(1, 2);
+ *      var g = f(3);
+ *      g(4); //=> 10
+ */
+module.exports = _curry1(function curry(fn) {
+  return curryN(fn.length, fn);
+});
+
+/***/ }),
+/* 56 */
+/*!*************************************************************!*\
+  !*** /Users/ivankleshnin/node_modules/ramda/src/reverse.js ***!
+  \*************************************************************/
+/*! no static exports found */
+/*! all exports used */
+/***/ (function(module, exports, __webpack_require__) {
+
+var _curry1 = __webpack_require__(/*! ./internal/_curry1 */ 2);
+var _isString = __webpack_require__(/*! ./internal/_isString */ 38);
+
+/**
+ * Returns a new list or string with the elements or characters in reverse
+ * order.
+ *
+ * @func
+ * @memberOf R
+ * @since v0.1.0
+ * @category List
+ * @sig [a] -> [a]
+ * @sig String -> String
+ * @param {Array|String} list
+ * @return {Array|String}
+ * @example
+ *
+ *      R.reverse([1, 2, 3]);  //=> [3, 2, 1]
+ *      R.reverse([1, 2]);     //=> [2, 1]
+ *      R.reverse([1]);        //=> [1]
+ *      R.reverse([]);         //=> []
+ *
+ *      R.reverse('abc');      //=> 'cba'
+ *      R.reverse('ab');       //=> 'ba'
+ *      R.reverse('a');        //=> 'a'
+ *      R.reverse('');         //=> ''
+ */
+module.exports = _curry1(function reverse(list) {
+  return _isString(list) ? list.split('').reverse().join('') : Array.prototype.slice.call(list, 0).reverse();
+});
+
+/***/ }),
+/* 57 */
 /*!**************************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/toString.js ***!
   \**************************************************************/
@@ -3399,8 +3663,8 @@ module.exports = function _checkForMethod(methodname, fn) {
 /*! all exports used */
 /***/ (function(module, exports, __webpack_require__) {
 
-var _curry1 = __webpack_require__(/*! ./internal/_curry1 */ 3);
-var _toString = __webpack_require__(/*! ./internal/_toString */ 246);
+var _curry1 = __webpack_require__(/*! ./internal/_curry1 */ 2);
+var _toString = __webpack_require__(/*! ./internal/_toString */ 254);
 
 /**
  * Returns the string representation of the given value. `eval`'ing the output
@@ -3443,50 +3707,7 @@ module.exports = _curry1(function toString(val) {
 });
 
 /***/ }),
-/* 51 */
-/*!*********************************************************!*\
-  !*** /Users/ivankleshnin/node_modules/ramda/src/nth.js ***!
-  \*********************************************************/
-/*! no static exports found */
-/*! all exports used */
-/***/ (function(module, exports, __webpack_require__) {
-
-var _curry2 = __webpack_require__(/*! ./internal/_curry2 */ 1);
-var _isString = __webpack_require__(/*! ./internal/_isString */ 60);
-
-/**
- * Returns the nth element of the given list or string. If n is negative the
- * element at index length + n is returned.
- *
- * @func
- * @memberOf R
- * @since v0.1.0
- * @category List
- * @sig Number -> [a] -> a | Undefined
- * @sig Number -> String -> String
- * @param {Number} offset
- * @param {*} list
- * @return {*}
- * @example
- *
- *      var list = ['foo', 'bar', 'baz', 'quux'];
- *      R.nth(1, list); //=> 'bar'
- *      R.nth(-1, list); //=> 'quux'
- *      R.nth(-99, list); //=> undefined
- *
- *      R.nth(2, 'abc'); //=> 'c'
- *      R.nth(3, 'abc'); //=> ''
- * @symb R.nth(-1, [a, b, c]) = c
- * @symb R.nth(0, [a, b, c]) = a
- * @symb R.nth(1, [a, b, c]) = b
- */
-module.exports = _curry2(function nth(offset, list) {
-  var idx = offset < 0 ? list.length + offset : offset;
-  return _isString(list) ? list.charAt(idx) : list[idx];
-});
-
-/***/ }),
-/* 52 */
+/* 58 */
 /*!*************************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/invoker.js ***!
   \*************************************************************/
@@ -3495,9 +3716,9 @@ module.exports = _curry2(function nth(offset, list) {
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry2 = __webpack_require__(/*! ./internal/_curry2 */ 1);
-var _isFunction = __webpack_require__(/*! ./internal/_isFunction */ 62);
+var _isFunction = __webpack_require__(/*! ./internal/_isFunction */ 67);
 var curryN = __webpack_require__(/*! ./curryN */ 15);
-var toString = __webpack_require__(/*! ./toString */ 50);
+var toString = __webpack_require__(/*! ./toString */ 57);
 
 /**
  * Turns a named method with a specified arity into a function that can be
@@ -3536,7 +3757,7 @@ module.exports = _curry2(function invoker(arity, method) {
 });
 
 /***/ }),
-/* 53 */
+/* 59 */
 /*!**********************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/path.js ***!
   \**********************************************************/
@@ -3578,7 +3799,7 @@ module.exports = _curry2(function path(paths, obj) {
 });
 
 /***/ }),
-/* 54 */
+/* 60 */
 /*!***********************************************************!*\
   !*** ./node_modules/rxjs/util/ArgumentOutOfRangeError.js ***!
   \***********************************************************/
@@ -3621,7 +3842,7 @@ exports.ArgumentOutOfRangeError = ArgumentOutOfRangeError;
 //# sourceMappingURL=ArgumentOutOfRangeError.js.map
 
 /***/ }),
-/* 55 */
+/* 61 */
 /*!**********************************************************!*\
   !*** ./node_modules/rxjs/observable/ScalarObservable.js ***!
   \**********************************************************/
@@ -3695,7 +3916,7 @@ exports.ScalarObservable = ScalarObservable;
 //# sourceMappingURL=ScalarObservable.js.map
 
 /***/ }),
-/* 56 */
+/* 62 */
 /*!*******************************************!*\
   !*** ./node_modules/rxjs/operator/map.js ***!
   \*******************************************/
@@ -3714,7 +3935,7 @@ var __extends = undefined && undefined.__extends || function (d, b) {
     }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var Subscriber_1 = __webpack_require__(/*! ../Subscriber */ 2);
+var Subscriber_1 = __webpack_require__(/*! ../Subscriber */ 3);
 /**
  * Applies a given `project` function to each value emitted by the source
  * Observable, and emits the resulting values as an Observable.
@@ -3796,7 +4017,7 @@ var MapSubscriber = function (_super) {
 //# sourceMappingURL=map.js.map
 
 /***/ }),
-/* 57 */
+/* 63 */
 /*!*********************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/add.js ***!
   \*********************************************************/
@@ -3828,86 +4049,53 @@ module.exports = _curry2(function add(a, b) {
 });
 
 /***/ }),
-/* 58 */
-/*!**********************************************************************!*\
-  !*** /Users/ivankleshnin/node_modules/ramda/src/internal/_curryN.js ***!
-  \**********************************************************************/
+/* 64 */
+/*!*****************************************************************************!*\
+  !*** /Users/ivankleshnin/node_modules/ramda/src/internal/_isTransformer.js ***!
+  \*****************************************************************************/
+/*! no static exports found */
+/*! all exports used */
+/***/ (function(module, exports) {
+
+module.exports = function _isTransformer(obj) {
+  return typeof obj['@@transducer/step'] === 'function';
+};
+
+/***/ }),
+/* 65 */
+/*!**********************************************************!*\
+  !*** /Users/ivankleshnin/node_modules/ramda/src/prop.js ***!
+  \**********************************************************/
 /*! no static exports found */
 /*! all exports used */
 /***/ (function(module, exports, __webpack_require__) {
 
-var _arity = __webpack_require__(/*! ./_arity */ 23);
-var _isPlaceholder = __webpack_require__(/*! ./_isPlaceholder */ 34);
+var _curry2 = __webpack_require__(/*! ./internal/_curry2 */ 1);
 
 /**
- * Internal curryN function.
+ * Returns a function that when supplied an object returns the indicated
+ * property of that object, if it exists.
  *
- * @private
- * @category Function
- * @param {Number} length The arity of the curried function.
- * @param {Array} received An array of arguments received thus far.
- * @param {Function} fn The function to curry.
- * @return {Function} The curried function.
+ * @func
+ * @memberOf R
+ * @since v0.1.0
+ * @category Object
+ * @sig s -> {s: a} -> a | Undefined
+ * @param {String} p The property name
+ * @param {Object} obj The object to query
+ * @return {*} The value at `obj.p`.
+ * @see R.path
+ * @example
+ *
+ *      R.prop('x', {x: 100}); //=> 100
+ *      R.prop('x', {}); //=> undefined
  */
-module.exports = function _curryN(length, received, fn) {
-  return function () {
-    var combined = [];
-    var argsIdx = 0;
-    var left = length;
-    var combinedIdx = 0;
-    while (combinedIdx < received.length || argsIdx < arguments.length) {
-      var result;
-      if (combinedIdx < received.length && (!_isPlaceholder(received[combinedIdx]) || argsIdx >= arguments.length)) {
-        result = received[combinedIdx];
-      } else {
-        result = arguments[argsIdx];
-        argsIdx += 1;
-      }
-      combined[combinedIdx] = result;
-      if (!_isPlaceholder(result)) {
-        left -= 1;
-      }
-      combinedIdx += 1;
-    }
-    return left <= 0 ? fn.apply(this, combined) : _arity(left, _curryN(length, combined, fn));
-  };
-};
+module.exports = _curry2(function prop(p, obj) {
+  return obj[p];
+});
 
 /***/ }),
-/* 59 */
-/*!*******************************************************************!*\
-  !*** /Users/ivankleshnin/node_modules/ramda/src/internal/_map.js ***!
-  \*******************************************************************/
-/*! no static exports found */
-/*! all exports used */
-/***/ (function(module, exports) {
-
-module.exports = function _map(fn, functor) {
-  var idx = 0;
-  var len = functor.length;
-  var result = Array(len);
-  while (idx < len) {
-    result[idx] = fn(functor[idx]);
-    idx += 1;
-  }
-  return result;
-};
-
-/***/ }),
-/* 60 */
-/*!************************************************************************!*\
-  !*** /Users/ivankleshnin/node_modules/ramda/src/internal/_isString.js ***!
-  \************************************************************************/
-/*! no static exports found */
-/*! all exports used */
-/***/ (function(module, exports) {
-
-module.exports = function _isString(x) {
-  return Object.prototype.toString.call(x) === '[object String]';
-};
-
-/***/ }),
-/* 61 */
+/* 66 */
 /*!**********************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/nAry.js ***!
   \**********************************************************/
@@ -3998,7 +4186,7 @@ module.exports = _curry2(function nAry(n, fn) {
 });
 
 /***/ }),
-/* 62 */
+/* 67 */
 /*!**************************************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/internal/_isFunction.js ***!
   \**************************************************************************/
@@ -4011,7 +4199,7 @@ module.exports = function _isFunction(x) {
 };
 
 /***/ }),
-/* 63 */
+/* 68 */
 /*!**********************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/lift.js ***!
   \**********************************************************/
@@ -4019,8 +4207,8 @@ module.exports = function _isFunction(x) {
 /*! all exports used */
 /***/ (function(module, exports, __webpack_require__) {
 
-var _curry1 = __webpack_require__(/*! ./internal/_curry1 */ 3);
-var liftN = __webpack_require__(/*! ./liftN */ 118);
+var _curry1 = __webpack_require__(/*! ./internal/_curry1 */ 2);
+var liftN = __webpack_require__(/*! ./liftN */ 125);
 
 /**
  * "lifts" a function of arity > 1 so that it may "map over" a list, Function or other
@@ -4049,77 +4237,104 @@ module.exports = _curry1(function lift(fn) {
 });
 
 /***/ }),
-/* 64 */
-/*!***********************************************************!*\
-  !*** /Users/ivankleshnin/node_modules/ramda/src/curry.js ***!
-  \***********************************************************/
+/* 69 */
+/*!**********************************************************!*\
+  !*** /Users/ivankleshnin/node_modules/ramda/src/type.js ***!
+  \**********************************************************/
 /*! no static exports found */
 /*! all exports used */
 /***/ (function(module, exports, __webpack_require__) {
 
-var _curry1 = __webpack_require__(/*! ./internal/_curry1 */ 3);
-var curryN = __webpack_require__(/*! ./curryN */ 15);
+var _curry1 = __webpack_require__(/*! ./internal/_curry1 */ 2);
 
 /**
- * Returns a curried equivalent of the provided function. The curried function
- * has two unusual capabilities. First, its arguments needn't be provided one
- * at a time. If `f` is a ternary function and `g` is `R.curry(f)`, the
- * following are equivalent:
- *
- *   - `g(1)(2)(3)`
- *   - `g(1)(2, 3)`
- *   - `g(1, 2)(3)`
- *   - `g(1, 2, 3)`
- *
- * Secondly, the special placeholder value `R.__` may be used to specify
- * "gaps", allowing partial application of any combination of arguments,
- * regardless of their positions. If `g` is as above and `_` is `R.__`, the
- * following are equivalent:
- *
- *   - `g(1, 2, 3)`
- *   - `g(_, 2, 3)(1)`
- *   - `g(_, _, 3)(1)(2)`
- *   - `g(_, _, 3)(1, 2)`
- *   - `g(_, 2)(1)(3)`
- *   - `g(_, 2)(1, 3)`
- *   - `g(_, 2)(_, 3)(1)`
+ * Gives a single-word string description of the (native) type of a value,
+ * returning such answers as 'Object', 'Number', 'Array', or 'Null'. Does not
+ * attempt to distinguish user Object types any further, reporting them all as
+ * 'Object'.
  *
  * @func
  * @memberOf R
- * @since v0.1.0
- * @category Function
- * @sig (* -> a) -> (* -> a)
- * @param {Function} fn The function to curry.
- * @return {Function} A new, curried function.
- * @see R.curryN
+ * @since v0.8.0
+ * @category Type
+ * @sig (* -> {*}) -> String
+ * @param {*} val The value to test
+ * @return {String}
  * @example
  *
- *      var addFourNumbers = (a, b, c, d) => a + b + c + d;
- *
- *      var curriedAddFourNumbers = R.curry(addFourNumbers);
- *      var f = curriedAddFourNumbers(1, 2);
- *      var g = f(3);
- *      g(4); //=> 10
+ *      R.type({}); //=> "Object"
+ *      R.type(1); //=> "Number"
+ *      R.type(false); //=> "Boolean"
+ *      R.type('s'); //=> "String"
+ *      R.type(null); //=> "Null"
+ *      R.type([]); //=> "Array"
+ *      R.type(/[A-z]/); //=> "RegExp"
  */
-module.exports = _curry1(function curry(fn) {
-  return curryN(fn.length, fn);
+module.exports = _curry1(function type(val) {
+  return val === null ? 'Null' : val === undefined ? 'Undefined' : Object.prototype.toString.call(val).slice(8, -1);
 });
 
 /***/ }),
-/* 65 */
+/* 70 */
 /*!*************************************************************!*\
-  !*** /Users/ivankleshnin/node_modules/ramda/src/reverse.js ***!
+  !*** /Users/ivankleshnin/node_modules/ramda/src/compose.js ***!
   \*************************************************************/
 /*! no static exports found */
 /*! all exports used */
 /***/ (function(module, exports, __webpack_require__) {
 
-var _curry1 = __webpack_require__(/*! ./internal/_curry1 */ 3);
-var _isString = __webpack_require__(/*! ./internal/_isString */ 60);
+var pipe = __webpack_require__(/*! ./pipe */ 98);
+var reverse = __webpack_require__(/*! ./reverse */ 56);
 
 /**
- * Returns a new list or string with the elements or characters in reverse
- * order.
+ * Performs right-to-left function composition. The rightmost function may have
+ * any arity; the remaining functions must be unary.
+ *
+ * **Note:** The result of compose is not automatically curried.
+ *
+ * @func
+ * @memberOf R
+ * @since v0.1.0
+ * @category Function
+ * @sig ((y -> z), (x -> y), ..., (o -> p), ((a, b, ..., n) -> o)) -> ((a, b, ..., n) -> z)
+ * @param {...Function} ...functions The functions to compose
+ * @return {Function}
+ * @see R.pipe
+ * @example
+ *
+ *      var classyGreeting = (firstName, lastName) => "The name's " + lastName + ", " + firstName + " " + lastName
+ *      var yellGreeting = R.compose(R.toUpper, classyGreeting);
+ *      yellGreeting('James', 'Bond'); //=> "THE NAME'S BOND, JAMES BOND"
+ *
+ *      R.compose(Math.abs, R.add(1), R.multiply(2))(-4) //=> 7
+ *
+ * @symb R.compose(f, g, h)(a, b) = f(g(h(a, b)))
+ */
+module.exports = function compose() {
+  if (arguments.length === 0) {
+    throw new Error('compose requires at least one argument');
+  }
+  return pipe.apply(this, reverse(arguments));
+};
+
+/***/ }),
+/* 71 */
+/*!**********************************************************!*\
+  !*** /Users/ivankleshnin/node_modules/ramda/src/tail.js ***!
+  \**********************************************************/
+/*! no static exports found */
+/*! all exports used */
+/***/ (function(module, exports, __webpack_require__) {
+
+var _checkForMethod = __webpack_require__(/*! ./internal/_checkForMethod */ 35);
+var _curry1 = __webpack_require__(/*! ./internal/_curry1 */ 2);
+var slice = __webpack_require__(/*! ./slice */ 30);
+
+/**
+ * Returns all but the first element of the given list or string (or object
+ * with a `tail` method).
+ *
+ * Dispatches to the `slice` method of the first argument, if present.
  *
  * @func
  * @memberOf R
@@ -4127,26 +4342,25 @@ var _isString = __webpack_require__(/*! ./internal/_isString */ 60);
  * @category List
  * @sig [a] -> [a]
  * @sig String -> String
- * @param {Array|String} list
- * @return {Array|String}
+ * @param {*} list
+ * @return {*}
+ * @see R.head, R.init, R.last
  * @example
  *
- *      R.reverse([1, 2, 3]);  //=> [3, 2, 1]
- *      R.reverse([1, 2]);     //=> [2, 1]
- *      R.reverse([1]);        //=> [1]
- *      R.reverse([]);         //=> []
+ *      R.tail([1, 2, 3]);  //=> [2, 3]
+ *      R.tail([1, 2]);     //=> [2]
+ *      R.tail([1]);        //=> []
+ *      R.tail([]);         //=> []
  *
- *      R.reverse('abc');      //=> 'cba'
- *      R.reverse('ab');       //=> 'ba'
- *      R.reverse('a');        //=> 'a'
- *      R.reverse('');         //=> ''
+ *      R.tail('abc');  //=> 'bc'
+ *      R.tail('ab');   //=> 'b'
+ *      R.tail('a');    //=> ''
+ *      R.tail('');     //=> ''
  */
-module.exports = _curry1(function reverse(list) {
-  return _isString(list) ? list.split('').reverse().join('') : Array.prototype.slice.call(list, 0).reverse();
-});
+module.exports = _curry1(_checkForMethod('tail', slice(1, Infinity)));
 
 /***/ }),
-/* 66 */
+/* 72 */
 /*!************************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/reject.js ***!
   \************************************************************/
@@ -4154,9 +4368,9 @@ module.exports = _curry1(function reverse(list) {
 /*! all exports used */
 /***/ (function(module, exports, __webpack_require__) {
 
-var _complement = __webpack_require__(/*! ./internal/_complement */ 128);
+var _complement = __webpack_require__(/*! ./internal/_complement */ 137);
 var _curry2 = __webpack_require__(/*! ./internal/_curry2 */ 1);
-var filter = __webpack_require__(/*! ./filter */ 91);
+var filter = __webpack_require__(/*! ./filter */ 73);
 
 /**
  * The complement of `filter`.
@@ -4185,7 +4399,61 @@ module.exports = _curry2(function reject(pred, filterable) {
 });
 
 /***/ }),
-/* 67 */
+/* 73 */
+/*!************************************************************!*\
+  !*** /Users/ivankleshnin/node_modules/ramda/src/filter.js ***!
+  \************************************************************/
+/*! no static exports found */
+/*! all exports used */
+/***/ (function(module, exports, __webpack_require__) {
+
+var _curry2 = __webpack_require__(/*! ./internal/_curry2 */ 1);
+var _dispatchable = __webpack_require__(/*! ./internal/_dispatchable */ 7);
+var _filter = __webpack_require__(/*! ./internal/_filter */ 101);
+var _isObject = __webpack_require__(/*! ./internal/_isObject */ 102);
+var _reduce = __webpack_require__(/*! ./internal/_reduce */ 17);
+var _xfilter = __webpack_require__(/*! ./internal/_xfilter */ 138);
+var keys = __webpack_require__(/*! ./keys */ 21);
+
+/**
+ * Takes a predicate and a "filterable", and returns a new filterable of the
+ * same type containing the members of the given filterable which satisfy the
+ * given predicate.
+ *
+ * Dispatches to the `filter` method of the second argument, if present.
+ *
+ * Acts as a transducer if a transformer is given in list position.
+ *
+ * @func
+ * @memberOf R
+ * @since v0.1.0
+ * @category List
+ * @sig Filterable f => (a -> Boolean) -> f a -> f a
+ * @param {Function} pred
+ * @param {Array} filterable
+ * @return {Array}
+ * @see R.reject, R.transduce, R.addIndex
+ * @example
+ *
+ *      var isEven = n => n % 2 === 0;
+ *
+ *      R.filter(isEven, [1, 2, 3, 4]); //=> [2, 4]
+ *
+ *      R.filter(isEven, {a: 1, b: 2, c: 3, d: 4}); //=> {b: 2, d: 4}
+ */
+module.exports = _curry2(_dispatchable(['filter'], _xfilter, function (pred, filterable) {
+  return _isObject(filterable) ? _reduce(function (acc, key) {
+    if (pred(filterable[key])) {
+      acc[key] = filterable[key];
+    }
+    return acc;
+  }, {}, keys(filterable)) :
+  // else
+  _filter(pred, filterable);
+}));
+
+/***/ }),
+/* 74 */
 /*!**************************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/reduceBy.js ***!
   \**************************************************************/
@@ -4193,11 +4461,11 @@ module.exports = _curry2(function reject(pred, filterable) {
 /*! all exports used */
 /***/ (function(module, exports, __webpack_require__) {
 
-var _curryN = __webpack_require__(/*! ./internal/_curryN */ 58);
-var _dispatchable = __webpack_require__(/*! ./internal/_dispatchable */ 8);
+var _curryN = __webpack_require__(/*! ./internal/_curryN */ 52);
+var _dispatchable = __webpack_require__(/*! ./internal/_dispatchable */ 7);
 var _has = __webpack_require__(/*! ./internal/_has */ 14);
-var _reduce = __webpack_require__(/*! ./internal/_reduce */ 18);
-var _xreduceBy = __webpack_require__(/*! ./internal/_xreduceBy */ 257);
+var _reduce = __webpack_require__(/*! ./internal/_reduce */ 17);
+var _xreduceBy = __webpack_require__(/*! ./internal/_xreduceBy */ 261);
 
 /**
  * Groups the elements of the list according to the result of calling
@@ -4252,7 +4520,7 @@ module.exports = _curryN(4, [], _dispatchable([], _xreduceBy, function reduceBy(
 }));
 
 /***/ }),
-/* 68 */
+/* 75 */
 /*!**********************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/flip.js ***!
   \**********************************************************/
@@ -4260,8 +4528,8 @@ module.exports = _curryN(4, [], _dispatchable([], _xreduceBy, function reduceBy(
 /*! all exports used */
 /***/ (function(module, exports, __webpack_require__) {
 
-var _curry1 = __webpack_require__(/*! ./internal/_curry1 */ 3);
-var curry = __webpack_require__(/*! ./curry */ 64);
+var _curry1 = __webpack_require__(/*! ./internal/_curry1 */ 2);
+var curry = __webpack_require__(/*! ./curry */ 55);
 
 /**
  * Returns a new function much like the supplied one, except that the first two
@@ -4293,7 +4561,53 @@ module.exports = _curry1(function flip(fn) {
 });
 
 /***/ }),
-/* 69 */
+/* 76 */
+/*!**************************************************************!*\
+  !*** /Users/ivankleshnin/node_modules/ramda/src/identity.js ***!
+  \**************************************************************/
+/*! no static exports found */
+/*! all exports used */
+/***/ (function(module, exports, __webpack_require__) {
+
+var _curry1 = __webpack_require__(/*! ./internal/_curry1 */ 2);
+var _identity = __webpack_require__(/*! ./internal/_identity */ 77);
+
+/**
+ * A function that does nothing but return the parameter supplied to it. Good
+ * as a default or placeholder function.
+ *
+ * @func
+ * @memberOf R
+ * @since v0.1.0
+ * @category Function
+ * @sig a -> a
+ * @param {*} x The value to return.
+ * @return {*} The input value, `x`.
+ * @example
+ *
+ *      R.identity(1); //=> 1
+ *
+ *      var obj = {};
+ *      R.identity(obj) === obj; //=> true
+ * @symb R.identity(a) = a
+ */
+module.exports = _curry1(_identity);
+
+/***/ }),
+/* 77 */
+/*!************************************************************************!*\
+  !*** /Users/ivankleshnin/node_modules/ramda/src/internal/_identity.js ***!
+  \************************************************************************/
+/*! no static exports found */
+/*! all exports used */
+/***/ (function(module, exports) {
+
+module.exports = function _identity(x) {
+  return x;
+};
+
+/***/ }),
+/* 78 */
 /*!**********************************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/internal/_assign.js ***!
   \**********************************************************************/
@@ -4301,57 +4615,12 @@ module.exports = _curry1(function flip(fn) {
 /*! all exports used */
 /***/ (function(module, exports, __webpack_require__) {
 
-var _objectAssign = __webpack_require__(/*! ./_objectAssign */ 145);
+var _objectAssign = __webpack_require__(/*! ./_objectAssign */ 153);
 
 module.exports = typeof Object.assign === 'function' ? Object.assign : _objectAssign;
 
 /***/ }),
-/* 70 */
-/*!**********************************************************!*\
-  !*** /Users/ivankleshnin/node_modules/ramda/src/lens.js ***!
-  \**********************************************************/
-/*! no static exports found */
-/*! all exports used */
-/***/ (function(module, exports, __webpack_require__) {
-
-var _curry2 = __webpack_require__(/*! ./internal/_curry2 */ 1);
-var map = __webpack_require__(/*! ./map */ 17);
-
-/**
- * Returns a lens for the given getter and setter functions. The getter "gets"
- * the value of the focus; the setter "sets" the value of the focus. The setter
- * should not mutate the data structure.
- *
- * @func
- * @memberOf R
- * @since v0.8.0
- * @category Object
- * @typedefn Lens s a = Functor f => (a -> f a) -> s -> f s
- * @sig (s -> a) -> ((a, s) -> s) -> Lens s a
- * @param {Function} getter
- * @param {Function} setter
- * @return {Lens}
- * @see R.view, R.set, R.over, R.lensIndex, R.lensProp
- * @example
- *
- *      var xLens = R.lens(R.prop('x'), R.assoc('x'));
- *
- *      R.view(xLens, {x: 1, y: 2});            //=> 1
- *      R.set(xLens, 4, {x: 1, y: 2});          //=> {x: 4, y: 2}
- *      R.over(xLens, R.negate, {x: 1, y: 2});  //=> {x: -1, y: 2}
- */
-module.exports = _curry2(function lens(getter, setter) {
-  return function (toFunctorFn) {
-    return function (target) {
-      return map(function (focus) {
-        return setter(focus, target);
-      }, toFunctorFn(getter(target)));
-    };
-  };
-});
-
-/***/ }),
-/* 71 */
+/* 79 */
 /*!*******************************************!*\
   !*** ./node_modules/rxjs/AsyncSubject.js ***!
   \*******************************************/
@@ -4370,8 +4639,8 @@ var __extends = undefined && undefined.__extends || function (d, b) {
     }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var Subject_1 = __webpack_require__(/*! ./Subject */ 10);
-var Subscription_1 = __webpack_require__(/*! ./Subscription */ 7);
+var Subject_1 = __webpack_require__(/*! ./Subject */ 11);
+var Subscription_1 = __webpack_require__(/*! ./Subscription */ 8);
 /**
  * @class AsyncSubject<T>
  */
@@ -4418,7 +4687,7 @@ exports.AsyncSubject = AsyncSubject;
 //# sourceMappingURL=AsyncSubject.js.map
 
 /***/ }),
-/* 72 */
+/* 80 */
 /*!*****************************************************!*\
   !*** ./node_modules/rxjs/operator/combineLatest.js ***!
   \*****************************************************/
@@ -4437,8 +4706,8 @@ var __extends = undefined && undefined.__extends || function (d, b) {
     }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var ArrayObservable_1 = __webpack_require__(/*! ../observable/ArrayObservable */ 20);
-var isArray_1 = __webpack_require__(/*! ../util/isArray */ 22);
+var ArrayObservable_1 = __webpack_require__(/*! ../observable/ArrayObservable */ 23);
+var isArray_1 = __webpack_require__(/*! ../util/isArray */ 26);
 var OuterSubscriber_1 = __webpack_require__(/*! ../OuterSubscriber */ 5);
 var subscribeToResult_1 = __webpack_require__(/*! ../util/subscribeToResult */ 6);
 var none = {};
@@ -4580,7 +4849,7 @@ exports.CombineLatestSubscriber = CombineLatestSubscriber;
 //# sourceMappingURL=combineLatest.js.map
 
 /***/ }),
-/* 73 */
+/* 81 */
 /*!**********************************************!*\
   !*** ./node_modules/rxjs/operator/concat.js ***!
   \**********************************************/
@@ -4592,9 +4861,9 @@ exports.CombineLatestSubscriber = CombineLatestSubscriber;
 
 
 var Observable_1 = __webpack_require__(/*! ../Observable */ 0);
-var isScheduler_1 = __webpack_require__(/*! ../util/isScheduler */ 19);
-var ArrayObservable_1 = __webpack_require__(/*! ../observable/ArrayObservable */ 20);
-var mergeAll_1 = __webpack_require__(/*! ./mergeAll */ 45);
+var isScheduler_1 = __webpack_require__(/*! ../util/isScheduler */ 22);
+var ArrayObservable_1 = __webpack_require__(/*! ../observable/ArrayObservable */ 23);
+var mergeAll_1 = __webpack_require__(/*! ./mergeAll */ 50);
 /* tslint:enable:max-line-length */
 /**
  * Creates an output Observable which sequentially emits all values from every
@@ -4766,7 +5035,7 @@ exports.concatStatic = concatStatic;
 //# sourceMappingURL=concat.js.map
 
 /***/ }),
-/* 74 */
+/* 82 */
 /*!*************************************************!*\
   !*** ./node_modules/rxjs/operator/observeOn.js ***!
   \*************************************************/
@@ -4785,8 +5054,8 @@ var __extends = undefined && undefined.__extends || function (d, b) {
     }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var Subscriber_1 = __webpack_require__(/*! ../Subscriber */ 2);
-var Notification_1 = __webpack_require__(/*! ../Notification */ 38);
+var Subscriber_1 = __webpack_require__(/*! ../Subscriber */ 3);
+var Notification_1 = __webpack_require__(/*! ../Notification */ 44);
 /**
  *
  * Re-emits all notifications from source Observable with specified scheduler.
@@ -4901,7 +5170,7 @@ exports.ObserveOnMessage = ObserveOnMessage;
 //# sourceMappingURL=observeOn.js.map
 
 /***/ }),
-/* 75 */
+/* 83 */
 /*!*********************************************!*\
   !*** ./node_modules/rxjs/util/isNumeric.js ***!
   \*********************************************/
@@ -4912,7 +5181,7 @@ exports.ObserveOnMessage = ObserveOnMessage;
 "use strict";
 
 
-var isArray_1 = __webpack_require__(/*! ../util/isArray */ 22);
+var isArray_1 = __webpack_require__(/*! ../util/isArray */ 26);
 function isNumeric(val) {
     // parseFloat NaNs numeric-cast false positives (null|true|false|"")
     // ...but misinterprets leading-number strings, particularly hex literals ("0x...")
@@ -4925,7 +5194,7 @@ exports.isNumeric = isNumeric;
 //# sourceMappingURL=isNumeric.js.map
 
 /***/ }),
-/* 76 */
+/* 84 */
 /*!******************************************!*\
   !*** ./node_modules/rxjs/util/isDate.js ***!
   \******************************************/
@@ -4943,7 +5212,7 @@ exports.isDate = isDate;
 //# sourceMappingURL=isDate.js.map
 
 /***/ }),
-/* 77 */
+/* 85 */
 /*!**********************************************!*\
   !*** ./node_modules/rxjs/util/EmptyError.js ***!
   \**********************************************/
@@ -4986,7 +5255,59 @@ exports.EmptyError = EmptyError;
 //# sourceMappingURL=EmptyError.js.map
 
 /***/ }),
-/* 78 */
+/* 86 */
+/*!**********************************************************!*\
+  !*** /Users/ivankleshnin/node_modules/ramda/src/over.js ***!
+  \**********************************************************/
+/*! no static exports found */
+/*! all exports used */
+/***/ (function(module, exports, __webpack_require__) {
+
+var _curry3 = __webpack_require__(/*! ./internal/_curry3 */ 4);
+
+/**
+ * Returns the result of "setting" the portion of the given data structure
+ * focused by the given lens to the result of applying the given function to
+ * the focused value.
+ *
+ * @func
+ * @memberOf R
+ * @since v0.16.0
+ * @category Object
+ * @typedefn Lens s a = Functor f => (a -> f a) -> s -> f s
+ * @sig Lens s a -> (a -> a) -> s -> s
+ * @param {Lens} lens
+ * @param {*} v
+ * @param {*} x
+ * @return {*}
+ * @see R.prop, R.lensIndex, R.lensProp
+ * @example
+ *
+ *      var headLens = R.lensIndex(0);
+ *
+ *      R.over(headLens, R.toUpper, ['foo', 'bar', 'baz']); //=> ['FOO', 'bar', 'baz']
+ */
+module.exports = function () {
+  // `Identity` is a functor that holds a single value, where `map` simply
+  // transforms the held value with the provided function.
+  var Identity = function (x) {
+    return { value: x, map: function (f) {
+        return Identity(f(x));
+      } };
+  };
+
+  return _curry3(function over(lens, f, x) {
+    // The value returned by the getter function is first transformed with `f`,
+    // then set as the value of an `Identity`. This is then mapped over with the
+    // setter function of the lens.
+    return lens(function (y) {
+      return Identity(f(y));
+    })(x).value;
+  });
+}();
+
+/***/ }),
+/* 87 */
 /*!********************************************!*\
   !*** ./node_modules/rxjs/util/isObject.js ***!
   \********************************************/
@@ -5006,7 +5327,7 @@ exports.isObject = isObject;
 //# sourceMappingURL=isObject.js.map
 
 /***/ }),
-/* 79 */
+/* 88 */
 /*!***************************************!*\
   !*** ./node_modules/rxjs/Observer.js ***!
   \***************************************/
@@ -5028,7 +5349,7 @@ exports.empty = {
 //# sourceMappingURL=Observer.js.map
 
 /***/ }),
-/* 80 */
+/* 89 */
 /*!**************************************************!*\
   !*** ./node_modules/rxjs/SubjectSubscription.js ***!
   \**************************************************/
@@ -5047,7 +5368,7 @@ var __extends = undefined && undefined.__extends || function (d, b) {
     }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var Subscription_1 = __webpack_require__(/*! ./Subscription */ 7);
+var Subscription_1 = __webpack_require__(/*! ./Subscription */ 8);
 /**
  * We need this JSDoc comment for affecting ESDoc.
  * @ignore
@@ -5083,53 +5404,143 @@ exports.SubjectSubscription = SubjectSubscription;
 //# sourceMappingURL=SubjectSubscription.js.map
 
 /***/ }),
-/* 81 */
-/*!*****************************************************************************!*\
-  !*** /Users/ivankleshnin/node_modules/ramda/src/internal/_isTransformer.js ***!
-  \*****************************************************************************/
+/* 90 */
+/*!************************************************************!*\
+  !*** /Users/ivankleshnin/node_modules/ramda/src/adjust.js ***!
+  \************************************************************/
+/*! no static exports found */
+/*! all exports used */
+/***/ (function(module, exports, __webpack_require__) {
+
+var _concat = __webpack_require__(/*! ./internal/_concat */ 20);
+var _curry3 = __webpack_require__(/*! ./internal/_curry3 */ 4);
+
+/**
+ * Applies a function to the value at the given index of an array, returning a
+ * new copy of the array with the element at the given index replaced with the
+ * result of the function application.
+ *
+ * @func
+ * @memberOf R
+ * @since v0.14.0
+ * @category List
+ * @sig (a -> a) -> Number -> [a] -> [a]
+ * @param {Function} fn The function to apply.
+ * @param {Number} idx The index.
+ * @param {Array|Arguments} list An array-like object whose value
+ *        at the supplied index will be replaced.
+ * @return {Array} A copy of the supplied array-like object with
+ *         the element at index `idx` replaced with the value
+ *         returned by applying `fn` to the existing element.
+ * @see R.update
+ * @example
+ *
+ *      R.adjust(R.add(10), 1, [1, 2, 3]);     //=> [1, 12, 3]
+ *      R.adjust(R.add(10))(1)([1, 2, 3]);     //=> [1, 12, 3]
+ * @symb R.adjust(f, -1, [a, b]) = [a, f(b)]
+ * @symb R.adjust(f, 0, [a, b]) = [f(a), b]
+ */
+module.exports = _curry3(function adjust(fn, idx, list) {
+  if (idx >= list.length || idx < -list.length) {
+    return list;
+  }
+  var start = idx < 0 ? list.length : 0;
+  var _idx = start + idx;
+  var _list = _concat(list);
+  _list[_idx] = fn(list[_idx]);
+  return _list;
+});
+
+/***/ }),
+/* 91 */
+/*!*********************************************************************!*\
+  !*** /Users/ivankleshnin/node_modules/ramda/src/internal/_xwrap.js ***!
+  \*********************************************************************/
 /*! no static exports found */
 /*! all exports used */
 /***/ (function(module, exports) {
 
-module.exports = function _isTransformer(obj) {
-  return typeof obj['@@transducer/step'] === 'function';
-};
+module.exports = function () {
+  function XWrap(fn) {
+    this.f = fn;
+  }
+  XWrap.prototype['@@transducer/init'] = function () {
+    throw new Error('init not implemented on XWrap');
+  };
+  XWrap.prototype['@@transducer/result'] = function (acc) {
+    return acc;
+  };
+  XWrap.prototype['@@transducer/step'] = function (acc, x) {
+    return this.f(acc, x);
+  };
+
+  return function _xwrap(fn) {
+    return new XWrap(fn);
+  };
+}();
 
 /***/ }),
-/* 82 */
+/* 92 */
 /*!**********************************************************!*\
-  !*** /Users/ivankleshnin/node_modules/ramda/src/prop.js ***!
+  !*** /Users/ivankleshnin/node_modules/ramda/src/bind.js ***!
   \**********************************************************/
 /*! no static exports found */
 /*! all exports used */
 /***/ (function(module, exports, __webpack_require__) {
 
+var _arity = __webpack_require__(/*! ./internal/_arity */ 19);
 var _curry2 = __webpack_require__(/*! ./internal/_curry2 */ 1);
 
 /**
- * Returns a function that when supplied an object returns the indicated
- * property of that object, if it exists.
+ * Creates a function that is bound to a context.
+ * Note: `R.bind` does not provide the additional argument-binding capabilities of
+ * [Function.prototype.bind](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/bind).
  *
  * @func
  * @memberOf R
- * @since v0.1.0
+ * @since v0.6.0
+ * @category Function
  * @category Object
- * @sig s -> {s: a} -> a | Undefined
- * @param {String} p The property name
- * @param {Object} obj The object to query
- * @return {*} The value at `obj.p`.
- * @see R.path
+ * @sig (* -> *) -> {*} -> (* -> *)
+ * @param {Function} fn The function to bind to context
+ * @param {Object} thisObj The context to bind `fn` to
+ * @return {Function} A function that will execute in the context of `thisObj`.
+ * @see R.partial
  * @example
  *
- *      R.prop('x', {x: 100}); //=> 100
- *      R.prop('x', {}); //=> undefined
+ *      var log = R.bind(console.log, console);
+ *      R.pipe(R.assoc('a', 2), R.tap(log), R.assoc('a', 3))({a: 1}); //=> {a: 3}
+ *      // logs {a: 2}
+ * @symb R.bind(f, o)(a, b) = f.call(o, a, b)
  */
-module.exports = _curry2(function prop(p, obj) {
-  return obj[p];
+module.exports = _curry2(function bind(fn, thisObj) {
+  return _arity(fn.length, function () {
+    return fn.apply(thisObj, arguments);
+  });
 });
 
 /***/ }),
-/* 83 */
+/* 93 */
+/*!***************************************************************************!*\
+  !*** /Users/ivankleshnin/node_modules/ramda/src/internal/_isArguments.js ***!
+  \***************************************************************************/
+/*! no static exports found */
+/*! all exports used */
+/***/ (function(module, exports, __webpack_require__) {
+
+var _has = __webpack_require__(/*! ./_has */ 14);
+
+module.exports = function () {
+  var toString = Object.prototype.toString;
+  return toString.call(arguments) === '[object Arguments]' ? function _isArguments(x) {
+    return toString.call(x) === '[object Arguments]';
+  } : function _isArguments(x) {
+    return _has('callee', x);
+  };
+}();
+
+/***/ }),
+/* 94 */
 /*!********************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/ap.js ***!
   \********************************************************/
@@ -5137,10 +5548,10 @@ module.exports = _curry2(function prop(p, obj) {
 /*! all exports used */
 /***/ (function(module, exports, __webpack_require__) {
 
-var _concat = __webpack_require__(/*! ./internal/_concat */ 21);
+var _concat = __webpack_require__(/*! ./internal/_concat */ 20);
 var _curry2 = __webpack_require__(/*! ./internal/_curry2 */ 1);
-var _reduce = __webpack_require__(/*! ./internal/_reduce */ 18);
-var map = __webpack_require__(/*! ./map */ 17);
+var _reduce = __webpack_require__(/*! ./internal/_reduce */ 17);
+var map = __webpack_require__(/*! ./map */ 16);
 
 /**
  * ap applies a list of functions to a list of values.
@@ -5174,7 +5585,7 @@ module.exports = _curry2(function ap(applicative, fn) {
 });
 
 /***/ }),
-/* 84 */
+/* 95 */
 /*!***************************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/assocPath.js ***!
   \***************************************************************/
@@ -5184,9 +5595,9 @@ module.exports = _curry2(function ap(applicative, fn) {
 
 var _curry3 = __webpack_require__(/*! ./internal/_curry3 */ 4);
 var _has = __webpack_require__(/*! ./internal/_has */ 14);
-var _isArray = __webpack_require__(/*! ./internal/_isArray */ 28);
-var _isInteger = __webpack_require__(/*! ./internal/_isInteger */ 85);
-var assoc = __webpack_require__(/*! ./assoc */ 41);
+var _isArray = __webpack_require__(/*! ./internal/_isArray */ 27);
+var _isInteger = __webpack_require__(/*! ./internal/_isInteger */ 96);
+var assoc = __webpack_require__(/*! ./assoc */ 39);
 
 /**
  * Makes a shallow clone of an object, setting or overriding the nodes required
@@ -5231,7 +5642,7 @@ module.exports = _curry3(function assocPath(path, val, obj) {
 });
 
 /***/ }),
-/* 85 */
+/* 96 */
 /*!*************************************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/internal/_isInteger.js ***!
   \*************************************************************************/
@@ -5252,7 +5663,7 @@ module.exports = Number.isInteger || function _isInteger(n) {
 };
 
 /***/ }),
-/* 86 */
+/* 97 */
 /*!***********************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/chain.js ***!
   \***********************************************************/
@@ -5261,10 +5672,10 @@ module.exports = Number.isInteger || function _isInteger(n) {
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry2 = __webpack_require__(/*! ./internal/_curry2 */ 1);
-var _dispatchable = __webpack_require__(/*! ./internal/_dispatchable */ 8);
-var _makeFlat = __webpack_require__(/*! ./internal/_makeFlat */ 119);
-var _xchain = __webpack_require__(/*! ./internal/_xchain */ 236);
-var map = __webpack_require__(/*! ./map */ 17);
+var _dispatchable = __webpack_require__(/*! ./internal/_dispatchable */ 7);
+var _makeFlat = __webpack_require__(/*! ./internal/_makeFlat */ 126);
+var _xchain = __webpack_require__(/*! ./internal/_xchain */ 245);
+var map = __webpack_require__(/*! ./map */ 16);
 
 /**
  * `chain` maps a function over a list and concatenates the results. `chain`
@@ -5298,130 +5709,51 @@ module.exports = _curry2(_dispatchable(['chain'], _xchain, function chain(fn, mo
 }));
 
 /***/ }),
-/* 87 */
+/* 98 */
 /*!**********************************************************!*\
-  !*** /Users/ivankleshnin/node_modules/ramda/src/type.js ***!
+  !*** /Users/ivankleshnin/node_modules/ramda/src/pipe.js ***!
   \**********************************************************/
 /*! no static exports found */
 /*! all exports used */
 /***/ (function(module, exports, __webpack_require__) {
 
-var _curry1 = __webpack_require__(/*! ./internal/_curry1 */ 3);
+var _arity = __webpack_require__(/*! ./internal/_arity */ 19);
+var _pipe = __webpack_require__(/*! ./internal/_pipe */ 130);
+var reduce = __webpack_require__(/*! ./reduce */ 24);
+var tail = __webpack_require__(/*! ./tail */ 71);
 
 /**
- * Gives a single-word string description of the (native) type of a value,
- * returning such answers as 'Object', 'Number', 'Array', or 'Null'. Does not
- * attempt to distinguish user Object types any further, reporting them all as
- * 'Object'.
- *
- * @func
- * @memberOf R
- * @since v0.8.0
- * @category Type
- * @sig (* -> {*}) -> String
- * @param {*} val The value to test
- * @return {String}
- * @example
- *
- *      R.type({}); //=> "Object"
- *      R.type(1); //=> "Number"
- *      R.type(false); //=> "Boolean"
- *      R.type('s'); //=> "String"
- *      R.type(null); //=> "Null"
- *      R.type([]); //=> "Array"
- *      R.type(/[A-z]/); //=> "RegExp"
- */
-module.exports = _curry1(function type(val) {
-  return val === null ? 'Null' : val === undefined ? 'Undefined' : Object.prototype.toString.call(val).slice(8, -1);
-});
-
-/***/ }),
-/* 88 */
-/*!*************************************************************!*\
-  !*** /Users/ivankleshnin/node_modules/ramda/src/compose.js ***!
-  \*************************************************************/
-/*! no static exports found */
-/*! all exports used */
-/***/ (function(module, exports, __webpack_require__) {
-
-var pipe = __webpack_require__(/*! ./pipe */ 123);
-var reverse = __webpack_require__(/*! ./reverse */ 65);
-
-/**
- * Performs right-to-left function composition. The rightmost function may have
+ * Performs left-to-right function composition. The leftmost function may have
  * any arity; the remaining functions must be unary.
  *
- * **Note:** The result of compose is not automatically curried.
+ * In some libraries this function is named `sequence`.
+ *
+ * **Note:** The result of pipe is not automatically curried.
  *
  * @func
  * @memberOf R
  * @since v0.1.0
  * @category Function
- * @sig ((y -> z), (x -> y), ..., (o -> p), ((a, b, ..., n) -> o)) -> ((a, b, ..., n) -> z)
- * @param {...Function} ...functions The functions to compose
+ * @sig (((a, b, ..., n) -> o), (o -> p), ..., (x -> y), (y -> z)) -> ((a, b, ..., n) -> z)
+ * @param {...Function} functions
  * @return {Function}
- * @see R.pipe
+ * @see R.compose
  * @example
  *
- *      var classyGreeting = (firstName, lastName) => "The name's " + lastName + ", " + firstName + " " + lastName
- *      var yellGreeting = R.compose(R.toUpper, classyGreeting);
- *      yellGreeting('James', 'Bond'); //=> "THE NAME'S BOND, JAMES BOND"
+ *      var f = R.pipe(Math.pow, R.negate, R.inc);
  *
- *      R.compose(Math.abs, R.add(1), R.multiply(2))(-4) //=> 7
- *
- * @symb R.compose(f, g, h)(a, b) = f(g(h(a, b)))
+ *      f(3, 4); // -(3^4) + 1
+ * @symb R.pipe(f, g, h)(a, b) = h(g(f(a, b)))
  */
-module.exports = function compose() {
+module.exports = function pipe() {
   if (arguments.length === 0) {
-    throw new Error('compose requires at least one argument');
+    throw new Error('pipe requires at least one argument');
   }
-  return pipe.apply(this, reverse(arguments));
+  return _arity(arguments[0].length, reduce(_pipe, arguments[0], tail(arguments)));
 };
 
 /***/ }),
-/* 89 */
-/*!**********************************************************!*\
-  !*** /Users/ivankleshnin/node_modules/ramda/src/tail.js ***!
-  \**********************************************************/
-/*! no static exports found */
-/*! all exports used */
-/***/ (function(module, exports, __webpack_require__) {
-
-var _checkForMethod = __webpack_require__(/*! ./internal/_checkForMethod */ 49);
-var _curry1 = __webpack_require__(/*! ./internal/_curry1 */ 3);
-var slice = __webpack_require__(/*! ./slice */ 31);
-
-/**
- * Returns all but the first element of the given list or string (or object
- * with a `tail` method).
- *
- * Dispatches to the `slice` method of the first argument, if present.
- *
- * @func
- * @memberOf R
- * @since v0.1.0
- * @category List
- * @sig [a] -> [a]
- * @sig String -> String
- * @param {*} list
- * @return {*}
- * @see R.head, R.init, R.last
- * @example
- *
- *      R.tail([1, 2, 3]);  //=> [2, 3]
- *      R.tail([1, 2]);     //=> [2]
- *      R.tail([1]);        //=> []
- *      R.tail([]);         //=> []
- *
- *      R.tail('abc');  //=> 'bc'
- *      R.tail('ab');   //=> 'b'
- *      R.tail('a');    //=> ''
- *      R.tail('');     //=> ''
- */
-module.exports = _curry1(_checkForMethod('tail', slice(1, Infinity)));
-
-/***/ }),
-/* 90 */
+/* 99 */
 /*!************************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/concat.js ***!
   \************************************************************/
@@ -5430,9 +5762,9 @@ module.exports = _curry1(_checkForMethod('tail', slice(1, Infinity)));
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry2 = __webpack_require__(/*! ./internal/_curry2 */ 1);
-var _isArray = __webpack_require__(/*! ./internal/_isArray */ 28);
-var _isFunction = __webpack_require__(/*! ./internal/_isFunction */ 62);
-var toString = __webpack_require__(/*! ./toString */ 50);
+var _isArray = __webpack_require__(/*! ./internal/_isArray */ 27);
+var _isFunction = __webpack_require__(/*! ./internal/_isFunction */ 67);
+var toString = __webpack_require__(/*! ./toString */ 57);
 
 /**
  * Returns the result of concatenating the given lists or strings.
@@ -5471,61 +5803,89 @@ module.exports = _curry2(function concat(a, b) {
 });
 
 /***/ }),
-/* 91 */
-/*!************************************************************!*\
-  !*** /Users/ivankleshnin/node_modules/ramda/src/filter.js ***!
-  \************************************************************/
+/* 100 */
+/*!***************************************************************!*\
+  !*** /Users/ivankleshnin/node_modules/ramda/src/identical.js ***!
+  \***************************************************************/
 /*! no static exports found */
 /*! all exports used */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry2 = __webpack_require__(/*! ./internal/_curry2 */ 1);
-var _dispatchable = __webpack_require__(/*! ./internal/_dispatchable */ 8);
-var _filter = __webpack_require__(/*! ./internal/_filter */ 129);
-var _isObject = __webpack_require__(/*! ./internal/_isObject */ 130);
-var _reduce = __webpack_require__(/*! ./internal/_reduce */ 18);
-var _xfilter = __webpack_require__(/*! ./internal/_xfilter */ 252);
-var keys = __webpack_require__(/*! ./keys */ 24);
 
 /**
- * Takes a predicate and a "filterable", and returns a new filterable of the
- * same type containing the members of the given filterable which satisfy the
- * given predicate.
- *
- * Dispatches to the `filter` method of the second argument, if present.
- *
- * Acts as a transducer if a transformer is given in list position.
+ * Returns true if its arguments are identical, false otherwise. Values are
+ * identical if they reference the same memory. `NaN` is identical to `NaN`;
+ * `0` and `-0` are not identical.
  *
  * @func
  * @memberOf R
- * @since v0.1.0
- * @category List
- * @sig Filterable f => (a -> Boolean) -> f a -> f a
- * @param {Function} pred
- * @param {Array} filterable
- * @return {Array}
- * @see R.reject, R.transduce, R.addIndex
+ * @since v0.15.0
+ * @category Relation
+ * @sig a -> a -> Boolean
+ * @param {*} a
+ * @param {*} b
+ * @return {Boolean}
  * @example
  *
- *      var isEven = n => n % 2 === 0;
- *
- *      R.filter(isEven, [1, 2, 3, 4]); //=> [2, 4]
- *
- *      R.filter(isEven, {a: 1, b: 2, c: 3, d: 4}); //=> {b: 2, d: 4}
+ *      var o = {};
+ *      R.identical(o, o); //=> true
+ *      R.identical(1, 1); //=> true
+ *      R.identical(1, '1'); //=> false
+ *      R.identical([], []); //=> false
+ *      R.identical(0, -0); //=> false
+ *      R.identical(NaN, NaN); //=> true
  */
-module.exports = _curry2(_dispatchable(['filter'], _xfilter, function (pred, filterable) {
-  return _isObject(filterable) ? _reduce(function (acc, key) {
-    if (pred(filterable[key])) {
-      acc[key] = filterable[key];
-    }
-    return acc;
-  }, {}, keys(filterable)) :
-  // else
-  _filter(pred, filterable);
-}));
+module.exports = _curry2(function identical(a, b) {
+  // SameValue algorithm
+  if (a === b) {
+    // Steps 1-5, 7-10
+    // Steps 6.b-6.e: +0 != -0
+    return a !== 0 || 1 / a === 1 / b;
+  } else {
+    // Step 6.a: NaN == NaN
+    return a !== a && b !== b;
+  }
+});
 
 /***/ }),
-/* 92 */
+/* 101 */
+/*!**********************************************************************!*\
+  !*** /Users/ivankleshnin/node_modules/ramda/src/internal/_filter.js ***!
+  \**********************************************************************/
+/*! no static exports found */
+/*! all exports used */
+/***/ (function(module, exports) {
+
+module.exports = function _filter(fn, list) {
+  var idx = 0;
+  var len = list.length;
+  var result = [];
+
+  while (idx < len) {
+    if (fn(list[idx])) {
+      result[result.length] = list[idx];
+    }
+    idx += 1;
+  }
+  return result;
+};
+
+/***/ }),
+/* 102 */
+/*!************************************************************************!*\
+  !*** /Users/ivankleshnin/node_modules/ramda/src/internal/_isObject.js ***!
+  \************************************************************************/
+/*! no static exports found */
+/*! all exports used */
+/***/ (function(module, exports) {
+
+module.exports = function _isObject(x) {
+  return Object.prototype.toString.call(x) === '[object Object]';
+};
+
+/***/ }),
+/* 103 */
 /*!****************************************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/internal/_containsWith.js ***!
   \****************************************************************************/
@@ -5547,53 +5907,7 @@ module.exports = function _containsWith(pred, x, list) {
 };
 
 /***/ }),
-/* 93 */
-/*!**************************************************************!*\
-  !*** /Users/ivankleshnin/node_modules/ramda/src/identity.js ***!
-  \**************************************************************/
-/*! no static exports found */
-/*! all exports used */
-/***/ (function(module, exports, __webpack_require__) {
-
-var _curry1 = __webpack_require__(/*! ./internal/_curry1 */ 3);
-var _identity = __webpack_require__(/*! ./internal/_identity */ 94);
-
-/**
- * A function that does nothing but return the parameter supplied to it. Good
- * as a default or placeholder function.
- *
- * @func
- * @memberOf R
- * @since v0.1.0
- * @category Function
- * @sig a -> a
- * @param {*} x The value to return.
- * @return {*} The input value, `x`.
- * @example
- *
- *      R.identity(1); //=> 1
- *
- *      var obj = {};
- *      R.identity(obj) === obj; //=> true
- * @symb R.identity(a) = a
- */
-module.exports = _curry1(_identity);
-
-/***/ }),
-/* 94 */
-/*!************************************************************************!*\
-  !*** /Users/ivankleshnin/node_modules/ramda/src/internal/_identity.js ***!
-  \************************************************************************/
-/*! no static exports found */
-/*! all exports used */
-/***/ (function(module, exports) {
-
-module.exports = function _identity(x) {
-  return x;
-};
-
-/***/ }),
-/* 95 */
+/* 104 */
 /*!**********************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/uniq.js ***!
   \**********************************************************/
@@ -5601,8 +5915,8 @@ module.exports = function _identity(x) {
 /*! all exports used */
 /***/ (function(module, exports, __webpack_require__) {
 
-var identity = __webpack_require__(/*! ./identity */ 93);
-var uniqBy = __webpack_require__(/*! ./uniqBy */ 144);
+var identity = __webpack_require__(/*! ./identity */ 76);
+var uniqBy = __webpack_require__(/*! ./uniqBy */ 152);
 
 /**
  * Returns a new list containing only one copy of each element in the original
@@ -5624,7 +5938,7 @@ var uniqBy = __webpack_require__(/*! ./uniqBy */ 144);
 module.exports = uniqBy(identity);
 
 /***/ }),
-/* 96 */
+/* 105 */
 /*!**************************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/uniqWith.js ***!
   \**************************************************************/
@@ -5632,7 +5946,7 @@ module.exports = uniqBy(identity);
 /*! all exports used */
 /***/ (function(module, exports, __webpack_require__) {
 
-var _containsWith = __webpack_require__(/*! ./internal/_containsWith */ 92);
+var _containsWith = __webpack_require__(/*! ./internal/_containsWith */ 103);
 var _curry2 = __webpack_require__(/*! ./internal/_curry2 */ 1);
 
 /**
@@ -5673,7 +5987,46 @@ module.exports = _curry2(function uniqWith(pred, list) {
 });
 
 /***/ }),
-/* 97 */
+/* 106 */
+/*!************************************************************!*\
+  !*** /Users/ivankleshnin/node_modules/ramda/src/update.js ***!
+  \************************************************************/
+/*! no static exports found */
+/*! all exports used */
+/***/ (function(module, exports, __webpack_require__) {
+
+var _curry3 = __webpack_require__(/*! ./internal/_curry3 */ 4);
+var adjust = __webpack_require__(/*! ./adjust */ 90);
+var always = __webpack_require__(/*! ./always */ 32);
+
+/**
+ * Returns a new copy of the array with the element at the provided index
+ * replaced with the given value.
+ *
+ * @func
+ * @memberOf R
+ * @since v0.14.0
+ * @category List
+ * @sig Number -> a -> [a] -> [a]
+ * @param {Number} idx The index to update.
+ * @param {*} x The value to exist at the given index of the returned array.
+ * @param {Array|Arguments} list The source array-like object to be updated.
+ * @return {Array} A copy of `list` with the value at index `idx` replaced with `x`.
+ * @see R.adjust
+ * @example
+ *
+ *      R.update(1, 11, [0, 1, 2]);     //=> [0, 11, 2]
+ *      R.update(1)(11)([0, 1, 2]);     //=> [0, 11, 2]
+ * @symb R.update(-1, a, [b, c]) = [b, a]
+ * @symb R.update(0, a, [b, c]) = [a, c]
+ * @symb R.update(1, a, [b, c]) = [b, a]
+ */
+module.exports = _curry3(function update(idx, x, list) {
+  return adjust(always(x), idx, list);
+});
+
+/***/ }),
+/* 107 */
 /*!***********************************!*\
   !*** (webpack)/buildin/global.js ***!
   \***********************************/
@@ -5708,7 +6061,7 @@ try {
 module.exports = g;
 
 /***/ }),
-/* 98 */
+/* 108 */
 /*!*******************************************************!*\
   !*** ./node_modules/rxjs/util/UnsubscriptionError.js ***!
   \*******************************************************/
@@ -5749,7 +6102,7 @@ exports.UnsubscriptionError = UnsubscriptionError;
 //# sourceMappingURL=UnsubscriptionError.js.map
 
 /***/ }),
-/* 99 */
+/* 109 */
 /*!***********************************************!*\
   !*** ./node_modules/rxjs/util/isArrayLike.js ***!
   \***********************************************/
@@ -5766,7 +6119,7 @@ exports.isArrayLike = function (x) {
 //# sourceMappingURL=isArrayLike.js.map
 
 /***/ }),
-/* 100 */
+/* 110 */
 /*!*********************************************!*\
   !*** ./node_modules/rxjs/util/isPromise.js ***!
   \*********************************************/
@@ -5784,7 +6137,7 @@ exports.isPromise = isPromise;
 //# sourceMappingURL=isPromise.js.map
 
 /***/ }),
-/* 101 */
+/* 111 */
 /*!*********************************************!*\
   !*** ./node_modules/rxjs/operator/merge.js ***!
   \*********************************************/
@@ -5796,9 +6149,9 @@ exports.isPromise = isPromise;
 
 
 var Observable_1 = __webpack_require__(/*! ../Observable */ 0);
-var ArrayObservable_1 = __webpack_require__(/*! ../observable/ArrayObservable */ 20);
-var mergeAll_1 = __webpack_require__(/*! ./mergeAll */ 45);
-var isScheduler_1 = __webpack_require__(/*! ../util/isScheduler */ 19);
+var ArrayObservable_1 = __webpack_require__(/*! ../observable/ArrayObservable */ 23);
+var mergeAll_1 = __webpack_require__(/*! ./mergeAll */ 50);
+var isScheduler_1 = __webpack_require__(/*! ../util/isScheduler */ 22);
 /* tslint:enable:max-line-length */
 /**
  * Creates an output Observable which concurrently emits all values from every
@@ -5940,7 +6293,7 @@ exports.mergeStatic = mergeStatic;
 //# sourceMappingURL=merge.js.map
 
 /***/ }),
-/* 102 */
+/* 112 */
 /*!*******************************************!*\
   !*** ./node_modules/rxjs/operator/zip.js ***!
   \*******************************************/
@@ -5959,12 +6312,12 @@ var __extends = undefined && undefined.__extends || function (d, b) {
     }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var ArrayObservable_1 = __webpack_require__(/*! ../observable/ArrayObservable */ 20);
-var isArray_1 = __webpack_require__(/*! ../util/isArray */ 22);
-var Subscriber_1 = __webpack_require__(/*! ../Subscriber */ 2);
+var ArrayObservable_1 = __webpack_require__(/*! ../observable/ArrayObservable */ 23);
+var isArray_1 = __webpack_require__(/*! ../util/isArray */ 26);
+var Subscriber_1 = __webpack_require__(/*! ../Subscriber */ 3);
 var OuterSubscriber_1 = __webpack_require__(/*! ../OuterSubscriber */ 5);
 var subscribeToResult_1 = __webpack_require__(/*! ../util/subscribeToResult */ 6);
-var iterator_1 = __webpack_require__(/*! ../symbol/iterator */ 37);
+var iterator_1 = __webpack_require__(/*! ../symbol/iterator */ 43);
 /* tslint:enable:max-line-length */
 /**
  * @param observables
@@ -6229,7 +6582,7 @@ var ZipBufferIterator = function (_super) {
 //# sourceMappingURL=zip.js.map
 
 /***/ }),
-/* 103 */
+/* 113 */
 /*!**********************************************!*\
   !*** ./node_modules/rxjs/scheduler/queue.js ***!
   \**********************************************/
@@ -6240,8 +6593,8 @@ var ZipBufferIterator = function (_super) {
 "use strict";
 
 
-var QueueAction_1 = __webpack_require__(/*! ./QueueAction */ 181);
-var QueueScheduler_1 = __webpack_require__(/*! ./QueueScheduler */ 182);
+var QueueAction_1 = __webpack_require__(/*! ./QueueAction */ 191);
+var QueueScheduler_1 = __webpack_require__(/*! ./QueueScheduler */ 192);
 /**
  *
  * Queue Scheduler
@@ -6307,7 +6660,7 @@ exports.queue = new QueueScheduler_1.QueueScheduler(QueueAction_1.QueueAction);
 //# sourceMappingURL=queue.js.map
 
 /***/ }),
-/* 104 */
+/* 114 */
 /*!************************************************************!*\
   !*** ./node_modules/rxjs/operator/distinctUntilChanged.js ***!
   \************************************************************/
@@ -6326,9 +6679,9 @@ var __extends = undefined && undefined.__extends || function (d, b) {
     }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var Subscriber_1 = __webpack_require__(/*! ../Subscriber */ 2);
+var Subscriber_1 = __webpack_require__(/*! ../Subscriber */ 3);
 var tryCatch_1 = __webpack_require__(/*! ../util/tryCatch */ 13);
-var errorObject_1 = __webpack_require__(/*! ../util/errorObject */ 11);
+var errorObject_1 = __webpack_require__(/*! ../util/errorObject */ 12);
 /* tslint:enable:max-line-length */
 /**
  * Returns an Observable that emits all items emitted by the source Observable that are distinct by comparison from the previous item.
@@ -6429,7 +6782,7 @@ var DistinctUntilChangedSubscriber = function (_super) {
 //# sourceMappingURL=distinctUntilChanged.js.map
 
 /***/ }),
-/* 105 */
+/* 115 */
 /*!**********************************************!*\
   !*** ./node_modules/rxjs/operator/filter.js ***!
   \**********************************************/
@@ -6448,7 +6801,7 @@ var __extends = undefined && undefined.__extends || function (d, b) {
     }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var Subscriber_1 = __webpack_require__(/*! ../Subscriber */ 2);
+var Subscriber_1 = __webpack_require__(/*! ../Subscriber */ 3);
 /* tslint:enable:max-line-length */
 /**
  * Filter items emitted by the source Observable by only emitting those that
@@ -6535,7 +6888,7 @@ var FilterSubscriber = function (_super) {
 //# sourceMappingURL=filter.js.map
 
 /***/ }),
-/* 106 */
+/* 116 */
 /*!**********************************************!*\
   !*** ./node_modules/rxjs/operator/reduce.js ***!
   \**********************************************/
@@ -6554,7 +6907,7 @@ var __extends = undefined && undefined.__extends || function (d, b) {
     }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var Subscriber_1 = __webpack_require__(/*! ../Subscriber */ 2);
+var Subscriber_1 = __webpack_require__(/*! ../Subscriber */ 3);
 /* tslint:enable:max-line-length */
 /**
  * Applies an accumulator function over the source Observable, and returns the
@@ -6676,7 +7029,7 @@ exports.ReduceSubscriber = ReduceSubscriber;
 //# sourceMappingURL=reduce.js.map
 
 /***/ }),
-/* 107 */
+/* 117 */
 /*!***************************************************************!*\
   !*** ./node_modules/rxjs/observable/ConnectableObservable.js ***!
   \***************************************************************/
@@ -6695,10 +7048,10 @@ var __extends = undefined && undefined.__extends || function (d, b) {
     }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var Subject_1 = __webpack_require__(/*! ../Subject */ 10);
+var Subject_1 = __webpack_require__(/*! ../Subject */ 11);
 var Observable_1 = __webpack_require__(/*! ../Observable */ 0);
-var Subscriber_1 = __webpack_require__(/*! ../Subscriber */ 2);
-var Subscription_1 = __webpack_require__(/*! ../Subscription */ 7);
+var Subscriber_1 = __webpack_require__(/*! ../Subscriber */ 3);
+var Subscription_1 = __webpack_require__(/*! ../Subscription */ 8);
 /**
  * @class ConnectableObservable<T>
  */
@@ -6858,7 +7211,7 @@ var RefCountSubscriber = function (_super) {
 //# sourceMappingURL=ConnectableObservable.js.map
 
 /***/ }),
-/* 108 */
+/* 118 */
 /*!************************!*\
   !*** external "React" ***!
   \************************/
@@ -6869,143 +7222,35 @@ var RefCountSubscriber = function (_super) {
 module.exports = React;
 
 /***/ }),
-/* 109 */
-/*!************************************************************!*\
-  !*** /Users/ivankleshnin/node_modules/ramda/src/adjust.js ***!
-  \************************************************************/
+/* 119 */
+/*!********************************************************************!*\
+  !*** /Users/ivankleshnin/node_modules/ramda/src/internal/_xmap.js ***!
+  \********************************************************************/
 /*! no static exports found */
 /*! all exports used */
 /***/ (function(module, exports, __webpack_require__) {
 
-var _concat = __webpack_require__(/*! ./internal/_concat */ 21);
-var _curry3 = __webpack_require__(/*! ./internal/_curry3 */ 4);
-
-/**
- * Applies a function to the value at the given index of an array, returning a
- * new copy of the array with the element at the given index replaced with the
- * result of the function application.
- *
- * @func
- * @memberOf R
- * @since v0.14.0
- * @category List
- * @sig (a -> a) -> Number -> [a] -> [a]
- * @param {Function} fn The function to apply.
- * @param {Number} idx The index.
- * @param {Array|Arguments} list An array-like object whose value
- *        at the supplied index will be replaced.
- * @return {Array} A copy of the supplied array-like object with
- *         the element at index `idx` replaced with the value
- *         returned by applying `fn` to the existing element.
- * @see R.update
- * @example
- *
- *      R.adjust(R.add(10), 1, [1, 2, 3]);     //=> [1, 12, 3]
- *      R.adjust(R.add(10))(1)([1, 2, 3]);     //=> [1, 12, 3]
- * @symb R.adjust(f, -1, [a, b]) = [a, f(b)]
- * @symb R.adjust(f, 0, [a, b]) = [f(a), b]
- */
-module.exports = _curry3(function adjust(fn, idx, list) {
-  if (idx >= list.length || idx < -list.length) {
-    return list;
-  }
-  var start = idx < 0 ? list.length : 0;
-  var _idx = start + idx;
-  var _list = _concat(list);
-  _list[_idx] = fn(list[_idx]);
-  return _list;
-});
-
-/***/ }),
-/* 110 */
-/*!*********************************************************************!*\
-  !*** /Users/ivankleshnin/node_modules/ramda/src/internal/_xwrap.js ***!
-  \*********************************************************************/
-/*! no static exports found */
-/*! all exports used */
-/***/ (function(module, exports) {
+var _curry2 = __webpack_require__(/*! ./_curry2 */ 1);
+var _xfBase = __webpack_require__(/*! ./_xfBase */ 9);
 
 module.exports = function () {
-  function XWrap(fn) {
-    this.f = fn;
+  function XMap(f, xf) {
+    this.xf = xf;
+    this.f = f;
   }
-  XWrap.prototype['@@transducer/init'] = function () {
-    throw new Error('init not implemented on XWrap');
-  };
-  XWrap.prototype['@@transducer/result'] = function (acc) {
-    return acc;
-  };
-  XWrap.prototype['@@transducer/step'] = function (acc, x) {
-    return this.f(acc, x);
+  XMap.prototype['@@transducer/init'] = _xfBase.init;
+  XMap.prototype['@@transducer/result'] = _xfBase.result;
+  XMap.prototype['@@transducer/step'] = function (result, input) {
+    return this.xf['@@transducer/step'](result, this.f(input));
   };
 
-  return function _xwrap(fn) {
-    return new XWrap(fn);
-  };
-}();
-
-/***/ }),
-/* 111 */
-/*!**********************************************************!*\
-  !*** /Users/ivankleshnin/node_modules/ramda/src/bind.js ***!
-  \**********************************************************/
-/*! no static exports found */
-/*! all exports used */
-/***/ (function(module, exports, __webpack_require__) {
-
-var _arity = __webpack_require__(/*! ./internal/_arity */ 23);
-var _curry2 = __webpack_require__(/*! ./internal/_curry2 */ 1);
-
-/**
- * Creates a function that is bound to a context.
- * Note: `R.bind` does not provide the additional argument-binding capabilities of
- * [Function.prototype.bind](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/bind).
- *
- * @func
- * @memberOf R
- * @since v0.6.0
- * @category Function
- * @category Object
- * @sig (* -> *) -> {*} -> (* -> *)
- * @param {Function} fn The function to bind to context
- * @param {Object} thisObj The context to bind `fn` to
- * @return {Function} A function that will execute in the context of `thisObj`.
- * @see R.partial
- * @example
- *
- *      var log = R.bind(console.log, console);
- *      R.pipe(R.assoc('a', 2), R.tap(log), R.assoc('a', 3))({a: 1}); //=> {a: 3}
- *      // logs {a: 2}
- * @symb R.bind(f, o)(a, b) = f.call(o, a, b)
- */
-module.exports = _curry2(function bind(fn, thisObj) {
-  return _arity(fn.length, function () {
-    return fn.apply(thisObj, arguments);
+  return _curry2(function _xmap(f, xf) {
+    return new XMap(f, xf);
   });
-});
-
-/***/ }),
-/* 112 */
-/*!***************************************************************************!*\
-  !*** /Users/ivankleshnin/node_modules/ramda/src/internal/_isArguments.js ***!
-  \***************************************************************************/
-/*! no static exports found */
-/*! all exports used */
-/***/ (function(module, exports, __webpack_require__) {
-
-var _has = __webpack_require__(/*! ./_has */ 14);
-
-module.exports = function () {
-  var toString = Object.prototype.toString;
-  return toString.call(arguments) === '[object Arguments]' ? function _isArguments(x) {
-    return toString.call(x) === '[object Arguments]';
-  } : function _isArguments(x) {
-    return _has('callee', x);
-  };
 }();
 
 /***/ }),
-/* 113 */
+/* 120 */
 /*!*********************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/and.js ***!
   \*********************************************************/
@@ -7039,7 +7284,7 @@ module.exports = _curry2(function and(a, b) {
 });
 
 /***/ }),
-/* 114 */
+/* 121 */
 /*!*********************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/any.js ***!
   \*********************************************************/
@@ -7048,8 +7293,8 @@ module.exports = _curry2(function and(a, b) {
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry2 = __webpack_require__(/*! ./internal/_curry2 */ 1);
-var _dispatchable = __webpack_require__(/*! ./internal/_dispatchable */ 8);
-var _xany = __webpack_require__(/*! ./internal/_xany */ 115);
+var _dispatchable = __webpack_require__(/*! ./internal/_dispatchable */ 7);
+var _xany = __webpack_require__(/*! ./internal/_xany */ 122);
 
 /**
  * Returns `true` if at least one of elements of the list match the predicate,
@@ -7088,7 +7333,7 @@ module.exports = _curry2(_dispatchable(['any'], _xany, function any(fn, list) {
 }));
 
 /***/ }),
-/* 115 */
+/* 122 */
 /*!********************************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/internal/_xany.js ***!
   \********************************************************************/
@@ -7098,7 +7343,7 @@ module.exports = _curry2(_dispatchable(['any'], _xany, function any(fn, list) {
 
 var _curry2 = __webpack_require__(/*! ./_curry2 */ 1);
 var _reduced = __webpack_require__(/*! ./_reduced */ 29);
-var _xfBase = __webpack_require__(/*! ./_xfBase */ 12);
+var _xfBase = __webpack_require__(/*! ./_xfBase */ 9);
 
 module.exports = function () {
   function XAny(f, xf) {
@@ -7127,7 +7372,7 @@ module.exports = function () {
 }();
 
 /***/ }),
-/* 116 */
+/* 123 */
 /*!***********************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/apply.js ***!
   \***********************************************************/
@@ -7162,7 +7407,7 @@ module.exports = _curry2(function apply(fn, args) {
 });
 
 /***/ }),
-/* 117 */
+/* 124 */
 /*!************************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/values.js ***!
   \************************************************************/
@@ -7170,8 +7415,8 @@ module.exports = _curry2(function apply(fn, args) {
 /*! all exports used */
 /***/ (function(module, exports, __webpack_require__) {
 
-var _curry1 = __webpack_require__(/*! ./internal/_curry1 */ 3);
-var keys = __webpack_require__(/*! ./keys */ 24);
+var _curry1 = __webpack_require__(/*! ./internal/_curry1 */ 2);
+var keys = __webpack_require__(/*! ./keys */ 21);
 
 /**
  * Returns a list of all the enumerable own properties of the supplied object.
@@ -7202,7 +7447,7 @@ module.exports = _curry1(function values(obj) {
 });
 
 /***/ }),
-/* 118 */
+/* 125 */
 /*!***********************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/liftN.js ***!
   \***********************************************************/
@@ -7211,10 +7456,10 @@ module.exports = _curry1(function values(obj) {
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry2 = __webpack_require__(/*! ./internal/_curry2 */ 1);
-var _reduce = __webpack_require__(/*! ./internal/_reduce */ 18);
-var ap = __webpack_require__(/*! ./ap */ 83);
+var _reduce = __webpack_require__(/*! ./internal/_reduce */ 17);
+var ap = __webpack_require__(/*! ./ap */ 94);
 var curryN = __webpack_require__(/*! ./curryN */ 15);
-var map = __webpack_require__(/*! ./map */ 17);
+var map = __webpack_require__(/*! ./map */ 16);
 
 /**
  * "lifts" a function to be the specified arity, so that it may "map over" that
@@ -7241,7 +7486,7 @@ module.exports = _curry2(function liftN(arity, fn) {
 });
 
 /***/ }),
-/* 119 */
+/* 126 */
 /*!************************************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/internal/_makeFlat.js ***!
   \************************************************************************/
@@ -7249,7 +7494,7 @@ module.exports = _curry2(function liftN(arity, fn) {
 /*! all exports used */
 /***/ (function(module, exports, __webpack_require__) {
 
-var isArrayLike = __webpack_require__(/*! ../isArrayLike */ 48);
+var isArrayLike = __webpack_require__(/*! ../isArrayLike */ 37);
 
 /**
  * `_makeFlat` is a helper function that returns a one-level or fully recursive
@@ -7283,7 +7528,7 @@ module.exports = function _makeFlat(recursive) {
 };
 
 /***/ }),
-/* 120 */
+/* 127 */
 /*!*********************************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/internal/_clone.js ***!
   \*********************************************************************/
@@ -7291,8 +7536,8 @@ module.exports = function _makeFlat(recursive) {
 /*! all exports used */
 /***/ (function(module, exports, __webpack_require__) {
 
-var _cloneRegExp = __webpack_require__(/*! ./_cloneRegExp */ 121);
-var type = __webpack_require__(/*! ../type */ 87);
+var _cloneRegExp = __webpack_require__(/*! ./_cloneRegExp */ 128);
+var type = __webpack_require__(/*! ../type */ 69);
 
 /**
  * Copies an object.
@@ -7336,7 +7581,7 @@ module.exports = function _clone(value, refFrom, refTo, deep) {
 };
 
 /***/ }),
-/* 121 */
+/* 128 */
 /*!***************************************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/internal/_cloneRegExp.js ***!
   \***************************************************************************/
@@ -7349,7 +7594,7 @@ module.exports = function _cloneRegExp(pattern) {
 };
 
 /***/ }),
-/* 122 */
+/* 129 */
 /*!*********************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/not.js ***!
   \*********************************************************/
@@ -7357,7 +7602,7 @@ module.exports = function _cloneRegExp(pattern) {
 /*! all exports used */
 /***/ (function(module, exports, __webpack_require__) {
 
-var _curry1 = __webpack_require__(/*! ./internal/_curry1 */ 3);
+var _curry1 = __webpack_require__(/*! ./internal/_curry1 */ 2);
 
 /**
  * A function that returns the `!` of its argument. It will return `true` when
@@ -7383,51 +7628,22 @@ module.exports = _curry1(function not(a) {
 });
 
 /***/ }),
-/* 123 */
-/*!**********************************************************!*\
-  !*** /Users/ivankleshnin/node_modules/ramda/src/pipe.js ***!
-  \**********************************************************/
+/* 130 */
+/*!********************************************************************!*\
+  !*** /Users/ivankleshnin/node_modules/ramda/src/internal/_pipe.js ***!
+  \********************************************************************/
 /*! no static exports found */
 /*! all exports used */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ (function(module, exports) {
 
-var _arity = __webpack_require__(/*! ./internal/_arity */ 23);
-var _pipe = __webpack_require__(/*! ./internal/_pipe */ 243);
-var reduce = __webpack_require__(/*! ./reduce */ 25);
-var tail = __webpack_require__(/*! ./tail */ 89);
-
-/**
- * Performs left-to-right function composition. The leftmost function may have
- * any arity; the remaining functions must be unary.
- *
- * In some libraries this function is named `sequence`.
- *
- * **Note:** The result of pipe is not automatically curried.
- *
- * @func
- * @memberOf R
- * @since v0.1.0
- * @category Function
- * @sig (((a, b, ..., n) -> o), (o -> p), ..., (x -> y), (y -> z)) -> ((a, b, ..., n) -> z)
- * @param {...Function} functions
- * @return {Function}
- * @see R.compose
- * @example
- *
- *      var f = R.pipe(Math.pow, R.negate, R.inc);
- *
- *      f(3, 4); // -(3^4) + 1
- * @symb R.pipe(f, g, h)(a, b) = h(g(f(a, b)))
- */
-module.exports = function pipe() {
-  if (arguments.length === 0) {
-    throw new Error('pipe requires at least one argument');
-  }
-  return _arity(arguments[0].length, reduce(_pipe, arguments[0], tail(arguments)));
+module.exports = function _pipe(f, g) {
+  return function () {
+    return g.call(this, f.apply(this, arguments));
+  };
 };
 
 /***/ }),
-/* 124 */
+/* 131 */
 /*!**************************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/composeK.js ***!
   \**************************************************************/
@@ -7435,9 +7651,9 @@ module.exports = function pipe() {
 /*! all exports used */
 /***/ (function(module, exports, __webpack_require__) {
 
-var chain = __webpack_require__(/*! ./chain */ 86);
-var compose = __webpack_require__(/*! ./compose */ 88);
-var map = __webpack_require__(/*! ./map */ 17);
+var chain = __webpack_require__(/*! ./chain */ 97);
+var compose = __webpack_require__(/*! ./compose */ 70);
+var map = __webpack_require__(/*! ./map */ 16);
 
 /**
  * Returns the right-to-left Kleisli composition of the provided functions,
@@ -7479,7 +7695,7 @@ module.exports = function composeK() {
 };
 
 /***/ }),
-/* 125 */
+/* 132 */
 /*!***********************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/pipeP.js ***!
   \***********************************************************/
@@ -7487,10 +7703,10 @@ module.exports = function composeK() {
 /*! all exports used */
 /***/ (function(module, exports, __webpack_require__) {
 
-var _arity = __webpack_require__(/*! ./internal/_arity */ 23);
-var _pipeP = __webpack_require__(/*! ./internal/_pipeP */ 245);
-var reduce = __webpack_require__(/*! ./reduce */ 25);
-var tail = __webpack_require__(/*! ./tail */ 89);
+var _arity = __webpack_require__(/*! ./internal/_arity */ 19);
+var _pipeP = __webpack_require__(/*! ./internal/_pipeP */ 253);
+var reduce = __webpack_require__(/*! ./reduce */ 24);
+var tail = __webpack_require__(/*! ./tail */ 71);
 
 /**
  * Performs left-to-right composition of one or more Promise-returning
@@ -7518,7 +7734,7 @@ module.exports = function pipeP() {
 };
 
 /***/ }),
-/* 126 */
+/* 133 */
 /*!***********************************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/internal/_indexOf.js ***!
   \***********************************************************************/
@@ -7526,7 +7742,7 @@ module.exports = function pipeP() {
 /*! all exports used */
 /***/ (function(module, exports, __webpack_require__) {
 
-var equals = __webpack_require__(/*! ../equals */ 26);
+var equals = __webpack_require__(/*! ../equals */ 25);
 
 module.exports = function _indexOf(list, a, idx) {
   var inf, item;
@@ -7584,53 +7800,151 @@ module.exports = function _indexOf(list, a, idx) {
 };
 
 /***/ }),
-/* 127 */
-/*!***************************************************************!*\
-  !*** /Users/ivankleshnin/node_modules/ramda/src/identical.js ***!
-  \***************************************************************/
+/* 134 */
+/*!**********************************************************************!*\
+  !*** /Users/ivankleshnin/node_modules/ramda/src/internal/_equals.js ***!
+  \**********************************************************************/
 /*! no static exports found */
 /*! all exports used */
 /***/ (function(module, exports, __webpack_require__) {
 
-var _curry2 = __webpack_require__(/*! ./internal/_curry2 */ 1);
+var _arrayFromIterator = __webpack_require__(/*! ./_arrayFromIterator */ 135);
+var _functionName = __webpack_require__(/*! ./_functionName */ 136);
+var _has = __webpack_require__(/*! ./_has */ 14);
+var identical = __webpack_require__(/*! ../identical */ 100);
+var keys = __webpack_require__(/*! ../keys */ 21);
+var type = __webpack_require__(/*! ../type */ 69);
 
-/**
- * Returns true if its arguments are identical, false otherwise. Values are
- * identical if they reference the same memory. `NaN` is identical to `NaN`;
- * `0` and `-0` are not identical.
- *
- * @func
- * @memberOf R
- * @since v0.15.0
- * @category Relation
- * @sig a -> a -> Boolean
- * @param {*} a
- * @param {*} b
- * @return {Boolean}
- * @example
- *
- *      var o = {};
- *      R.identical(o, o); //=> true
- *      R.identical(1, 1); //=> true
- *      R.identical(1, '1'); //=> false
- *      R.identical([], []); //=> false
- *      R.identical(0, -0); //=> false
- *      R.identical(NaN, NaN); //=> true
- */
-module.exports = _curry2(function identical(a, b) {
-  // SameValue algorithm
-  if (a === b) {
-    // Steps 1-5, 7-10
-    // Steps 6.b-6.e: +0 != -0
-    return a !== 0 || 1 / a === 1 / b;
-  } else {
-    // Step 6.a: NaN == NaN
-    return a !== a && b !== b;
+module.exports = function _equals(a, b, stackA, stackB) {
+  if (identical(a, b)) {
+    return true;
   }
-});
+
+  if (type(a) !== type(b)) {
+    return false;
+  }
+
+  if (a == null || b == null) {
+    return false;
+  }
+
+  if (typeof a.equals === 'function' || typeof b.equals === 'function') {
+    return typeof a.equals === 'function' && a.equals(b) && typeof b.equals === 'function' && b.equals(a);
+  }
+
+  switch (type(a)) {
+    case 'Arguments':
+    case 'Array':
+    case 'Object':
+      if (typeof a.constructor === 'function' && _functionName(a.constructor) === 'Promise') {
+        return a === b;
+      }
+      break;
+    case 'Boolean':
+    case 'Number':
+    case 'String':
+      if (!(typeof a === typeof b && identical(a.valueOf(), b.valueOf()))) {
+        return false;
+      }
+      break;
+    case 'Date':
+      if (!identical(a.valueOf(), b.valueOf())) {
+        return false;
+      }
+      break;
+    case 'Error':
+      return a.name === b.name && a.message === b.message;
+    case 'RegExp':
+      if (!(a.source === b.source && a.global === b.global && a.ignoreCase === b.ignoreCase && a.multiline === b.multiline && a.sticky === b.sticky && a.unicode === b.unicode)) {
+        return false;
+      }
+      break;
+    case 'Map':
+    case 'Set':
+      if (!_equals(_arrayFromIterator(a.entries()), _arrayFromIterator(b.entries()), stackA, stackB)) {
+        return false;
+      }
+      break;
+    case 'Int8Array':
+    case 'Uint8Array':
+    case 'Uint8ClampedArray':
+    case 'Int16Array':
+    case 'Uint16Array':
+    case 'Int32Array':
+    case 'Uint32Array':
+    case 'Float32Array':
+    case 'Float64Array':
+      break;
+    case 'ArrayBuffer':
+      break;
+    default:
+      // Values of other types are only equal if identical.
+      return false;
+  }
+
+  var keysA = keys(a);
+  if (keysA.length !== keys(b).length) {
+    return false;
+  }
+
+  var idx = stackA.length - 1;
+  while (idx >= 0) {
+    if (stackA[idx] === a) {
+      return stackB[idx] === b;
+    }
+    idx -= 1;
+  }
+
+  stackA.push(a);
+  stackB.push(b);
+  idx = keysA.length - 1;
+  while (idx >= 0) {
+    var key = keysA[idx];
+    if (!(_has(key, b) && _equals(b[key], a[key], stackA, stackB))) {
+      return false;
+    }
+    idx -= 1;
+  }
+  stackA.pop();
+  stackB.pop();
+  return true;
+};
 
 /***/ }),
-/* 128 */
+/* 135 */
+/*!*********************************************************************************!*\
+  !*** /Users/ivankleshnin/node_modules/ramda/src/internal/_arrayFromIterator.js ***!
+  \*********************************************************************************/
+/*! no static exports found */
+/*! all exports used */
+/***/ (function(module, exports) {
+
+module.exports = function _arrayFromIterator(iter) {
+  var list = [];
+  var next;
+  while (!(next = iter.next()).done) {
+    list.push(next.value);
+  }
+  return list;
+};
+
+/***/ }),
+/* 136 */
+/*!****************************************************************************!*\
+  !*** /Users/ivankleshnin/node_modules/ramda/src/internal/_functionName.js ***!
+  \****************************************************************************/
+/*! no static exports found */
+/*! all exports used */
+/***/ (function(module, exports) {
+
+module.exports = function _functionName(f) {
+  // String(x => x) evaluates to "x => x", so the pattern may not match.
+  var match = String(f).match(/^function (\w*)/);
+  return match == null ? '' : match[1];
+};
+
+/***/ }),
+/* 137 */
 /*!**************************************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/internal/_complement.js ***!
   \**************************************************************************/
@@ -7645,43 +7959,35 @@ module.exports = function _complement(f) {
 };
 
 /***/ }),
-/* 129 */
-/*!**********************************************************************!*\
-  !*** /Users/ivankleshnin/node_modules/ramda/src/internal/_filter.js ***!
-  \**********************************************************************/
+/* 138 */
+/*!***********************************************************************!*\
+  !*** /Users/ivankleshnin/node_modules/ramda/src/internal/_xfilter.js ***!
+  \***********************************************************************/
 /*! no static exports found */
 /*! all exports used */
-/***/ (function(module, exports) {
+/***/ (function(module, exports, __webpack_require__) {
 
-module.exports = function _filter(fn, list) {
-  var idx = 0;
-  var len = list.length;
-  var result = [];
+var _curry2 = __webpack_require__(/*! ./_curry2 */ 1);
+var _xfBase = __webpack_require__(/*! ./_xfBase */ 9);
 
-  while (idx < len) {
-    if (fn(list[idx])) {
-      result[result.length] = list[idx];
-    }
-    idx += 1;
+module.exports = function () {
+  function XFilter(f, xf) {
+    this.xf = xf;
+    this.f = f;
   }
-  return result;
-};
+  XFilter.prototype['@@transducer/init'] = _xfBase.init;
+  XFilter.prototype['@@transducer/result'] = _xfBase.result;
+  XFilter.prototype['@@transducer/step'] = function (result, input) {
+    return this.f(input) ? this.xf['@@transducer/step'](result, input) : result;
+  };
+
+  return _curry2(function _xfilter(f, xf) {
+    return new XFilter(f, xf);
+  });
+}();
 
 /***/ }),
-/* 130 */
-/*!************************************************************************!*\
-  !*** /Users/ivankleshnin/node_modules/ramda/src/internal/_isObject.js ***!
-  \************************************************************************/
-/*! no static exports found */
-/*! all exports used */
-/***/ (function(module, exports) {
-
-module.exports = function _isObject(x) {
-  return Object.prototype.toString.call(x) === '[object Object]';
-};
-
-/***/ }),
-/* 131 */
+/* 139 */
 /*!****************************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/constructN.js ***!
   \****************************************************************/
@@ -7690,8 +7996,8 @@ module.exports = function _isObject(x) {
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry2 = __webpack_require__(/*! ./internal/_curry2 */ 1);
-var curry = __webpack_require__(/*! ./curry */ 64);
-var nAry = __webpack_require__(/*! ./nAry */ 61);
+var curry = __webpack_require__(/*! ./curry */ 55);
+var nAry = __webpack_require__(/*! ./nAry */ 66);
 
 /**
  * Wraps a constructor function inside a curried function that can be called
@@ -7764,7 +8070,7 @@ module.exports = _curry2(function constructN(n, Fn) {
 });
 
 /***/ }),
-/* 132 */
+/* 140 */
 /*!**************************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/converge.js ***!
   \**************************************************************/
@@ -7773,11 +8079,11 @@ module.exports = _curry2(function constructN(n, Fn) {
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry2 = __webpack_require__(/*! ./internal/_curry2 */ 1);
-var _map = __webpack_require__(/*! ./internal/_map */ 59);
+var _map = __webpack_require__(/*! ./internal/_map */ 54);
 var curryN = __webpack_require__(/*! ./curryN */ 15);
-var max = __webpack_require__(/*! ./max */ 35);
-var pluck = __webpack_require__(/*! ./pluck */ 47);
-var reduce = __webpack_require__(/*! ./reduce */ 25);
+var max = __webpack_require__(/*! ./max */ 36);
+var pluck = __webpack_require__(/*! ./pluck */ 53);
+var reduce = __webpack_require__(/*! ./reduce */ 24);
 
 /**
  * Accepts a converging function and a list of branching functions and returns
@@ -7817,7 +8123,7 @@ module.exports = _curry2(function converge(after, fns) {
 });
 
 /***/ }),
-/* 133 */
+/* 141 */
 /*!***************************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/defaultTo.js ***!
   \***************************************************************/
@@ -7854,7 +8160,7 @@ module.exports = _curry2(function defaultTo(d, v) {
 });
 
 /***/ }),
-/* 134 */
+/* 142 */
 /*!****************************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/difference.js ***!
   \****************************************************************/
@@ -7862,7 +8168,7 @@ module.exports = _curry2(function defaultTo(d, v) {
 /*! all exports used */
 /***/ (function(module, exports, __webpack_require__) {
 
-var _contains = __webpack_require__(/*! ./internal/_contains */ 32);
+var _contains = __webpack_require__(/*! ./internal/_contains */ 33);
 var _curry2 = __webpack_require__(/*! ./internal/_curry2 */ 1);
 
 /**
@@ -7899,7 +8205,7 @@ module.exports = _curry2(function difference(first, second) {
 });
 
 /***/ }),
-/* 135 */
+/* 143 */
 /*!********************************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/differenceWith.js ***!
   \********************************************************************/
@@ -7907,7 +8213,7 @@ module.exports = _curry2(function difference(first, second) {
 /*! all exports used */
 /***/ (function(module, exports, __webpack_require__) {
 
-var _containsWith = __webpack_require__(/*! ./internal/_containsWith */ 92);
+var _containsWith = __webpack_require__(/*! ./internal/_containsWith */ 103);
 var _curry3 = __webpack_require__(/*! ./internal/_curry3 */ 4);
 
 /**
@@ -7946,7 +8252,7 @@ module.exports = _curry3(function differenceWith(pred, first, second) {
 });
 
 /***/ }),
-/* 136 */
+/* 144 */
 /*!************************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/dissoc.js ***!
   \************************************************************/
@@ -7982,7 +8288,7 @@ module.exports = _curry2(function dissoc(prop, obj) {
 });
 
 /***/ }),
-/* 137 */
+/* 145 */
 /*!**********************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/drop.js ***!
   \**********************************************************/
@@ -7991,9 +8297,9 @@ module.exports = _curry2(function dissoc(prop, obj) {
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry2 = __webpack_require__(/*! ./internal/_curry2 */ 1);
-var _dispatchable = __webpack_require__(/*! ./internal/_dispatchable */ 8);
-var _xdrop = __webpack_require__(/*! ./internal/_xdrop */ 262);
-var slice = __webpack_require__(/*! ./slice */ 31);
+var _dispatchable = __webpack_require__(/*! ./internal/_dispatchable */ 7);
+var _xdrop = __webpack_require__(/*! ./internal/_xdrop */ 266);
+var slice = __webpack_require__(/*! ./slice */ 30);
 
 /**
  * Returns all but the first `n` elements of the given list, string, or
@@ -8024,7 +8330,7 @@ module.exports = _curry2(_dispatchable(['drop'], _xdrop, function drop(n, xs) {
 }));
 
 /***/ }),
-/* 138 */
+/* 146 */
 /*!**********************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/take.js ***!
   \**********************************************************/
@@ -8033,9 +8339,9 @@ module.exports = _curry2(_dispatchable(['drop'], _xdrop, function drop(n, xs) {
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry2 = __webpack_require__(/*! ./internal/_curry2 */ 1);
-var _dispatchable = __webpack_require__(/*! ./internal/_dispatchable */ 8);
-var _xtake = __webpack_require__(/*! ./internal/_xtake */ 265);
-var slice = __webpack_require__(/*! ./slice */ 31);
+var _dispatchable = __webpack_require__(/*! ./internal/_dispatchable */ 7);
+var _xtake = __webpack_require__(/*! ./internal/_xtake */ 269);
+var slice = __webpack_require__(/*! ./slice */ 30);
 
 /**
  * Returns the first `n` elements of the given list, string, or
@@ -8085,7 +8391,7 @@ module.exports = _curry2(_dispatchable(['take'], _xtake, function take(n, xs) {
 }));
 
 /***/ }),
-/* 139 */
+/* 147 */
 /*!********************************************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/internal/_xdropRepeatsWith.js ***!
   \********************************************************************************/
@@ -8094,7 +8400,7 @@ module.exports = _curry2(_dispatchable(['take'], _xtake, function take(n, xs) {
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry2 = __webpack_require__(/*! ./_curry2 */ 1);
-var _xfBase = __webpack_require__(/*! ./_xfBase */ 12);
+var _xfBase = __webpack_require__(/*! ./_xfBase */ 9);
 
 module.exports = function () {
   function XDropRepeatsWith(pred, xf) {
@@ -8123,7 +8429,7 @@ module.exports = function () {
 }();
 
 /***/ }),
-/* 140 */
+/* 148 */
 /*!*********************************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/dropRepeatsWith.js ***!
   \*********************************************************************/
@@ -8132,9 +8438,9 @@ module.exports = function () {
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry2 = __webpack_require__(/*! ./internal/_curry2 */ 1);
-var _dispatchable = __webpack_require__(/*! ./internal/_dispatchable */ 8);
-var _xdropRepeatsWith = __webpack_require__(/*! ./internal/_xdropRepeatsWith */ 139);
-var last = __webpack_require__(/*! ./last */ 141);
+var _dispatchable = __webpack_require__(/*! ./internal/_dispatchable */ 7);
+var _xdropRepeatsWith = __webpack_require__(/*! ./internal/_xdropRepeatsWith */ 147);
+var last = __webpack_require__(/*! ./last */ 149);
 
 /**
  * Returns a new list without any consecutively repeating elements. Equality is
@@ -8174,7 +8480,7 @@ module.exports = _curry2(_dispatchable([], _xdropRepeatsWith, function dropRepea
 }));
 
 /***/ }),
-/* 141 */
+/* 149 */
 /*!**********************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/last.js ***!
   \**********************************************************/
@@ -8182,7 +8488,7 @@ module.exports = _curry2(_dispatchable([], _xdropRepeatsWith, function dropRepea
 /*! all exports used */
 /***/ (function(module, exports, __webpack_require__) {
 
-var nth = __webpack_require__(/*! ./nth */ 51);
+var nth = __webpack_require__(/*! ./nth */ 40);
 
 /**
  * Returns the last element of the given list or string.
@@ -8207,7 +8513,7 @@ var nth = __webpack_require__(/*! ./nth */ 51);
 module.exports = nth(-1);
 
 /***/ }),
-/* 142 */
+/* 150 */
 /*!********************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/or.js ***!
   \********************************************************/
@@ -8242,7 +8548,7 @@ module.exports = _curry2(function or(a, b) {
 });
 
 /***/ }),
-/* 143 */
+/* 151 */
 /*!***********************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/empty.js ***!
   \***********************************************************/
@@ -8250,11 +8556,11 @@ module.exports = _curry2(function or(a, b) {
 /*! all exports used */
 /***/ (function(module, exports, __webpack_require__) {
 
-var _curry1 = __webpack_require__(/*! ./internal/_curry1 */ 3);
-var _isArguments = __webpack_require__(/*! ./internal/_isArguments */ 112);
-var _isArray = __webpack_require__(/*! ./internal/_isArray */ 28);
-var _isObject = __webpack_require__(/*! ./internal/_isObject */ 130);
-var _isString = __webpack_require__(/*! ./internal/_isString */ 60);
+var _curry1 = __webpack_require__(/*! ./internal/_curry1 */ 2);
+var _isArguments = __webpack_require__(/*! ./internal/_isArguments */ 93);
+var _isArray = __webpack_require__(/*! ./internal/_isArray */ 27);
+var _isObject = __webpack_require__(/*! ./internal/_isObject */ 102);
+var _isString = __webpack_require__(/*! ./internal/_isString */ 38);
 
 /**
  * Returns the empty value of its argument's type. Ramda defines the empty
@@ -8287,7 +8593,7 @@ module.exports = _curry1(function empty(x) {
 });
 
 /***/ }),
-/* 144 */
+/* 152 */
 /*!************************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/uniqBy.js ***!
   \************************************************************/
@@ -8295,7 +8601,7 @@ module.exports = _curry1(function empty(x) {
 /*! all exports used */
 /***/ (function(module, exports, __webpack_require__) {
 
-var _Set = __webpack_require__(/*! ./internal/_Set */ 304);
+var _Set = __webpack_require__(/*! ./internal/_Set */ 308);
 var _curry2 = __webpack_require__(/*! ./internal/_curry2 */ 1);
 
 /**
@@ -8334,7 +8640,7 @@ module.exports = _curry2(function uniqBy(fn, list) {
 });
 
 /***/ }),
-/* 145 */
+/* 153 */
 /*!****************************************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/internal/_objectAssign.js ***!
   \****************************************************************************/
@@ -8368,7 +8674,7 @@ module.exports = function _objectAssign(target) {
 };
 
 /***/ }),
-/* 146 */
+/* 154 */
 /*!***********************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/objOf.js ***!
   \***********************************************************/
@@ -8405,7 +8711,7 @@ module.exports = _curry2(function objOf(key, val) {
 });
 
 /***/ }),
-/* 147 */
+/* 155 */
 /*!********************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/is.js ***!
   \********************************************************/
@@ -8443,7 +8749,7 @@ module.exports = _curry2(function is(Ctor, val) {
 });
 
 /***/ }),
-/* 148 */
+/* 156 */
 /*!**********************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/juxt.js ***!
   \**********************************************************/
@@ -8451,8 +8757,8 @@ module.exports = _curry2(function is(Ctor, val) {
 /*! all exports used */
 /***/ (function(module, exports, __webpack_require__) {
 
-var _curry1 = __webpack_require__(/*! ./internal/_curry1 */ 3);
-var converge = __webpack_require__(/*! ./converge */ 132);
+var _curry1 = __webpack_require__(/*! ./internal/_curry1 */ 2);
+var converge = __webpack_require__(/*! ./converge */ 140);
 
 /**
  * juxt applies a list of functions to a list of values.
@@ -8478,7 +8784,7 @@ module.exports = _curry1(function juxt(fns) {
 });
 
 /***/ }),
-/* 149 */
+/* 157 */
 /*!************************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/length.js ***!
   \************************************************************/
@@ -8486,8 +8792,8 @@ module.exports = _curry1(function juxt(fns) {
 /*! all exports used */
 /***/ (function(module, exports, __webpack_require__) {
 
-var _curry1 = __webpack_require__(/*! ./internal/_curry1 */ 3);
-var _isNumber = __webpack_require__(/*! ./internal/_isNumber */ 150);
+var _curry1 = __webpack_require__(/*! ./internal/_curry1 */ 2);
+var _isNumber = __webpack_require__(/*! ./internal/_isNumber */ 158);
 
 /**
  * Returns the number of elements in the array by returning `list.length`.
@@ -8509,7 +8815,7 @@ module.exports = _curry1(function length(list) {
 });
 
 /***/ }),
-/* 150 */
+/* 158 */
 /*!************************************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/internal/_isNumber.js ***!
   \************************************************************************/
@@ -8522,46 +8828,83 @@ module.exports = function _isNumber(x) {
 };
 
 /***/ }),
-/* 151 */
-/*!************************************************************!*\
-  !*** /Users/ivankleshnin/node_modules/ramda/src/update.js ***!
-  \************************************************************/
+/* 159 */
+/*!***************************************************************!*\
+  !*** /Users/ivankleshnin/node_modules/ramda/src/lensIndex.js ***!
+  \***************************************************************/
 /*! no static exports found */
 /*! all exports used */
 /***/ (function(module, exports, __webpack_require__) {
 
-var _curry3 = __webpack_require__(/*! ./internal/_curry3 */ 4);
-var adjust = __webpack_require__(/*! ./adjust */ 109);
-var always = __webpack_require__(/*! ./always */ 33);
+var _curry1 = __webpack_require__(/*! ./internal/_curry1 */ 2);
+var lens = __webpack_require__(/*! ./lens */ 41);
+var nth = __webpack_require__(/*! ./nth */ 40);
+var update = __webpack_require__(/*! ./update */ 106);
 
 /**
- * Returns a new copy of the array with the element at the provided index
- * replaced with the given value.
+ * Returns a lens whose focus is the specified index.
  *
  * @func
  * @memberOf R
  * @since v0.14.0
- * @category List
- * @sig Number -> a -> [a] -> [a]
- * @param {Number} idx The index to update.
- * @param {*} x The value to exist at the given index of the returned array.
- * @param {Array|Arguments} list The source array-like object to be updated.
- * @return {Array} A copy of `list` with the value at index `idx` replaced with `x`.
- * @see R.adjust
+ * @category Object
+ * @typedefn Lens s a = Functor f => (a -> f a) -> s -> f s
+ * @sig Number -> Lens s a
+ * @param {Number} n
+ * @return {Lens}
+ * @see R.view, R.set, R.over
  * @example
  *
- *      R.update(1, 11, [0, 1, 2]);     //=> [0, 11, 2]
- *      R.update(1)(11)([0, 1, 2]);     //=> [0, 11, 2]
- * @symb R.update(-1, a, [b, c]) = [b, a]
- * @symb R.update(0, a, [b, c]) = [a, c]
- * @symb R.update(1, a, [b, c]) = [b, a]
+ *      var headLens = R.lensIndex(0);
+ *
+ *      R.view(headLens, ['a', 'b', 'c']);            //=> 'a'
+ *      R.set(headLens, 'x', ['a', 'b', 'c']);        //=> ['x', 'b', 'c']
+ *      R.over(headLens, R.toUpper, ['a', 'b', 'c']); //=> ['A', 'b', 'c']
  */
-module.exports = _curry3(function update(idx, x, list) {
-  return adjust(always(x), idx, list);
+module.exports = _curry1(function lensIndex(n) {
+  return lens(nth(n), update(n));
 });
 
 /***/ }),
-/* 152 */
+/* 160 */
+/*!**************************************************************!*\
+  !*** /Users/ivankleshnin/node_modules/ramda/src/lensProp.js ***!
+  \**************************************************************/
+/*! no static exports found */
+/*! all exports used */
+/***/ (function(module, exports, __webpack_require__) {
+
+var _curry1 = __webpack_require__(/*! ./internal/_curry1 */ 2);
+var assoc = __webpack_require__(/*! ./assoc */ 39);
+var lens = __webpack_require__(/*! ./lens */ 41);
+var prop = __webpack_require__(/*! ./prop */ 65);
+
+/**
+ * Returns a lens whose focus is the specified property.
+ *
+ * @func
+ * @memberOf R
+ * @since v0.14.0
+ * @category Object
+ * @typedefn Lens s a = Functor f => (a -> f a) -> s -> f s
+ * @sig String -> Lens s a
+ * @param {String} k
+ * @return {Lens}
+ * @see R.view, R.set, R.over
+ * @example
+ *
+ *      var xLens = R.lensProp('x');
+ *
+ *      R.view(xLens, {x: 1, y: 2});            //=> 1
+ *      R.set(xLens, 4, {x: 1, y: 2});          //=> {x: 4, y: 2}
+ *      R.over(xLens, R.negate, {x: 1, y: 2});  //=> {x: -1, y: 2}
+ */
+module.exports = _curry1(function lensProp(k) {
+  return lens(prop(k), assoc(k));
+});
+
+/***/ }),
+/* 161 */
 /*!**********************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/mean.js ***!
   \**********************************************************/
@@ -8569,8 +8912,8 @@ module.exports = _curry3(function update(idx, x, list) {
 /*! all exports used */
 /***/ (function(module, exports, __webpack_require__) {
 
-var _curry1 = __webpack_require__(/*! ./internal/_curry1 */ 3);
-var sum = __webpack_require__(/*! ./sum */ 153);
+var _curry1 = __webpack_require__(/*! ./internal/_curry1 */ 2);
+var sum = __webpack_require__(/*! ./sum */ 162);
 
 /**
  * Returns the mean of the given list of numbers.
@@ -8592,7 +8935,7 @@ module.exports = _curry1(function mean(list) {
 });
 
 /***/ }),
-/* 153 */
+/* 162 */
 /*!*********************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/sum.js ***!
   \*********************************************************/
@@ -8600,8 +8943,8 @@ module.exports = _curry1(function mean(list) {
 /*! all exports used */
 /***/ (function(module, exports, __webpack_require__) {
 
-var add = __webpack_require__(/*! ./add */ 57);
-var reduce = __webpack_require__(/*! ./reduce */ 25);
+var add = __webpack_require__(/*! ./add */ 63);
+var reduce = __webpack_require__(/*! ./reduce */ 24);
 
 /**
  * Adds together all the elements of a list.
@@ -8621,7 +8964,7 @@ var reduce = __webpack_require__(/*! ./reduce */ 25);
 module.exports = reduce(add, 0);
 
 /***/ }),
-/* 154 */
+/* 163 */
 /*!***********************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/merge.js ***!
   \***********************************************************/
@@ -8629,7 +8972,7 @@ module.exports = reduce(add, 0);
 /*! all exports used */
 /***/ (function(module, exports, __webpack_require__) {
 
-var _assign = __webpack_require__(/*! ./internal/_assign */ 69);
+var _assign = __webpack_require__(/*! ./internal/_assign */ 78);
 var _curry2 = __webpack_require__(/*! ./internal/_curry2 */ 1);
 
 /**
@@ -8660,7 +9003,7 @@ module.exports = _curry2(function merge(l, r) {
 });
 
 /***/ }),
-/* 155 */
+/* 164 */
 /*!******************************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/mergeWithKey.js ***!
   \******************************************************************/
@@ -8718,7 +9061,7 @@ module.exports = _curry3(function mergeWithKey(fn, l, r) {
 });
 
 /***/ }),
-/* 156 */
+/* 165 */
 /*!**************************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/multiply.js ***!
   \**************************************************************/
@@ -8753,59 +9096,7 @@ module.exports = _curry2(function multiply(a, b) {
 });
 
 /***/ }),
-/* 157 */
-/*!**********************************************************!*\
-  !*** /Users/ivankleshnin/node_modules/ramda/src/over.js ***!
-  \**********************************************************/
-/*! no static exports found */
-/*! all exports used */
-/***/ (function(module, exports, __webpack_require__) {
-
-var _curry3 = __webpack_require__(/*! ./internal/_curry3 */ 4);
-
-/**
- * Returns the result of "setting" the portion of the given data structure
- * focused by the given lens to the result of applying the given function to
- * the focused value.
- *
- * @func
- * @memberOf R
- * @since v0.16.0
- * @category Object
- * @typedefn Lens s a = Functor f => (a -> f a) -> s -> f s
- * @sig Lens s a -> (a -> a) -> s -> s
- * @param {Lens} lens
- * @param {*} v
- * @param {*} x
- * @return {*}
- * @see R.prop, R.lensIndex, R.lensProp
- * @example
- *
- *      var headLens = R.lensIndex(0);
- *
- *      R.over(headLens, R.toUpper, ['foo', 'bar', 'baz']); //=> ['FOO', 'bar', 'baz']
- */
-module.exports = function () {
-  // `Identity` is a functor that holds a single value, where `map` simply
-  // transforms the held value with the provided function.
-  var Identity = function (x) {
-    return { value: x, map: function (f) {
-        return Identity(f(x));
-      } };
-  };
-
-  return _curry3(function over(lens, f, x) {
-    // The value returned by the getter function is first transformed with `f`,
-    // then set as the value of an `Identity`. This is then mapped over with the
-    // setter function of the lens.
-    return lens(function (y) {
-      return Identity(f(y));
-    })(x).value;
-  });
-}();
-
-/***/ }),
-/* 158 */
+/* 166 */
 /*!***************************************************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/internal/_createPartialApplicator.js ***!
   \***************************************************************************************/
@@ -8813,7 +9104,7 @@ module.exports = function () {
 /*! all exports used */
 /***/ (function(module, exports, __webpack_require__) {
 
-var _arity = __webpack_require__(/*! ./_arity */ 23);
+var _arity = __webpack_require__(/*! ./_arity */ 19);
 var _curry2 = __webpack_require__(/*! ./_curry2 */ 1);
 
 module.exports = function _createPartialApplicator(concat) {
@@ -8825,7 +9116,7 @@ module.exports = function _createPartialApplicator(concat) {
 };
 
 /***/ }),
-/* 159 */
+/* 167 */
 /*!*************************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/pickAll.js ***!
   \*************************************************************/
@@ -8866,7 +9157,7 @@ module.exports = _curry2(function pickAll(names, obj) {
 });
 
 /***/ }),
-/* 160 */
+/* 168 */
 /*!*************************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/prepend.js ***!
   \*************************************************************/
@@ -8874,7 +9165,7 @@ module.exports = _curry2(function pickAll(names, obj) {
 /*! all exports used */
 /***/ (function(module, exports, __webpack_require__) {
 
-var _concat = __webpack_require__(/*! ./internal/_concat */ 21);
+var _concat = __webpack_require__(/*! ./internal/_concat */ 20);
 var _curry2 = __webpack_require__(/*! ./internal/_curry2 */ 1);
 
 /**
@@ -8899,7 +9190,7 @@ module.exports = _curry2(function prepend(el, list) {
 });
 
 /***/ }),
-/* 161 */
+/* 169 */
 /*!*************************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/useWith.js ***!
   \*************************************************************/
@@ -8952,7 +9243,7 @@ module.exports = _curry2(function useWith(fn, transformers) {
 });
 
 /***/ }),
-/* 162 */
+/* 170 */
 /*!*****************************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/reduceRight.js ***!
   \*****************************************************************/
@@ -9014,7 +9305,7 @@ module.exports = _curry3(function reduceRight(fn, acc, list) {
 });
 
 /***/ }),
-/* 163 */
+/* 171 */
 /*!***********************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/times.js ***!
   \***********************************************************/
@@ -9063,7 +9354,7 @@ module.exports = _curry2(function times(fn, n) {
 });
 
 /***/ }),
-/* 164 */
+/* 172 */
 /*!**************************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/sequence.js ***!
   \**************************************************************/
@@ -9072,10 +9363,10 @@ module.exports = _curry2(function times(fn, n) {
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry2 = __webpack_require__(/*! ./internal/_curry2 */ 1);
-var ap = __webpack_require__(/*! ./ap */ 83);
-var map = __webpack_require__(/*! ./map */ 17);
-var prepend = __webpack_require__(/*! ./prepend */ 160);
-var reduceRight = __webpack_require__(/*! ./reduceRight */ 162);
+var ap = __webpack_require__(/*! ./ap */ 94);
+var map = __webpack_require__(/*! ./map */ 16);
+var prepend = __webpack_require__(/*! ./prepend */ 168);
+var reduceRight = __webpack_require__(/*! ./reduceRight */ 170);
 
 /**
  * Transforms a [Traversable](https://github.com/fantasyland/fantasy-land#traversable)
@@ -9108,7 +9399,46 @@ module.exports = _curry2(function sequence(of, traversable) {
 });
 
 /***/ }),
-/* 165 */
+/* 173 */
+/*!*********************************************************!*\
+  !*** /Users/ivankleshnin/node_modules/ramda/src/set.js ***!
+  \*********************************************************/
+/*! no static exports found */
+/*! all exports used */
+/***/ (function(module, exports, __webpack_require__) {
+
+var _curry3 = __webpack_require__(/*! ./internal/_curry3 */ 4);
+var always = __webpack_require__(/*! ./always */ 32);
+var over = __webpack_require__(/*! ./over */ 86);
+
+/**
+ * Returns the result of "setting" the portion of the given data structure
+ * focused by the given lens to the given value.
+ *
+ * @func
+ * @memberOf R
+ * @since v0.16.0
+ * @category Object
+ * @typedefn Lens s a = Functor f => (a -> f a) -> s -> f s
+ * @sig Lens s a -> a -> s -> s
+ * @param {Lens} lens
+ * @param {*} v
+ * @param {*} x
+ * @return {*}
+ * @see R.prop, R.lensIndex, R.lensProp
+ * @example
+ *
+ *      var xLens = R.lensProp('x');
+ *
+ *      R.set(xLens, 4, {x: 1, y: 2});  //=> {x: 4, y: 2}
+ *      R.set(xLens, 8, {x: 1, y: 2});  //=> {x: 8, y: 2}
+ */
+module.exports = _curry3(function set(lens, v, x) {
+  return over(lens, always(v), x);
+});
+
+/***/ }),
+/* 174 */
 /*!************************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/sortBy.js ***!
   \************************************************************/
@@ -9159,7 +9489,54 @@ module.exports = _curry2(function sortBy(fn, list) {
 });
 
 /***/ }),
-/* 166 */
+/* 175 */
+/*!**********************************************************!*\
+  !*** /Users/ivankleshnin/node_modules/ramda/src/view.js ***!
+  \**********************************************************/
+/*! no static exports found */
+/*! all exports used */
+/***/ (function(module, exports, __webpack_require__) {
+
+var _curry2 = __webpack_require__(/*! ./internal/_curry2 */ 1);
+
+/**
+ * Returns a "view" of the given data structure, determined by the given lens.
+ * The lens's focus determines which portion of the data structure is visible.
+ *
+ * @func
+ * @memberOf R
+ * @since v0.16.0
+ * @category Object
+ * @typedefn Lens s a = Functor f => (a -> f a) -> s -> f s
+ * @sig Lens s a -> s -> a
+ * @param {Lens} lens
+ * @param {*} x
+ * @return {*}
+ * @see R.prop, R.lensIndex, R.lensProp
+ * @example
+ *
+ *      var xLens = R.lensProp('x');
+ *
+ *      R.view(xLens, {x: 1, y: 2});  //=> 1
+ *      R.view(xLens, {x: 4, y: 2});  //=> 4
+ */
+module.exports = function () {
+  // `Const` is a functor that effectively ignores the function given to `map`.
+  var Const = function (x) {
+    return { value: x, map: function () {
+        return this;
+      } };
+  };
+
+  return _curry2(function view(lens, x) {
+    // Using `Const` effectively ignores the setter function of the `lens`,
+    // leaving the value returned by the getter function unmodified.
+    return lens(Const)(x).value;
+  });
+}();
+
+/***/ }),
+/* 176 */
 /*!***********************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/where.js ***!
   \***********************************************************/
@@ -9214,7 +9591,7 @@ module.exports = _curry2(function where(spec, testObj) {
 });
 
 /***/ }),
-/* 167 */
+/* 177 */
 /*!************************************************!*\
   !*** ./node_modules/rxjs/util/toSubscriber.js ***!
   \************************************************/
@@ -9225,9 +9602,9 @@ module.exports = _curry2(function where(spec, testObj) {
 "use strict";
 
 
-var Subscriber_1 = __webpack_require__(/*! ../Subscriber */ 2);
-var rxSubscriber_1 = __webpack_require__(/*! ../symbol/rxSubscriber */ 36);
-var Observer_1 = __webpack_require__(/*! ../Observer */ 79);
+var Subscriber_1 = __webpack_require__(/*! ../Subscriber */ 3);
+var rxSubscriber_1 = __webpack_require__(/*! ../symbol/rxSubscriber */ 42);
+var Observer_1 = __webpack_require__(/*! ../Observer */ 88);
 function toSubscriber(nextOrObserver, error, complete) {
     if (nextOrObserver) {
         if (nextOrObserver instanceof Subscriber_1.Subscriber) {
@@ -9246,7 +9623,7 @@ exports.toSubscriber = toSubscriber;
 //# sourceMappingURL=toSubscriber.js.map
 
 /***/ }),
-/* 168 */
+/* 178 */
 /*!***********************************************************!*\
   !*** ./node_modules/rxjs/add/observable/combineLatest.js ***!
   \***********************************************************/
@@ -9258,12 +9635,12 @@ exports.toSubscriber = toSubscriber;
 
 
 var Observable_1 = __webpack_require__(/*! ../../Observable */ 0);
-var combineLatest_1 = __webpack_require__(/*! ../../observable/combineLatest */ 169);
+var combineLatest_1 = __webpack_require__(/*! ../../observable/combineLatest */ 179);
 Observable_1.Observable.combineLatest = combineLatest_1.combineLatest;
 //# sourceMappingURL=combineLatest.js.map
 
 /***/ }),
-/* 169 */
+/* 179 */
 /*!*******************************************************!*\
   !*** ./node_modules/rxjs/observable/combineLatest.js ***!
   \*******************************************************/
@@ -9274,10 +9651,10 @@ Observable_1.Observable.combineLatest = combineLatest_1.combineLatest;
 "use strict";
 
 
-var isScheduler_1 = __webpack_require__(/*! ../util/isScheduler */ 19);
-var isArray_1 = __webpack_require__(/*! ../util/isArray */ 22);
-var ArrayObservable_1 = __webpack_require__(/*! ./ArrayObservable */ 20);
-var combineLatest_1 = __webpack_require__(/*! ../operator/combineLatest */ 72);
+var isScheduler_1 = __webpack_require__(/*! ../util/isScheduler */ 22);
+var isArray_1 = __webpack_require__(/*! ../util/isArray */ 26);
+var ArrayObservable_1 = __webpack_require__(/*! ./ArrayObservable */ 23);
+var combineLatest_1 = __webpack_require__(/*! ../operator/combineLatest */ 80);
 /* tslint:enable:max-line-length */
 /**
  * Combines multiple Observables to create an Observable whose values are
@@ -9411,7 +9788,7 @@ exports.combineLatest = combineLatest;
 //# sourceMappingURL=combineLatest.js.map
 
 /***/ }),
-/* 170 */
+/* 180 */
 /*!**********************************************!*\
   !*** ./node_modules/rxjs/InnerSubscriber.js ***!
   \**********************************************/
@@ -9430,7 +9807,7 @@ var __extends = undefined && undefined.__extends || function (d, b) {
     }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var Subscriber_1 = __webpack_require__(/*! ./Subscriber */ 2);
+var Subscriber_1 = __webpack_require__(/*! ./Subscriber */ 3);
 /**
  * We need this JSDoc comment for affecting ESDoc.
  * @ignore
@@ -9462,7 +9839,7 @@ exports.InnerSubscriber = InnerSubscriber;
 //# sourceMappingURL=InnerSubscriber.js.map
 
 /***/ }),
-/* 171 */
+/* 181 */
 /*!********************************************************!*\
   !*** ./node_modules/rxjs/observable/FromObservable.js ***!
   \********************************************************/
@@ -9483,17 +9860,17 @@ var __extends = undefined && undefined.__extends || function (d, b) {
     }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var isArray_1 = __webpack_require__(/*! ../util/isArray */ 22);
-var isArrayLike_1 = __webpack_require__(/*! ../util/isArrayLike */ 99);
-var isPromise_1 = __webpack_require__(/*! ../util/isPromise */ 100);
-var PromiseObservable_1 = __webpack_require__(/*! ./PromiseObservable */ 172);
+var isArray_1 = __webpack_require__(/*! ../util/isArray */ 26);
+var isArrayLike_1 = __webpack_require__(/*! ../util/isArrayLike */ 109);
+var isPromise_1 = __webpack_require__(/*! ../util/isPromise */ 110);
+var PromiseObservable_1 = __webpack_require__(/*! ./PromiseObservable */ 182);
 var IteratorObservable_1 = __webpack_require__(/*! ./IteratorObservable */ 428);
-var ArrayObservable_1 = __webpack_require__(/*! ./ArrayObservable */ 20);
+var ArrayObservable_1 = __webpack_require__(/*! ./ArrayObservable */ 23);
 var ArrayLikeObservable_1 = __webpack_require__(/*! ./ArrayLikeObservable */ 429);
-var iterator_1 = __webpack_require__(/*! ../symbol/iterator */ 37);
+var iterator_1 = __webpack_require__(/*! ../symbol/iterator */ 43);
 var Observable_1 = __webpack_require__(/*! ../Observable */ 0);
-var observeOn_1 = __webpack_require__(/*! ../operator/observeOn */ 74);
-var observable_1 = __webpack_require__(/*! ../symbol/observable */ 43);
+var observeOn_1 = __webpack_require__(/*! ../operator/observeOn */ 82);
+var observable_1 = __webpack_require__(/*! ../symbol/observable */ 48);
 /**
  * We need this JSDoc comment for affecting ESDoc.
  * @extends {Ignored}
@@ -9596,7 +9973,7 @@ exports.FromObservable = FromObservable;
 //# sourceMappingURL=FromObservable.js.map
 
 /***/ }),
-/* 172 */
+/* 182 */
 /*!***********************************************************!*\
   !*** ./node_modules/rxjs/observable/PromiseObservable.js ***!
   \***********************************************************/
@@ -9615,7 +9992,7 @@ var __extends = undefined && undefined.__extends || function (d, b) {
     }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var root_1 = __webpack_require__(/*! ../util/root */ 9);
+var root_1 = __webpack_require__(/*! ../util/root */ 10);
 var Observable_1 = __webpack_require__(/*! ../Observable */ 0);
 /**
  * We need this JSDoc comment for affecting ESDoc.
@@ -9733,7 +10110,7 @@ function dispatchError(arg) {
 //# sourceMappingURL=PromiseObservable.js.map
 
 /***/ }),
-/* 173 */
+/* 183 */
 /*!***********************************************!*\
   !*** ./node_modules/rxjs/scheduler/Action.js ***!
   \***********************************************/
@@ -9752,7 +10129,7 @@ var __extends = undefined && undefined.__extends || function (d, b) {
     }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var Subscription_1 = __webpack_require__(/*! ../Subscription */ 7);
+var Subscription_1 = __webpack_require__(/*! ../Subscription */ 8);
 /**
  * A unit of work to be executed in a {@link Scheduler}. An action is typically
  * created from within a Scheduler and an RxJS user does not need to concern
@@ -9794,7 +10171,7 @@ exports.Action = Action;
 //# sourceMappingURL=Action.js.map
 
 /***/ }),
-/* 174 */
+/* 184 */
 /*!****************************************!*\
   !*** ./node_modules/rxjs/Scheduler.js ***!
   \****************************************/
@@ -9861,7 +10238,7 @@ exports.Scheduler = Scheduler;
 //# sourceMappingURL=Scheduler.js.map
 
 /***/ }),
-/* 175 */
+/* 185 */
 /*!***************************************************!*\
   !*** ./node_modules/rxjs/add/observable/merge.js ***!
   \***************************************************/
@@ -9873,12 +10250,12 @@ exports.Scheduler = Scheduler;
 
 
 var Observable_1 = __webpack_require__(/*! ../../Observable */ 0);
-var merge_1 = __webpack_require__(/*! ../../observable/merge */ 176);
+var merge_1 = __webpack_require__(/*! ../../observable/merge */ 186);
 Observable_1.Observable.merge = merge_1.merge;
 //# sourceMappingURL=merge.js.map
 
 /***/ }),
-/* 176 */
+/* 186 */
 /*!***********************************************!*\
   !*** ./node_modules/rxjs/observable/merge.js ***!
   \***********************************************/
@@ -9889,12 +10266,12 @@ Observable_1.Observable.merge = merge_1.merge;
 "use strict";
 
 
-var merge_1 = __webpack_require__(/*! ../operator/merge */ 101);
+var merge_1 = __webpack_require__(/*! ../operator/merge */ 111);
 exports.merge = merge_1.mergeStatic;
 //# sourceMappingURL=merge.js.map
 
 /***/ }),
-/* 177 */
+/* 187 */
 /*!********************************************!*\
   !*** ./node_modules/rxjs/operator/race.js ***!
   \********************************************/
@@ -9913,8 +10290,8 @@ var __extends = undefined && undefined.__extends || function (d, b) {
     }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var isArray_1 = __webpack_require__(/*! ../util/isArray */ 22);
-var ArrayObservable_1 = __webpack_require__(/*! ../observable/ArrayObservable */ 20);
+var isArray_1 = __webpack_require__(/*! ../util/isArray */ 26);
+var ArrayObservable_1 = __webpack_require__(/*! ../observable/ArrayObservable */ 23);
 var OuterSubscriber_1 = __webpack_require__(/*! ../OuterSubscriber */ 5);
 var subscribeToResult_1 = __webpack_require__(/*! ../util/subscribeToResult */ 6);
 /* tslint:enable:max-line-length */
@@ -10017,7 +10394,7 @@ exports.RaceSubscriber = RaceSubscriber;
 //# sourceMappingURL=race.js.map
 
 /***/ }),
-/* 178 */
+/* 188 */
 /*!****************************************!*\
   !*** ./node_modules/rxjs/util/noop.js ***!
   \****************************************/
@@ -10034,7 +10411,7 @@ exports.noop = noop;
 //# sourceMappingURL=noop.js.map
 
 /***/ }),
-/* 179 */
+/* 189 */
 /*!*********************************************************!*\
   !*** ./node_modules/rxjs/operator/onErrorResumeNext.js ***!
   \*********************************************************/
@@ -10053,8 +10430,8 @@ var __extends = undefined && undefined.__extends || function (d, b) {
     }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var FromObservable_1 = __webpack_require__(/*! ../observable/FromObservable */ 171);
-var isArray_1 = __webpack_require__(/*! ../util/isArray */ 22);
+var FromObservable_1 = __webpack_require__(/*! ../observable/FromObservable */ 181);
+var isArray_1 = __webpack_require__(/*! ../util/isArray */ 26);
 var OuterSubscriber_1 = __webpack_require__(/*! ../OuterSubscriber */ 5);
 var subscribeToResult_1 = __webpack_require__(/*! ../util/subscribeToResult */ 6);
 /* tslint:enable:max-line-length */
@@ -10185,7 +10562,7 @@ var OnErrorResumeNextSubscriber = function (_super) {
 //# sourceMappingURL=onErrorResumeNext.js.map
 
 /***/ }),
-/* 180 */
+/* 190 */
 /*!************************************************************!*\
   !*** ./node_modules/rxjs/observable/dom/AjaxObservable.js ***!
   \************************************************************/
@@ -10204,12 +10581,12 @@ var __extends = undefined && undefined.__extends || function (d, b) {
     }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var root_1 = __webpack_require__(/*! ../../util/root */ 9);
+var root_1 = __webpack_require__(/*! ../../util/root */ 10);
 var tryCatch_1 = __webpack_require__(/*! ../../util/tryCatch */ 13);
-var errorObject_1 = __webpack_require__(/*! ../../util/errorObject */ 11);
+var errorObject_1 = __webpack_require__(/*! ../../util/errorObject */ 12);
 var Observable_1 = __webpack_require__(/*! ../../Observable */ 0);
-var Subscriber_1 = __webpack_require__(/*! ../../Subscriber */ 2);
-var map_1 = __webpack_require__(/*! ../../operator/map */ 56);
+var Subscriber_1 = __webpack_require__(/*! ../../Subscriber */ 3);
+var map_1 = __webpack_require__(/*! ../../operator/map */ 62);
 function getCORSRequest() {
     if (root_1.root.XMLHttpRequest) {
         return new root_1.root.XMLHttpRequest();
@@ -10630,7 +11007,7 @@ exports.AjaxTimeoutError = AjaxTimeoutError;
 //# sourceMappingURL=AjaxObservable.js.map
 
 /***/ }),
-/* 181 */
+/* 191 */
 /*!****************************************************!*\
   !*** ./node_modules/rxjs/scheduler/QueueAction.js ***!
   \****************************************************/
@@ -10649,7 +11026,7 @@ var __extends = undefined && undefined.__extends || function (d, b) {
     }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var AsyncAction_1 = __webpack_require__(/*! ./AsyncAction */ 39);
+var AsyncAction_1 = __webpack_require__(/*! ./AsyncAction */ 45);
 /**
  * We need this JSDoc comment for affecting ESDoc.
  * @ignore
@@ -10696,7 +11073,7 @@ exports.QueueAction = QueueAction;
 //# sourceMappingURL=QueueAction.js.map
 
 /***/ }),
-/* 182 */
+/* 192 */
 /*!*******************************************************!*\
   !*** ./node_modules/rxjs/scheduler/QueueScheduler.js ***!
   \*******************************************************/
@@ -10715,7 +11092,7 @@ var __extends = undefined && undefined.__extends || function (d, b) {
     }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var AsyncScheduler_1 = __webpack_require__(/*! ./AsyncScheduler */ 40);
+var AsyncScheduler_1 = __webpack_require__(/*! ./AsyncScheduler */ 46);
 var QueueScheduler = function (_super) {
     __extends(QueueScheduler, _super);
     function QueueScheduler() {
@@ -10727,7 +11104,7 @@ exports.QueueScheduler = QueueScheduler;
 //# sourceMappingURL=QueueScheduler.js.map
 
 /***/ }),
-/* 183 */
+/* 193 */
 /*!************************************************!*\
   !*** ./node_modules/rxjs/operator/mergeMap.js ***!
   \************************************************/
@@ -10914,7 +11291,7 @@ exports.MergeMapSubscriber = MergeMapSubscriber;
 //# sourceMappingURL=mergeMap.js.map
 
 /***/ }),
-/* 184 */
+/* 194 */
 /*!**************************************************!*\
   !*** ./node_modules/rxjs/operator/mergeMapTo.js ***!
   \**************************************************/
@@ -11090,7 +11467,7 @@ exports.MergeMapToSubscriber = MergeMapToSubscriber;
 //# sourceMappingURL=mergeMapTo.js.map
 
 /***/ }),
-/* 185 */
+/* 195 */
 /*!****************************************************************!*\
   !*** ./node_modules/rxjs/add/operator/distinctUntilChanged.js ***!
   \****************************************************************/
@@ -11102,12 +11479,12 @@ exports.MergeMapToSubscriber = MergeMapToSubscriber;
 
 
 var Observable_1 = __webpack_require__(/*! ../../Observable */ 0);
-var distinctUntilChanged_1 = __webpack_require__(/*! ../../operator/distinctUntilChanged */ 104);
+var distinctUntilChanged_1 = __webpack_require__(/*! ../../operator/distinctUntilChanged */ 114);
 Observable_1.Observable.prototype.distinctUntilChanged = distinctUntilChanged_1.distinctUntilChanged;
 //# sourceMappingURL=distinctUntilChanged.js.map
 
 /***/ }),
-/* 186 */
+/* 196 */
 /*!**********************************************!*\
   !*** ./node_modules/rxjs/add/operator/do.js ***!
   \**********************************************/
@@ -11119,13 +11496,13 @@ Observable_1.Observable.prototype.distinctUntilChanged = distinctUntilChanged_1.
 
 
 var Observable_1 = __webpack_require__(/*! ../../Observable */ 0);
-var do_1 = __webpack_require__(/*! ../../operator/do */ 187);
+var do_1 = __webpack_require__(/*! ../../operator/do */ 197);
 Observable_1.Observable.prototype.do = do_1._do;
 Observable_1.Observable.prototype._do = do_1._do;
 //# sourceMappingURL=do.js.map
 
 /***/ }),
-/* 187 */
+/* 197 */
 /*!******************************************!*\
   !*** ./node_modules/rxjs/operator/do.js ***!
   \******************************************/
@@ -11144,7 +11521,7 @@ var __extends = undefined && undefined.__extends || function (d, b) {
     }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var Subscriber_1 = __webpack_require__(/*! ../Subscriber */ 2);
+var Subscriber_1 = __webpack_require__(/*! ../Subscriber */ 3);
 /* tslint:enable:max-line-length */
 /**
  * Perform a side effect for every emission on the source Observable, but return
@@ -11250,7 +11627,7 @@ var DoSubscriber = function (_super) {
 //# sourceMappingURL=do.js.map
 
 /***/ }),
-/* 188 */
+/* 198 */
 /*!**************************************************!*\
   !*** ./node_modules/rxjs/add/operator/filter.js ***!
   \**************************************************/
@@ -11262,12 +11639,12 @@ var DoSubscriber = function (_super) {
 
 
 var Observable_1 = __webpack_require__(/*! ../../Observable */ 0);
-var filter_1 = __webpack_require__(/*! ../../operator/filter */ 105);
+var filter_1 = __webpack_require__(/*! ../../operator/filter */ 115);
 Observable_1.Observable.prototype.filter = filter_1.filter;
 //# sourceMappingURL=filter.js.map
 
 /***/ }),
-/* 189 */
+/* 199 */
 /*!********************************************!*\
   !*** ./node_modules/rxjs/operator/find.js ***!
   \********************************************/
@@ -11286,7 +11663,7 @@ var __extends = undefined && undefined.__extends || function (d, b) {
     }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var Subscriber_1 = __webpack_require__(/*! ../Subscriber */ 2);
+var Subscriber_1 = __webpack_require__(/*! ../Subscriber */ 3);
 /* tslint:enable:max-line-length */
 /**
  * Emits only the first value emitted by the source Observable that meets some
@@ -11384,7 +11761,7 @@ exports.FindValueSubscriber = FindValueSubscriber;
 //# sourceMappingURL=find.js.map
 
 /***/ }),
-/* 190 */
+/* 200 */
 /*!***********************************************!*\
   !*** ./node_modules/rxjs/add/operator/map.js ***!
   \***********************************************/
@@ -11396,12 +11773,12 @@ exports.FindValueSubscriber = FindValueSubscriber;
 
 
 var Observable_1 = __webpack_require__(/*! ../../Observable */ 0);
-var map_1 = __webpack_require__(/*! ../../operator/map */ 56);
+var map_1 = __webpack_require__(/*! ../../operator/map */ 62);
 Observable_1.Observable.prototype.map = map_1.map;
 //# sourceMappingURL=map.js.map
 
 /***/ }),
-/* 191 */
+/* 201 */
 /*!*************************************************!*\
   !*** ./node_modules/rxjs/add/operator/pluck.js ***!
   \*************************************************/
@@ -11413,12 +11790,12 @@ Observable_1.Observable.prototype.map = map_1.map;
 
 
 var Observable_1 = __webpack_require__(/*! ../../Observable */ 0);
-var pluck_1 = __webpack_require__(/*! ../../operator/pluck */ 192);
+var pluck_1 = __webpack_require__(/*! ../../operator/pluck */ 202);
 Observable_1.Observable.prototype.pluck = pluck_1.pluck;
 //# sourceMappingURL=pluck.js.map
 
 /***/ }),
-/* 192 */
+/* 202 */
 /*!*********************************************!*\
   !*** ./node_modules/rxjs/operator/pluck.js ***!
   \*********************************************/
@@ -11429,7 +11806,7 @@ Observable_1.Observable.prototype.pluck = pluck_1.pluck;
 "use strict";
 
 
-var map_1 = __webpack_require__(/*! ./map */ 56);
+var map_1 = __webpack_require__(/*! ./map */ 62);
 /**
  * Maps each source value (an object) to its specified nested property.
  *
@@ -11486,7 +11863,7 @@ function plucker(props, length) {
 //# sourceMappingURL=pluck.js.map
 
 /***/ }),
-/* 193 */
+/* 203 */
 /*!**********************************************!*\
   !*** ./node_modules/rxjs/BehaviorSubject.js ***!
   \**********************************************/
@@ -11505,8 +11882,8 @@ var __extends = undefined && undefined.__extends || function (d, b) {
     }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var Subject_1 = __webpack_require__(/*! ./Subject */ 10);
-var ObjectUnsubscribedError_1 = __webpack_require__(/*! ./util/ObjectUnsubscribedError */ 44);
+var Subject_1 = __webpack_require__(/*! ./Subject */ 11);
+var ObjectUnsubscribedError_1 = __webpack_require__(/*! ./util/ObjectUnsubscribedError */ 49);
 /**
  * @class BehaviorSubject<T>
  */
@@ -11548,7 +11925,7 @@ exports.BehaviorSubject = BehaviorSubject;
 //# sourceMappingURL=BehaviorSubject.js.map
 
 /***/ }),
-/* 194 */
+/* 204 */
 /*!**************************************************!*\
   !*** ./node_modules/rxjs/add/operator/sample.js ***!
   \**************************************************/
@@ -11560,12 +11937,12 @@ exports.BehaviorSubject = BehaviorSubject;
 
 
 var Observable_1 = __webpack_require__(/*! ../../Observable */ 0);
-var sample_1 = __webpack_require__(/*! ../../operator/sample */ 195);
+var sample_1 = __webpack_require__(/*! ../../operator/sample */ 205);
 Observable_1.Observable.prototype.sample = sample_1.sample;
 //# sourceMappingURL=sample.js.map
 
 /***/ }),
-/* 195 */
+/* 205 */
 /*!**********************************************!*\
   !*** ./node_modules/rxjs/operator/sample.js ***!
   \**********************************************/
@@ -11668,7 +12045,7 @@ var SampleSubscriber = function (_super) {
 //# sourceMappingURL=sample.js.map
 
 /***/ }),
-/* 196 */
+/* 206 */
 /*!************************************************!*\
   !*** ./node_modules/rxjs/add/operator/scan.js ***!
   \************************************************/
@@ -11680,12 +12057,12 @@ var SampleSubscriber = function (_super) {
 
 
 var Observable_1 = __webpack_require__(/*! ../../Observable */ 0);
-var scan_1 = __webpack_require__(/*! ../../operator/scan */ 197);
+var scan_1 = __webpack_require__(/*! ../../operator/scan */ 207);
 Observable_1.Observable.prototype.scan = scan_1.scan;
 //# sourceMappingURL=scan.js.map
 
 /***/ }),
-/* 197 */
+/* 207 */
 /*!********************************************!*\
   !*** ./node_modules/rxjs/operator/scan.js ***!
   \********************************************/
@@ -11704,7 +12081,7 @@ var __extends = undefined && undefined.__extends || function (d, b) {
     }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var Subscriber_1 = __webpack_require__(/*! ../Subscriber */ 2);
+var Subscriber_1 = __webpack_require__(/*! ../Subscriber */ 3);
 /* tslint:enable:max-line-length */
 /**
  * Applies an accumulator function over the source Observable, and returns each
@@ -11819,7 +12196,7 @@ var ScanSubscriber = function (_super) {
 //# sourceMappingURL=scan.js.map
 
 /***/ }),
-/* 198 */
+/* 208 */
 /*!*******************************************************!*\
   !*** ./node_modules/rxjs/add/operator/shareReplay.js ***!
   \*******************************************************/
@@ -11831,12 +12208,12 @@ var ScanSubscriber = function (_super) {
 
 
 var Observable_1 = __webpack_require__(/*! ../../Observable */ 0);
-var shareReplay_1 = __webpack_require__(/*! ../../operator/shareReplay */ 199);
+var shareReplay_1 = __webpack_require__(/*! ../../operator/shareReplay */ 209);
 Observable_1.Observable.prototype.shareReplay = shareReplay_1.shareReplay;
 //# sourceMappingURL=shareReplay.js.map
 
 /***/ }),
-/* 199 */
+/* 209 */
 /*!***************************************************!*\
   !*** ./node_modules/rxjs/operator/shareReplay.js ***!
   \***************************************************/
@@ -11847,8 +12224,8 @@ Observable_1.Observable.prototype.shareReplay = shareReplay_1.shareReplay;
 "use strict";
 
 
-var multicast_1 = __webpack_require__(/*! ./multicast */ 30);
-var ReplaySubject_1 = __webpack_require__(/*! ../ReplaySubject */ 46);
+var multicast_1 = __webpack_require__(/*! ./multicast */ 31);
+var ReplaySubject_1 = __webpack_require__(/*! ../ReplaySubject */ 51);
 /**
  * @method shareReplay
  * @owner Observable
@@ -11869,7 +12246,7 @@ exports.shareReplay = shareReplay;
 //# sourceMappingURL=shareReplay.js.map
 
 /***/ }),
-/* 200 */
+/* 210 */
 /*!*****************************************************!*\
   !*** ./node_modules/rxjs/add/operator/startWith.js ***!
   \*****************************************************/
@@ -11881,12 +12258,12 @@ exports.shareReplay = shareReplay;
 
 
 var Observable_1 = __webpack_require__(/*! ../../Observable */ 0);
-var startWith_1 = __webpack_require__(/*! ../../operator/startWith */ 201);
+var startWith_1 = __webpack_require__(/*! ../../operator/startWith */ 211);
 Observable_1.Observable.prototype.startWith = startWith_1.startWith;
 //# sourceMappingURL=startWith.js.map
 
 /***/ }),
-/* 201 */
+/* 211 */
 /*!*************************************************!*\
   !*** ./node_modules/rxjs/operator/startWith.js ***!
   \*************************************************/
@@ -11897,11 +12274,11 @@ Observable_1.Observable.prototype.startWith = startWith_1.startWith;
 "use strict";
 
 
-var ArrayObservable_1 = __webpack_require__(/*! ../observable/ArrayObservable */ 20);
-var ScalarObservable_1 = __webpack_require__(/*! ../observable/ScalarObservable */ 55);
-var EmptyObservable_1 = __webpack_require__(/*! ../observable/EmptyObservable */ 27);
-var concat_1 = __webpack_require__(/*! ./concat */ 73);
-var isScheduler_1 = __webpack_require__(/*! ../util/isScheduler */ 19);
+var ArrayObservable_1 = __webpack_require__(/*! ../observable/ArrayObservable */ 23);
+var ScalarObservable_1 = __webpack_require__(/*! ../observable/ScalarObservable */ 61);
+var EmptyObservable_1 = __webpack_require__(/*! ../observable/EmptyObservable */ 28);
+var concat_1 = __webpack_require__(/*! ./concat */ 81);
+var isScheduler_1 = __webpack_require__(/*! ../util/isScheduler */ 22);
 /* tslint:enable:max-line-length */
 /**
  * Returns an Observable that emits the items you specify as arguments before it begins to emit
@@ -11941,7 +12318,7 @@ exports.startWith = startWith;
 //# sourceMappingURL=startWith.js.map
 
 /***/ }),
-/* 202 */
+/* 212 */
 /*!*********************************************!*\
   !*** ./node_modules/rxjs/scheduler/asap.js ***!
   \*********************************************/
@@ -11992,7 +12369,7 @@ exports.asap = new AsapScheduler_1.AsapScheduler(AsapAction_1.AsapAction);
 //# sourceMappingURL=asap.js.map
 
 /***/ }),
-/* 203 */
+/* 213 */
 /*!************************************************!*\
   !*** ./node_modules/timers-browserify/main.js ***!
   \************************************************/
@@ -12056,7 +12433,7 @@ exports.setImmediate = setImmediate;
 exports.clearImmediate = clearImmediate;
 
 /***/ }),
-/* 204 */
+/* 214 */
 /*!************************************************!*\
   !*** ./node_modules/rxjs/operator/throttle.js ***!
   \************************************************/
@@ -12222,7 +12599,7 @@ var ThrottleSubscriber = function (_super) {
 //# sourceMappingURL=throttle.js.map
 
 /***/ }),
-/* 205 */
+/* 215 */
 /*!****************************************************!*\
   !*** ./node_modules/rxjs/operator/timeInterval.js ***!
   \****************************************************/
@@ -12241,8 +12618,8 @@ var __extends = undefined && undefined.__extends || function (d, b) {
     }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var Subscriber_1 = __webpack_require__(/*! ../Subscriber */ 2);
-var async_1 = __webpack_require__(/*! ../scheduler/async */ 16);
+var Subscriber_1 = __webpack_require__(/*! ../Subscriber */ 3);
+var async_1 = __webpack_require__(/*! ../scheduler/async */ 18);
 /**
  * @param scheduler
  * @return {Observable<TimeInterval<any>>|WebSocketSubject<T>|Observable<T>}
@@ -12298,7 +12675,7 @@ var TimeIntervalSubscriber = function (_super) {
 //# sourceMappingURL=timeInterval.js.map
 
 /***/ }),
-/* 206 */
+/* 216 */
 /*!************************************************!*\
   !*** ./node_modules/rxjs/util/TimeoutError.js ***!
   \************************************************/
@@ -12338,7 +12715,7 @@ exports.TimeoutError = TimeoutError;
 //# sourceMappingURL=TimeoutError.js.map
 
 /***/ }),
-/* 207 */
+/* 217 */
 /*!*************************************************!*\
   !*** ./node_modules/rxjs/operator/timestamp.js ***!
   \*************************************************/
@@ -12357,8 +12734,8 @@ var __extends = undefined && undefined.__extends || function (d, b) {
     }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var Subscriber_1 = __webpack_require__(/*! ../Subscriber */ 2);
-var async_1 = __webpack_require__(/*! ../scheduler/async */ 16);
+var Subscriber_1 = __webpack_require__(/*! ../Subscriber */ 3);
+var async_1 = __webpack_require__(/*! ../scheduler/async */ 18);
 /**
  * @param scheduler
  * @return {Observable<Timestamp<any>>|WebSocketSubject<T>|Observable<T>}
@@ -12405,7 +12782,7 @@ var TimestampSubscriber = function (_super) {
 //# sourceMappingURL=timestamp.js.map
 
 /***/ }),
-/* 208 */
+/* 218 */
 /*!**********************************************************!*\
   !*** ./node_modules/rxjs/add/operator/withLatestFrom.js ***!
   \**********************************************************/
@@ -12417,12 +12794,12 @@ var TimestampSubscriber = function (_super) {
 
 
 var Observable_1 = __webpack_require__(/*! ../../Observable */ 0);
-var withLatestFrom_1 = __webpack_require__(/*! ../../operator/withLatestFrom */ 209);
+var withLatestFrom_1 = __webpack_require__(/*! ../../operator/withLatestFrom */ 219);
 Observable_1.Observable.prototype.withLatestFrom = withLatestFrom_1.withLatestFrom;
 //# sourceMappingURL=withLatestFrom.js.map
 
 /***/ }),
-/* 209 */
+/* 219 */
 /*!******************************************************!*\
   !*** ./node_modules/rxjs/operator/withLatestFrom.js ***!
   \******************************************************/
@@ -12565,7 +12942,7 @@ var WithLatestFromSubscriber = function (_super) {
 //# sourceMappingURL=withLatestFrom.js.map
 
 /***/ }),
-/* 210 */
+/* 220 */
 /*!***********************************************************!*\
   !*** ./node_modules/rxjs/testing/SubscriptionLoggable.js ***!
   \***********************************************************/
@@ -12576,7 +12953,7 @@ var WithLatestFromSubscriber = function (_super) {
 "use strict";
 
 
-var SubscriptionLog_1 = __webpack_require__(/*! ./SubscriptionLog */ 211);
+var SubscriptionLog_1 = __webpack_require__(/*! ./SubscriptionLog */ 221);
 var SubscriptionLoggable = function () {
     function SubscriptionLoggable() {
         this.subscriptions = [];
@@ -12596,7 +12973,7 @@ exports.SubscriptionLoggable = SubscriptionLoggable;
 //# sourceMappingURL=SubscriptionLoggable.js.map
 
 /***/ }),
-/* 211 */
+/* 221 */
 /*!******************************************************!*\
   !*** ./node_modules/rxjs/testing/SubscriptionLog.js ***!
   \******************************************************/
@@ -12621,7 +12998,7 @@ exports.SubscriptionLog = SubscriptionLog;
 //# sourceMappingURL=SubscriptionLog.js.map
 
 /***/ }),
-/* 212 */
+/* 222 */
 /*!***********************************************!*\
   !*** ./node_modules/rxjs/util/applyMixins.js ***!
   \***********************************************/
@@ -12646,7 +13023,7 @@ exports.applyMixins = applyMixins;
 //# sourceMappingURL=applyMixins.js.map
 
 /***/ }),
-/* 213 */
+/* 223 */
 /*!*************************************************************!*\
   !*** ./node_modules/rxjs/scheduler/VirtualTimeScheduler.js ***!
   \*************************************************************/
@@ -12665,8 +13042,8 @@ var __extends = undefined && undefined.__extends || function (d, b) {
     }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var AsyncAction_1 = __webpack_require__(/*! ./AsyncAction */ 39);
-var AsyncScheduler_1 = __webpack_require__(/*! ./AsyncScheduler */ 40);
+var AsyncAction_1 = __webpack_require__(/*! ./AsyncAction */ 45);
+var AsyncScheduler_1 = __webpack_require__(/*! ./AsyncScheduler */ 46);
 var VirtualTimeScheduler = function (_super) {
     __extends(VirtualTimeScheduler, _super);
     function VirtualTimeScheduler(SchedulerAction, maxFrames) {
@@ -12786,7 +13163,7 @@ exports.VirtualAction = VirtualAction;
 //# sourceMappingURL=VirtualTimeScheduler.js.map
 
 /***/ }),
-/* 214 */
+/* 224 */
 /*!*************************!*\
   !*** ./client/index.js ***!
   \*************************/
@@ -12797,9 +13174,9 @@ exports.VirtualAction = VirtualAction;
 "use strict";
 
 
-var _react = __webpack_require__(/*! react */ 108);
+var _react = __webpack_require__(/*! react */ 118);
 
-var _connect = __webpack_require__(/*! ./connect */ 215);
+var _connect = __webpack_require__(/*! ./connect */ 225);
 
 var _connect2 = _interopRequireDefault(_connect);
 
@@ -12872,36 +13249,37 @@ var actions = {
 
 var state = Observable.merge(actions.addTodo, actions.toggleTodo, actions.setFilter).startWith(initialState).scan(function (state, fn) {
   return fn(state);
-}).do(function (state) {
+}).distinctUntilChanged(R.equals).do(function (state) {
   console.log("state spy:", state);
   stateCycle.next(state);
-}).distinctUntilChanged().shareReplay(1);
+}).shareReplay(1);
 
 // Derived state should act like normal (instead of some memoized shit), so you can
 // depend on it in actions (unlike so in Redux!)
-var filteredTodos = state.map(function (state) {
-  switch (state.filter) {
-    case "all":
-      return Object.values(state.todos);
-    case "completed":
-      return R.sortBy(function (t) {
-        return t.addedAt;
-      }, R.filter(function (t) {
-        return t.completed;
-      }, Object.values(state.todos)));
-    case "active":
-      return R.sortBy(function (t) {
-        return t.addedAt;
-      }, R.filter(function (t) {
-        return !t.completed;
-      }, Object.values(state.todos)));
-    default:
-      throw Error("Unknown filter: " + state.filter);
-  }
-});
+var derived = {
+  filteredTodos: state.map(function (state) {
+    switch (state.filter) {
+      case "all":
+        return Object.values(state.todos);
+      case "completed":
+        return R.sortBy(function (t) {
+          return t.addedAt;
+        }, R.filter(function (t) {
+          return t.completed;
+        }, Object.values(state.todos)));
+      case "active":
+        return R.sortBy(function (t) {
+          return t.addedAt;
+        }, R.filter(function (t) {
+          return !t.completed;
+        }, Object.values(state.todos)));
+      default:
+        throw Error("Unknown filter: " + state.filter);
+    }
+  })
 
-// Rendering & Events
-var AddTodo = function AddTodo(props) {
+  // Rendering & Events
+};var AddTodo = function AddTodo(props) {
   var input = void 0;
   return React.createElement(
     "div",
@@ -12941,7 +13319,7 @@ var TodoItem = function TodoItem(props) {
   );
 };
 
-var TodoList = (0, _connect2.default)({ todos: filteredTodos }, function (props) {
+var TodoList = (0, _connect2.default)({ todos: derived.filteredTodos }, function (props) {
   return React.createElement(
     "ul",
     null,
@@ -12959,24 +13337,24 @@ var Footer = function Footer(props) {
     " ",
     React.createElement(
       "a",
-      { onClick: function onClick() {
-          return intents.setFilter.next("all");
+      { id: "all", href: "#all", onClick: function onClick(e) {
+          e.preventDefault();intents.setFilter.next("all");
         } },
       "All"
     ),
     ", ",
     React.createElement(
       "a",
-      { onClick: function onClick() {
-          return intents.setFilter.next("active");
+      { id: "active", href: "#active", onClick: function onClick(e) {
+          e.preventDefault();intents.setFilter.next("active");
         } },
       "Active"
     ),
     ", ",
     React.createElement(
       "a",
-      { onClick: function onClick() {
-          return intents.setFilter.next("completed");
+      { id: "completed", href: "#completed", onClick: function onClick(e) {
+          e.preventDefault();intents.setFilter.next("completed");
         } },
       "Completed"
     )
@@ -12996,7 +13374,7 @@ var App = function App(props) {
 ReactDOM.render(React.createElement(App, null), document.getElementById("root"));
 
 /***/ }),
-/* 215 */
+/* 225 */
 /*!***************************!*\
   !*** ./client/connect.js ***!
   \***************************/
@@ -13015,9 +13393,9 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 exports.default = connect;
 
-var _react = __webpack_require__(/*! react */ 108);
+var _react = __webpack_require__(/*! react */ 118);
 
-var _combineLatestObj = __webpack_require__(/*! ./combineLatestObj */ 216);
+var _combineLatestObj = __webpack_require__(/*! ./combineLatestObj */ 226);
 
 var _combineLatestObj2 = _interopRequireDefault(_combineLatestObj);
 
@@ -13071,7 +13449,7 @@ function connect(streamsToProps, ComponentToWrap) {
 }
 
 /***/ }),
-/* 216 */
+/* 226 */
 /*!************************************!*\
   !*** ./client/combineLatestObj.js ***!
   \************************************/
@@ -13084,7 +13462,7 @@ function connect(streamsToProps, ComponentToWrap) {
 
 // a nicer analogy of https://github.com/staltz/combineLatestObj/blob/master/index.js
 
-var R = __webpack_require__(/*! ramda */ 217);
+var R = __webpack_require__(/*! ramda */ 227);
 
 var _require = __webpack_require__(/*! rxjs */ 409),
     Observable = _require.Observable;
@@ -13114,7 +13492,7 @@ function combineLatestObj(obj) {
 module.exports = combineLatestObj;
 
 /***/ }),
-/* 217 */
+/* 227 */
 /*!*******************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/index.js ***!
   \*******************************************************/
@@ -13123,238 +13501,238 @@ module.exports = combineLatestObj;
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports = {
-  F: __webpack_require__(/*! ./src/F */ 218),
-  T: __webpack_require__(/*! ./src/T */ 219),
-  __: __webpack_require__(/*! ./src/__ */ 220),
-  add: __webpack_require__(/*! ./src/add */ 57),
-  addIndex: __webpack_require__(/*! ./src/addIndex */ 221),
-  adjust: __webpack_require__(/*! ./src/adjust */ 109),
-  all: __webpack_require__(/*! ./src/all */ 222),
-  allPass: __webpack_require__(/*! ./src/allPass */ 224),
-  always: __webpack_require__(/*! ./src/always */ 33),
-  and: __webpack_require__(/*! ./src/and */ 113),
-  any: __webpack_require__(/*! ./src/any */ 114),
-  anyPass: __webpack_require__(/*! ./src/anyPass */ 226),
-  ap: __webpack_require__(/*! ./src/ap */ 83),
-  aperture: __webpack_require__(/*! ./src/aperture */ 227),
-  append: __webpack_require__(/*! ./src/append */ 230),
-  apply: __webpack_require__(/*! ./src/apply */ 116),
-  applySpec: __webpack_require__(/*! ./src/applySpec */ 231),
-  ascend: __webpack_require__(/*! ./src/ascend */ 232),
-  assoc: __webpack_require__(/*! ./src/assoc */ 41),
-  assocPath: __webpack_require__(/*! ./src/assocPath */ 84),
-  binary: __webpack_require__(/*! ./src/binary */ 233),
-  bind: __webpack_require__(/*! ./src/bind */ 111),
-  both: __webpack_require__(/*! ./src/both */ 234),
-  call: __webpack_require__(/*! ./src/call */ 235),
-  chain: __webpack_require__(/*! ./src/chain */ 86),
-  clamp: __webpack_require__(/*! ./src/clamp */ 239),
-  clone: __webpack_require__(/*! ./src/clone */ 240),
-  comparator: __webpack_require__(/*! ./src/comparator */ 241),
-  complement: __webpack_require__(/*! ./src/complement */ 242),
-  compose: __webpack_require__(/*! ./src/compose */ 88),
-  composeK: __webpack_require__(/*! ./src/composeK */ 124),
-  composeP: __webpack_require__(/*! ./src/composeP */ 244),
-  concat: __webpack_require__(/*! ./src/concat */ 90),
-  cond: __webpack_require__(/*! ./src/cond */ 253),
-  construct: __webpack_require__(/*! ./src/construct */ 254),
-  constructN: __webpack_require__(/*! ./src/constructN */ 131),
-  contains: __webpack_require__(/*! ./src/contains */ 255),
-  converge: __webpack_require__(/*! ./src/converge */ 132),
-  countBy: __webpack_require__(/*! ./src/countBy */ 256),
-  curry: __webpack_require__(/*! ./src/curry */ 64),
+  F: __webpack_require__(/*! ./src/F */ 228),
+  T: __webpack_require__(/*! ./src/T */ 229),
+  __: __webpack_require__(/*! ./src/__ */ 230),
+  add: __webpack_require__(/*! ./src/add */ 63),
+  addIndex: __webpack_require__(/*! ./src/addIndex */ 231),
+  adjust: __webpack_require__(/*! ./src/adjust */ 90),
+  all: __webpack_require__(/*! ./src/all */ 232),
+  allPass: __webpack_require__(/*! ./src/allPass */ 234),
+  always: __webpack_require__(/*! ./src/always */ 32),
+  and: __webpack_require__(/*! ./src/and */ 120),
+  any: __webpack_require__(/*! ./src/any */ 121),
+  anyPass: __webpack_require__(/*! ./src/anyPass */ 235),
+  ap: __webpack_require__(/*! ./src/ap */ 94),
+  aperture: __webpack_require__(/*! ./src/aperture */ 236),
+  append: __webpack_require__(/*! ./src/append */ 239),
+  apply: __webpack_require__(/*! ./src/apply */ 123),
+  applySpec: __webpack_require__(/*! ./src/applySpec */ 240),
+  ascend: __webpack_require__(/*! ./src/ascend */ 241),
+  assoc: __webpack_require__(/*! ./src/assoc */ 39),
+  assocPath: __webpack_require__(/*! ./src/assocPath */ 95),
+  binary: __webpack_require__(/*! ./src/binary */ 242),
+  bind: __webpack_require__(/*! ./src/bind */ 92),
+  both: __webpack_require__(/*! ./src/both */ 243),
+  call: __webpack_require__(/*! ./src/call */ 244),
+  chain: __webpack_require__(/*! ./src/chain */ 97),
+  clamp: __webpack_require__(/*! ./src/clamp */ 248),
+  clone: __webpack_require__(/*! ./src/clone */ 249),
+  comparator: __webpack_require__(/*! ./src/comparator */ 250),
+  complement: __webpack_require__(/*! ./src/complement */ 251),
+  compose: __webpack_require__(/*! ./src/compose */ 70),
+  composeK: __webpack_require__(/*! ./src/composeK */ 131),
+  composeP: __webpack_require__(/*! ./src/composeP */ 252),
+  concat: __webpack_require__(/*! ./src/concat */ 99),
+  cond: __webpack_require__(/*! ./src/cond */ 257),
+  construct: __webpack_require__(/*! ./src/construct */ 258),
+  constructN: __webpack_require__(/*! ./src/constructN */ 139),
+  contains: __webpack_require__(/*! ./src/contains */ 259),
+  converge: __webpack_require__(/*! ./src/converge */ 140),
+  countBy: __webpack_require__(/*! ./src/countBy */ 260),
+  curry: __webpack_require__(/*! ./src/curry */ 55),
   curryN: __webpack_require__(/*! ./src/curryN */ 15),
-  dec: __webpack_require__(/*! ./src/dec */ 258),
-  descend: __webpack_require__(/*! ./src/descend */ 259),
-  defaultTo: __webpack_require__(/*! ./src/defaultTo */ 133),
-  difference: __webpack_require__(/*! ./src/difference */ 134),
-  differenceWith: __webpack_require__(/*! ./src/differenceWith */ 135),
-  dissoc: __webpack_require__(/*! ./src/dissoc */ 136),
-  dissocPath: __webpack_require__(/*! ./src/dissocPath */ 260),
-  divide: __webpack_require__(/*! ./src/divide */ 261),
-  drop: __webpack_require__(/*! ./src/drop */ 137),
-  dropLast: __webpack_require__(/*! ./src/dropLast */ 263),
-  dropLastWhile: __webpack_require__(/*! ./src/dropLastWhile */ 267),
-  dropRepeats: __webpack_require__(/*! ./src/dropRepeats */ 270),
-  dropRepeatsWith: __webpack_require__(/*! ./src/dropRepeatsWith */ 140),
-  dropWhile: __webpack_require__(/*! ./src/dropWhile */ 271),
-  either: __webpack_require__(/*! ./src/either */ 273),
-  empty: __webpack_require__(/*! ./src/empty */ 143),
-  eqBy: __webpack_require__(/*! ./src/eqBy */ 274),
-  eqProps: __webpack_require__(/*! ./src/eqProps */ 275),
-  equals: __webpack_require__(/*! ./src/equals */ 26),
-  evolve: __webpack_require__(/*! ./src/evolve */ 276),
-  filter: __webpack_require__(/*! ./src/filter */ 91),
-  find: __webpack_require__(/*! ./src/find */ 277),
-  findIndex: __webpack_require__(/*! ./src/findIndex */ 279),
-  findLast: __webpack_require__(/*! ./src/findLast */ 281),
-  findLastIndex: __webpack_require__(/*! ./src/findLastIndex */ 283),
-  flatten: __webpack_require__(/*! ./src/flatten */ 285),
-  flip: __webpack_require__(/*! ./src/flip */ 68),
-  forEach: __webpack_require__(/*! ./src/forEach */ 286),
-  forEachObjIndexed: __webpack_require__(/*! ./src/forEachObjIndexed */ 287),
-  fromPairs: __webpack_require__(/*! ./src/fromPairs */ 288),
-  groupBy: __webpack_require__(/*! ./src/groupBy */ 289),
-  groupWith: __webpack_require__(/*! ./src/groupWith */ 290),
-  gt: __webpack_require__(/*! ./src/gt */ 291),
-  gte: __webpack_require__(/*! ./src/gte */ 292),
-  has: __webpack_require__(/*! ./src/has */ 293),
-  hasIn: __webpack_require__(/*! ./src/hasIn */ 294),
-  head: __webpack_require__(/*! ./src/head */ 295),
-  identical: __webpack_require__(/*! ./src/identical */ 127),
-  identity: __webpack_require__(/*! ./src/identity */ 93),
-  ifElse: __webpack_require__(/*! ./src/ifElse */ 296),
-  inc: __webpack_require__(/*! ./src/inc */ 297),
-  indexBy: __webpack_require__(/*! ./src/indexBy */ 298),
-  indexOf: __webpack_require__(/*! ./src/indexOf */ 299),
-  init: __webpack_require__(/*! ./src/init */ 300),
-  insert: __webpack_require__(/*! ./src/insert */ 301),
-  insertAll: __webpack_require__(/*! ./src/insertAll */ 302),
-  intersection: __webpack_require__(/*! ./src/intersection */ 303),
-  intersectionWith: __webpack_require__(/*! ./src/intersectionWith */ 305),
-  intersperse: __webpack_require__(/*! ./src/intersperse */ 306),
-  into: __webpack_require__(/*! ./src/into */ 307),
-  invert: __webpack_require__(/*! ./src/invert */ 309),
-  invertObj: __webpack_require__(/*! ./src/invertObj */ 310),
-  invoker: __webpack_require__(/*! ./src/invoker */ 52),
-  is: __webpack_require__(/*! ./src/is */ 147),
-  isArrayLike: __webpack_require__(/*! ./src/isArrayLike */ 48),
-  isEmpty: __webpack_require__(/*! ./src/isEmpty */ 311),
-  isNil: __webpack_require__(/*! ./src/isNil */ 312),
-  join: __webpack_require__(/*! ./src/join */ 313),
-  juxt: __webpack_require__(/*! ./src/juxt */ 148),
-  keys: __webpack_require__(/*! ./src/keys */ 24),
-  keysIn: __webpack_require__(/*! ./src/keysIn */ 314),
-  last: __webpack_require__(/*! ./src/last */ 141),
-  lastIndexOf: __webpack_require__(/*! ./src/lastIndexOf */ 315),
-  length: __webpack_require__(/*! ./src/length */ 149),
-  lens: __webpack_require__(/*! ./src/lens */ 70),
-  lensIndex: __webpack_require__(/*! ./src/lensIndex */ 316),
-  lensPath: __webpack_require__(/*! ./src/lensPath */ 317),
-  lensProp: __webpack_require__(/*! ./src/lensProp */ 318),
-  lift: __webpack_require__(/*! ./src/lift */ 63),
-  liftN: __webpack_require__(/*! ./src/liftN */ 118),
-  lt: __webpack_require__(/*! ./src/lt */ 319),
-  lte: __webpack_require__(/*! ./src/lte */ 320),
-  map: __webpack_require__(/*! ./src/map */ 17),
-  mapAccum: __webpack_require__(/*! ./src/mapAccum */ 321),
-  mapAccumRight: __webpack_require__(/*! ./src/mapAccumRight */ 322),
-  mapObjIndexed: __webpack_require__(/*! ./src/mapObjIndexed */ 323),
-  match: __webpack_require__(/*! ./src/match */ 324),
-  mathMod: __webpack_require__(/*! ./src/mathMod */ 325),
-  max: __webpack_require__(/*! ./src/max */ 35),
-  maxBy: __webpack_require__(/*! ./src/maxBy */ 326),
-  mean: __webpack_require__(/*! ./src/mean */ 152),
-  median: __webpack_require__(/*! ./src/median */ 327),
-  memoize: __webpack_require__(/*! ./src/memoize */ 328),
-  merge: __webpack_require__(/*! ./src/merge */ 154),
-  mergeAll: __webpack_require__(/*! ./src/mergeAll */ 329),
-  mergeWith: __webpack_require__(/*! ./src/mergeWith */ 330),
-  mergeWithKey: __webpack_require__(/*! ./src/mergeWithKey */ 155),
-  min: __webpack_require__(/*! ./src/min */ 331),
-  minBy: __webpack_require__(/*! ./src/minBy */ 332),
-  modulo: __webpack_require__(/*! ./src/modulo */ 333),
-  multiply: __webpack_require__(/*! ./src/multiply */ 156),
-  nAry: __webpack_require__(/*! ./src/nAry */ 61),
-  negate: __webpack_require__(/*! ./src/negate */ 334),
-  none: __webpack_require__(/*! ./src/none */ 335),
-  not: __webpack_require__(/*! ./src/not */ 122),
-  nth: __webpack_require__(/*! ./src/nth */ 51),
-  nthArg: __webpack_require__(/*! ./src/nthArg */ 336),
-  objOf: __webpack_require__(/*! ./src/objOf */ 146),
-  of: __webpack_require__(/*! ./src/of */ 337),
-  omit: __webpack_require__(/*! ./src/omit */ 339),
-  once: __webpack_require__(/*! ./src/once */ 340),
-  or: __webpack_require__(/*! ./src/or */ 142),
-  over: __webpack_require__(/*! ./src/over */ 157),
-  pair: __webpack_require__(/*! ./src/pair */ 341),
-  partial: __webpack_require__(/*! ./src/partial */ 342),
-  partialRight: __webpack_require__(/*! ./src/partialRight */ 343),
-  partition: __webpack_require__(/*! ./src/partition */ 344),
-  path: __webpack_require__(/*! ./src/path */ 53),
-  pathEq: __webpack_require__(/*! ./src/pathEq */ 345),
-  pathOr: __webpack_require__(/*! ./src/pathOr */ 346),
-  pathSatisfies: __webpack_require__(/*! ./src/pathSatisfies */ 347),
-  pick: __webpack_require__(/*! ./src/pick */ 348),
-  pickAll: __webpack_require__(/*! ./src/pickAll */ 159),
-  pickBy: __webpack_require__(/*! ./src/pickBy */ 349),
-  pipe: __webpack_require__(/*! ./src/pipe */ 123),
-  pipeK: __webpack_require__(/*! ./src/pipeK */ 350),
-  pipeP: __webpack_require__(/*! ./src/pipeP */ 125),
-  pluck: __webpack_require__(/*! ./src/pluck */ 47),
-  prepend: __webpack_require__(/*! ./src/prepend */ 160),
-  product: __webpack_require__(/*! ./src/product */ 351),
-  project: __webpack_require__(/*! ./src/project */ 352),
-  prop: __webpack_require__(/*! ./src/prop */ 82),
-  propEq: __webpack_require__(/*! ./src/propEq */ 353),
-  propIs: __webpack_require__(/*! ./src/propIs */ 354),
-  propOr: __webpack_require__(/*! ./src/propOr */ 355),
-  propSatisfies: __webpack_require__(/*! ./src/propSatisfies */ 356),
-  props: __webpack_require__(/*! ./src/props */ 357),
-  range: __webpack_require__(/*! ./src/range */ 358),
-  reduce: __webpack_require__(/*! ./src/reduce */ 25),
-  reduceBy: __webpack_require__(/*! ./src/reduceBy */ 67),
-  reduceRight: __webpack_require__(/*! ./src/reduceRight */ 162),
-  reduceWhile: __webpack_require__(/*! ./src/reduceWhile */ 359),
-  reduced: __webpack_require__(/*! ./src/reduced */ 360),
-  reject: __webpack_require__(/*! ./src/reject */ 66),
-  remove: __webpack_require__(/*! ./src/remove */ 361),
-  repeat: __webpack_require__(/*! ./src/repeat */ 362),
-  replace: __webpack_require__(/*! ./src/replace */ 363),
-  reverse: __webpack_require__(/*! ./src/reverse */ 65),
-  scan: __webpack_require__(/*! ./src/scan */ 364),
-  sequence: __webpack_require__(/*! ./src/sequence */ 164),
-  set: __webpack_require__(/*! ./src/set */ 365),
-  slice: __webpack_require__(/*! ./src/slice */ 31),
-  sort: __webpack_require__(/*! ./src/sort */ 366),
-  sortBy: __webpack_require__(/*! ./src/sortBy */ 165),
-  sortWith: __webpack_require__(/*! ./src/sortWith */ 367),
-  split: __webpack_require__(/*! ./src/split */ 368),
-  splitAt: __webpack_require__(/*! ./src/splitAt */ 369),
-  splitEvery: __webpack_require__(/*! ./src/splitEvery */ 370),
-  splitWhen: __webpack_require__(/*! ./src/splitWhen */ 371),
-  subtract: __webpack_require__(/*! ./src/subtract */ 372),
-  sum: __webpack_require__(/*! ./src/sum */ 153),
-  symmetricDifference: __webpack_require__(/*! ./src/symmetricDifference */ 373),
-  symmetricDifferenceWith: __webpack_require__(/*! ./src/symmetricDifferenceWith */ 374),
-  tail: __webpack_require__(/*! ./src/tail */ 89),
-  take: __webpack_require__(/*! ./src/take */ 138),
-  takeLast: __webpack_require__(/*! ./src/takeLast */ 375),
-  takeLastWhile: __webpack_require__(/*! ./src/takeLastWhile */ 376),
-  takeWhile: __webpack_require__(/*! ./src/takeWhile */ 377),
-  tap: __webpack_require__(/*! ./src/tap */ 379),
-  test: __webpack_require__(/*! ./src/test */ 380),
-  times: __webpack_require__(/*! ./src/times */ 163),
-  toLower: __webpack_require__(/*! ./src/toLower */ 382),
-  toPairs: __webpack_require__(/*! ./src/toPairs */ 383),
-  toPairsIn: __webpack_require__(/*! ./src/toPairsIn */ 384),
-  toString: __webpack_require__(/*! ./src/toString */ 50),
-  toUpper: __webpack_require__(/*! ./src/toUpper */ 385),
-  transduce: __webpack_require__(/*! ./src/transduce */ 386),
-  transpose: __webpack_require__(/*! ./src/transpose */ 387),
-  traverse: __webpack_require__(/*! ./src/traverse */ 388),
-  trim: __webpack_require__(/*! ./src/trim */ 389),
-  tryCatch: __webpack_require__(/*! ./src/tryCatch */ 390),
-  type: __webpack_require__(/*! ./src/type */ 87),
-  unapply: __webpack_require__(/*! ./src/unapply */ 391),
-  unary: __webpack_require__(/*! ./src/unary */ 392),
-  uncurryN: __webpack_require__(/*! ./src/uncurryN */ 393),
-  unfold: __webpack_require__(/*! ./src/unfold */ 394),
-  union: __webpack_require__(/*! ./src/union */ 395),
-  unionWith: __webpack_require__(/*! ./src/unionWith */ 396),
-  uniq: __webpack_require__(/*! ./src/uniq */ 95),
-  uniqBy: __webpack_require__(/*! ./src/uniqBy */ 144),
-  uniqWith: __webpack_require__(/*! ./src/uniqWith */ 96),
-  unless: __webpack_require__(/*! ./src/unless */ 397),
-  unnest: __webpack_require__(/*! ./src/unnest */ 398),
-  until: __webpack_require__(/*! ./src/until */ 399),
-  update: __webpack_require__(/*! ./src/update */ 151),
-  useWith: __webpack_require__(/*! ./src/useWith */ 161),
-  values: __webpack_require__(/*! ./src/values */ 117),
-  valuesIn: __webpack_require__(/*! ./src/valuesIn */ 400),
-  view: __webpack_require__(/*! ./src/view */ 401),
+  dec: __webpack_require__(/*! ./src/dec */ 262),
+  descend: __webpack_require__(/*! ./src/descend */ 263),
+  defaultTo: __webpack_require__(/*! ./src/defaultTo */ 141),
+  difference: __webpack_require__(/*! ./src/difference */ 142),
+  differenceWith: __webpack_require__(/*! ./src/differenceWith */ 143),
+  dissoc: __webpack_require__(/*! ./src/dissoc */ 144),
+  dissocPath: __webpack_require__(/*! ./src/dissocPath */ 264),
+  divide: __webpack_require__(/*! ./src/divide */ 265),
+  drop: __webpack_require__(/*! ./src/drop */ 145),
+  dropLast: __webpack_require__(/*! ./src/dropLast */ 267),
+  dropLastWhile: __webpack_require__(/*! ./src/dropLastWhile */ 271),
+  dropRepeats: __webpack_require__(/*! ./src/dropRepeats */ 274),
+  dropRepeatsWith: __webpack_require__(/*! ./src/dropRepeatsWith */ 148),
+  dropWhile: __webpack_require__(/*! ./src/dropWhile */ 275),
+  either: __webpack_require__(/*! ./src/either */ 277),
+  empty: __webpack_require__(/*! ./src/empty */ 151),
+  eqBy: __webpack_require__(/*! ./src/eqBy */ 278),
+  eqProps: __webpack_require__(/*! ./src/eqProps */ 279),
+  equals: __webpack_require__(/*! ./src/equals */ 25),
+  evolve: __webpack_require__(/*! ./src/evolve */ 280),
+  filter: __webpack_require__(/*! ./src/filter */ 73),
+  find: __webpack_require__(/*! ./src/find */ 281),
+  findIndex: __webpack_require__(/*! ./src/findIndex */ 283),
+  findLast: __webpack_require__(/*! ./src/findLast */ 285),
+  findLastIndex: __webpack_require__(/*! ./src/findLastIndex */ 287),
+  flatten: __webpack_require__(/*! ./src/flatten */ 289),
+  flip: __webpack_require__(/*! ./src/flip */ 75),
+  forEach: __webpack_require__(/*! ./src/forEach */ 290),
+  forEachObjIndexed: __webpack_require__(/*! ./src/forEachObjIndexed */ 291),
+  fromPairs: __webpack_require__(/*! ./src/fromPairs */ 292),
+  groupBy: __webpack_require__(/*! ./src/groupBy */ 293),
+  groupWith: __webpack_require__(/*! ./src/groupWith */ 294),
+  gt: __webpack_require__(/*! ./src/gt */ 295),
+  gte: __webpack_require__(/*! ./src/gte */ 296),
+  has: __webpack_require__(/*! ./src/has */ 297),
+  hasIn: __webpack_require__(/*! ./src/hasIn */ 298),
+  head: __webpack_require__(/*! ./src/head */ 299),
+  identical: __webpack_require__(/*! ./src/identical */ 100),
+  identity: __webpack_require__(/*! ./src/identity */ 76),
+  ifElse: __webpack_require__(/*! ./src/ifElse */ 300),
+  inc: __webpack_require__(/*! ./src/inc */ 301),
+  indexBy: __webpack_require__(/*! ./src/indexBy */ 302),
+  indexOf: __webpack_require__(/*! ./src/indexOf */ 303),
+  init: __webpack_require__(/*! ./src/init */ 304),
+  insert: __webpack_require__(/*! ./src/insert */ 305),
+  insertAll: __webpack_require__(/*! ./src/insertAll */ 306),
+  intersection: __webpack_require__(/*! ./src/intersection */ 307),
+  intersectionWith: __webpack_require__(/*! ./src/intersectionWith */ 309),
+  intersperse: __webpack_require__(/*! ./src/intersperse */ 310),
+  into: __webpack_require__(/*! ./src/into */ 311),
+  invert: __webpack_require__(/*! ./src/invert */ 313),
+  invertObj: __webpack_require__(/*! ./src/invertObj */ 314),
+  invoker: __webpack_require__(/*! ./src/invoker */ 58),
+  is: __webpack_require__(/*! ./src/is */ 155),
+  isArrayLike: __webpack_require__(/*! ./src/isArrayLike */ 37),
+  isEmpty: __webpack_require__(/*! ./src/isEmpty */ 315),
+  isNil: __webpack_require__(/*! ./src/isNil */ 316),
+  join: __webpack_require__(/*! ./src/join */ 317),
+  juxt: __webpack_require__(/*! ./src/juxt */ 156),
+  keys: __webpack_require__(/*! ./src/keys */ 21),
+  keysIn: __webpack_require__(/*! ./src/keysIn */ 318),
+  last: __webpack_require__(/*! ./src/last */ 149),
+  lastIndexOf: __webpack_require__(/*! ./src/lastIndexOf */ 319),
+  length: __webpack_require__(/*! ./src/length */ 157),
+  lens: __webpack_require__(/*! ./src/lens */ 41),
+  lensIndex: __webpack_require__(/*! ./src/lensIndex */ 159),
+  lensPath: __webpack_require__(/*! ./src/lensPath */ 320),
+  lensProp: __webpack_require__(/*! ./src/lensProp */ 160),
+  lift: __webpack_require__(/*! ./src/lift */ 68),
+  liftN: __webpack_require__(/*! ./src/liftN */ 125),
+  lt: __webpack_require__(/*! ./src/lt */ 321),
+  lte: __webpack_require__(/*! ./src/lte */ 322),
+  map: __webpack_require__(/*! ./src/map */ 16),
+  mapAccum: __webpack_require__(/*! ./src/mapAccum */ 323),
+  mapAccumRight: __webpack_require__(/*! ./src/mapAccumRight */ 324),
+  mapObjIndexed: __webpack_require__(/*! ./src/mapObjIndexed */ 325),
+  match: __webpack_require__(/*! ./src/match */ 326),
+  mathMod: __webpack_require__(/*! ./src/mathMod */ 327),
+  max: __webpack_require__(/*! ./src/max */ 36),
+  maxBy: __webpack_require__(/*! ./src/maxBy */ 328),
+  mean: __webpack_require__(/*! ./src/mean */ 161),
+  median: __webpack_require__(/*! ./src/median */ 329),
+  memoize: __webpack_require__(/*! ./src/memoize */ 330),
+  merge: __webpack_require__(/*! ./src/merge */ 163),
+  mergeAll: __webpack_require__(/*! ./src/mergeAll */ 331),
+  mergeWith: __webpack_require__(/*! ./src/mergeWith */ 332),
+  mergeWithKey: __webpack_require__(/*! ./src/mergeWithKey */ 164),
+  min: __webpack_require__(/*! ./src/min */ 333),
+  minBy: __webpack_require__(/*! ./src/minBy */ 334),
+  modulo: __webpack_require__(/*! ./src/modulo */ 335),
+  multiply: __webpack_require__(/*! ./src/multiply */ 165),
+  nAry: __webpack_require__(/*! ./src/nAry */ 66),
+  negate: __webpack_require__(/*! ./src/negate */ 336),
+  none: __webpack_require__(/*! ./src/none */ 337),
+  not: __webpack_require__(/*! ./src/not */ 129),
+  nth: __webpack_require__(/*! ./src/nth */ 40),
+  nthArg: __webpack_require__(/*! ./src/nthArg */ 338),
+  objOf: __webpack_require__(/*! ./src/objOf */ 154),
+  of: __webpack_require__(/*! ./src/of */ 339),
+  omit: __webpack_require__(/*! ./src/omit */ 341),
+  once: __webpack_require__(/*! ./src/once */ 342),
+  or: __webpack_require__(/*! ./src/or */ 150),
+  over: __webpack_require__(/*! ./src/over */ 86),
+  pair: __webpack_require__(/*! ./src/pair */ 343),
+  partial: __webpack_require__(/*! ./src/partial */ 344),
+  partialRight: __webpack_require__(/*! ./src/partialRight */ 345),
+  partition: __webpack_require__(/*! ./src/partition */ 346),
+  path: __webpack_require__(/*! ./src/path */ 59),
+  pathEq: __webpack_require__(/*! ./src/pathEq */ 347),
+  pathOr: __webpack_require__(/*! ./src/pathOr */ 348),
+  pathSatisfies: __webpack_require__(/*! ./src/pathSatisfies */ 349),
+  pick: __webpack_require__(/*! ./src/pick */ 350),
+  pickAll: __webpack_require__(/*! ./src/pickAll */ 167),
+  pickBy: __webpack_require__(/*! ./src/pickBy */ 351),
+  pipe: __webpack_require__(/*! ./src/pipe */ 98),
+  pipeK: __webpack_require__(/*! ./src/pipeK */ 352),
+  pipeP: __webpack_require__(/*! ./src/pipeP */ 132),
+  pluck: __webpack_require__(/*! ./src/pluck */ 53),
+  prepend: __webpack_require__(/*! ./src/prepend */ 168),
+  product: __webpack_require__(/*! ./src/product */ 353),
+  project: __webpack_require__(/*! ./src/project */ 354),
+  prop: __webpack_require__(/*! ./src/prop */ 65),
+  propEq: __webpack_require__(/*! ./src/propEq */ 355),
+  propIs: __webpack_require__(/*! ./src/propIs */ 356),
+  propOr: __webpack_require__(/*! ./src/propOr */ 357),
+  propSatisfies: __webpack_require__(/*! ./src/propSatisfies */ 358),
+  props: __webpack_require__(/*! ./src/props */ 359),
+  range: __webpack_require__(/*! ./src/range */ 360),
+  reduce: __webpack_require__(/*! ./src/reduce */ 24),
+  reduceBy: __webpack_require__(/*! ./src/reduceBy */ 74),
+  reduceRight: __webpack_require__(/*! ./src/reduceRight */ 170),
+  reduceWhile: __webpack_require__(/*! ./src/reduceWhile */ 361),
+  reduced: __webpack_require__(/*! ./src/reduced */ 362),
+  reject: __webpack_require__(/*! ./src/reject */ 72),
+  remove: __webpack_require__(/*! ./src/remove */ 363),
+  repeat: __webpack_require__(/*! ./src/repeat */ 364),
+  replace: __webpack_require__(/*! ./src/replace */ 365),
+  reverse: __webpack_require__(/*! ./src/reverse */ 56),
+  scan: __webpack_require__(/*! ./src/scan */ 366),
+  sequence: __webpack_require__(/*! ./src/sequence */ 172),
+  set: __webpack_require__(/*! ./src/set */ 173),
+  slice: __webpack_require__(/*! ./src/slice */ 30),
+  sort: __webpack_require__(/*! ./src/sort */ 367),
+  sortBy: __webpack_require__(/*! ./src/sortBy */ 174),
+  sortWith: __webpack_require__(/*! ./src/sortWith */ 368),
+  split: __webpack_require__(/*! ./src/split */ 369),
+  splitAt: __webpack_require__(/*! ./src/splitAt */ 370),
+  splitEvery: __webpack_require__(/*! ./src/splitEvery */ 371),
+  splitWhen: __webpack_require__(/*! ./src/splitWhen */ 372),
+  subtract: __webpack_require__(/*! ./src/subtract */ 373),
+  sum: __webpack_require__(/*! ./src/sum */ 162),
+  symmetricDifference: __webpack_require__(/*! ./src/symmetricDifference */ 374),
+  symmetricDifferenceWith: __webpack_require__(/*! ./src/symmetricDifferenceWith */ 375),
+  tail: __webpack_require__(/*! ./src/tail */ 71),
+  take: __webpack_require__(/*! ./src/take */ 146),
+  takeLast: __webpack_require__(/*! ./src/takeLast */ 376),
+  takeLastWhile: __webpack_require__(/*! ./src/takeLastWhile */ 377),
+  takeWhile: __webpack_require__(/*! ./src/takeWhile */ 378),
+  tap: __webpack_require__(/*! ./src/tap */ 380),
+  test: __webpack_require__(/*! ./src/test */ 381),
+  times: __webpack_require__(/*! ./src/times */ 171),
+  toLower: __webpack_require__(/*! ./src/toLower */ 383),
+  toPairs: __webpack_require__(/*! ./src/toPairs */ 384),
+  toPairsIn: __webpack_require__(/*! ./src/toPairsIn */ 385),
+  toString: __webpack_require__(/*! ./src/toString */ 57),
+  toUpper: __webpack_require__(/*! ./src/toUpper */ 386),
+  transduce: __webpack_require__(/*! ./src/transduce */ 387),
+  transpose: __webpack_require__(/*! ./src/transpose */ 388),
+  traverse: __webpack_require__(/*! ./src/traverse */ 389),
+  trim: __webpack_require__(/*! ./src/trim */ 390),
+  tryCatch: __webpack_require__(/*! ./src/tryCatch */ 391),
+  type: __webpack_require__(/*! ./src/type */ 69),
+  unapply: __webpack_require__(/*! ./src/unapply */ 392),
+  unary: __webpack_require__(/*! ./src/unary */ 393),
+  uncurryN: __webpack_require__(/*! ./src/uncurryN */ 394),
+  unfold: __webpack_require__(/*! ./src/unfold */ 395),
+  union: __webpack_require__(/*! ./src/union */ 396),
+  unionWith: __webpack_require__(/*! ./src/unionWith */ 397),
+  uniq: __webpack_require__(/*! ./src/uniq */ 104),
+  uniqBy: __webpack_require__(/*! ./src/uniqBy */ 152),
+  uniqWith: __webpack_require__(/*! ./src/uniqWith */ 105),
+  unless: __webpack_require__(/*! ./src/unless */ 398),
+  unnest: __webpack_require__(/*! ./src/unnest */ 399),
+  until: __webpack_require__(/*! ./src/until */ 400),
+  update: __webpack_require__(/*! ./src/update */ 106),
+  useWith: __webpack_require__(/*! ./src/useWith */ 169),
+  values: __webpack_require__(/*! ./src/values */ 124),
+  valuesIn: __webpack_require__(/*! ./src/valuesIn */ 401),
+  view: __webpack_require__(/*! ./src/view */ 175),
   when: __webpack_require__(/*! ./src/when */ 402),
-  where: __webpack_require__(/*! ./src/where */ 166),
+  where: __webpack_require__(/*! ./src/where */ 176),
   whereEq: __webpack_require__(/*! ./src/whereEq */ 403),
   without: __webpack_require__(/*! ./src/without */ 404),
   xprod: __webpack_require__(/*! ./src/xprod */ 405),
@@ -13364,7 +13742,7 @@ module.exports = {
 };
 
 /***/ }),
-/* 218 */
+/* 228 */
 /*!*******************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/F.js ***!
   \*******************************************************/
@@ -13372,7 +13750,7 @@ module.exports = {
 /*! all exports used */
 /***/ (function(module, exports, __webpack_require__) {
 
-var always = __webpack_require__(/*! ./always */ 33);
+var always = __webpack_require__(/*! ./always */ 32);
 
 /**
  * A function that always returns `false`. Any passed in parameters are ignored.
@@ -13392,7 +13770,7 @@ var always = __webpack_require__(/*! ./always */ 33);
 module.exports = always(false);
 
 /***/ }),
-/* 219 */
+/* 229 */
 /*!*******************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/T.js ***!
   \*******************************************************/
@@ -13400,7 +13778,7 @@ module.exports = always(false);
 /*! all exports used */
 /***/ (function(module, exports, __webpack_require__) {
 
-var always = __webpack_require__(/*! ./always */ 33);
+var always = __webpack_require__(/*! ./always */ 32);
 
 /**
  * A function that always returns `true`. Any passed in parameters are ignored.
@@ -13420,7 +13798,7 @@ var always = __webpack_require__(/*! ./always */ 33);
 module.exports = always(true);
 
 /***/ }),
-/* 220 */
+/* 230 */
 /*!********************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/__.js ***!
   \********************************************************/
@@ -13457,7 +13835,7 @@ module.exports = always(true);
 module.exports = { '@@functional/placeholder': true };
 
 /***/ }),
-/* 221 */
+/* 231 */
 /*!**************************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/addIndex.js ***!
   \**************************************************************/
@@ -13465,8 +13843,8 @@ module.exports = { '@@functional/placeholder': true };
 /*! all exports used */
 /***/ (function(module, exports, __webpack_require__) {
 
-var _concat = __webpack_require__(/*! ./internal/_concat */ 21);
-var _curry1 = __webpack_require__(/*! ./internal/_curry1 */ 3);
+var _concat = __webpack_require__(/*! ./internal/_concat */ 20);
+var _curry1 = __webpack_require__(/*! ./internal/_curry1 */ 2);
 var curryN = __webpack_require__(/*! ./curryN */ 15);
 
 /**
@@ -13509,7 +13887,7 @@ module.exports = _curry1(function addIndex(fn) {
 });
 
 /***/ }),
-/* 222 */
+/* 232 */
 /*!*********************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/all.js ***!
   \*********************************************************/
@@ -13518,8 +13896,8 @@ module.exports = _curry1(function addIndex(fn) {
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry2 = __webpack_require__(/*! ./internal/_curry2 */ 1);
-var _dispatchable = __webpack_require__(/*! ./internal/_dispatchable */ 8);
-var _xall = __webpack_require__(/*! ./internal/_xall */ 223);
+var _dispatchable = __webpack_require__(/*! ./internal/_dispatchable */ 7);
+var _xall = __webpack_require__(/*! ./internal/_xall */ 233);
 
 /**
  * Returns `true` if all elements of the list match the predicate, `false` if
@@ -13557,7 +13935,7 @@ module.exports = _curry2(_dispatchable(['all'], _xall, function all(fn, list) {
 }));
 
 /***/ }),
-/* 223 */
+/* 233 */
 /*!********************************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/internal/_xall.js ***!
   \********************************************************************/
@@ -13567,7 +13945,7 @@ module.exports = _curry2(_dispatchable(['all'], _xall, function all(fn, list) {
 
 var _curry2 = __webpack_require__(/*! ./_curry2 */ 1);
 var _reduced = __webpack_require__(/*! ./_reduced */ 29);
-var _xfBase = __webpack_require__(/*! ./_xfBase */ 12);
+var _xfBase = __webpack_require__(/*! ./_xfBase */ 9);
 
 module.exports = function () {
   function XAll(f, xf) {
@@ -13596,7 +13974,7 @@ module.exports = function () {
 }();
 
 /***/ }),
-/* 224 */
+/* 234 */
 /*!*************************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/allPass.js ***!
   \*************************************************************/
@@ -13604,11 +13982,11 @@ module.exports = function () {
 /*! all exports used */
 /***/ (function(module, exports, __webpack_require__) {
 
-var _curry1 = __webpack_require__(/*! ./internal/_curry1 */ 3);
+var _curry1 = __webpack_require__(/*! ./internal/_curry1 */ 2);
 var curryN = __webpack_require__(/*! ./curryN */ 15);
-var max = __webpack_require__(/*! ./max */ 35);
-var pluck = __webpack_require__(/*! ./pluck */ 47);
-var reduce = __webpack_require__(/*! ./reduce */ 25);
+var max = __webpack_require__(/*! ./max */ 36);
+var pluck = __webpack_require__(/*! ./pluck */ 53);
+var reduce = __webpack_require__(/*! ./reduce */ 24);
 
 /**
  * Takes a list of predicates and returns a predicate that returns true for a
@@ -13650,35 +14028,7 @@ module.exports = _curry1(function allPass(preds) {
 });
 
 /***/ }),
-/* 225 */
-/*!********************************************************************!*\
-  !*** /Users/ivankleshnin/node_modules/ramda/src/internal/_xmap.js ***!
-  \********************************************************************/
-/*! no static exports found */
-/*! all exports used */
-/***/ (function(module, exports, __webpack_require__) {
-
-var _curry2 = __webpack_require__(/*! ./_curry2 */ 1);
-var _xfBase = __webpack_require__(/*! ./_xfBase */ 12);
-
-module.exports = function () {
-  function XMap(f, xf) {
-    this.xf = xf;
-    this.f = f;
-  }
-  XMap.prototype['@@transducer/init'] = _xfBase.init;
-  XMap.prototype['@@transducer/result'] = _xfBase.result;
-  XMap.prototype['@@transducer/step'] = function (result, input) {
-    return this.xf['@@transducer/step'](result, this.f(input));
-  };
-
-  return _curry2(function _xmap(f, xf) {
-    return new XMap(f, xf);
-  });
-}();
-
-/***/ }),
-/* 226 */
+/* 235 */
 /*!*************************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/anyPass.js ***!
   \*************************************************************/
@@ -13686,11 +14036,11 @@ module.exports = function () {
 /*! all exports used */
 /***/ (function(module, exports, __webpack_require__) {
 
-var _curry1 = __webpack_require__(/*! ./internal/_curry1 */ 3);
+var _curry1 = __webpack_require__(/*! ./internal/_curry1 */ 2);
 var curryN = __webpack_require__(/*! ./curryN */ 15);
-var max = __webpack_require__(/*! ./max */ 35);
-var pluck = __webpack_require__(/*! ./pluck */ 47);
-var reduce = __webpack_require__(/*! ./reduce */ 25);
+var max = __webpack_require__(/*! ./max */ 36);
+var pluck = __webpack_require__(/*! ./pluck */ 53);
+var reduce = __webpack_require__(/*! ./reduce */ 24);
 
 /**
  * Takes a list of predicates and returns a predicate that returns true for a
@@ -13733,7 +14083,7 @@ module.exports = _curry1(function anyPass(preds) {
 });
 
 /***/ }),
-/* 227 */
+/* 236 */
 /*!**************************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/aperture.js ***!
   \**************************************************************/
@@ -13741,10 +14091,10 @@ module.exports = _curry1(function anyPass(preds) {
 /*! all exports used */
 /***/ (function(module, exports, __webpack_require__) {
 
-var _aperture = __webpack_require__(/*! ./internal/_aperture */ 228);
+var _aperture = __webpack_require__(/*! ./internal/_aperture */ 237);
 var _curry2 = __webpack_require__(/*! ./internal/_curry2 */ 1);
-var _dispatchable = __webpack_require__(/*! ./internal/_dispatchable */ 8);
-var _xaperture = __webpack_require__(/*! ./internal/_xaperture */ 229);
+var _dispatchable = __webpack_require__(/*! ./internal/_dispatchable */ 7);
+var _xaperture = __webpack_require__(/*! ./internal/_xaperture */ 238);
 
 /**
  * Returns a new list, composed of n-tuples of consecutive elements If `n` is
@@ -13770,7 +14120,7 @@ var _xaperture = __webpack_require__(/*! ./internal/_xaperture */ 229);
 module.exports = _curry2(_dispatchable([], _xaperture, _aperture));
 
 /***/ }),
-/* 228 */
+/* 237 */
 /*!************************************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/internal/_aperture.js ***!
   \************************************************************************/
@@ -13790,7 +14140,7 @@ module.exports = function _aperture(n, list) {
 };
 
 /***/ }),
-/* 229 */
+/* 238 */
 /*!*************************************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/internal/_xaperture.js ***!
   \*************************************************************************/
@@ -13798,9 +14148,9 @@ module.exports = function _aperture(n, list) {
 /*! all exports used */
 /***/ (function(module, exports, __webpack_require__) {
 
-var _concat = __webpack_require__(/*! ./_concat */ 21);
+var _concat = __webpack_require__(/*! ./_concat */ 20);
 var _curry2 = __webpack_require__(/*! ./_curry2 */ 1);
-var _xfBase = __webpack_require__(/*! ./_xfBase */ 12);
+var _xfBase = __webpack_require__(/*! ./_xfBase */ 9);
 
 module.exports = function () {
   function XAperture(n, xf) {
@@ -13836,7 +14186,7 @@ module.exports = function () {
 }();
 
 /***/ }),
-/* 230 */
+/* 239 */
 /*!************************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/append.js ***!
   \************************************************************/
@@ -13844,7 +14194,7 @@ module.exports = function () {
 /*! all exports used */
 /***/ (function(module, exports, __webpack_require__) {
 
-var _concat = __webpack_require__(/*! ./internal/_concat */ 21);
+var _concat = __webpack_require__(/*! ./internal/_concat */ 20);
 var _curry2 = __webpack_require__(/*! ./internal/_curry2 */ 1);
 
 /**
@@ -13872,7 +14222,7 @@ module.exports = _curry2(function append(el, list) {
 });
 
 /***/ }),
-/* 231 */
+/* 240 */
 /*!***************************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/applySpec.js ***!
   \***************************************************************/
@@ -13880,14 +14230,14 @@ module.exports = _curry2(function append(el, list) {
 /*! all exports used */
 /***/ (function(module, exports, __webpack_require__) {
 
-var _curry1 = __webpack_require__(/*! ./internal/_curry1 */ 3);
-var apply = __webpack_require__(/*! ./apply */ 116);
+var _curry1 = __webpack_require__(/*! ./internal/_curry1 */ 2);
+var apply = __webpack_require__(/*! ./apply */ 123);
 var curryN = __webpack_require__(/*! ./curryN */ 15);
-var map = __webpack_require__(/*! ./map */ 17);
-var max = __webpack_require__(/*! ./max */ 35);
-var pluck = __webpack_require__(/*! ./pluck */ 47);
-var reduce = __webpack_require__(/*! ./reduce */ 25);
-var values = __webpack_require__(/*! ./values */ 117);
+var map = __webpack_require__(/*! ./map */ 16);
+var max = __webpack_require__(/*! ./max */ 36);
+var pluck = __webpack_require__(/*! ./pluck */ 53);
+var reduce = __webpack_require__(/*! ./reduce */ 24);
+var values = __webpack_require__(/*! ./values */ 124);
 
 /**
  * Given a spec object recursively mapping properties to functions, creates a
@@ -13927,7 +14277,7 @@ module.exports = _curry1(function applySpec(spec) {
 });
 
 /***/ }),
-/* 232 */
+/* 241 */
 /*!************************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/ascend.js ***!
   \************************************************************/
@@ -13965,7 +14315,7 @@ module.exports = _curry3(function ascend(fn, a, b) {
 });
 
 /***/ }),
-/* 233 */
+/* 242 */
 /*!************************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/binary.js ***!
   \************************************************************/
@@ -13973,8 +14323,8 @@ module.exports = _curry3(function ascend(fn, a, b) {
 /*! all exports used */
 /***/ (function(module, exports, __webpack_require__) {
 
-var _curry1 = __webpack_require__(/*! ./internal/_curry1 */ 3);
-var nAry = __webpack_require__(/*! ./nAry */ 61);
+var _curry1 = __webpack_require__(/*! ./internal/_curry1 */ 2);
+var nAry = __webpack_require__(/*! ./nAry */ 66);
 
 /**
  * Wraps a function of any arity (including nullary) in a function that accepts
@@ -14008,7 +14358,7 @@ module.exports = _curry1(function binary(fn) {
 });
 
 /***/ }),
-/* 234 */
+/* 243 */
 /*!**********************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/both.js ***!
   \**********************************************************/
@@ -14017,9 +14367,9 @@ module.exports = _curry1(function binary(fn) {
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry2 = __webpack_require__(/*! ./internal/_curry2 */ 1);
-var _isFunction = __webpack_require__(/*! ./internal/_isFunction */ 62);
-var and = __webpack_require__(/*! ./and */ 113);
-var lift = __webpack_require__(/*! ./lift */ 63);
+var _isFunction = __webpack_require__(/*! ./internal/_isFunction */ 67);
+var and = __webpack_require__(/*! ./and */ 120);
+var lift = __webpack_require__(/*! ./lift */ 68);
 
 /**
  * A function which calls the two provided functions and returns the `&&`
@@ -14056,7 +14406,7 @@ module.exports = _curry2(function both(f, g) {
 });
 
 /***/ }),
-/* 235 */
+/* 244 */
 /*!**********************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/call.js ***!
   \**********************************************************/
@@ -14064,7 +14414,7 @@ module.exports = _curry2(function both(f, g) {
 /*! all exports used */
 /***/ (function(module, exports, __webpack_require__) {
 
-var curry = __webpack_require__(/*! ./curry */ 64);
+var curry = __webpack_require__(/*! ./curry */ 55);
 
 /**
  * Returns the result of calling its first argument with the remaining
@@ -14102,7 +14452,7 @@ module.exports = curry(function call(fn) {
 });
 
 /***/ }),
-/* 236 */
+/* 245 */
 /*!**********************************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/internal/_xchain.js ***!
   \**********************************************************************/
@@ -14111,15 +14461,15 @@ module.exports = curry(function call(fn) {
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry2 = __webpack_require__(/*! ./_curry2 */ 1);
-var _flatCat = __webpack_require__(/*! ./_flatCat */ 237);
-var map = __webpack_require__(/*! ../map */ 17);
+var _flatCat = __webpack_require__(/*! ./_flatCat */ 246);
+var map = __webpack_require__(/*! ../map */ 16);
 
 module.exports = _curry2(function _xchain(f, xf) {
   return map(f, _flatCat(xf));
 });
 
 /***/ }),
-/* 237 */
+/* 246 */
 /*!***********************************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/internal/_flatCat.js ***!
   \***********************************************************************/
@@ -14127,10 +14477,10 @@ module.exports = _curry2(function _xchain(f, xf) {
 /*! all exports used */
 /***/ (function(module, exports, __webpack_require__) {
 
-var _forceReduced = __webpack_require__(/*! ./_forceReduced */ 238);
-var _reduce = __webpack_require__(/*! ./_reduce */ 18);
-var _xfBase = __webpack_require__(/*! ./_xfBase */ 12);
-var isArrayLike = __webpack_require__(/*! ../isArrayLike */ 48);
+var _forceReduced = __webpack_require__(/*! ./_forceReduced */ 247);
+var _reduce = __webpack_require__(/*! ./_reduce */ 17);
+var _xfBase = __webpack_require__(/*! ./_xfBase */ 9);
+var isArrayLike = __webpack_require__(/*! ../isArrayLike */ 37);
 
 module.exports = function () {
   var preservingReduced = function (xf) {
@@ -14161,7 +14511,7 @@ module.exports = function () {
 }();
 
 /***/ }),
-/* 238 */
+/* 247 */
 /*!****************************************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/internal/_forceReduced.js ***!
   \****************************************************************************/
@@ -14177,7 +14527,7 @@ module.exports = function _forceReduced(x) {
 };
 
 /***/ }),
-/* 239 */
+/* 248 */
 /*!***********************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/clamp.js ***!
   \***********************************************************/
@@ -14215,7 +14565,7 @@ module.exports = _curry3(function clamp(min, max, value) {
 });
 
 /***/ }),
-/* 240 */
+/* 249 */
 /*!***********************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/clone.js ***!
   \***********************************************************/
@@ -14223,8 +14573,8 @@ module.exports = _curry3(function clamp(min, max, value) {
 /*! all exports used */
 /***/ (function(module, exports, __webpack_require__) {
 
-var _clone = __webpack_require__(/*! ./internal/_clone */ 120);
-var _curry1 = __webpack_require__(/*! ./internal/_curry1 */ 3);
+var _clone = __webpack_require__(/*! ./internal/_clone */ 127);
+var _curry1 = __webpack_require__(/*! ./internal/_curry1 */ 2);
 
 /**
  * Creates a deep copy of the value which may contain (nested) `Array`s and
@@ -14252,7 +14602,7 @@ module.exports = _curry1(function clone(value) {
 });
 
 /***/ }),
-/* 241 */
+/* 250 */
 /*!****************************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/comparator.js ***!
   \****************************************************************/
@@ -14260,7 +14610,7 @@ module.exports = _curry1(function clone(value) {
 /*! all exports used */
 /***/ (function(module, exports, __webpack_require__) {
 
-var _curry1 = __webpack_require__(/*! ./internal/_curry1 */ 3);
+var _curry1 = __webpack_require__(/*! ./internal/_curry1 */ 2);
 
 /**
  * Makes a comparator function out of a function that reports whether the first
@@ -14289,7 +14639,7 @@ module.exports = _curry1(function comparator(pred) {
 });
 
 /***/ }),
-/* 242 */
+/* 251 */
 /*!****************************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/complement.js ***!
   \****************************************************************/
@@ -14297,8 +14647,8 @@ module.exports = _curry1(function comparator(pred) {
 /*! all exports used */
 /***/ (function(module, exports, __webpack_require__) {
 
-var lift = __webpack_require__(/*! ./lift */ 63);
-var not = __webpack_require__(/*! ./not */ 122);
+var lift = __webpack_require__(/*! ./lift */ 68);
+var not = __webpack_require__(/*! ./not */ 129);
 
 /**
  * Takes a function `f` and returns a function `g` such that if called with the same arguments
@@ -14325,22 +14675,7 @@ var not = __webpack_require__(/*! ./not */ 122);
 module.exports = lift(not);
 
 /***/ }),
-/* 243 */
-/*!********************************************************************!*\
-  !*** /Users/ivankleshnin/node_modules/ramda/src/internal/_pipe.js ***!
-  \********************************************************************/
-/*! no static exports found */
-/*! all exports used */
-/***/ (function(module, exports) {
-
-module.exports = function _pipe(f, g) {
-  return function () {
-    return g.call(this, f.apply(this, arguments));
-  };
-};
-
-/***/ }),
-/* 244 */
+/* 252 */
 /*!**************************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/composeP.js ***!
   \**************************************************************/
@@ -14348,8 +14683,8 @@ module.exports = function _pipe(f, g) {
 /*! all exports used */
 /***/ (function(module, exports, __webpack_require__) {
 
-var pipeP = __webpack_require__(/*! ./pipeP */ 125);
-var reverse = __webpack_require__(/*! ./reverse */ 65);
+var pipeP = __webpack_require__(/*! ./pipeP */ 132);
+var reverse = __webpack_require__(/*! ./reverse */ 56);
 
 /**
  * Performs right-to-left composition of one or more Promise-returning
@@ -14393,7 +14728,7 @@ module.exports = function composeP() {
 };
 
 /***/ }),
-/* 245 */
+/* 253 */
 /*!*********************************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/internal/_pipeP.js ***!
   \*********************************************************************/
@@ -14411,7 +14746,7 @@ module.exports = function _pipeP(f, g) {
 };
 
 /***/ }),
-/* 246 */
+/* 254 */
 /*!************************************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/internal/_toString.js ***!
   \************************************************************************/
@@ -14419,12 +14754,12 @@ module.exports = function _pipeP(f, g) {
 /*! all exports used */
 /***/ (function(module, exports, __webpack_require__) {
 
-var _contains = __webpack_require__(/*! ./_contains */ 32);
-var _map = __webpack_require__(/*! ./_map */ 59);
-var _quote = __webpack_require__(/*! ./_quote */ 250);
-var _toISOString = __webpack_require__(/*! ./_toISOString */ 251);
-var keys = __webpack_require__(/*! ../keys */ 24);
-var reject = __webpack_require__(/*! ../reject */ 66);
+var _contains = __webpack_require__(/*! ./_contains */ 33);
+var _map = __webpack_require__(/*! ./_map */ 54);
+var _quote = __webpack_require__(/*! ./_quote */ 255);
+var _toISOString = __webpack_require__(/*! ./_toISOString */ 256);
+var keys = __webpack_require__(/*! ../keys */ 21);
+var reject = __webpack_require__(/*! ../reject */ 72);
 
 module.exports = function _toString(x, seen) {
   var recur = function recur(y) {
@@ -14471,151 +14806,7 @@ module.exports = function _toString(x, seen) {
 };
 
 /***/ }),
-/* 247 */
-/*!**********************************************************************!*\
-  !*** /Users/ivankleshnin/node_modules/ramda/src/internal/_equals.js ***!
-  \**********************************************************************/
-/*! no static exports found */
-/*! all exports used */
-/***/ (function(module, exports, __webpack_require__) {
-
-var _arrayFromIterator = __webpack_require__(/*! ./_arrayFromIterator */ 248);
-var _functionName = __webpack_require__(/*! ./_functionName */ 249);
-var _has = __webpack_require__(/*! ./_has */ 14);
-var identical = __webpack_require__(/*! ../identical */ 127);
-var keys = __webpack_require__(/*! ../keys */ 24);
-var type = __webpack_require__(/*! ../type */ 87);
-
-module.exports = function _equals(a, b, stackA, stackB) {
-  if (identical(a, b)) {
-    return true;
-  }
-
-  if (type(a) !== type(b)) {
-    return false;
-  }
-
-  if (a == null || b == null) {
-    return false;
-  }
-
-  if (typeof a.equals === 'function' || typeof b.equals === 'function') {
-    return typeof a.equals === 'function' && a.equals(b) && typeof b.equals === 'function' && b.equals(a);
-  }
-
-  switch (type(a)) {
-    case 'Arguments':
-    case 'Array':
-    case 'Object':
-      if (typeof a.constructor === 'function' && _functionName(a.constructor) === 'Promise') {
-        return a === b;
-      }
-      break;
-    case 'Boolean':
-    case 'Number':
-    case 'String':
-      if (!(typeof a === typeof b && identical(a.valueOf(), b.valueOf()))) {
-        return false;
-      }
-      break;
-    case 'Date':
-      if (!identical(a.valueOf(), b.valueOf())) {
-        return false;
-      }
-      break;
-    case 'Error':
-      return a.name === b.name && a.message === b.message;
-    case 'RegExp':
-      if (!(a.source === b.source && a.global === b.global && a.ignoreCase === b.ignoreCase && a.multiline === b.multiline && a.sticky === b.sticky && a.unicode === b.unicode)) {
-        return false;
-      }
-      break;
-    case 'Map':
-    case 'Set':
-      if (!_equals(_arrayFromIterator(a.entries()), _arrayFromIterator(b.entries()), stackA, stackB)) {
-        return false;
-      }
-      break;
-    case 'Int8Array':
-    case 'Uint8Array':
-    case 'Uint8ClampedArray':
-    case 'Int16Array':
-    case 'Uint16Array':
-    case 'Int32Array':
-    case 'Uint32Array':
-    case 'Float32Array':
-    case 'Float64Array':
-      break;
-    case 'ArrayBuffer':
-      break;
-    default:
-      // Values of other types are only equal if identical.
-      return false;
-  }
-
-  var keysA = keys(a);
-  if (keysA.length !== keys(b).length) {
-    return false;
-  }
-
-  var idx = stackA.length - 1;
-  while (idx >= 0) {
-    if (stackA[idx] === a) {
-      return stackB[idx] === b;
-    }
-    idx -= 1;
-  }
-
-  stackA.push(a);
-  stackB.push(b);
-  idx = keysA.length - 1;
-  while (idx >= 0) {
-    var key = keysA[idx];
-    if (!(_has(key, b) && _equals(b[key], a[key], stackA, stackB))) {
-      return false;
-    }
-    idx -= 1;
-  }
-  stackA.pop();
-  stackB.pop();
-  return true;
-};
-
-/***/ }),
-/* 248 */
-/*!*********************************************************************************!*\
-  !*** /Users/ivankleshnin/node_modules/ramda/src/internal/_arrayFromIterator.js ***!
-  \*********************************************************************************/
-/*! no static exports found */
-/*! all exports used */
-/***/ (function(module, exports) {
-
-module.exports = function _arrayFromIterator(iter) {
-  var list = [];
-  var next;
-  while (!(next = iter.next()).done) {
-    list.push(next.value);
-  }
-  return list;
-};
-
-/***/ }),
-/* 249 */
-/*!****************************************************************************!*\
-  !*** /Users/ivankleshnin/node_modules/ramda/src/internal/_functionName.js ***!
-  \****************************************************************************/
-/*! no static exports found */
-/*! all exports used */
-/***/ (function(module, exports) {
-
-module.exports = function _functionName(f) {
-  // String(x => x) evaluates to "x => x", so the pattern may not match.
-  var match = String(f).match(/^function (\w*)/);
-  return match == null ? '' : match[1];
-};
-
-/***/ }),
-/* 250 */
+/* 255 */
 /*!*********************************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/internal/_quote.js ***!
   \*********************************************************************/
@@ -14631,7 +14822,7 @@ module.exports = function _quote(s) {
 };
 
 /***/ }),
-/* 251 */
+/* 256 */
 /*!***************************************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/internal/_toISOString.js ***!
   \***************************************************************************/
@@ -14655,35 +14846,7 @@ module.exports = function () {
 }();
 
 /***/ }),
-/* 252 */
-/*!***********************************************************************!*\
-  !*** /Users/ivankleshnin/node_modules/ramda/src/internal/_xfilter.js ***!
-  \***********************************************************************/
-/*! no static exports found */
-/*! all exports used */
-/***/ (function(module, exports, __webpack_require__) {
-
-var _curry2 = __webpack_require__(/*! ./_curry2 */ 1);
-var _xfBase = __webpack_require__(/*! ./_xfBase */ 12);
-
-module.exports = function () {
-  function XFilter(f, xf) {
-    this.xf = xf;
-    this.f = f;
-  }
-  XFilter.prototype['@@transducer/init'] = _xfBase.init;
-  XFilter.prototype['@@transducer/result'] = _xfBase.result;
-  XFilter.prototype['@@transducer/step'] = function (result, input) {
-    return this.f(input) ? this.xf['@@transducer/step'](result, input) : result;
-  };
-
-  return _curry2(function _xfilter(f, xf) {
-    return new XFilter(f, xf);
-  });
-}();
-
-/***/ }),
-/* 253 */
+/* 257 */
 /*!**********************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/cond.js ***!
   \**********************************************************/
@@ -14691,11 +14854,11 @@ module.exports = function () {
 /*! all exports used */
 /***/ (function(module, exports, __webpack_require__) {
 
-var _arity = __webpack_require__(/*! ./internal/_arity */ 23);
-var _curry1 = __webpack_require__(/*! ./internal/_curry1 */ 3);
-var map = __webpack_require__(/*! ./map */ 17);
-var max = __webpack_require__(/*! ./max */ 35);
-var reduce = __webpack_require__(/*! ./reduce */ 25);
+var _arity = __webpack_require__(/*! ./internal/_arity */ 19);
+var _curry1 = __webpack_require__(/*! ./internal/_curry1 */ 2);
+var map = __webpack_require__(/*! ./map */ 16);
+var max = __webpack_require__(/*! ./max */ 36);
+var reduce = __webpack_require__(/*! ./reduce */ 24);
 
 /**
  * Returns a function, `fn`, which encapsulates `if/else, if/else, ...` logic.
@@ -14739,7 +14902,7 @@ module.exports = _curry1(function cond(pairs) {
 });
 
 /***/ }),
-/* 254 */
+/* 258 */
 /*!***************************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/construct.js ***!
   \***************************************************************/
@@ -14747,8 +14910,8 @@ module.exports = _curry1(function cond(pairs) {
 /*! all exports used */
 /***/ (function(module, exports, __webpack_require__) {
 
-var _curry1 = __webpack_require__(/*! ./internal/_curry1 */ 3);
-var constructN = __webpack_require__(/*! ./constructN */ 131);
+var _curry1 = __webpack_require__(/*! ./internal/_curry1 */ 2);
+var constructN = __webpack_require__(/*! ./constructN */ 139);
 
 /**
  * Wraps a constructor function inside a curried function that can be called
@@ -14786,7 +14949,7 @@ module.exports = _curry1(function construct(Fn) {
 });
 
 /***/ }),
-/* 255 */
+/* 259 */
 /*!**************************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/contains.js ***!
   \**************************************************************/
@@ -14794,7 +14957,7 @@ module.exports = _curry1(function construct(Fn) {
 /*! all exports used */
 /***/ (function(module, exports, __webpack_require__) {
 
-var _contains = __webpack_require__(/*! ./internal/_contains */ 32);
+var _contains = __webpack_require__(/*! ./internal/_contains */ 33);
 var _curry2 = __webpack_require__(/*! ./internal/_curry2 */ 1);
 
 /**
@@ -14820,7 +14983,7 @@ var _curry2 = __webpack_require__(/*! ./internal/_curry2 */ 1);
 module.exports = _curry2(_contains);
 
 /***/ }),
-/* 256 */
+/* 260 */
 /*!*************************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/countBy.js ***!
   \*************************************************************/
@@ -14828,7 +14991,7 @@ module.exports = _curry2(_contains);
 /*! all exports used */
 /***/ (function(module, exports, __webpack_require__) {
 
-var reduceBy = __webpack_require__(/*! ./reduceBy */ 67);
+var reduceBy = __webpack_require__(/*! ./reduceBy */ 74);
 
 /**
  * Counts the elements of a list according to how many match each value of a
@@ -14859,7 +15022,7 @@ module.exports = reduceBy(function (acc, elem) {
 }, 0);
 
 /***/ }),
-/* 257 */
+/* 261 */
 /*!*************************************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/internal/_xreduceBy.js ***!
   \*************************************************************************/
@@ -14867,9 +15030,9 @@ module.exports = reduceBy(function (acc, elem) {
 /*! all exports used */
 /***/ (function(module, exports, __webpack_require__) {
 
-var _curryN = __webpack_require__(/*! ./_curryN */ 58);
+var _curryN = __webpack_require__(/*! ./_curryN */ 52);
 var _has = __webpack_require__(/*! ./_has */ 14);
-var _xfBase = __webpack_require__(/*! ./_xfBase */ 12);
+var _xfBase = __webpack_require__(/*! ./_xfBase */ 9);
 
 module.exports = function () {
   function XReduceBy(valueFn, valueAcc, keyFn, xf) {
@@ -14907,7 +15070,7 @@ module.exports = function () {
 }();
 
 /***/ }),
-/* 258 */
+/* 262 */
 /*!*********************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/dec.js ***!
   \*********************************************************/
@@ -14915,7 +15078,7 @@ module.exports = function () {
 /*! all exports used */
 /***/ (function(module, exports, __webpack_require__) {
 
-var add = __webpack_require__(/*! ./add */ 57);
+var add = __webpack_require__(/*! ./add */ 63);
 
 /**
  * Decrements its argument.
@@ -14935,7 +15098,7 @@ var add = __webpack_require__(/*! ./add */ 57);
 module.exports = add(-1);
 
 /***/ }),
-/* 259 */
+/* 263 */
 /*!*************************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/descend.js ***!
   \*************************************************************/
@@ -14973,7 +15136,7 @@ module.exports = _curry3(function descend(fn, a, b) {
 });
 
 /***/ }),
-/* 260 */
+/* 264 */
 /*!****************************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/dissocPath.js ***!
   \****************************************************************/
@@ -14982,8 +15145,8 @@ module.exports = _curry3(function descend(fn, a, b) {
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry2 = __webpack_require__(/*! ./internal/_curry2 */ 1);
-var assoc = __webpack_require__(/*! ./assoc */ 41);
-var dissoc = __webpack_require__(/*! ./dissoc */ 136);
+var assoc = __webpack_require__(/*! ./assoc */ 39);
+var dissoc = __webpack_require__(/*! ./dissoc */ 144);
 
 /**
  * Makes a shallow clone of an object, omitting the property at the given path.
@@ -15017,7 +15180,7 @@ module.exports = _curry2(function dissocPath(path, obj) {
 });
 
 /***/ }),
-/* 261 */
+/* 265 */
 /*!************************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/divide.js ***!
   \************************************************************/
@@ -15054,7 +15217,7 @@ module.exports = _curry2(function divide(a, b) {
 });
 
 /***/ }),
-/* 262 */
+/* 266 */
 /*!*********************************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/internal/_xdrop.js ***!
   \*********************************************************************/
@@ -15063,7 +15226,7 @@ module.exports = _curry2(function divide(a, b) {
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry2 = __webpack_require__(/*! ./_curry2 */ 1);
-var _xfBase = __webpack_require__(/*! ./_xfBase */ 12);
+var _xfBase = __webpack_require__(/*! ./_xfBase */ 9);
 
 module.exports = function () {
   function XDrop(n, xf) {
@@ -15086,7 +15249,7 @@ module.exports = function () {
 }();
 
 /***/ }),
-/* 263 */
+/* 267 */
 /*!**************************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/dropLast.js ***!
   \**************************************************************/
@@ -15095,9 +15258,9 @@ module.exports = function () {
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry2 = __webpack_require__(/*! ./internal/_curry2 */ 1);
-var _dispatchable = __webpack_require__(/*! ./internal/_dispatchable */ 8);
-var _dropLast = __webpack_require__(/*! ./internal/_dropLast */ 264);
-var _xdropLast = __webpack_require__(/*! ./internal/_xdropLast */ 266);
+var _dispatchable = __webpack_require__(/*! ./internal/_dispatchable */ 7);
+var _dropLast = __webpack_require__(/*! ./internal/_dropLast */ 268);
+var _xdropLast = __webpack_require__(/*! ./internal/_xdropLast */ 270);
 
 /**
  * Returns a list containing all but the last `n` elements of the given `list`.
@@ -15123,7 +15286,7 @@ var _xdropLast = __webpack_require__(/*! ./internal/_xdropLast */ 266);
 module.exports = _curry2(_dispatchable([], _xdropLast, _dropLast));
 
 /***/ }),
-/* 264 */
+/* 268 */
 /*!************************************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/internal/_dropLast.js ***!
   \************************************************************************/
@@ -15131,14 +15294,14 @@ module.exports = _curry2(_dispatchable([], _xdropLast, _dropLast));
 /*! all exports used */
 /***/ (function(module, exports, __webpack_require__) {
 
-var take = __webpack_require__(/*! ../take */ 138);
+var take = __webpack_require__(/*! ../take */ 146);
 
 module.exports = function dropLast(n, xs) {
   return take(n < xs.length ? xs.length - n : 0, xs);
 };
 
 /***/ }),
-/* 265 */
+/* 269 */
 /*!*********************************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/internal/_xtake.js ***!
   \*********************************************************************/
@@ -15148,7 +15311,7 @@ module.exports = function dropLast(n, xs) {
 
 var _curry2 = __webpack_require__(/*! ./_curry2 */ 1);
 var _reduced = __webpack_require__(/*! ./_reduced */ 29);
-var _xfBase = __webpack_require__(/*! ./_xfBase */ 12);
+var _xfBase = __webpack_require__(/*! ./_xfBase */ 9);
 
 module.exports = function () {
   function XTake(n, xf) {
@@ -15170,7 +15333,7 @@ module.exports = function () {
 }();
 
 /***/ }),
-/* 266 */
+/* 270 */
 /*!*************************************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/internal/_xdropLast.js ***!
   \*************************************************************************/
@@ -15179,7 +15342,7 @@ module.exports = function () {
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry2 = __webpack_require__(/*! ./_curry2 */ 1);
-var _xfBase = __webpack_require__(/*! ./_xfBase */ 12);
+var _xfBase = __webpack_require__(/*! ./_xfBase */ 9);
 
 module.exports = function () {
   function XDropLast(n, xf) {
@@ -15215,7 +15378,7 @@ module.exports = function () {
 }();
 
 /***/ }),
-/* 267 */
+/* 271 */
 /*!*******************************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/dropLastWhile.js ***!
   \*******************************************************************/
@@ -15224,9 +15387,9 @@ module.exports = function () {
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry2 = __webpack_require__(/*! ./internal/_curry2 */ 1);
-var _dispatchable = __webpack_require__(/*! ./internal/_dispatchable */ 8);
-var _dropLastWhile = __webpack_require__(/*! ./internal/_dropLastWhile */ 268);
-var _xdropLastWhile = __webpack_require__(/*! ./internal/_xdropLastWhile */ 269);
+var _dispatchable = __webpack_require__(/*! ./internal/_dispatchable */ 7);
+var _dropLastWhile = __webpack_require__(/*! ./internal/_dropLastWhile */ 272);
+var _xdropLastWhile = __webpack_require__(/*! ./internal/_xdropLastWhile */ 273);
 
 /**
  * Returns a new list excluding all the tailing elements of a given list which
@@ -15253,7 +15416,7 @@ var _xdropLastWhile = __webpack_require__(/*! ./internal/_xdropLastWhile */ 269)
 module.exports = _curry2(_dispatchable([], _xdropLastWhile, _dropLastWhile));
 
 /***/ }),
-/* 268 */
+/* 272 */
 /*!*****************************************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/internal/_dropLastWhile.js ***!
   \*****************************************************************************/
@@ -15270,7 +15433,7 @@ module.exports = function dropLastWhile(pred, list) {
 };
 
 /***/ }),
-/* 269 */
+/* 273 */
 /*!******************************************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/internal/_xdropLastWhile.js ***!
   \******************************************************************************/
@@ -15279,8 +15442,8 @@ module.exports = function dropLastWhile(pred, list) {
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry2 = __webpack_require__(/*! ./_curry2 */ 1);
-var _reduce = __webpack_require__(/*! ./_reduce */ 18);
-var _xfBase = __webpack_require__(/*! ./_xfBase */ 12);
+var _reduce = __webpack_require__(/*! ./_reduce */ 17);
+var _xfBase = __webpack_require__(/*! ./_xfBase */ 9);
 
 module.exports = function () {
   function XDropLastWhile(fn, xf) {
@@ -15312,7 +15475,7 @@ module.exports = function () {
 }();
 
 /***/ }),
-/* 270 */
+/* 274 */
 /*!*****************************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/dropRepeats.js ***!
   \*****************************************************************/
@@ -15320,11 +15483,11 @@ module.exports = function () {
 /*! all exports used */
 /***/ (function(module, exports, __webpack_require__) {
 
-var _curry1 = __webpack_require__(/*! ./internal/_curry1 */ 3);
-var _dispatchable = __webpack_require__(/*! ./internal/_dispatchable */ 8);
-var _xdropRepeatsWith = __webpack_require__(/*! ./internal/_xdropRepeatsWith */ 139);
-var dropRepeatsWith = __webpack_require__(/*! ./dropRepeatsWith */ 140);
-var equals = __webpack_require__(/*! ./equals */ 26);
+var _curry1 = __webpack_require__(/*! ./internal/_curry1 */ 2);
+var _dispatchable = __webpack_require__(/*! ./internal/_dispatchable */ 7);
+var _xdropRepeatsWith = __webpack_require__(/*! ./internal/_xdropRepeatsWith */ 147);
+var dropRepeatsWith = __webpack_require__(/*! ./dropRepeatsWith */ 148);
+var equals = __webpack_require__(/*! ./equals */ 25);
 
 /**
  * Returns a new list without any consecutively repeating elements. `R.equals`
@@ -15347,7 +15510,7 @@ var equals = __webpack_require__(/*! ./equals */ 26);
 module.exports = _curry1(_dispatchable([], _xdropRepeatsWith(equals), dropRepeatsWith(equals)));
 
 /***/ }),
-/* 271 */
+/* 275 */
 /*!***************************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/dropWhile.js ***!
   \***************************************************************/
@@ -15356,8 +15519,8 @@ module.exports = _curry1(_dispatchable([], _xdropRepeatsWith(equals), dropRepeat
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry2 = __webpack_require__(/*! ./internal/_curry2 */ 1);
-var _dispatchable = __webpack_require__(/*! ./internal/_dispatchable */ 8);
-var _xdropWhile = __webpack_require__(/*! ./internal/_xdropWhile */ 272);
+var _dispatchable = __webpack_require__(/*! ./internal/_dispatchable */ 7);
+var _xdropWhile = __webpack_require__(/*! ./internal/_xdropWhile */ 276);
 
 /**
  * Returns a new list excluding the leading elements of a given list which
@@ -15394,7 +15557,7 @@ module.exports = _curry2(_dispatchable(['dropWhile'], _xdropWhile, function drop
 }));
 
 /***/ }),
-/* 272 */
+/* 276 */
 /*!**************************************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/internal/_xdropWhile.js ***!
   \**************************************************************************/
@@ -15403,7 +15566,7 @@ module.exports = _curry2(_dispatchable(['dropWhile'], _xdropWhile, function drop
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry2 = __webpack_require__(/*! ./_curry2 */ 1);
-var _xfBase = __webpack_require__(/*! ./_xfBase */ 12);
+var _xfBase = __webpack_require__(/*! ./_xfBase */ 9);
 
 module.exports = function () {
   function XDropWhile(f, xf) {
@@ -15428,7 +15591,7 @@ module.exports = function () {
 }();
 
 /***/ }),
-/* 273 */
+/* 277 */
 /*!************************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/either.js ***!
   \************************************************************/
@@ -15437,9 +15600,9 @@ module.exports = function () {
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry2 = __webpack_require__(/*! ./internal/_curry2 */ 1);
-var _isFunction = __webpack_require__(/*! ./internal/_isFunction */ 62);
-var lift = __webpack_require__(/*! ./lift */ 63);
-var or = __webpack_require__(/*! ./or */ 142);
+var _isFunction = __webpack_require__(/*! ./internal/_isFunction */ 67);
+var lift = __webpack_require__(/*! ./lift */ 68);
+var or = __webpack_require__(/*! ./or */ 150);
 
 /**
  * A function wrapping calls to the two functions in an `||` operation,
@@ -15475,7 +15638,7 @@ module.exports = _curry2(function either(f, g) {
 });
 
 /***/ }),
-/* 274 */
+/* 278 */
 /*!**********************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/eqBy.js ***!
   \**********************************************************/
@@ -15484,7 +15647,7 @@ module.exports = _curry2(function either(f, g) {
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry3 = __webpack_require__(/*! ./internal/_curry3 */ 4);
-var equals = __webpack_require__(/*! ./equals */ 26);
+var equals = __webpack_require__(/*! ./equals */ 25);
 
 /**
  * Takes a function and two values in its domain and returns `true` if the
@@ -15508,7 +15671,7 @@ module.exports = _curry3(function eqBy(f, x, y) {
 });
 
 /***/ }),
-/* 275 */
+/* 279 */
 /*!*************************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/eqProps.js ***!
   \*************************************************************/
@@ -15517,7 +15680,7 @@ module.exports = _curry3(function eqBy(f, x, y) {
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry3 = __webpack_require__(/*! ./internal/_curry3 */ 4);
-var equals = __webpack_require__(/*! ./equals */ 26);
+var equals = __webpack_require__(/*! ./equals */ 25);
 
 /**
  * Reports whether two objects have the same value, in `R.equals` terms, for
@@ -15545,7 +15708,7 @@ module.exports = _curry3(function eqProps(prop, obj1, obj2) {
 });
 
 /***/ }),
-/* 276 */
+/* 280 */
 /*!************************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/evolve.js ***!
   \************************************************************/
@@ -15594,7 +15757,7 @@ module.exports = _curry2(function evolve(transformations, object) {
 });
 
 /***/ }),
-/* 277 */
+/* 281 */
 /*!**********************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/find.js ***!
   \**********************************************************/
@@ -15603,8 +15766,8 @@ module.exports = _curry2(function evolve(transformations, object) {
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry2 = __webpack_require__(/*! ./internal/_curry2 */ 1);
-var _dispatchable = __webpack_require__(/*! ./internal/_dispatchable */ 8);
-var _xfind = __webpack_require__(/*! ./internal/_xfind */ 278);
+var _dispatchable = __webpack_require__(/*! ./internal/_dispatchable */ 7);
+var _xfind = __webpack_require__(/*! ./internal/_xfind */ 282);
 
 /**
  * Returns the first element of the list which matches the predicate, or
@@ -15642,7 +15805,7 @@ module.exports = _curry2(_dispatchable(['find'], _xfind, function find(fn, list)
 }));
 
 /***/ }),
-/* 278 */
+/* 282 */
 /*!*********************************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/internal/_xfind.js ***!
   \*********************************************************************/
@@ -15652,7 +15815,7 @@ module.exports = _curry2(_dispatchable(['find'], _xfind, function find(fn, list)
 
 var _curry2 = __webpack_require__(/*! ./_curry2 */ 1);
 var _reduced = __webpack_require__(/*! ./_reduced */ 29);
-var _xfBase = __webpack_require__(/*! ./_xfBase */ 12);
+var _xfBase = __webpack_require__(/*! ./_xfBase */ 9);
 
 module.exports = function () {
   function XFind(f, xf) {
@@ -15681,7 +15844,7 @@ module.exports = function () {
 }();
 
 /***/ }),
-/* 279 */
+/* 283 */
 /*!***************************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/findIndex.js ***!
   \***************************************************************/
@@ -15690,8 +15853,8 @@ module.exports = function () {
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry2 = __webpack_require__(/*! ./internal/_curry2 */ 1);
-var _dispatchable = __webpack_require__(/*! ./internal/_dispatchable */ 8);
-var _xfindIndex = __webpack_require__(/*! ./internal/_xfindIndex */ 280);
+var _dispatchable = __webpack_require__(/*! ./internal/_dispatchable */ 7);
+var _xfindIndex = __webpack_require__(/*! ./internal/_xfindIndex */ 284);
 
 /**
  * Returns the index of the first element of the list which matches the
@@ -15728,7 +15891,7 @@ module.exports = _curry2(_dispatchable([], _xfindIndex, function findIndex(fn, l
 }));
 
 /***/ }),
-/* 280 */
+/* 284 */
 /*!**************************************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/internal/_xfindIndex.js ***!
   \**************************************************************************/
@@ -15738,7 +15901,7 @@ module.exports = _curry2(_dispatchable([], _xfindIndex, function findIndex(fn, l
 
 var _curry2 = __webpack_require__(/*! ./_curry2 */ 1);
 var _reduced = __webpack_require__(/*! ./_reduced */ 29);
-var _xfBase = __webpack_require__(/*! ./_xfBase */ 12);
+var _xfBase = __webpack_require__(/*! ./_xfBase */ 9);
 
 module.exports = function () {
   function XFindIndex(f, xf) {
@@ -15769,7 +15932,7 @@ module.exports = function () {
 }();
 
 /***/ }),
-/* 281 */
+/* 285 */
 /*!**************************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/findLast.js ***!
   \**************************************************************/
@@ -15778,8 +15941,8 @@ module.exports = function () {
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry2 = __webpack_require__(/*! ./internal/_curry2 */ 1);
-var _dispatchable = __webpack_require__(/*! ./internal/_dispatchable */ 8);
-var _xfindLast = __webpack_require__(/*! ./internal/_xfindLast */ 282);
+var _dispatchable = __webpack_require__(/*! ./internal/_dispatchable */ 7);
+var _xfindLast = __webpack_require__(/*! ./internal/_xfindLast */ 286);
 
 /**
  * Returns the last element of the list which matches the predicate, or
@@ -15814,7 +15977,7 @@ module.exports = _curry2(_dispatchable([], _xfindLast, function findLast(fn, lis
 }));
 
 /***/ }),
-/* 282 */
+/* 286 */
 /*!*************************************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/internal/_xfindLast.js ***!
   \*************************************************************************/
@@ -15823,7 +15986,7 @@ module.exports = _curry2(_dispatchable([], _xfindLast, function findLast(fn, lis
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry2 = __webpack_require__(/*! ./_curry2 */ 1);
-var _xfBase = __webpack_require__(/*! ./_xfBase */ 12);
+var _xfBase = __webpack_require__(/*! ./_xfBase */ 9);
 
 module.exports = function () {
   function XFindLast(f, xf) {
@@ -15847,7 +16010,7 @@ module.exports = function () {
 }();
 
 /***/ }),
-/* 283 */
+/* 287 */
 /*!*******************************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/findLastIndex.js ***!
   \*******************************************************************/
@@ -15856,8 +16019,8 @@ module.exports = function () {
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry2 = __webpack_require__(/*! ./internal/_curry2 */ 1);
-var _dispatchable = __webpack_require__(/*! ./internal/_dispatchable */ 8);
-var _xfindLastIndex = __webpack_require__(/*! ./internal/_xfindLastIndex */ 284);
+var _dispatchable = __webpack_require__(/*! ./internal/_dispatchable */ 7);
+var _xfindLastIndex = __webpack_require__(/*! ./internal/_xfindLastIndex */ 288);
 
 /**
  * Returns the index of the last element of the list which matches the
@@ -15893,7 +16056,7 @@ module.exports = _curry2(_dispatchable([], _xfindLastIndex, function findLastInd
 }));
 
 /***/ }),
-/* 284 */
+/* 288 */
 /*!******************************************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/internal/_xfindLastIndex.js ***!
   \******************************************************************************/
@@ -15902,7 +16065,7 @@ module.exports = _curry2(_dispatchable([], _xfindLastIndex, function findLastInd
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry2 = __webpack_require__(/*! ./_curry2 */ 1);
-var _xfBase = __webpack_require__(/*! ./_xfBase */ 12);
+var _xfBase = __webpack_require__(/*! ./_xfBase */ 9);
 
 module.exports = function () {
   function XFindLastIndex(f, xf) {
@@ -15929,7 +16092,7 @@ module.exports = function () {
 }();
 
 /***/ }),
-/* 285 */
+/* 289 */
 /*!*************************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/flatten.js ***!
   \*************************************************************/
@@ -15937,8 +16100,8 @@ module.exports = function () {
 /*! all exports used */
 /***/ (function(module, exports, __webpack_require__) {
 
-var _curry1 = __webpack_require__(/*! ./internal/_curry1 */ 3);
-var _makeFlat = __webpack_require__(/*! ./internal/_makeFlat */ 119);
+var _curry1 = __webpack_require__(/*! ./internal/_curry1 */ 2);
+var _makeFlat = __webpack_require__(/*! ./internal/_makeFlat */ 126);
 
 /**
  * Returns a new list by pulling every item out of it (and all its sub-arrays)
@@ -15960,7 +16123,7 @@ var _makeFlat = __webpack_require__(/*! ./internal/_makeFlat */ 119);
 module.exports = _curry1(_makeFlat(true));
 
 /***/ }),
-/* 286 */
+/* 290 */
 /*!*************************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/forEach.js ***!
   \*************************************************************/
@@ -15968,7 +16131,7 @@ module.exports = _curry1(_makeFlat(true));
 /*! all exports used */
 /***/ (function(module, exports, __webpack_require__) {
 
-var _checkForMethod = __webpack_require__(/*! ./internal/_checkForMethod */ 49);
+var _checkForMethod = __webpack_require__(/*! ./internal/_checkForMethod */ 35);
 var _curry2 = __webpack_require__(/*! ./internal/_curry2 */ 1);
 
 /**
@@ -16016,7 +16179,7 @@ module.exports = _curry2(_checkForMethod('forEach', function forEach(fn, list) {
 }));
 
 /***/ }),
-/* 287 */
+/* 291 */
 /*!***********************************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/forEachObjIndexed.js ***!
   \***********************************************************************/
@@ -16025,7 +16188,7 @@ module.exports = _curry2(_checkForMethod('forEach', function forEach(fn, list) {
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry2 = __webpack_require__(/*! ./internal/_curry2 */ 1);
-var keys = __webpack_require__(/*! ./keys */ 24);
+var keys = __webpack_require__(/*! ./keys */ 21);
 
 /**
  * Iterate over an input `object`, calling a provided function `fn` for each
@@ -16061,7 +16224,7 @@ module.exports = _curry2(function forEachObjIndexed(fn, obj) {
 });
 
 /***/ }),
-/* 288 */
+/* 292 */
 /*!***************************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/fromPairs.js ***!
   \***************************************************************/
@@ -16069,7 +16232,7 @@ module.exports = _curry2(function forEachObjIndexed(fn, obj) {
 /*! all exports used */
 /***/ (function(module, exports, __webpack_require__) {
 
-var _curry1 = __webpack_require__(/*! ./internal/_curry1 */ 3);
+var _curry1 = __webpack_require__(/*! ./internal/_curry1 */ 2);
 
 /**
  * Creates a new object from a list key-value pairs. If a key appears in
@@ -16098,7 +16261,7 @@ module.exports = _curry1(function fromPairs(pairs) {
 });
 
 /***/ }),
-/* 289 */
+/* 293 */
 /*!*************************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/groupBy.js ***!
   \*************************************************************/
@@ -16106,9 +16269,9 @@ module.exports = _curry1(function fromPairs(pairs) {
 /*! all exports used */
 /***/ (function(module, exports, __webpack_require__) {
 
-var _checkForMethod = __webpack_require__(/*! ./internal/_checkForMethod */ 49);
+var _checkForMethod = __webpack_require__(/*! ./internal/_checkForMethod */ 35);
 var _curry2 = __webpack_require__(/*! ./internal/_curry2 */ 1);
-var reduceBy = __webpack_require__(/*! ./reduceBy */ 67);
+var reduceBy = __webpack_require__(/*! ./reduceBy */ 74);
 
 /**
  * Splits a list into sub-lists stored in an object, based on the result of
@@ -16159,7 +16322,7 @@ module.exports = _curry2(_checkForMethod('groupBy', reduceBy(function (acc, item
 }, null)));
 
 /***/ }),
-/* 290 */
+/* 294 */
 /*!***************************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/groupWith.js ***!
   \***************************************************************/
@@ -16211,7 +16374,7 @@ module.exports = _curry2(function (fn, list) {
 });
 
 /***/ }),
-/* 291 */
+/* 295 */
 /*!********************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/gt.js ***!
   \********************************************************/
@@ -16247,7 +16410,7 @@ module.exports = _curry2(function gt(a, b) {
 });
 
 /***/ }),
-/* 292 */
+/* 296 */
 /*!*********************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/gte.js ***!
   \*********************************************************/
@@ -16283,7 +16446,7 @@ module.exports = _curry2(function gte(a, b) {
 });
 
 /***/ }),
-/* 293 */
+/* 297 */
 /*!*********************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/has.js ***!
   \*********************************************************/
@@ -16321,7 +16484,7 @@ var _has = __webpack_require__(/*! ./internal/_has */ 14);
 module.exports = _curry2(_has);
 
 /***/ }),
-/* 294 */
+/* 298 */
 /*!***********************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/hasIn.js ***!
   \***********************************************************/
@@ -16362,7 +16525,7 @@ module.exports = _curry2(function hasIn(prop, obj) {
 });
 
 /***/ }),
-/* 295 */
+/* 299 */
 /*!**********************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/head.js ***!
   \**********************************************************/
@@ -16370,7 +16533,7 @@ module.exports = _curry2(function hasIn(prop, obj) {
 /*! all exports used */
 /***/ (function(module, exports, __webpack_require__) {
 
-var nth = __webpack_require__(/*! ./nth */ 51);
+var nth = __webpack_require__(/*! ./nth */ 40);
 
 /**
  * Returns the first element of the given list or string. In some libraries
@@ -16396,7 +16559,7 @@ var nth = __webpack_require__(/*! ./nth */ 51);
 module.exports = nth(0);
 
 /***/ }),
-/* 296 */
+/* 300 */
 /*!************************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/ifElse.js ***!
   \************************************************************/
@@ -16439,7 +16602,7 @@ module.exports = _curry3(function ifElse(condition, onTrue, onFalse) {
 });
 
 /***/ }),
-/* 297 */
+/* 301 */
 /*!*********************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/inc.js ***!
   \*********************************************************/
@@ -16447,7 +16610,7 @@ module.exports = _curry3(function ifElse(condition, onTrue, onFalse) {
 /*! all exports used */
 /***/ (function(module, exports, __webpack_require__) {
 
-var add = __webpack_require__(/*! ./add */ 57);
+var add = __webpack_require__(/*! ./add */ 63);
 
 /**
  * Increments its argument.
@@ -16467,7 +16630,7 @@ var add = __webpack_require__(/*! ./add */ 57);
 module.exports = add(1);
 
 /***/ }),
-/* 298 */
+/* 302 */
 /*!*************************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/indexBy.js ***!
   \*************************************************************/
@@ -16475,7 +16638,7 @@ module.exports = add(1);
 /*! all exports used */
 /***/ (function(module, exports, __webpack_require__) {
 
-var reduceBy = __webpack_require__(/*! ./reduceBy */ 67);
+var reduceBy = __webpack_require__(/*! ./reduceBy */ 74);
 
 /**
  * Given a function that generates a key, turns a list of objects into an
@@ -16504,7 +16667,7 @@ module.exports = reduceBy(function (acc, elem) {
 }, null);
 
 /***/ }),
-/* 299 */
+/* 303 */
 /*!*************************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/indexOf.js ***!
   \*************************************************************/
@@ -16513,8 +16676,8 @@ module.exports = reduceBy(function (acc, elem) {
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry2 = __webpack_require__(/*! ./internal/_curry2 */ 1);
-var _indexOf = __webpack_require__(/*! ./internal/_indexOf */ 126);
-var _isArray = __webpack_require__(/*! ./internal/_isArray */ 28);
+var _indexOf = __webpack_require__(/*! ./internal/_indexOf */ 133);
+var _isArray = __webpack_require__(/*! ./internal/_isArray */ 27);
 
 /**
  * Returns the position of the first occurrence of an item in an array, or -1
@@ -16540,7 +16703,7 @@ module.exports = _curry2(function indexOf(target, xs) {
 });
 
 /***/ }),
-/* 300 */
+/* 304 */
 /*!**********************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/init.js ***!
   \**********************************************************/
@@ -16548,7 +16711,7 @@ module.exports = _curry2(function indexOf(target, xs) {
 /*! all exports used */
 /***/ (function(module, exports, __webpack_require__) {
 
-var slice = __webpack_require__(/*! ./slice */ 31);
+var slice = __webpack_require__(/*! ./slice */ 30);
 
 /**
  * Returns all but the last element of the given list or string.
@@ -16577,7 +16740,7 @@ var slice = __webpack_require__(/*! ./slice */ 31);
 module.exports = slice(0, -1);
 
 /***/ }),
-/* 301 */
+/* 305 */
 /*!************************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/insert.js ***!
   \************************************************************/
@@ -16613,7 +16776,7 @@ module.exports = _curry3(function insert(idx, elt, list) {
 });
 
 /***/ }),
-/* 302 */
+/* 306 */
 /*!***************************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/insertAll.js ***!
   \***************************************************************/
@@ -16647,7 +16810,7 @@ module.exports = _curry3(function insertAll(idx, elts, list) {
 });
 
 /***/ }),
-/* 303 */
+/* 307 */
 /*!******************************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/intersection.js ***!
   \******************************************************************/
@@ -16655,11 +16818,11 @@ module.exports = _curry3(function insertAll(idx, elts, list) {
 /*! all exports used */
 /***/ (function(module, exports, __webpack_require__) {
 
-var _contains = __webpack_require__(/*! ./internal/_contains */ 32);
+var _contains = __webpack_require__(/*! ./internal/_contains */ 33);
 var _curry2 = __webpack_require__(/*! ./internal/_curry2 */ 1);
-var _filter = __webpack_require__(/*! ./internal/_filter */ 129);
-var flip = __webpack_require__(/*! ./flip */ 68);
-var uniq = __webpack_require__(/*! ./uniq */ 95);
+var _filter = __webpack_require__(/*! ./internal/_filter */ 101);
+var flip = __webpack_require__(/*! ./flip */ 75);
+var uniq = __webpack_require__(/*! ./uniq */ 104);
 
 /**
  * Combines two lists into a set (i.e. no duplicates) composed of those
@@ -16691,7 +16854,7 @@ module.exports = _curry2(function intersection(list1, list2) {
 });
 
 /***/ }),
-/* 304 */
+/* 308 */
 /*!*******************************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/internal/_Set.js ***!
   \*******************************************************************/
@@ -16699,7 +16862,7 @@ module.exports = _curry2(function intersection(list1, list2) {
 /*! all exports used */
 /***/ (function(module, exports, __webpack_require__) {
 
-var _contains = __webpack_require__(/*! ./_contains */ 32);
+var _contains = __webpack_require__(/*! ./_contains */ 33);
 
 // A simple Set type that honours R.equals semantics
 module.exports = function () {
@@ -16871,7 +17034,7 @@ module.exports = function () {
 }();
 
 /***/ }),
-/* 305 */
+/* 309 */
 /*!**********************************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/intersectionWith.js ***!
   \**********************************************************************/
@@ -16879,9 +17042,9 @@ module.exports = function () {
 /*! all exports used */
 /***/ (function(module, exports, __webpack_require__) {
 
-var _containsWith = __webpack_require__(/*! ./internal/_containsWith */ 92);
+var _containsWith = __webpack_require__(/*! ./internal/_containsWith */ 103);
 var _curry3 = __webpack_require__(/*! ./internal/_curry3 */ 4);
-var uniqWith = __webpack_require__(/*! ./uniqWith */ 96);
+var uniqWith = __webpack_require__(/*! ./uniqWith */ 105);
 
 /**
  * Combines two lists into a set (i.e. no duplicates) composed of those
@@ -16939,7 +17102,7 @@ module.exports = _curry3(function intersectionWith(pred, list1, list2) {
 });
 
 /***/ }),
-/* 306 */
+/* 310 */
 /*!*****************************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/intersperse.js ***!
   \*****************************************************************/
@@ -16947,7 +17110,7 @@ module.exports = _curry3(function intersectionWith(pred, list1, list2) {
 /*! all exports used */
 /***/ (function(module, exports, __webpack_require__) {
 
-var _checkForMethod = __webpack_require__(/*! ./internal/_checkForMethod */ 49);
+var _checkForMethod = __webpack_require__(/*! ./internal/_checkForMethod */ 35);
 var _curry2 = __webpack_require__(/*! ./internal/_curry2 */ 1);
 
 /**
@@ -16983,7 +17146,7 @@ module.exports = _curry2(_checkForMethod('intersperse', function intersperse(sep
 }));
 
 /***/ }),
-/* 307 */
+/* 311 */
 /*!**********************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/into.js ***!
   \**********************************************************/
@@ -16991,11 +17154,11 @@ module.exports = _curry2(_checkForMethod('intersperse', function intersperse(sep
 /*! all exports used */
 /***/ (function(module, exports, __webpack_require__) {
 
-var _clone = __webpack_require__(/*! ./internal/_clone */ 120);
+var _clone = __webpack_require__(/*! ./internal/_clone */ 127);
 var _curry3 = __webpack_require__(/*! ./internal/_curry3 */ 4);
-var _isTransformer = __webpack_require__(/*! ./internal/_isTransformer */ 81);
-var _reduce = __webpack_require__(/*! ./internal/_reduce */ 18);
-var _stepCat = __webpack_require__(/*! ./internal/_stepCat */ 308);
+var _isTransformer = __webpack_require__(/*! ./internal/_isTransformer */ 64);
+var _reduce = __webpack_require__(/*! ./internal/_reduce */ 17);
+var _stepCat = __webpack_require__(/*! ./internal/_stepCat */ 312);
 
 /**
  * Transforms the items of the list with the transducer and appends the
@@ -17039,7 +17202,7 @@ module.exports = _curry3(function into(acc, xf, list) {
 });
 
 /***/ }),
-/* 308 */
+/* 312 */
 /*!***********************************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/internal/_stepCat.js ***!
   \***********************************************************************/
@@ -17047,11 +17210,11 @@ module.exports = _curry3(function into(acc, xf, list) {
 /*! all exports used */
 /***/ (function(module, exports, __webpack_require__) {
 
-var _assign = __webpack_require__(/*! ./_assign */ 69);
-var _identity = __webpack_require__(/*! ./_identity */ 94);
-var _isTransformer = __webpack_require__(/*! ./_isTransformer */ 81);
-var isArrayLike = __webpack_require__(/*! ../isArrayLike */ 48);
-var objOf = __webpack_require__(/*! ../objOf */ 146);
+var _assign = __webpack_require__(/*! ./_assign */ 78);
+var _identity = __webpack_require__(/*! ./_identity */ 77);
+var _isTransformer = __webpack_require__(/*! ./_isTransformer */ 64);
+var isArrayLike = __webpack_require__(/*! ../isArrayLike */ 37);
+var objOf = __webpack_require__(/*! ../objOf */ 154);
 
 module.exports = function () {
   var _stepCatArray = {
@@ -17095,7 +17258,7 @@ module.exports = function () {
 }();
 
 /***/ }),
-/* 309 */
+/* 313 */
 /*!************************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/invert.js ***!
   \************************************************************/
@@ -17103,9 +17266,9 @@ module.exports = function () {
 /*! all exports used */
 /***/ (function(module, exports, __webpack_require__) {
 
-var _curry1 = __webpack_require__(/*! ./internal/_curry1 */ 3);
+var _curry1 = __webpack_require__(/*! ./internal/_curry1 */ 2);
 var _has = __webpack_require__(/*! ./internal/_has */ 14);
-var keys = __webpack_require__(/*! ./keys */ 24);
+var keys = __webpack_require__(/*! ./keys */ 21);
 
 /**
  * Same as R.invertObj, however this accounts for objects with duplicate values
@@ -17146,7 +17309,7 @@ module.exports = _curry1(function invert(obj) {
 });
 
 /***/ }),
-/* 310 */
+/* 314 */
 /*!***************************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/invertObj.js ***!
   \***************************************************************/
@@ -17154,8 +17317,8 @@ module.exports = _curry1(function invert(obj) {
 /*! all exports used */
 /***/ (function(module, exports, __webpack_require__) {
 
-var _curry1 = __webpack_require__(/*! ./internal/_curry1 */ 3);
-var keys = __webpack_require__(/*! ./keys */ 24);
+var _curry1 = __webpack_require__(/*! ./internal/_curry1 */ 2);
+var keys = __webpack_require__(/*! ./keys */ 21);
 
 /**
  * Returns a new object with the keys of the given object as values, and the
@@ -17198,7 +17361,7 @@ module.exports = _curry1(function invertObj(obj) {
 });
 
 /***/ }),
-/* 311 */
+/* 315 */
 /*!*************************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/isEmpty.js ***!
   \*************************************************************/
@@ -17206,9 +17369,9 @@ module.exports = _curry1(function invertObj(obj) {
 /*! all exports used */
 /***/ (function(module, exports, __webpack_require__) {
 
-var _curry1 = __webpack_require__(/*! ./internal/_curry1 */ 3);
-var empty = __webpack_require__(/*! ./empty */ 143);
-var equals = __webpack_require__(/*! ./equals */ 26);
+var _curry1 = __webpack_require__(/*! ./internal/_curry1 */ 2);
+var empty = __webpack_require__(/*! ./empty */ 151);
+var equals = __webpack_require__(/*! ./equals */ 25);
 
 /**
  * Returns `true` if the given value is its type's empty value; `false`
@@ -17236,7 +17399,7 @@ module.exports = _curry1(function isEmpty(x) {
 });
 
 /***/ }),
-/* 312 */
+/* 316 */
 /*!***********************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/isNil.js ***!
   \***********************************************************/
@@ -17244,7 +17407,7 @@ module.exports = _curry1(function isEmpty(x) {
 /*! all exports used */
 /***/ (function(module, exports, __webpack_require__) {
 
-var _curry1 = __webpack_require__(/*! ./internal/_curry1 */ 3);
+var _curry1 = __webpack_require__(/*! ./internal/_curry1 */ 2);
 
 /**
  * Checks if the input value is `null` or `undefined`.
@@ -17268,7 +17431,7 @@ module.exports = _curry1(function isNil(x) {
 });
 
 /***/ }),
-/* 313 */
+/* 317 */
 /*!**********************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/join.js ***!
   \**********************************************************/
@@ -17276,7 +17439,7 @@ module.exports = _curry1(function isNil(x) {
 /*! all exports used */
 /***/ (function(module, exports, __webpack_require__) {
 
-var invoker = __webpack_require__(/*! ./invoker */ 52);
+var invoker = __webpack_require__(/*! ./invoker */ 58);
 
 /**
  * Returns a string made by inserting the `separator` between each element and
@@ -17300,7 +17463,7 @@ var invoker = __webpack_require__(/*! ./invoker */ 52);
 module.exports = invoker(1, 'join');
 
 /***/ }),
-/* 314 */
+/* 318 */
 /*!************************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/keysIn.js ***!
   \************************************************************/
@@ -17308,7 +17471,7 @@ module.exports = invoker(1, 'join');
 /*! all exports used */
 /***/ (function(module, exports, __webpack_require__) {
 
-var _curry1 = __webpack_require__(/*! ./internal/_curry1 */ 3);
+var _curry1 = __webpack_require__(/*! ./internal/_curry1 */ 2);
 
 /**
  * Returns a list containing the names of all the properties of the supplied
@@ -17340,7 +17503,7 @@ module.exports = _curry1(function keysIn(obj) {
 });
 
 /***/ }),
-/* 315 */
+/* 319 */
 /*!*****************************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/lastIndexOf.js ***!
   \*****************************************************************/
@@ -17349,8 +17512,8 @@ module.exports = _curry1(function keysIn(obj) {
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry2 = __webpack_require__(/*! ./internal/_curry2 */ 1);
-var _isArray = __webpack_require__(/*! ./internal/_isArray */ 28);
-var equals = __webpack_require__(/*! ./equals */ 26);
+var _isArray = __webpack_require__(/*! ./internal/_isArray */ 27);
+var equals = __webpack_require__(/*! ./equals */ 25);
 
 /**
  * Returns the position of the last occurrence of an item in an array, or -1 if
@@ -17387,45 +17550,7 @@ module.exports = _curry2(function lastIndexOf(target, xs) {
 });
 
 /***/ }),
-/* 316 */
-/*!***************************************************************!*\
-  !*** /Users/ivankleshnin/node_modules/ramda/src/lensIndex.js ***!
-  \***************************************************************/
-/*! no static exports found */
-/*! all exports used */
-/***/ (function(module, exports, __webpack_require__) {
-
-var _curry1 = __webpack_require__(/*! ./internal/_curry1 */ 3);
-var lens = __webpack_require__(/*! ./lens */ 70);
-var nth = __webpack_require__(/*! ./nth */ 51);
-var update = __webpack_require__(/*! ./update */ 151);
-
-/**
- * Returns a lens whose focus is the specified index.
- *
- * @func
- * @memberOf R
- * @since v0.14.0
- * @category Object
- * @typedefn Lens s a = Functor f => (a -> f a) -> s -> f s
- * @sig Number -> Lens s a
- * @param {Number} n
- * @return {Lens}
- * @see R.view, R.set, R.over
- * @example
- *
- *      var headLens = R.lensIndex(0);
- *
- *      R.view(headLens, ['a', 'b', 'c']);            //=> 'a'
- *      R.set(headLens, 'x', ['a', 'b', 'c']);        //=> ['x', 'b', 'c']
- *      R.over(headLens, R.toUpper, ['a', 'b', 'c']); //=> ['A', 'b', 'c']
- */
-module.exports = _curry1(function lensIndex(n) {
-  return lens(nth(n), update(n));
-});
-
-/***/ }),
-/* 317 */
+/* 320 */
 /*!**************************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/lensPath.js ***!
   \**************************************************************/
@@ -17433,10 +17558,10 @@ module.exports = _curry1(function lensIndex(n) {
 /*! all exports used */
 /***/ (function(module, exports, __webpack_require__) {
 
-var _curry1 = __webpack_require__(/*! ./internal/_curry1 */ 3);
-var assocPath = __webpack_require__(/*! ./assocPath */ 84);
-var lens = __webpack_require__(/*! ./lens */ 70);
-var path = __webpack_require__(/*! ./path */ 53);
+var _curry1 = __webpack_require__(/*! ./internal/_curry1 */ 2);
+var assocPath = __webpack_require__(/*! ./assocPath */ 95);
+var lens = __webpack_require__(/*! ./lens */ 41);
+var path = __webpack_require__(/*! ./path */ 59);
 
 /**
  * Returns a lens whose focus is the specified path.
@@ -17467,45 +17592,7 @@ module.exports = _curry1(function lensPath(p) {
 });
 
 /***/ }),
-/* 318 */
-/*!**************************************************************!*\
-  !*** /Users/ivankleshnin/node_modules/ramda/src/lensProp.js ***!
-  \**************************************************************/
-/*! no static exports found */
-/*! all exports used */
-/***/ (function(module, exports, __webpack_require__) {
-
-var _curry1 = __webpack_require__(/*! ./internal/_curry1 */ 3);
-var assoc = __webpack_require__(/*! ./assoc */ 41);
-var lens = __webpack_require__(/*! ./lens */ 70);
-var prop = __webpack_require__(/*! ./prop */ 82);
-
-/**
- * Returns a lens whose focus is the specified property.
- *
- * @func
- * @memberOf R
- * @since v0.14.0
- * @category Object
- * @typedefn Lens s a = Functor f => (a -> f a) -> s -> f s
- * @sig String -> Lens s a
- * @param {String} k
- * @return {Lens}
- * @see R.view, R.set, R.over
- * @example
- *
- *      var xLens = R.lensProp('x');
- *
- *      R.view(xLens, {x: 1, y: 2});            //=> 1
- *      R.set(xLens, 4, {x: 1, y: 2});          //=> {x: 4, y: 2}
- *      R.over(xLens, R.negate, {x: 1, y: 2});  //=> {x: -1, y: 2}
- */
-module.exports = _curry1(function lensProp(k) {
-  return lens(prop(k), assoc(k));
-});
-
-/***/ }),
-/* 319 */
+/* 321 */
 /*!********************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/lt.js ***!
   \********************************************************/
@@ -17541,7 +17628,7 @@ module.exports = _curry2(function lt(a, b) {
 });
 
 /***/ }),
-/* 320 */
+/* 322 */
 /*!*********************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/lte.js ***!
   \*********************************************************/
@@ -17577,7 +17664,7 @@ module.exports = _curry2(function lte(a, b) {
 });
 
 /***/ }),
-/* 321 */
+/* 323 */
 /*!**************************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/mapAccum.js ***!
   \**************************************************************/
@@ -17635,7 +17722,7 @@ module.exports = _curry3(function mapAccum(fn, acc, list) {
 });
 
 /***/ }),
-/* 322 */
+/* 324 */
 /*!*******************************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/mapAccumRight.js ***!
   \*******************************************************************/
@@ -17695,7 +17782,7 @@ module.exports = _curry3(function mapAccumRight(fn, acc, list) {
 });
 
 /***/ }),
-/* 323 */
+/* 325 */
 /*!*******************************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/mapObjIndexed.js ***!
   \*******************************************************************/
@@ -17704,8 +17791,8 @@ module.exports = _curry3(function mapAccumRight(fn, acc, list) {
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry2 = __webpack_require__(/*! ./internal/_curry2 */ 1);
-var _reduce = __webpack_require__(/*! ./internal/_reduce */ 18);
-var keys = __webpack_require__(/*! ./keys */ 24);
+var _reduce = __webpack_require__(/*! ./internal/_reduce */ 17);
+var keys = __webpack_require__(/*! ./keys */ 21);
 
 /**
  * An Object-specific version of `map`. The function is applied to three
@@ -17736,7 +17823,7 @@ module.exports = _curry2(function mapObjIndexed(fn, obj) {
 });
 
 /***/ }),
-/* 324 */
+/* 326 */
 /*!***********************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/match.js ***!
   \***********************************************************/
@@ -17772,7 +17859,7 @@ module.exports = _curry2(function match(rx, str) {
 });
 
 /***/ }),
-/* 325 */
+/* 327 */
 /*!*************************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/mathMod.js ***!
   \*************************************************************/
@@ -17781,7 +17868,7 @@ module.exports = _curry2(function match(rx, str) {
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry2 = __webpack_require__(/*! ./internal/_curry2 */ 1);
-var _isInteger = __webpack_require__(/*! ./internal/_isInteger */ 85);
+var _isInteger = __webpack_require__(/*! ./internal/_isInteger */ 96);
 
 /**
  * mathMod behaves like the modulo operator should mathematically, unlike the
@@ -17826,7 +17913,7 @@ module.exports = _curry2(function mathMod(m, p) {
 });
 
 /***/ }),
-/* 326 */
+/* 328 */
 /*!***********************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/maxBy.js ***!
   \***********************************************************/
@@ -17865,7 +17952,7 @@ module.exports = _curry3(function maxBy(f, a, b) {
 });
 
 /***/ }),
-/* 327 */
+/* 329 */
 /*!************************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/median.js ***!
   \************************************************************/
@@ -17873,8 +17960,8 @@ module.exports = _curry3(function maxBy(f, a, b) {
 /*! all exports used */
 /***/ (function(module, exports, __webpack_require__) {
 
-var _curry1 = __webpack_require__(/*! ./internal/_curry1 */ 3);
-var mean = __webpack_require__(/*! ./mean */ 152);
+var _curry1 = __webpack_require__(/*! ./internal/_curry1 */ 2);
+var mean = __webpack_require__(/*! ./mean */ 161);
 
 /**
  * Returns the median of the given list of numbers.
@@ -17905,7 +17992,7 @@ module.exports = _curry1(function median(list) {
 });
 
 /***/ }),
-/* 328 */
+/* 330 */
 /*!*************************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/memoize.js ***!
   \*************************************************************/
@@ -17913,10 +18000,10 @@ module.exports = _curry1(function median(list) {
 /*! all exports used */
 /***/ (function(module, exports, __webpack_require__) {
 
-var _arity = __webpack_require__(/*! ./internal/_arity */ 23);
-var _curry1 = __webpack_require__(/*! ./internal/_curry1 */ 3);
+var _arity = __webpack_require__(/*! ./internal/_arity */ 19);
+var _curry1 = __webpack_require__(/*! ./internal/_curry1 */ 2);
 var _has = __webpack_require__(/*! ./internal/_has */ 14);
-var toString = __webpack_require__(/*! ./toString */ 50);
+var toString = __webpack_require__(/*! ./toString */ 57);
 
 /**
  * Creates a new function that, when invoked, caches the result of calling `fn`
@@ -17956,7 +18043,7 @@ module.exports = _curry1(function memoize(fn) {
 });
 
 /***/ }),
-/* 329 */
+/* 331 */
 /*!**************************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/mergeAll.js ***!
   \**************************************************************/
@@ -17964,8 +18051,8 @@ module.exports = _curry1(function memoize(fn) {
 /*! all exports used */
 /***/ (function(module, exports, __webpack_require__) {
 
-var _assign = __webpack_require__(/*! ./internal/_assign */ 69);
-var _curry1 = __webpack_require__(/*! ./internal/_curry1 */ 3);
+var _assign = __webpack_require__(/*! ./internal/_assign */ 78);
+var _curry1 = __webpack_require__(/*! ./internal/_curry1 */ 2);
 
 /**
  * Merges a list of objects together into one object.
@@ -17989,7 +18076,7 @@ module.exports = _curry1(function mergeAll(list) {
 });
 
 /***/ }),
-/* 330 */
+/* 332 */
 /*!***************************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/mergeWith.js ***!
   \***************************************************************/
@@ -17998,7 +18085,7 @@ module.exports = _curry1(function mergeAll(list) {
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry3 = __webpack_require__(/*! ./internal/_curry3 */ 4);
-var mergeWithKey = __webpack_require__(/*! ./mergeWithKey */ 155);
+var mergeWithKey = __webpack_require__(/*! ./mergeWithKey */ 164);
 
 /**
  * Creates a new object with the own properties of the two provided objects. If
@@ -18031,7 +18118,7 @@ module.exports = _curry3(function mergeWith(fn, l, r) {
 });
 
 /***/ }),
-/* 331 */
+/* 333 */
 /*!*********************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/min.js ***!
   \*********************************************************/
@@ -18063,7 +18150,7 @@ module.exports = _curry2(function min(a, b) {
 });
 
 /***/ }),
-/* 332 */
+/* 334 */
 /*!***********************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/minBy.js ***!
   \***********************************************************/
@@ -18102,7 +18189,7 @@ module.exports = _curry3(function minBy(f, a, b) {
 });
 
 /***/ }),
-/* 333 */
+/* 335 */
 /*!************************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/modulo.js ***!
   \************************************************************/
@@ -18142,7 +18229,7 @@ module.exports = _curry2(function modulo(a, b) {
 });
 
 /***/ }),
-/* 334 */
+/* 336 */
 /*!************************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/negate.js ***!
   \************************************************************/
@@ -18150,7 +18237,7 @@ module.exports = _curry2(function modulo(a, b) {
 /*! all exports used */
 /***/ (function(module, exports, __webpack_require__) {
 
-var _curry1 = __webpack_require__(/*! ./internal/_curry1 */ 3);
+var _curry1 = __webpack_require__(/*! ./internal/_curry1 */ 2);
 
 /**
  * Negates its argument.
@@ -18171,7 +18258,7 @@ module.exports = _curry1(function negate(n) {
 });
 
 /***/ }),
-/* 335 */
+/* 337 */
 /*!**********************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/none.js ***!
   \**********************************************************/
@@ -18179,11 +18266,11 @@ module.exports = _curry1(function negate(n) {
 /*! all exports used */
 /***/ (function(module, exports, __webpack_require__) {
 
-var _complement = __webpack_require__(/*! ./internal/_complement */ 128);
+var _complement = __webpack_require__(/*! ./internal/_complement */ 137);
 var _curry2 = __webpack_require__(/*! ./internal/_curry2 */ 1);
-var _dispatchable = __webpack_require__(/*! ./internal/_dispatchable */ 8);
-var _xany = __webpack_require__(/*! ./internal/_xany */ 115);
-var any = __webpack_require__(/*! ./any */ 114);
+var _dispatchable = __webpack_require__(/*! ./internal/_dispatchable */ 7);
+var _xany = __webpack_require__(/*! ./internal/_xany */ 122);
+var any = __webpack_require__(/*! ./any */ 121);
 
 /**
  * Returns `true` if no elements of the list match the predicate, `false`
@@ -18210,7 +18297,7 @@ var any = __webpack_require__(/*! ./any */ 114);
 module.exports = _curry2(_complement(_dispatchable(['any'], _xany, any)));
 
 /***/ }),
-/* 336 */
+/* 338 */
 /*!************************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/nthArg.js ***!
   \************************************************************/
@@ -18218,9 +18305,9 @@ module.exports = _curry2(_complement(_dispatchable(['any'], _xany, any)));
 /*! all exports used */
 /***/ (function(module, exports, __webpack_require__) {
 
-var _curry1 = __webpack_require__(/*! ./internal/_curry1 */ 3);
+var _curry1 = __webpack_require__(/*! ./internal/_curry1 */ 2);
 var curryN = __webpack_require__(/*! ./curryN */ 15);
-var nth = __webpack_require__(/*! ./nth */ 51);
+var nth = __webpack_require__(/*! ./nth */ 40);
 
 /**
  * Returns a function which returns its nth argument.
@@ -18248,7 +18335,7 @@ module.exports = _curry1(function nthArg(n) {
 });
 
 /***/ }),
-/* 337 */
+/* 339 */
 /*!********************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/of.js ***!
   \********************************************************/
@@ -18256,8 +18343,8 @@ module.exports = _curry1(function nthArg(n) {
 /*! all exports used */
 /***/ (function(module, exports, __webpack_require__) {
 
-var _curry1 = __webpack_require__(/*! ./internal/_curry1 */ 3);
-var _of = __webpack_require__(/*! ./internal/_of */ 338);
+var _curry1 = __webpack_require__(/*! ./internal/_curry1 */ 2);
+var _of = __webpack_require__(/*! ./internal/_of */ 340);
 
 /**
  * Returns a singleton array containing the value provided.
@@ -18280,7 +18367,7 @@ var _of = __webpack_require__(/*! ./internal/_of */ 338);
 module.exports = _curry1(_of);
 
 /***/ }),
-/* 338 */
+/* 340 */
 /*!******************************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/internal/_of.js ***!
   \******************************************************************/
@@ -18293,7 +18380,7 @@ module.exports = function _of(x) {
 };
 
 /***/ }),
-/* 339 */
+/* 341 */
 /*!**********************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/omit.js ***!
   \**********************************************************/
@@ -18301,7 +18388,7 @@ module.exports = function _of(x) {
 /*! all exports used */
 /***/ (function(module, exports, __webpack_require__) {
 
-var _contains = __webpack_require__(/*! ./internal/_contains */ 32);
+var _contains = __webpack_require__(/*! ./internal/_contains */ 33);
 var _curry2 = __webpack_require__(/*! ./internal/_curry2 */ 1);
 
 /**
@@ -18331,7 +18418,7 @@ module.exports = _curry2(function omit(names, obj) {
 });
 
 /***/ }),
-/* 340 */
+/* 342 */
 /*!**********************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/once.js ***!
   \**********************************************************/
@@ -18339,8 +18426,8 @@ module.exports = _curry2(function omit(names, obj) {
 /*! all exports used */
 /***/ (function(module, exports, __webpack_require__) {
 
-var _arity = __webpack_require__(/*! ./internal/_arity */ 23);
-var _curry1 = __webpack_require__(/*! ./internal/_curry1 */ 3);
+var _arity = __webpack_require__(/*! ./internal/_arity */ 19);
+var _curry1 = __webpack_require__(/*! ./internal/_curry1 */ 2);
 
 /**
  * Accepts a function `fn` and returns a function that guards invocation of
@@ -18375,7 +18462,7 @@ module.exports = _curry1(function once(fn) {
 });
 
 /***/ }),
-/* 341 */
+/* 343 */
 /*!**********************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/pair.js ***!
   \**********************************************************/
@@ -18406,7 +18493,7 @@ module.exports = _curry2(function pair(fst, snd) {
 });
 
 /***/ }),
-/* 342 */
+/* 344 */
 /*!*************************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/partial.js ***!
   \*************************************************************/
@@ -18414,8 +18501,8 @@ module.exports = _curry2(function pair(fst, snd) {
 /*! all exports used */
 /***/ (function(module, exports, __webpack_require__) {
 
-var _concat = __webpack_require__(/*! ./internal/_concat */ 21);
-var _createPartialApplicator = __webpack_require__(/*! ./internal/_createPartialApplicator */ 158);
+var _concat = __webpack_require__(/*! ./internal/_concat */ 20);
+var _createPartialApplicator = __webpack_require__(/*! ./internal/_createPartialApplicator */ 166);
 
 /**
  * Takes a function `f` and a list of arguments, and returns a function `g`.
@@ -18448,7 +18535,7 @@ var _createPartialApplicator = __webpack_require__(/*! ./internal/_createPartial
 module.exports = _createPartialApplicator(_concat);
 
 /***/ }),
-/* 343 */
+/* 345 */
 /*!******************************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/partialRight.js ***!
   \******************************************************************/
@@ -18456,9 +18543,9 @@ module.exports = _createPartialApplicator(_concat);
 /*! all exports used */
 /***/ (function(module, exports, __webpack_require__) {
 
-var _concat = __webpack_require__(/*! ./internal/_concat */ 21);
-var _createPartialApplicator = __webpack_require__(/*! ./internal/_createPartialApplicator */ 158);
-var flip = __webpack_require__(/*! ./flip */ 68);
+var _concat = __webpack_require__(/*! ./internal/_concat */ 20);
+var _createPartialApplicator = __webpack_require__(/*! ./internal/_createPartialApplicator */ 166);
+var flip = __webpack_require__(/*! ./flip */ 75);
 
 /**
  * Takes a function `f` and a list of arguments, and returns a function `g`.
@@ -18487,7 +18574,7 @@ var flip = __webpack_require__(/*! ./flip */ 68);
 module.exports = _createPartialApplicator(flip(_concat));
 
 /***/ }),
-/* 344 */
+/* 346 */
 /*!***************************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/partition.js ***!
   \***************************************************************/
@@ -18495,9 +18582,9 @@ module.exports = _createPartialApplicator(flip(_concat));
 /*! all exports used */
 /***/ (function(module, exports, __webpack_require__) {
 
-var filter = __webpack_require__(/*! ./filter */ 91);
-var juxt = __webpack_require__(/*! ./juxt */ 148);
-var reject = __webpack_require__(/*! ./reject */ 66);
+var filter = __webpack_require__(/*! ./filter */ 73);
+var juxt = __webpack_require__(/*! ./juxt */ 156);
+var reject = __webpack_require__(/*! ./reject */ 72);
 
 /**
  * Takes a predicate and a list or other "filterable" object and returns the
@@ -18525,7 +18612,7 @@ var reject = __webpack_require__(/*! ./reject */ 66);
 module.exports = juxt([filter, reject]);
 
 /***/ }),
-/* 345 */
+/* 347 */
 /*!************************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/pathEq.js ***!
   \************************************************************/
@@ -18534,8 +18621,8 @@ module.exports = juxt([filter, reject]);
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry3 = __webpack_require__(/*! ./internal/_curry3 */ 4);
-var equals = __webpack_require__(/*! ./equals */ 26);
-var path = __webpack_require__(/*! ./path */ 53);
+var equals = __webpack_require__(/*! ./equals */ 25);
+var path = __webpack_require__(/*! ./path */ 59);
 
 /**
  * Determines whether a nested path on an object has a specific value, in
@@ -18566,7 +18653,7 @@ module.exports = _curry3(function pathEq(_path, val, obj) {
 });
 
 /***/ }),
-/* 346 */
+/* 348 */
 /*!************************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/pathOr.js ***!
   \************************************************************/
@@ -18575,8 +18662,8 @@ module.exports = _curry3(function pathEq(_path, val, obj) {
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry3 = __webpack_require__(/*! ./internal/_curry3 */ 4);
-var defaultTo = __webpack_require__(/*! ./defaultTo */ 133);
-var path = __webpack_require__(/*! ./path */ 53);
+var defaultTo = __webpack_require__(/*! ./defaultTo */ 141);
+var path = __webpack_require__(/*! ./path */ 59);
 
 /**
  * If the given, non-null object has a value at the given path, returns the
@@ -18602,7 +18689,7 @@ module.exports = _curry3(function pathOr(d, p, obj) {
 });
 
 /***/ }),
-/* 347 */
+/* 349 */
 /*!*******************************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/pathSatisfies.js ***!
   \*******************************************************************/
@@ -18611,7 +18698,7 @@ module.exports = _curry3(function pathOr(d, p, obj) {
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry3 = __webpack_require__(/*! ./internal/_curry3 */ 4);
-var path = __webpack_require__(/*! ./path */ 53);
+var path = __webpack_require__(/*! ./path */ 59);
 
 /**
  * Returns `true` if the specified object property at given path satisfies the
@@ -18637,7 +18724,7 @@ module.exports = _curry3(function pathSatisfies(pred, propPath, obj) {
 });
 
 /***/ }),
-/* 348 */
+/* 350 */
 /*!**********************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/pick.js ***!
   \**********************************************************/
@@ -18678,7 +18765,7 @@ module.exports = _curry2(function pick(names, obj) {
 });
 
 /***/ }),
-/* 349 */
+/* 351 */
 /*!************************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/pickBy.js ***!
   \************************************************************/
@@ -18719,7 +18806,7 @@ module.exports = _curry2(function pickBy(test, obj) {
 });
 
 /***/ }),
-/* 350 */
+/* 352 */
 /*!***********************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/pipeK.js ***!
   \***********************************************************/
@@ -18727,8 +18814,8 @@ module.exports = _curry2(function pickBy(test, obj) {
 /*! all exports used */
 /***/ (function(module, exports, __webpack_require__) {
 
-var composeK = __webpack_require__(/*! ./composeK */ 124);
-var reverse = __webpack_require__(/*! ./reverse */ 65);
+var composeK = __webpack_require__(/*! ./composeK */ 131);
+var reverse = __webpack_require__(/*! ./reverse */ 56);
 
 /**
  * Returns the left-to-right Kleisli composition of the provided functions,
@@ -18772,7 +18859,7 @@ module.exports = function pipeK() {
 };
 
 /***/ }),
-/* 351 */
+/* 353 */
 /*!*************************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/product.js ***!
   \*************************************************************/
@@ -18780,8 +18867,8 @@ module.exports = function pipeK() {
 /*! all exports used */
 /***/ (function(module, exports, __webpack_require__) {
 
-var multiply = __webpack_require__(/*! ./multiply */ 156);
-var reduce = __webpack_require__(/*! ./reduce */ 25);
+var multiply = __webpack_require__(/*! ./multiply */ 165);
+var reduce = __webpack_require__(/*! ./reduce */ 24);
 
 /**
  * Multiplies together all the elements of a list.
@@ -18801,7 +18888,7 @@ var reduce = __webpack_require__(/*! ./reduce */ 25);
 module.exports = reduce(multiply, 1);
 
 /***/ }),
-/* 352 */
+/* 354 */
 /*!*************************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/project.js ***!
   \*************************************************************/
@@ -18809,10 +18896,10 @@ module.exports = reduce(multiply, 1);
 /*! all exports used */
 /***/ (function(module, exports, __webpack_require__) {
 
-var _map = __webpack_require__(/*! ./internal/_map */ 59);
-var identity = __webpack_require__(/*! ./identity */ 93);
-var pickAll = __webpack_require__(/*! ./pickAll */ 159);
-var useWith = __webpack_require__(/*! ./useWith */ 161);
+var _map = __webpack_require__(/*! ./internal/_map */ 54);
+var identity = __webpack_require__(/*! ./identity */ 76);
+var pickAll = __webpack_require__(/*! ./pickAll */ 167);
+var useWith = __webpack_require__(/*! ./useWith */ 169);
 
 /**
  * Reasonable analog to SQL `select` statement.
@@ -18836,7 +18923,7 @@ var useWith = __webpack_require__(/*! ./useWith */ 161);
 module.exports = useWith(_map, [pickAll, identity]); // passing `identity` gives correct arity
 
 /***/ }),
-/* 353 */
+/* 355 */
 /*!************************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/propEq.js ***!
   \************************************************************/
@@ -18845,7 +18932,7 @@ module.exports = useWith(_map, [pickAll, identity]); // passing `identity` gives
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry3 = __webpack_require__(/*! ./internal/_curry3 */ 4);
-var equals = __webpack_require__(/*! ./equals */ 26);
+var equals = __webpack_require__(/*! ./equals */ 25);
 
 /**
  * Returns `true` if the specified object property is equal, in `R.equals`
@@ -18876,7 +18963,7 @@ module.exports = _curry3(function propEq(name, val, obj) {
 });
 
 /***/ }),
-/* 354 */
+/* 356 */
 /*!************************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/propIs.js ***!
   \************************************************************/
@@ -18885,7 +18972,7 @@ module.exports = _curry3(function propEq(name, val, obj) {
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry3 = __webpack_require__(/*! ./internal/_curry3 */ 4);
-var is = __webpack_require__(/*! ./is */ 147);
+var is = __webpack_require__(/*! ./is */ 155);
 
 /**
  * Returns `true` if the specified object property is of the given type;
@@ -18912,7 +18999,7 @@ module.exports = _curry3(function propIs(type, name, obj) {
 });
 
 /***/ }),
-/* 355 */
+/* 357 */
 /*!************************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/propOr.js ***!
   \************************************************************/
@@ -18954,7 +19041,7 @@ module.exports = _curry3(function propOr(val, p, obj) {
 });
 
 /***/ }),
-/* 356 */
+/* 358 */
 /*!*******************************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/propSatisfies.js ***!
   \*******************************************************************/
@@ -18987,7 +19074,7 @@ module.exports = _curry3(function propSatisfies(pred, name, obj) {
 });
 
 /***/ }),
-/* 357 */
+/* 359 */
 /*!***********************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/props.js ***!
   \***********************************************************/
@@ -19031,7 +19118,7 @@ module.exports = _curry2(function props(ps, obj) {
 });
 
 /***/ }),
-/* 358 */
+/* 360 */
 /*!***********************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/range.js ***!
   \***********************************************************/
@@ -19040,7 +19127,7 @@ module.exports = _curry2(function props(ps, obj) {
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry2 = __webpack_require__(/*! ./internal/_curry2 */ 1);
-var _isNumber = __webpack_require__(/*! ./internal/_isNumber */ 150);
+var _isNumber = __webpack_require__(/*! ./internal/_isNumber */ 158);
 
 /**
  * Returns a list of numbers from `from` (inclusive) to `to` (exclusive).
@@ -19072,7 +19159,7 @@ module.exports = _curry2(function range(from, to) {
 });
 
 /***/ }),
-/* 359 */
+/* 361 */
 /*!*****************************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/reduceWhile.js ***!
   \*****************************************************************/
@@ -19080,8 +19167,8 @@ module.exports = _curry2(function range(from, to) {
 /*! all exports used */
 /***/ (function(module, exports, __webpack_require__) {
 
-var _curryN = __webpack_require__(/*! ./internal/_curryN */ 58);
-var _reduce = __webpack_require__(/*! ./internal/_reduce */ 18);
+var _curryN = __webpack_require__(/*! ./internal/_curryN */ 52);
+var _reduce = __webpack_require__(/*! ./internal/_reduce */ 17);
 var _reduced = __webpack_require__(/*! ./internal/_reduced */ 29);
 
 /**
@@ -19120,7 +19207,7 @@ module.exports = _curryN(4, [], function _reduceWhile(pred, fn, a, list) {
 });
 
 /***/ }),
-/* 360 */
+/* 362 */
 /*!*************************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/reduced.js ***!
   \*************************************************************/
@@ -19128,7 +19215,7 @@ module.exports = _curryN(4, [], function _reduceWhile(pred, fn, a, list) {
 /*! all exports used */
 /***/ (function(module, exports, __webpack_require__) {
 
-var _curry1 = __webpack_require__(/*! ./internal/_curry1 */ 3);
+var _curry1 = __webpack_require__(/*! ./internal/_curry1 */ 2);
 var _reduced = __webpack_require__(/*! ./internal/_reduced */ 29);
 
 /**
@@ -19158,7 +19245,7 @@ var _reduced = __webpack_require__(/*! ./internal/_reduced */ 29);
 module.exports = _curry1(_reduced);
 
 /***/ }),
-/* 361 */
+/* 363 */
 /*!************************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/remove.js ***!
   \************************************************************/
@@ -19194,7 +19281,7 @@ module.exports = _curry3(function remove(start, count, list) {
 });
 
 /***/ }),
-/* 362 */
+/* 364 */
 /*!************************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/repeat.js ***!
   \************************************************************/
@@ -19203,8 +19290,8 @@ module.exports = _curry3(function remove(start, count, list) {
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry2 = __webpack_require__(/*! ./internal/_curry2 */ 1);
-var always = __webpack_require__(/*! ./always */ 33);
-var times = __webpack_require__(/*! ./times */ 163);
+var always = __webpack_require__(/*! ./always */ 32);
+var times = __webpack_require__(/*! ./times */ 171);
 
 /**
  * Returns a fixed list of size `n` containing a specified identical value.
@@ -19233,7 +19320,7 @@ module.exports = _curry2(function repeat(value, n) {
 });
 
 /***/ }),
-/* 363 */
+/* 365 */
 /*!*************************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/replace.js ***!
   \*************************************************************/
@@ -19268,7 +19355,7 @@ module.exports = _curry3(function replace(regex, replacement, str) {
 });
 
 /***/ }),
-/* 364 */
+/* 366 */
 /*!**********************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/scan.js ***!
   \**********************************************************/
@@ -19311,46 +19398,7 @@ module.exports = _curry3(function scan(fn, acc, list) {
 });
 
 /***/ }),
-/* 365 */
-/*!*********************************************************!*\
-  !*** /Users/ivankleshnin/node_modules/ramda/src/set.js ***!
-  \*********************************************************/
-/*! no static exports found */
-/*! all exports used */
-/***/ (function(module, exports, __webpack_require__) {
-
-var _curry3 = __webpack_require__(/*! ./internal/_curry3 */ 4);
-var always = __webpack_require__(/*! ./always */ 33);
-var over = __webpack_require__(/*! ./over */ 157);
-
-/**
- * Returns the result of "setting" the portion of the given data structure
- * focused by the given lens to the given value.
- *
- * @func
- * @memberOf R
- * @since v0.16.0
- * @category Object
- * @typedefn Lens s a = Functor f => (a -> f a) -> s -> f s
- * @sig Lens s a -> a -> s -> s
- * @param {Lens} lens
- * @param {*} v
- * @param {*} x
- * @return {*}
- * @see R.prop, R.lensIndex, R.lensProp
- * @example
- *
- *      var xLens = R.lensProp('x');
- *
- *      R.set(xLens, 4, {x: 1, y: 2});  //=> {x: 4, y: 2}
- *      R.set(xLens, 8, {x: 1, y: 2});  //=> {x: 8, y: 2}
- */
-module.exports = _curry3(function set(lens, v, x) {
-  return over(lens, always(v), x);
-});
-
-/***/ }),
-/* 366 */
+/* 367 */
 /*!**********************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/sort.js ***!
   \**********************************************************/
@@ -19385,7 +19433,7 @@ module.exports = _curry2(function sort(comparator, list) {
 });
 
 /***/ }),
-/* 367 */
+/* 368 */
 /*!**************************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/sortWith.js ***!
   \**************************************************************/
@@ -19440,7 +19488,7 @@ module.exports = _curry2(function sortWith(fns, list) {
 });
 
 /***/ }),
-/* 368 */
+/* 369 */
 /*!***********************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/split.js ***!
   \***********************************************************/
@@ -19448,7 +19496,7 @@ module.exports = _curry2(function sortWith(fns, list) {
 /*! all exports used */
 /***/ (function(module, exports, __webpack_require__) {
 
-var invoker = __webpack_require__(/*! ./invoker */ 52);
+var invoker = __webpack_require__(/*! ./invoker */ 58);
 
 /**
  * Splits a string into an array of strings based on the given
@@ -19473,7 +19521,7 @@ var invoker = __webpack_require__(/*! ./invoker */ 52);
 module.exports = invoker(1, 'split');
 
 /***/ }),
-/* 369 */
+/* 370 */
 /*!*************************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/splitAt.js ***!
   \*************************************************************/
@@ -19482,8 +19530,8 @@ module.exports = invoker(1, 'split');
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry2 = __webpack_require__(/*! ./internal/_curry2 */ 1);
-var length = __webpack_require__(/*! ./length */ 149);
-var slice = __webpack_require__(/*! ./slice */ 31);
+var length = __webpack_require__(/*! ./length */ 157);
+var slice = __webpack_require__(/*! ./slice */ 30);
 
 /**
  * Splits a given list or string at a given index.
@@ -19508,7 +19556,7 @@ module.exports = _curry2(function splitAt(index, array) {
 });
 
 /***/ }),
-/* 370 */
+/* 371 */
 /*!****************************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/splitEvery.js ***!
   \****************************************************************/
@@ -19517,7 +19565,7 @@ module.exports = _curry2(function splitAt(index, array) {
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry2 = __webpack_require__(/*! ./internal/_curry2 */ 1);
-var slice = __webpack_require__(/*! ./slice */ 31);
+var slice = __webpack_require__(/*! ./slice */ 30);
 
 /**
  * Splits a collection into slices of the specified length.
@@ -19549,7 +19597,7 @@ module.exports = _curry2(function splitEvery(n, list) {
 });
 
 /***/ }),
-/* 371 */
+/* 372 */
 /*!***************************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/splitWhen.js ***!
   \***************************************************************/
@@ -19592,7 +19640,7 @@ module.exports = _curry2(function splitWhen(pred, list) {
 });
 
 /***/ }),
-/* 372 */
+/* 373 */
 /*!**************************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/subtract.js ***!
   \**************************************************************/
@@ -19630,7 +19678,7 @@ module.exports = _curry2(function subtract(a, b) {
 });
 
 /***/ }),
-/* 373 */
+/* 374 */
 /*!*************************************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/symmetricDifference.js ***!
   \*************************************************************************/
@@ -19639,8 +19687,8 @@ module.exports = _curry2(function subtract(a, b) {
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry2 = __webpack_require__(/*! ./internal/_curry2 */ 1);
-var concat = __webpack_require__(/*! ./concat */ 90);
-var difference = __webpack_require__(/*! ./difference */ 134);
+var concat = __webpack_require__(/*! ./concat */ 99);
+var difference = __webpack_require__(/*! ./difference */ 142);
 
 /**
  * Finds the set (i.e. no duplicates) of all elements contained in the first or
@@ -19665,7 +19713,7 @@ module.exports = _curry2(function symmetricDifference(list1, list2) {
 });
 
 /***/ }),
-/* 374 */
+/* 375 */
 /*!*****************************************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/symmetricDifferenceWith.js ***!
   \*****************************************************************************/
@@ -19674,8 +19722,8 @@ module.exports = _curry2(function symmetricDifference(list1, list2) {
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry3 = __webpack_require__(/*! ./internal/_curry3 */ 4);
-var concat = __webpack_require__(/*! ./concat */ 90);
-var differenceWith = __webpack_require__(/*! ./differenceWith */ 135);
+var concat = __webpack_require__(/*! ./concat */ 99);
+var differenceWith = __webpack_require__(/*! ./differenceWith */ 143);
 
 /**
  * Finds the set (i.e. no duplicates) of all elements contained in the first or
@@ -19704,7 +19752,7 @@ module.exports = _curry3(function symmetricDifferenceWith(pred, list1, list2) {
 });
 
 /***/ }),
-/* 375 */
+/* 376 */
 /*!**************************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/takeLast.js ***!
   \**************************************************************/
@@ -19713,7 +19761,7 @@ module.exports = _curry3(function symmetricDifferenceWith(pred, list1, list2) {
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry2 = __webpack_require__(/*! ./internal/_curry2 */ 1);
-var drop = __webpack_require__(/*! ./drop */ 137);
+var drop = __webpack_require__(/*! ./drop */ 145);
 
 /**
  * Returns a new list containing the last `n` elements of the given list.
@@ -19742,7 +19790,7 @@ module.exports = _curry2(function takeLast(n, xs) {
 });
 
 /***/ }),
-/* 376 */
+/* 377 */
 /*!*******************************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/takeLastWhile.js ***!
   \*******************************************************************/
@@ -19783,7 +19831,7 @@ module.exports = _curry2(function takeLastWhile(fn, list) {
 });
 
 /***/ }),
-/* 377 */
+/* 378 */
 /*!***************************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/takeWhile.js ***!
   \***************************************************************/
@@ -19792,8 +19840,8 @@ module.exports = _curry2(function takeLastWhile(fn, list) {
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry2 = __webpack_require__(/*! ./internal/_curry2 */ 1);
-var _dispatchable = __webpack_require__(/*! ./internal/_dispatchable */ 8);
-var _xtakeWhile = __webpack_require__(/*! ./internal/_xtakeWhile */ 378);
+var _dispatchable = __webpack_require__(/*! ./internal/_dispatchable */ 7);
+var _xtakeWhile = __webpack_require__(/*! ./internal/_xtakeWhile */ 379);
 
 /**
  * Returns a new list containing the first `n` elements of a given list,
@@ -19831,7 +19879,7 @@ module.exports = _curry2(_dispatchable(['takeWhile'], _xtakeWhile, function take
 }));
 
 /***/ }),
-/* 378 */
+/* 379 */
 /*!**************************************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/internal/_xtakeWhile.js ***!
   \**************************************************************************/
@@ -19841,7 +19889,7 @@ module.exports = _curry2(_dispatchable(['takeWhile'], _xtakeWhile, function take
 
 var _curry2 = __webpack_require__(/*! ./_curry2 */ 1);
 var _reduced = __webpack_require__(/*! ./_reduced */ 29);
-var _xfBase = __webpack_require__(/*! ./_xfBase */ 12);
+var _xfBase = __webpack_require__(/*! ./_xfBase */ 9);
 
 module.exports = function () {
   function XTakeWhile(f, xf) {
@@ -19860,7 +19908,7 @@ module.exports = function () {
 }();
 
 /***/ }),
-/* 379 */
+/* 380 */
 /*!*********************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/tap.js ***!
   \*********************************************************/
@@ -19894,7 +19942,7 @@ module.exports = _curry2(function tap(fn, x) {
 });
 
 /***/ }),
-/* 380 */
+/* 381 */
 /*!**********************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/test.js ***!
   \**********************************************************/
@@ -19902,10 +19950,10 @@ module.exports = _curry2(function tap(fn, x) {
 /*! all exports used */
 /***/ (function(module, exports, __webpack_require__) {
 
-var _cloneRegExp = __webpack_require__(/*! ./internal/_cloneRegExp */ 121);
+var _cloneRegExp = __webpack_require__(/*! ./internal/_cloneRegExp */ 128);
 var _curry2 = __webpack_require__(/*! ./internal/_curry2 */ 1);
-var _isRegExp = __webpack_require__(/*! ./internal/_isRegExp */ 381);
-var toString = __webpack_require__(/*! ./toString */ 50);
+var _isRegExp = __webpack_require__(/*! ./internal/_isRegExp */ 382);
+var toString = __webpack_require__(/*! ./toString */ 57);
 
 /**
  * Determines whether a given string matches a given regular expression.
@@ -19932,7 +19980,7 @@ module.exports = _curry2(function test(pattern, str) {
 });
 
 /***/ }),
-/* 381 */
+/* 382 */
 /*!************************************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/internal/_isRegExp.js ***!
   \************************************************************************/
@@ -19945,7 +19993,7 @@ module.exports = function _isRegExp(x) {
 };
 
 /***/ }),
-/* 382 */
+/* 383 */
 /*!*************************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/toLower.js ***!
   \*************************************************************/
@@ -19953,7 +20001,7 @@ module.exports = function _isRegExp(x) {
 /*! all exports used */
 /***/ (function(module, exports, __webpack_require__) {
 
-var invoker = __webpack_require__(/*! ./invoker */ 52);
+var invoker = __webpack_require__(/*! ./invoker */ 58);
 
 /**
  * The lower case version of a string.
@@ -19973,7 +20021,7 @@ var invoker = __webpack_require__(/*! ./invoker */ 52);
 module.exports = invoker(0, 'toLowerCase');
 
 /***/ }),
-/* 383 */
+/* 384 */
 /*!*************************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/toPairs.js ***!
   \*************************************************************/
@@ -19981,7 +20029,7 @@ module.exports = invoker(0, 'toLowerCase');
 /*! all exports used */
 /***/ (function(module, exports, __webpack_require__) {
 
-var _curry1 = __webpack_require__(/*! ./internal/_curry1 */ 3);
+var _curry1 = __webpack_require__(/*! ./internal/_curry1 */ 2);
 var _has = __webpack_require__(/*! ./internal/_has */ 14);
 
 /**
@@ -20013,7 +20061,7 @@ module.exports = _curry1(function toPairs(obj) {
 });
 
 /***/ }),
-/* 384 */
+/* 385 */
 /*!***************************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/toPairsIn.js ***!
   \***************************************************************/
@@ -20021,7 +20069,7 @@ module.exports = _curry1(function toPairs(obj) {
 /*! all exports used */
 /***/ (function(module, exports, __webpack_require__) {
 
-var _curry1 = __webpack_require__(/*! ./internal/_curry1 */ 3);
+var _curry1 = __webpack_require__(/*! ./internal/_curry1 */ 2);
 
 /**
  * Converts an object into an array of key, value arrays. The object's own
@@ -20053,7 +20101,7 @@ module.exports = _curry1(function toPairsIn(obj) {
 });
 
 /***/ }),
-/* 385 */
+/* 386 */
 /*!*************************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/toUpper.js ***!
   \*************************************************************/
@@ -20061,7 +20109,7 @@ module.exports = _curry1(function toPairsIn(obj) {
 /*! all exports used */
 /***/ (function(module, exports, __webpack_require__) {
 
-var invoker = __webpack_require__(/*! ./invoker */ 52);
+var invoker = __webpack_require__(/*! ./invoker */ 58);
 
 /**
  * The upper case version of a string.
@@ -20081,7 +20129,7 @@ var invoker = __webpack_require__(/*! ./invoker */ 52);
 module.exports = invoker(0, 'toUpperCase');
 
 /***/ }),
-/* 386 */
+/* 387 */
 /*!***************************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/transduce.js ***!
   \***************************************************************/
@@ -20089,8 +20137,8 @@ module.exports = invoker(0, 'toUpperCase');
 /*! all exports used */
 /***/ (function(module, exports, __webpack_require__) {
 
-var _reduce = __webpack_require__(/*! ./internal/_reduce */ 18);
-var _xwrap = __webpack_require__(/*! ./internal/_xwrap */ 110);
+var _reduce = __webpack_require__(/*! ./internal/_reduce */ 17);
+var _xwrap = __webpack_require__(/*! ./internal/_xwrap */ 91);
 var curryN = __webpack_require__(/*! ./curryN */ 15);
 
 /**
@@ -20142,7 +20190,7 @@ module.exports = curryN(4, function transduce(xf, fn, acc, list) {
 });
 
 /***/ }),
-/* 387 */
+/* 388 */
 /*!***************************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/transpose.js ***!
   \***************************************************************/
@@ -20150,7 +20198,7 @@ module.exports = curryN(4, function transduce(xf, fn, acc, list) {
 /*! all exports used */
 /***/ (function(module, exports, __webpack_require__) {
 
-var _curry1 = __webpack_require__(/*! ./internal/_curry1 */ 3);
+var _curry1 = __webpack_require__(/*! ./internal/_curry1 */ 2);
 
 /**
  * Transposes the rows and columns of a 2D list.
@@ -20196,7 +20244,7 @@ module.exports = _curry1(function transpose(outerlist) {
 });
 
 /***/ }),
-/* 388 */
+/* 389 */
 /*!**************************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/traverse.js ***!
   \**************************************************************/
@@ -20205,8 +20253,8 @@ module.exports = _curry1(function transpose(outerlist) {
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry3 = __webpack_require__(/*! ./internal/_curry3 */ 4);
-var map = __webpack_require__(/*! ./map */ 17);
-var sequence = __webpack_require__(/*! ./sequence */ 164);
+var map = __webpack_require__(/*! ./map */ 16);
+var sequence = __webpack_require__(/*! ./sequence */ 172);
 
 /**
  * Maps an [Applicative](https://github.com/fantasyland/fantasy-land#applicative)-returning
@@ -20239,7 +20287,7 @@ module.exports = _curry3(function traverse(of, f, traversable) {
 });
 
 /***/ }),
-/* 389 */
+/* 390 */
 /*!**********************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/trim.js ***!
   \**********************************************************/
@@ -20247,7 +20295,7 @@ module.exports = _curry3(function traverse(of, f, traversable) {
 /*! all exports used */
 /***/ (function(module, exports, __webpack_require__) {
 
-var _curry1 = __webpack_require__(/*! ./internal/_curry1 */ 3);
+var _curry1 = __webpack_require__(/*! ./internal/_curry1 */ 2);
 
 /**
  * Removes (strips) whitespace from both ends of the string.
@@ -20282,7 +20330,7 @@ module.exports = function () {
 }();
 
 /***/ }),
-/* 390 */
+/* 391 */
 /*!**************************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/tryCatch.js ***!
   \**************************************************************/
@@ -20290,8 +20338,8 @@ module.exports = function () {
 /*! all exports used */
 /***/ (function(module, exports, __webpack_require__) {
 
-var _arity = __webpack_require__(/*! ./internal/_arity */ 23);
-var _concat = __webpack_require__(/*! ./internal/_concat */ 21);
+var _arity = __webpack_require__(/*! ./internal/_arity */ 19);
+var _concat = __webpack_require__(/*! ./internal/_concat */ 20);
 var _curry2 = __webpack_require__(/*! ./internal/_curry2 */ 1);
 
 /**
@@ -20326,7 +20374,7 @@ module.exports = _curry2(function _tryCatch(tryer, catcher) {
 });
 
 /***/ }),
-/* 391 */
+/* 392 */
 /*!*************************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/unapply.js ***!
   \*************************************************************/
@@ -20334,7 +20382,7 @@ module.exports = _curry2(function _tryCatch(tryer, catcher) {
 /*! all exports used */
 /***/ (function(module, exports, __webpack_require__) {
 
-var _curry1 = __webpack_require__(/*! ./internal/_curry1 */ 3);
+var _curry1 = __webpack_require__(/*! ./internal/_curry1 */ 2);
 
 /**
  * Takes a function `fn`, which takes a single array argument, and returns a
@@ -20367,7 +20415,7 @@ module.exports = _curry1(function unapply(fn) {
 });
 
 /***/ }),
-/* 392 */
+/* 393 */
 /*!***********************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/unary.js ***!
   \***********************************************************/
@@ -20375,8 +20423,8 @@ module.exports = _curry1(function unapply(fn) {
 /*! all exports used */
 /***/ (function(module, exports, __webpack_require__) {
 
-var _curry1 = __webpack_require__(/*! ./internal/_curry1 */ 3);
-var nAry = __webpack_require__(/*! ./nAry */ 61);
+var _curry1 = __webpack_require__(/*! ./internal/_curry1 */ 2);
+var nAry = __webpack_require__(/*! ./nAry */ 66);
 
 /**
  * Wraps a function of any arity (including nullary) in a function that accepts
@@ -20410,7 +20458,7 @@ module.exports = _curry1(function unary(fn) {
 });
 
 /***/ }),
-/* 393 */
+/* 394 */
 /*!**************************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/uncurryN.js ***!
   \**************************************************************/
@@ -20457,7 +20505,7 @@ module.exports = _curry2(function uncurryN(depth, fn) {
 });
 
 /***/ }),
-/* 394 */
+/* 395 */
 /*!************************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/unfold.js ***!
   \************************************************************/
@@ -20503,7 +20551,7 @@ module.exports = _curry2(function unfold(fn, seed) {
 });
 
 /***/ }),
-/* 395 */
+/* 396 */
 /*!***********************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/union.js ***!
   \***********************************************************/
@@ -20511,10 +20559,10 @@ module.exports = _curry2(function unfold(fn, seed) {
 /*! all exports used */
 /***/ (function(module, exports, __webpack_require__) {
 
-var _concat = __webpack_require__(/*! ./internal/_concat */ 21);
+var _concat = __webpack_require__(/*! ./internal/_concat */ 20);
 var _curry2 = __webpack_require__(/*! ./internal/_curry2 */ 1);
-var compose = __webpack_require__(/*! ./compose */ 88);
-var uniq = __webpack_require__(/*! ./uniq */ 95);
+var compose = __webpack_require__(/*! ./compose */ 70);
+var uniq = __webpack_require__(/*! ./uniq */ 104);
 
 /**
  * Combines two lists into a set (i.e. no duplicates) composed of the elements
@@ -20536,7 +20584,7 @@ var uniq = __webpack_require__(/*! ./uniq */ 95);
 module.exports = _curry2(compose(uniq, _concat));
 
 /***/ }),
-/* 396 */
+/* 397 */
 /*!***************************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/unionWith.js ***!
   \***************************************************************/
@@ -20544,9 +20592,9 @@ module.exports = _curry2(compose(uniq, _concat));
 /*! all exports used */
 /***/ (function(module, exports, __webpack_require__) {
 
-var _concat = __webpack_require__(/*! ./internal/_concat */ 21);
+var _concat = __webpack_require__(/*! ./internal/_concat */ 20);
 var _curry3 = __webpack_require__(/*! ./internal/_curry3 */ 4);
-var uniqWith = __webpack_require__(/*! ./uniqWith */ 96);
+var uniqWith = __webpack_require__(/*! ./uniqWith */ 105);
 
 /**
  * Combines two lists into a set (i.e. no duplicates) composed of the elements
@@ -20575,7 +20623,7 @@ module.exports = _curry3(function unionWith(pred, list1, list2) {
 });
 
 /***/ }),
-/* 397 */
+/* 398 */
 /*!************************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/unless.js ***!
   \************************************************************/
@@ -20615,7 +20663,7 @@ module.exports = _curry3(function unless(pred, whenFalseFn, x) {
 });
 
 /***/ }),
-/* 398 */
+/* 399 */
 /*!************************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/unnest.js ***!
   \************************************************************/
@@ -20623,8 +20671,8 @@ module.exports = _curry3(function unless(pred, whenFalseFn, x) {
 /*! all exports used */
 /***/ (function(module, exports, __webpack_require__) {
 
-var _identity = __webpack_require__(/*! ./internal/_identity */ 94);
-var chain = __webpack_require__(/*! ./chain */ 86);
+var _identity = __webpack_require__(/*! ./internal/_identity */ 77);
+var chain = __webpack_require__(/*! ./chain */ 97);
 
 /**
  * Shorthand for `R.chain(R.identity)`, which removes one level of nesting from
@@ -20646,7 +20694,7 @@ var chain = __webpack_require__(/*! ./chain */ 86);
 module.exports = chain(_identity);
 
 /***/ }),
-/* 399 */
+/* 400 */
 /*!***********************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/until.js ***!
   \***********************************************************/
@@ -20684,7 +20732,7 @@ module.exports = _curry3(function until(pred, fn, init) {
 });
 
 /***/ }),
-/* 400 */
+/* 401 */
 /*!**************************************************************!*\
   !*** /Users/ivankleshnin/node_modules/ramda/src/valuesIn.js ***!
   \**************************************************************/
@@ -20692,7 +20740,7 @@ module.exports = _curry3(function until(pred, fn, init) {
 /*! all exports used */
 /***/ (function(module, exports, __webpack_require__) {
 
-var _curry1 = __webpack_require__(/*! ./internal/_curry1 */ 3);
+var _curry1 = __webpack_require__(/*! ./internal/_curry1 */ 2);
 
 /**
  * Returns a list of all the properties, including prototype properties, of the
@@ -20722,53 +20770,6 @@ module.exports = _curry1(function valuesIn(obj) {
   }
   return vs;
 });
-
-/***/ }),
-/* 401 */
-/*!**********************************************************!*\
-  !*** /Users/ivankleshnin/node_modules/ramda/src/view.js ***!
-  \**********************************************************/
-/*! no static exports found */
-/*! all exports used */
-/***/ (function(module, exports, __webpack_require__) {
-
-var _curry2 = __webpack_require__(/*! ./internal/_curry2 */ 1);
-
-/**
- * Returns a "view" of the given data structure, determined by the given lens.
- * The lens's focus determines which portion of the data structure is visible.
- *
- * @func
- * @memberOf R
- * @since v0.16.0
- * @category Object
- * @typedefn Lens s a = Functor f => (a -> f a) -> s -> f s
- * @sig Lens s a -> s -> a
- * @param {Lens} lens
- * @param {*} x
- * @return {*}
- * @see R.prop, R.lensIndex, R.lensProp
- * @example
- *
- *      var xLens = R.lensProp('x');
- *
- *      R.view(xLens, {x: 1, y: 2});  //=> 1
- *      R.view(xLens, {x: 4, y: 2});  //=> 4
- */
-module.exports = function () {
-  // `Const` is a functor that effectively ignores the function given to `map`.
-  var Const = function (x) {
-    return { value: x, map: function () {
-        return this;
-      } };
-  };
-
-  return _curry2(function view(lens, x) {
-    // Using `Const` effectively ignores the setter function of the `lens`,
-    // leaving the value returned by the getter function unmodified.
-    return lens(Const)(x).value;
-  });
-}();
 
 /***/ }),
 /* 402 */
@@ -20823,9 +20824,9 @@ module.exports = _curry3(function when(pred, whenTrueFn, x) {
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry2 = __webpack_require__(/*! ./internal/_curry2 */ 1);
-var equals = __webpack_require__(/*! ./equals */ 26);
-var map = __webpack_require__(/*! ./map */ 17);
-var where = __webpack_require__(/*! ./where */ 166);
+var equals = __webpack_require__(/*! ./equals */ 25);
+var map = __webpack_require__(/*! ./map */ 16);
+var where = __webpack_require__(/*! ./where */ 176);
 
 /**
  * Takes a spec object and a test object; returns true if the test satisfies
@@ -20867,10 +20868,10 @@ module.exports = _curry2(function whereEq(spec, testObj) {
 /*! all exports used */
 /***/ (function(module, exports, __webpack_require__) {
 
-var _contains = __webpack_require__(/*! ./internal/_contains */ 32);
+var _contains = __webpack_require__(/*! ./internal/_contains */ 33);
 var _curry2 = __webpack_require__(/*! ./internal/_curry2 */ 1);
-var flip = __webpack_require__(/*! ./flip */ 68);
-var reject = __webpack_require__(/*! ./reject */ 66);
+var flip = __webpack_require__(/*! ./flip */ 75);
+var reject = __webpack_require__(/*! ./reject */ 72);
 
 /**
  * Returns a new list without values in the first argument.
@@ -21084,7 +21085,7 @@ module.exports = _curry3(function zipWith(fn, a, b) {
 // Subject extends Observable and Observable references Subject in it's
 // definition
 
-var Subject_1 = __webpack_require__(/*! ./Subject */ 10);
+var Subject_1 = __webpack_require__(/*! ./Subject */ 11);
 exports.Subject = Subject_1.Subject;
 exports.AnonymousSubject = Subject_1.AnonymousSubject;
 /* tslint:enable:no-unused-variable */
@@ -21094,7 +21095,7 @@ exports.Observable = Observable_1.Observable;
 /* tslint:disable:no-use-before-declare */
 __webpack_require__(/*! ./add/observable/bindCallback */ 410);
 __webpack_require__(/*! ./add/observable/bindNodeCallback */ 413);
-__webpack_require__(/*! ./add/observable/combineLatest */ 168);
+__webpack_require__(/*! ./add/observable/combineLatest */ 178);
 __webpack_require__(/*! ./add/observable/concat */ 416);
 __webpack_require__(/*! ./add/observable/defer */ 418);
 __webpack_require__(/*! ./add/observable/empty */ 421);
@@ -21106,7 +21107,7 @@ __webpack_require__(/*! ./add/observable/fromPromise */ 436);
 __webpack_require__(/*! ./add/observable/generate */ 438);
 __webpack_require__(/*! ./add/observable/if */ 441);
 __webpack_require__(/*! ./add/observable/interval */ 444);
-__webpack_require__(/*! ./add/observable/merge */ 175);
+__webpack_require__(/*! ./add/observable/merge */ 185);
 __webpack_require__(/*! ./add/observable/race */ 447);
 __webpack_require__(/*! ./add/observable/never */ 449);
 __webpack_require__(/*! ./add/observable/of */ 452);
@@ -21141,14 +21142,14 @@ __webpack_require__(/*! ./add/operator/defaultIfEmpty */ 509);
 __webpack_require__(/*! ./add/operator/delay */ 511);
 __webpack_require__(/*! ./add/operator/delayWhen */ 513);
 __webpack_require__(/*! ./add/operator/distinct */ 515);
-__webpack_require__(/*! ./add/operator/distinctUntilChanged */ 185);
+__webpack_require__(/*! ./add/operator/distinctUntilChanged */ 195);
 __webpack_require__(/*! ./add/operator/distinctUntilKeyChanged */ 518);
-__webpack_require__(/*! ./add/operator/do */ 186);
+__webpack_require__(/*! ./add/operator/do */ 196);
 __webpack_require__(/*! ./add/operator/exhaust */ 520);
 __webpack_require__(/*! ./add/operator/exhaustMap */ 522);
 __webpack_require__(/*! ./add/operator/expand */ 524);
 __webpack_require__(/*! ./add/operator/elementAt */ 526);
-__webpack_require__(/*! ./add/operator/filter */ 188);
+__webpack_require__(/*! ./add/operator/filter */ 198);
 __webpack_require__(/*! ./add/operator/finally */ 528);
 __webpack_require__(/*! ./add/operator/find */ 530);
 __webpack_require__(/*! ./add/operator/findIndex */ 531);
@@ -21161,7 +21162,7 @@ __webpack_require__(/*! ./add/operator/auditTime */ 546);
 __webpack_require__(/*! ./add/operator/last */ 548);
 __webpack_require__(/*! ./add/operator/let */ 550);
 __webpack_require__(/*! ./add/operator/every */ 552);
-__webpack_require__(/*! ./add/operator/map */ 190);
+__webpack_require__(/*! ./add/operator/map */ 200);
 __webpack_require__(/*! ./add/operator/mapTo */ 554);
 __webpack_require__(/*! ./add/operator/materialize */ 556);
 __webpack_require__(/*! ./add/operator/max */ 558);
@@ -21176,7 +21177,7 @@ __webpack_require__(/*! ./add/operator/observeOn */ 569);
 __webpack_require__(/*! ./add/operator/onErrorResumeNext */ 570);
 __webpack_require__(/*! ./add/operator/pairwise */ 571);
 __webpack_require__(/*! ./add/operator/partition */ 573);
-__webpack_require__(/*! ./add/operator/pluck */ 191);
+__webpack_require__(/*! ./add/operator/pluck */ 201);
 __webpack_require__(/*! ./add/operator/publish */ 576);
 __webpack_require__(/*! ./add/operator/publishBehavior */ 578);
 __webpack_require__(/*! ./add/operator/publishReplay */ 580);
@@ -21187,18 +21188,18 @@ __webpack_require__(/*! ./add/operator/repeat */ 586);
 __webpack_require__(/*! ./add/operator/repeatWhen */ 588);
 __webpack_require__(/*! ./add/operator/retry */ 590);
 __webpack_require__(/*! ./add/operator/retryWhen */ 592);
-__webpack_require__(/*! ./add/operator/sample */ 194);
+__webpack_require__(/*! ./add/operator/sample */ 204);
 __webpack_require__(/*! ./add/operator/sampleTime */ 594);
-__webpack_require__(/*! ./add/operator/scan */ 196);
+__webpack_require__(/*! ./add/operator/scan */ 206);
 __webpack_require__(/*! ./add/operator/sequenceEqual */ 596);
 __webpack_require__(/*! ./add/operator/share */ 598);
-__webpack_require__(/*! ./add/operator/shareReplay */ 198);
+__webpack_require__(/*! ./add/operator/shareReplay */ 208);
 __webpack_require__(/*! ./add/operator/single */ 600);
 __webpack_require__(/*! ./add/operator/skip */ 602);
 __webpack_require__(/*! ./add/operator/skipLast */ 604);
 __webpack_require__(/*! ./add/operator/skipUntil */ 606);
 __webpack_require__(/*! ./add/operator/skipWhile */ 608);
-__webpack_require__(/*! ./add/operator/startWith */ 200);
+__webpack_require__(/*! ./add/operator/startWith */ 210);
 __webpack_require__(/*! ./add/operator/subscribeOn */ 610);
 __webpack_require__(/*! ./add/operator/switch */ 618);
 __webpack_require__(/*! ./add/operator/switchMap */ 620);
@@ -21220,53 +21221,53 @@ __webpack_require__(/*! ./add/operator/windowCount */ 647);
 __webpack_require__(/*! ./add/operator/windowTime */ 649);
 __webpack_require__(/*! ./add/operator/windowToggle */ 651);
 __webpack_require__(/*! ./add/operator/windowWhen */ 653);
-__webpack_require__(/*! ./add/operator/withLatestFrom */ 208);
+__webpack_require__(/*! ./add/operator/withLatestFrom */ 218);
 __webpack_require__(/*! ./add/operator/zip */ 655);
 __webpack_require__(/*! ./add/operator/zipAll */ 656);
 /* tslint:disable:no-unused-variable */
-var Subscription_1 = __webpack_require__(/*! ./Subscription */ 7);
+var Subscription_1 = __webpack_require__(/*! ./Subscription */ 8);
 exports.Subscription = Subscription_1.Subscription;
-var Subscriber_1 = __webpack_require__(/*! ./Subscriber */ 2);
+var Subscriber_1 = __webpack_require__(/*! ./Subscriber */ 3);
 exports.Subscriber = Subscriber_1.Subscriber;
-var AsyncSubject_1 = __webpack_require__(/*! ./AsyncSubject */ 71);
+var AsyncSubject_1 = __webpack_require__(/*! ./AsyncSubject */ 79);
 exports.AsyncSubject = AsyncSubject_1.AsyncSubject;
-var ReplaySubject_1 = __webpack_require__(/*! ./ReplaySubject */ 46);
+var ReplaySubject_1 = __webpack_require__(/*! ./ReplaySubject */ 51);
 exports.ReplaySubject = ReplaySubject_1.ReplaySubject;
-var BehaviorSubject_1 = __webpack_require__(/*! ./BehaviorSubject */ 193);
+var BehaviorSubject_1 = __webpack_require__(/*! ./BehaviorSubject */ 203);
 exports.BehaviorSubject = BehaviorSubject_1.BehaviorSubject;
-var ConnectableObservable_1 = __webpack_require__(/*! ./observable/ConnectableObservable */ 107);
+var ConnectableObservable_1 = __webpack_require__(/*! ./observable/ConnectableObservable */ 117);
 exports.ConnectableObservable = ConnectableObservable_1.ConnectableObservable;
-var Notification_1 = __webpack_require__(/*! ./Notification */ 38);
+var Notification_1 = __webpack_require__(/*! ./Notification */ 44);
 exports.Notification = Notification_1.Notification;
-var EmptyError_1 = __webpack_require__(/*! ./util/EmptyError */ 77);
+var EmptyError_1 = __webpack_require__(/*! ./util/EmptyError */ 85);
 exports.EmptyError = EmptyError_1.EmptyError;
-var ArgumentOutOfRangeError_1 = __webpack_require__(/*! ./util/ArgumentOutOfRangeError */ 54);
+var ArgumentOutOfRangeError_1 = __webpack_require__(/*! ./util/ArgumentOutOfRangeError */ 60);
 exports.ArgumentOutOfRangeError = ArgumentOutOfRangeError_1.ArgumentOutOfRangeError;
-var ObjectUnsubscribedError_1 = __webpack_require__(/*! ./util/ObjectUnsubscribedError */ 44);
+var ObjectUnsubscribedError_1 = __webpack_require__(/*! ./util/ObjectUnsubscribedError */ 49);
 exports.ObjectUnsubscribedError = ObjectUnsubscribedError_1.ObjectUnsubscribedError;
-var TimeoutError_1 = __webpack_require__(/*! ./util/TimeoutError */ 206);
+var TimeoutError_1 = __webpack_require__(/*! ./util/TimeoutError */ 216);
 exports.TimeoutError = TimeoutError_1.TimeoutError;
-var UnsubscriptionError_1 = __webpack_require__(/*! ./util/UnsubscriptionError */ 98);
+var UnsubscriptionError_1 = __webpack_require__(/*! ./util/UnsubscriptionError */ 108);
 exports.UnsubscriptionError = UnsubscriptionError_1.UnsubscriptionError;
-var timeInterval_1 = __webpack_require__(/*! ./operator/timeInterval */ 205);
+var timeInterval_1 = __webpack_require__(/*! ./operator/timeInterval */ 215);
 exports.TimeInterval = timeInterval_1.TimeInterval;
-var timestamp_1 = __webpack_require__(/*! ./operator/timestamp */ 207);
+var timestamp_1 = __webpack_require__(/*! ./operator/timestamp */ 217);
 exports.Timestamp = timestamp_1.Timestamp;
 var TestScheduler_1 = __webpack_require__(/*! ./testing/TestScheduler */ 658);
 exports.TestScheduler = TestScheduler_1.TestScheduler;
-var VirtualTimeScheduler_1 = __webpack_require__(/*! ./scheduler/VirtualTimeScheduler */ 213);
+var VirtualTimeScheduler_1 = __webpack_require__(/*! ./scheduler/VirtualTimeScheduler */ 223);
 exports.VirtualTimeScheduler = VirtualTimeScheduler_1.VirtualTimeScheduler;
-var AjaxObservable_1 = __webpack_require__(/*! ./observable/dom/AjaxObservable */ 180);
+var AjaxObservable_1 = __webpack_require__(/*! ./observable/dom/AjaxObservable */ 190);
 exports.AjaxResponse = AjaxObservable_1.AjaxResponse;
 exports.AjaxError = AjaxObservable_1.AjaxError;
 exports.AjaxTimeoutError = AjaxObservable_1.AjaxTimeoutError;
-var asap_1 = __webpack_require__(/*! ./scheduler/asap */ 202);
-var async_1 = __webpack_require__(/*! ./scheduler/async */ 16);
-var queue_1 = __webpack_require__(/*! ./scheduler/queue */ 103);
+var asap_1 = __webpack_require__(/*! ./scheduler/asap */ 212);
+var async_1 = __webpack_require__(/*! ./scheduler/async */ 18);
+var queue_1 = __webpack_require__(/*! ./scheduler/queue */ 113);
 var animationFrame_1 = __webpack_require__(/*! ./scheduler/animationFrame */ 661);
-var rxSubscriber_1 = __webpack_require__(/*! ./symbol/rxSubscriber */ 36);
-var iterator_1 = __webpack_require__(/*! ./symbol/iterator */ 37);
-var observable_1 = __webpack_require__(/*! ./symbol/observable */ 43);
+var rxSubscriber_1 = __webpack_require__(/*! ./symbol/rxSubscriber */ 42);
+var iterator_1 = __webpack_require__(/*! ./symbol/iterator */ 43);
+var observable_1 = __webpack_require__(/*! ./symbol/observable */ 48);
 /* tslint:enable:no-unused-variable */
 /**
  * @typedef {Object} Rx.Scheduler
@@ -21364,8 +21365,8 @@ var __extends = undefined && undefined.__extends || function (d, b) {
 };
 var Observable_1 = __webpack_require__(/*! ../Observable */ 0);
 var tryCatch_1 = __webpack_require__(/*! ../util/tryCatch */ 13);
-var errorObject_1 = __webpack_require__(/*! ../util/errorObject */ 11);
-var AsyncSubject_1 = __webpack_require__(/*! ../AsyncSubject */ 71);
+var errorObject_1 = __webpack_require__(/*! ../util/errorObject */ 12);
+var AsyncSubject_1 = __webpack_require__(/*! ../AsyncSubject */ 79);
 /**
  * We need this JSDoc comment for affecting ESDoc.
  * @extends {Ignored}
@@ -21685,8 +21686,8 @@ var __extends = undefined && undefined.__extends || function (d, b) {
 };
 var Observable_1 = __webpack_require__(/*! ../Observable */ 0);
 var tryCatch_1 = __webpack_require__(/*! ../util/tryCatch */ 13);
-var errorObject_1 = __webpack_require__(/*! ../util/errorObject */ 11);
-var AsyncSubject_1 = __webpack_require__(/*! ../AsyncSubject */ 71);
+var errorObject_1 = __webpack_require__(/*! ../util/errorObject */ 12);
+var AsyncSubject_1 = __webpack_require__(/*! ../AsyncSubject */ 79);
 /**
  * We need this JSDoc comment for affecting ESDoc.
  * @extends {Ignored}
@@ -21974,7 +21975,7 @@ Observable_1.Observable.concat = concat_1.concat;
 "use strict";
 
 
-var concat_1 = __webpack_require__(/*! ../operator/concat */ 73);
+var concat_1 = __webpack_require__(/*! ../operator/concat */ 81);
 exports.concat = concat_1.concatStatic;
 //# sourceMappingURL=concat.js.map
 
@@ -22153,7 +22154,7 @@ Observable_1.Observable.empty = empty_1.empty;
 "use strict";
 
 
-var EmptyObservable_1 = __webpack_require__(/*! ./EmptyObservable */ 27);
+var EmptyObservable_1 = __webpack_require__(/*! ./EmptyObservable */ 28);
 exports.empty = EmptyObservable_1.EmptyObservable.create;
 //# sourceMappingURL=empty.js.map
 
@@ -22211,8 +22212,8 @@ var __extends = undefined && undefined.__extends || function (d, b) {
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 var Observable_1 = __webpack_require__(/*! ../Observable */ 0);
-var EmptyObservable_1 = __webpack_require__(/*! ./EmptyObservable */ 27);
-var isArray_1 = __webpack_require__(/*! ../util/isArray */ 22);
+var EmptyObservable_1 = __webpack_require__(/*! ./EmptyObservable */ 28);
+var isArray_1 = __webpack_require__(/*! ../util/isArray */ 26);
 var subscribeToResult_1 = __webpack_require__(/*! ../util/subscribeToResult */ 6);
 var OuterSubscriber_1 = __webpack_require__(/*! ../OuterSubscriber */ 5);
 /**
@@ -22349,7 +22350,7 @@ Observable_1.Observable.from = from_1.from;
 "use strict";
 
 
-var FromObservable_1 = __webpack_require__(/*! ./FromObservable */ 171);
+var FromObservable_1 = __webpack_require__(/*! ./FromObservable */ 181);
 exports.from = FromObservable_1.FromObservable.create;
 //# sourceMappingURL=from.js.map
 
@@ -22373,9 +22374,9 @@ var __extends = undefined && undefined.__extends || function (d, b) {
     }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var root_1 = __webpack_require__(/*! ../util/root */ 9);
+var root_1 = __webpack_require__(/*! ../util/root */ 10);
 var Observable_1 = __webpack_require__(/*! ../Observable */ 0);
-var iterator_1 = __webpack_require__(/*! ../symbol/iterator */ 37);
+var iterator_1 = __webpack_require__(/*! ../symbol/iterator */ 43);
 /**
  * We need this JSDoc comment for affecting ESDoc.
  * @extends {Ignored}
@@ -22567,8 +22568,8 @@ var __extends = undefined && undefined.__extends || function (d, b) {
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 var Observable_1 = __webpack_require__(/*! ../Observable */ 0);
-var ScalarObservable_1 = __webpack_require__(/*! ./ScalarObservable */ 55);
-var EmptyObservable_1 = __webpack_require__(/*! ./EmptyObservable */ 27);
+var ScalarObservable_1 = __webpack_require__(/*! ./ScalarObservable */ 61);
+var EmptyObservable_1 = __webpack_require__(/*! ./EmptyObservable */ 28);
 /**
  * We need this JSDoc comment for affecting ESDoc.
  * @extends {Ignored}
@@ -22688,9 +22689,9 @@ var __extends = undefined && undefined.__extends || function (d, b) {
 };
 var Observable_1 = __webpack_require__(/*! ../Observable */ 0);
 var tryCatch_1 = __webpack_require__(/*! ../util/tryCatch */ 13);
-var isFunction_1 = __webpack_require__(/*! ../util/isFunction */ 42);
-var errorObject_1 = __webpack_require__(/*! ../util/errorObject */ 11);
-var Subscription_1 = __webpack_require__(/*! ../Subscription */ 7);
+var isFunction_1 = __webpack_require__(/*! ../util/isFunction */ 47);
+var errorObject_1 = __webpack_require__(/*! ../util/errorObject */ 12);
+var Subscription_1 = __webpack_require__(/*! ../Subscription */ 8);
 var toString = Object.prototype.toString;
 function isNodeStyleEventEmitter(sourceObj) {
     return !!sourceObj && typeof sourceObj.addListener === 'function' && typeof sourceObj.removeListener === 'function';
@@ -22877,9 +22878,9 @@ var __extends = undefined && undefined.__extends || function (d, b) {
     }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var isFunction_1 = __webpack_require__(/*! ../util/isFunction */ 42);
+var isFunction_1 = __webpack_require__(/*! ../util/isFunction */ 47);
 var Observable_1 = __webpack_require__(/*! ../Observable */ 0);
-var Subscription_1 = __webpack_require__(/*! ../Subscription */ 7);
+var Subscription_1 = __webpack_require__(/*! ../Subscription */ 8);
 /**
  * We need this JSDoc comment for affecting ESDoc.
  * @extends {Ignored}
@@ -23014,7 +23015,7 @@ Observable_1.Observable.fromPromise = fromPromise_1.fromPromise;
 "use strict";
 
 
-var PromiseObservable_1 = __webpack_require__(/*! ./PromiseObservable */ 172);
+var PromiseObservable_1 = __webpack_require__(/*! ./PromiseObservable */ 182);
 exports.fromPromise = PromiseObservable_1.PromiseObservable.create;
 //# sourceMappingURL=fromPromise.js.map
 
@@ -23072,7 +23073,7 @@ var __extends = undefined && undefined.__extends || function (d, b) {
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 var Observable_1 = __webpack_require__(/*! ../Observable */ 0);
-var isScheduler_1 = __webpack_require__(/*! ../util/isScheduler */ 19);
+var isScheduler_1 = __webpack_require__(/*! ../util/isScheduler */ 22);
 var selfSelector = function selfSelector(value) {
     return value;
 };
@@ -23366,9 +23367,9 @@ var __extends = undefined && undefined.__extends || function (d, b) {
     }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var isNumeric_1 = __webpack_require__(/*! ../util/isNumeric */ 75);
+var isNumeric_1 = __webpack_require__(/*! ../util/isNumeric */ 83);
 var Observable_1 = __webpack_require__(/*! ../Observable */ 0);
-var async_1 = __webpack_require__(/*! ../scheduler/async */ 16);
+var async_1 = __webpack_require__(/*! ../scheduler/async */ 18);
 /**
  * We need this JSDoc comment for affecting ESDoc.
  * @extends {Ignored}
@@ -23488,7 +23489,7 @@ Observable_1.Observable.race = race_1.race;
 "use strict";
 
 
-var race_1 = __webpack_require__(/*! ../operator/race */ 177);
+var race_1 = __webpack_require__(/*! ../operator/race */ 187);
 exports.race = race_1.raceStatic;
 //# sourceMappingURL=race.js.map
 
@@ -23546,7 +23547,7 @@ var __extends = undefined && undefined.__extends || function (d, b) {
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 var Observable_1 = __webpack_require__(/*! ../Observable */ 0);
-var noop_1 = __webpack_require__(/*! ../util/noop */ 178);
+var noop_1 = __webpack_require__(/*! ../util/noop */ 188);
 /**
  * We need this JSDoc comment for affecting ESDoc.
  * @extends {Ignored}
@@ -23628,7 +23629,7 @@ Observable_1.Observable.of = of_1.of;
 "use strict";
 
 
-var ArrayObservable_1 = __webpack_require__(/*! ./ArrayObservable */ 20);
+var ArrayObservable_1 = __webpack_require__(/*! ./ArrayObservable */ 23);
 exports.of = ArrayObservable_1.ArrayObservable.of;
 //# sourceMappingURL=of.js.map
 
@@ -23661,7 +23662,7 @@ Observable_1.Observable.onErrorResumeNext = onErrorResumeNext_1.onErrorResumeNex
 "use strict";
 
 
-var onErrorResumeNext_1 = __webpack_require__(/*! ../operator/onErrorResumeNext */ 179);
+var onErrorResumeNext_1 = __webpack_require__(/*! ../operator/onErrorResumeNext */ 189);
 exports.onErrorResumeNext = onErrorResumeNext_1.onErrorResumeNextStatic;
 //# sourceMappingURL=onErrorResumeNext.js.map
 
@@ -24246,11 +24247,11 @@ var __extends = undefined && undefined.__extends || function (d, b) {
     }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var isNumeric_1 = __webpack_require__(/*! ../util/isNumeric */ 75);
+var isNumeric_1 = __webpack_require__(/*! ../util/isNumeric */ 83);
 var Observable_1 = __webpack_require__(/*! ../Observable */ 0);
-var async_1 = __webpack_require__(/*! ../scheduler/async */ 16);
-var isScheduler_1 = __webpack_require__(/*! ../util/isScheduler */ 19);
-var isDate_1 = __webpack_require__(/*! ../util/isDate */ 76);
+var async_1 = __webpack_require__(/*! ../scheduler/async */ 18);
+var isScheduler_1 = __webpack_require__(/*! ../util/isScheduler */ 22);
+var isDate_1 = __webpack_require__(/*! ../util/isDate */ 84);
 /**
  * We need this JSDoc comment for affecting ESDoc.
  * @extends {Ignored}
@@ -24382,7 +24383,7 @@ Observable_1.Observable.zip = zip_1.zip;
 "use strict";
 
 
-var zip_1 = __webpack_require__(/*! ../operator/zip */ 102);
+var zip_1 = __webpack_require__(/*! ../operator/zip */ 112);
 exports.zip = zip_1.zipStatic;
 //# sourceMappingURL=zip.js.map
 
@@ -24415,7 +24416,7 @@ Observable_1.Observable.ajax = ajax_1.ajax;
 "use strict";
 
 
-var AjaxObservable_1 = __webpack_require__(/*! ./AjaxObservable */ 180);
+var AjaxObservable_1 = __webpack_require__(/*! ./AjaxObservable */ 190);
 exports.ajax = AjaxObservable_1.AjaxObservable.create;
 //# sourceMappingURL=ajax.js.map
 
@@ -24472,14 +24473,14 @@ var __extends = undefined && undefined.__extends || function (d, b) {
     }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var Subject_1 = __webpack_require__(/*! ../../Subject */ 10);
-var Subscriber_1 = __webpack_require__(/*! ../../Subscriber */ 2);
+var Subject_1 = __webpack_require__(/*! ../../Subject */ 11);
+var Subscriber_1 = __webpack_require__(/*! ../../Subscriber */ 3);
 var Observable_1 = __webpack_require__(/*! ../../Observable */ 0);
-var Subscription_1 = __webpack_require__(/*! ../../Subscription */ 7);
-var root_1 = __webpack_require__(/*! ../../util/root */ 9);
-var ReplaySubject_1 = __webpack_require__(/*! ../../ReplaySubject */ 46);
+var Subscription_1 = __webpack_require__(/*! ../../Subscription */ 8);
+var root_1 = __webpack_require__(/*! ../../util/root */ 10);
+var ReplaySubject_1 = __webpack_require__(/*! ../../ReplaySubject */ 51);
 var tryCatch_1 = __webpack_require__(/*! ../../util/tryCatch */ 13);
-var errorObject_1 = __webpack_require__(/*! ../../util/errorObject */ 11);
+var errorObject_1 = __webpack_require__(/*! ../../util/errorObject */ 12);
 var assign_1 = __webpack_require__(/*! ../../util/assign */ 478);
 /**
  * We need this JSDoc comment for affecting ESDoc.
@@ -24725,7 +24726,7 @@ exports.WebSocketSubject = WebSocketSubject;
 "use strict";
 
 
-var root_1 = __webpack_require__(/*! ./root */ 9);
+var root_1 = __webpack_require__(/*! ./root */ 10);
 function assignImpl(target) {
     var sources = [];
     for (var _i = 1; _i < arguments.length; _i++) {
@@ -24896,7 +24897,7 @@ var __extends = undefined && undefined.__extends || function (d, b) {
     }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var Subscriber_1 = __webpack_require__(/*! ../Subscriber */ 2);
+var Subscriber_1 = __webpack_require__(/*! ../Subscriber */ 3);
 /**
  * Buffers the source Observable values until the size hits the maximum
  * `bufferSize` given.
@@ -25075,9 +25076,9 @@ var __extends = undefined && undefined.__extends || function (d, b) {
     }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var async_1 = __webpack_require__(/*! ../scheduler/async */ 16);
-var Subscriber_1 = __webpack_require__(/*! ../Subscriber */ 2);
-var isScheduler_1 = __webpack_require__(/*! ../util/isScheduler */ 19);
+var async_1 = __webpack_require__(/*! ../scheduler/async */ 18);
+var Subscriber_1 = __webpack_require__(/*! ../Subscriber */ 3);
+var isScheduler_1 = __webpack_require__(/*! ../util/isScheduler */ 22);
 /* tslint:enable:max-line-length */
 /**
  * Buffers the source Observable values for a specific time period.
@@ -25311,7 +25312,7 @@ var __extends = undefined && undefined.__extends || function (d, b) {
     }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var Subscription_1 = __webpack_require__(/*! ../Subscription */ 7);
+var Subscription_1 = __webpack_require__(/*! ../Subscription */ 8);
 var subscribeToResult_1 = __webpack_require__(/*! ../util/subscribeToResult */ 6);
 var OuterSubscriber_1 = __webpack_require__(/*! ../OuterSubscriber */ 5);
 /**
@@ -25494,9 +25495,9 @@ var __extends = undefined && undefined.__extends || function (d, b) {
     }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var Subscription_1 = __webpack_require__(/*! ../Subscription */ 7);
+var Subscription_1 = __webpack_require__(/*! ../Subscription */ 8);
 var tryCatch_1 = __webpack_require__(/*! ../util/tryCatch */ 13);
-var errorObject_1 = __webpack_require__(/*! ../util/errorObject */ 11);
+var errorObject_1 = __webpack_require__(/*! ../util/errorObject */ 12);
 var OuterSubscriber_1 = __webpack_require__(/*! ../OuterSubscriber */ 5);
 var subscribeToResult_1 = __webpack_require__(/*! ../util/subscribeToResult */ 6);
 /**
@@ -25786,7 +25787,7 @@ Observable_1.Observable.prototype.combineAll = combineAll_1.combineAll;
 "use strict";
 
 
-var combineLatest_1 = __webpack_require__(/*! ./combineLatest */ 72);
+var combineLatest_1 = __webpack_require__(/*! ./combineLatest */ 80);
 /**
  * Converts a higher-order Observable into a first-order Observable by waiting
  * for the outer Observable to complete, then applying {@link combineLatest}.
@@ -25846,7 +25847,7 @@ exports.combineAll = combineAll;
 
 
 var Observable_1 = __webpack_require__(/*! ../../Observable */ 0);
-var combineLatest_1 = __webpack_require__(/*! ../../operator/combineLatest */ 72);
+var combineLatest_1 = __webpack_require__(/*! ../../operator/combineLatest */ 80);
 Observable_1.Observable.prototype.combineLatest = combineLatest_1.combineLatest;
 //# sourceMappingURL=combineLatest.js.map
 
@@ -25863,7 +25864,7 @@ Observable_1.Observable.prototype.combineLatest = combineLatest_1.combineLatest;
 
 
 var Observable_1 = __webpack_require__(/*! ../../Observable */ 0);
-var concat_1 = __webpack_require__(/*! ../../operator/concat */ 73);
+var concat_1 = __webpack_require__(/*! ../../operator/concat */ 81);
 Observable_1.Observable.prototype.concat = concat_1.concat;
 //# sourceMappingURL=concat.js.map
 
@@ -25896,7 +25897,7 @@ Observable_1.Observable.prototype.concatAll = concatAll_1.concatAll;
 "use strict";
 
 
-var mergeAll_1 = __webpack_require__(/*! ./mergeAll */ 45);
+var mergeAll_1 = __webpack_require__(/*! ./mergeAll */ 50);
 /* tslint:enable:max-line-length */
 /**
  * Converts a higher-order Observable into a first-order Observable by
@@ -25981,7 +25982,7 @@ Observable_1.Observable.prototype.concatMap = concatMap_1.concatMap;
 "use strict";
 
 
-var mergeMap_1 = __webpack_require__(/*! ./mergeMap */ 183);
+var mergeMap_1 = __webpack_require__(/*! ./mergeMap */ 193);
 /* tslint:enable:max-line-length */
 /**
  * Projects each source value to an Observable which is merged in the output
@@ -26077,7 +26078,7 @@ Observable_1.Observable.prototype.concatMapTo = concatMapTo_1.concatMapTo;
 "use strict";
 
 
-var mergeMapTo_1 = __webpack_require__(/*! ./mergeMapTo */ 184);
+var mergeMapTo_1 = __webpack_require__(/*! ./mergeMapTo */ 194);
 /* tslint:enable:max-line-length */
 /**
  * Projects each source value to the same Observable which is merged multiple
@@ -26178,7 +26179,7 @@ var __extends = undefined && undefined.__extends || function (d, b) {
     }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var Subscriber_1 = __webpack_require__(/*! ../Subscriber */ 2);
+var Subscriber_1 = __webpack_require__(/*! ../Subscriber */ 3);
 /**
  * Counts the number of emissions on the source and emits that number when the
  * source completes.
@@ -26319,7 +26320,7 @@ var __extends = undefined && undefined.__extends || function (d, b) {
     }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var Subscriber_1 = __webpack_require__(/*! ../Subscriber */ 2);
+var Subscriber_1 = __webpack_require__(/*! ../Subscriber */ 3);
 /**
  * Converts an Observable of {@link Notification} objects into the emissions
  * that they represent.
@@ -26583,8 +26584,8 @@ var __extends = undefined && undefined.__extends || function (d, b) {
     }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var Subscriber_1 = __webpack_require__(/*! ../Subscriber */ 2);
-var async_1 = __webpack_require__(/*! ../scheduler/async */ 16);
+var Subscriber_1 = __webpack_require__(/*! ../Subscriber */ 3);
+var async_1 = __webpack_require__(/*! ../scheduler/async */ 18);
 /**
  * Emits a value from the source Observable only after a particular time span
  * has passed without another source emission.
@@ -26733,7 +26734,7 @@ var __extends = undefined && undefined.__extends || function (d, b) {
     }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var Subscriber_1 = __webpack_require__(/*! ../Subscriber */ 2);
+var Subscriber_1 = __webpack_require__(/*! ../Subscriber */ 3);
 /* tslint:enable:max-line-length */
 /**
  * Emits a given value if the source Observable completes without emitting any
@@ -26844,10 +26845,10 @@ var __extends = undefined && undefined.__extends || function (d, b) {
     }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var async_1 = __webpack_require__(/*! ../scheduler/async */ 16);
-var isDate_1 = __webpack_require__(/*! ../util/isDate */ 76);
-var Subscriber_1 = __webpack_require__(/*! ../Subscriber */ 2);
-var Notification_1 = __webpack_require__(/*! ../Notification */ 38);
+var async_1 = __webpack_require__(/*! ../scheduler/async */ 18);
+var isDate_1 = __webpack_require__(/*! ../util/isDate */ 84);
+var Subscriber_1 = __webpack_require__(/*! ../Subscriber */ 3);
+var Notification_1 = __webpack_require__(/*! ../Notification */ 44);
 /**
  * Delays the emission of items from the source Observable by a given timeout or
  * until a given Date.
@@ -27012,7 +27013,7 @@ var __extends = undefined && undefined.__extends || function (d, b) {
     }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var Subscriber_1 = __webpack_require__(/*! ../Subscriber */ 2);
+var Subscriber_1 = __webpack_require__(/*! ../Subscriber */ 3);
 var Observable_1 = __webpack_require__(/*! ../Observable */ 0);
 var OuterSubscriber_1 = __webpack_require__(/*! ../OuterSubscriber */ 5);
 var subscribeToResult_1 = __webpack_require__(/*! ../util/subscribeToResult */ 6);
@@ -27359,7 +27360,7 @@ exports.DistinctSubscriber = DistinctSubscriber;
 "use strict";
 
 
-var root_1 = __webpack_require__(/*! ./root */ 9);
+var root_1 = __webpack_require__(/*! ./root */ 10);
 function minimalSetImpl() {
     // THIS IS NOT a full impl of Set, this is just the minimum
     // bits of functionality we need for this library.
@@ -27421,7 +27422,7 @@ Observable_1.Observable.prototype.distinctUntilKeyChanged = distinctUntilKeyChan
 "use strict";
 
 
-var distinctUntilChanged_1 = __webpack_require__(/*! ./distinctUntilChanged */ 104);
+var distinctUntilChanged_1 = __webpack_require__(/*! ./distinctUntilChanged */ 114);
 /* tslint:enable:max-line-length */
 /**
  * Returns an Observable that emits all items emitted by the source Observable that are distinct by comparison from the previous item,
@@ -27820,7 +27821,7 @@ var __extends = undefined && undefined.__extends || function (d, b) {
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 var tryCatch_1 = __webpack_require__(/*! ../util/tryCatch */ 13);
-var errorObject_1 = __webpack_require__(/*! ../util/errorObject */ 11);
+var errorObject_1 = __webpack_require__(/*! ../util/errorObject */ 12);
 var OuterSubscriber_1 = __webpack_require__(/*! ../OuterSubscriber */ 5);
 var subscribeToResult_1 = __webpack_require__(/*! ../util/subscribeToResult */ 6);
 /* tslint:enable:max-line-length */
@@ -28006,8 +28007,8 @@ var __extends = undefined && undefined.__extends || function (d, b) {
     }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var Subscriber_1 = __webpack_require__(/*! ../Subscriber */ 2);
-var ArgumentOutOfRangeError_1 = __webpack_require__(/*! ../util/ArgumentOutOfRangeError */ 54);
+var Subscriber_1 = __webpack_require__(/*! ../Subscriber */ 3);
+var ArgumentOutOfRangeError_1 = __webpack_require__(/*! ../util/ArgumentOutOfRangeError */ 60);
 /**
  * Emits the single value at the specified `index` in a sequence of emissions
  * from the source Observable.
@@ -28138,8 +28139,8 @@ var __extends = undefined && undefined.__extends || function (d, b) {
     }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var Subscriber_1 = __webpack_require__(/*! ../Subscriber */ 2);
-var Subscription_1 = __webpack_require__(/*! ../Subscription */ 7);
+var Subscriber_1 = __webpack_require__(/*! ../Subscriber */ 3);
+var Subscription_1 = __webpack_require__(/*! ../Subscription */ 8);
 /**
  * Returns an Observable that mirrors the source Observable, but will call a specified function when
  * the source terminates on complete or error.
@@ -28189,7 +28190,7 @@ var FinallySubscriber = function (_super) {
 
 
 var Observable_1 = __webpack_require__(/*! ../../Observable */ 0);
-var find_1 = __webpack_require__(/*! ../../operator/find */ 189);
+var find_1 = __webpack_require__(/*! ../../operator/find */ 199);
 Observable_1.Observable.prototype.find = find_1.find;
 //# sourceMappingURL=find.js.map
 
@@ -28222,7 +28223,7 @@ Observable_1.Observable.prototype.findIndex = findIndex_1.findIndex;
 "use strict";
 
 
-var find_1 = __webpack_require__(/*! ./find */ 189);
+var find_1 = __webpack_require__(/*! ./find */ 199);
 /**
  * Emits only the index of the first value emitted by the source Observable that
  * meets some condition.
@@ -28300,8 +28301,8 @@ var __extends = undefined && undefined.__extends || function (d, b) {
     }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var Subscriber_1 = __webpack_require__(/*! ../Subscriber */ 2);
-var EmptyError_1 = __webpack_require__(/*! ../util/EmptyError */ 77);
+var Subscriber_1 = __webpack_require__(/*! ../Subscriber */ 3);
+var EmptyError_1 = __webpack_require__(/*! ../util/EmptyError */ 85);
 /**
  * Emits only the first value (or the first value that meets some condition)
  * emitted by the source Observable.
@@ -28480,10 +28481,10 @@ var __extends = undefined && undefined.__extends || function (d, b) {
     }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var Subscriber_1 = __webpack_require__(/*! ../Subscriber */ 2);
-var Subscription_1 = __webpack_require__(/*! ../Subscription */ 7);
+var Subscriber_1 = __webpack_require__(/*! ../Subscriber */ 3);
+var Subscription_1 = __webpack_require__(/*! ../Subscription */ 8);
 var Observable_1 = __webpack_require__(/*! ../Observable */ 0);
-var Subject_1 = __webpack_require__(/*! ../Subject */ 10);
+var Subject_1 = __webpack_require__(/*! ../Subject */ 11);
 var Map_1 = __webpack_require__(/*! ../util/Map */ 537);
 var FastMap_1 = __webpack_require__(/*! ../util/FastMap */ 539);
 /* tslint:enable:max-line-length */
@@ -28761,7 +28762,7 @@ var InnerRefCountSubscription = function (_super) {
 "use strict";
 
 
-var root_1 = __webpack_require__(/*! ./root */ 9);
+var root_1 = __webpack_require__(/*! ./root */ 10);
 var MapPolyfill_1 = __webpack_require__(/*! ./MapPolyfill */ 538);
 exports.Map = root_1.root.Map || function () {
   return MapPolyfill_1.MapPolyfill;
@@ -28906,8 +28907,8 @@ var __extends = undefined && undefined.__extends || function (d, b) {
     }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var Subscriber_1 = __webpack_require__(/*! ../Subscriber */ 2);
-var noop_1 = __webpack_require__(/*! ../util/noop */ 178);
+var Subscriber_1 = __webpack_require__(/*! ../Subscriber */ 3);
+var noop_1 = __webpack_require__(/*! ../util/noop */ 188);
 /**
  * Ignores all items emitted by the source Observable and only passes calls of `complete` or `error`.
  *
@@ -28984,7 +28985,7 @@ var __extends = undefined && undefined.__extends || function (d, b) {
     }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var Subscriber_1 = __webpack_require__(/*! ../Subscriber */ 2);
+var Subscriber_1 = __webpack_require__(/*! ../Subscriber */ 3);
 /**
  * If the source Observable is empty it returns an Observable that emits true, otherwise it emits false.
  *
@@ -29068,7 +29069,7 @@ var __extends = undefined && undefined.__extends || function (d, b) {
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 var tryCatch_1 = __webpack_require__(/*! ../util/tryCatch */ 13);
-var errorObject_1 = __webpack_require__(/*! ../util/errorObject */ 11);
+var errorObject_1 = __webpack_require__(/*! ../util/errorObject */ 12);
 var OuterSubscriber_1 = __webpack_require__(/*! ../OuterSubscriber */ 5);
 var subscribeToResult_1 = __webpack_require__(/*! ../util/subscribeToResult */ 6);
 /**
@@ -29216,8 +29217,8 @@ var __extends = undefined && undefined.__extends || function (d, b) {
     }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var async_1 = __webpack_require__(/*! ../scheduler/async */ 16);
-var Subscriber_1 = __webpack_require__(/*! ../Subscriber */ 2);
+var async_1 = __webpack_require__(/*! ../scheduler/async */ 18);
+var Subscriber_1 = __webpack_require__(/*! ../Subscriber */ 3);
 /**
  * Ignores source values for `duration` milliseconds, then emits the most recent
  * value from the source Observable, then repeats this process.
@@ -29357,8 +29358,8 @@ var __extends = undefined && undefined.__extends || function (d, b) {
     }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var Subscriber_1 = __webpack_require__(/*! ../Subscriber */ 2);
-var EmptyError_1 = __webpack_require__(/*! ../util/EmptyError */ 77);
+var Subscriber_1 = __webpack_require__(/*! ../Subscriber */ 3);
+var EmptyError_1 = __webpack_require__(/*! ../util/EmptyError */ 85);
 /* tslint:enable:max-line-length */
 /**
  * Returns an Observable that emits only the last item emitted by the source Observable.
@@ -29546,7 +29547,7 @@ var __extends = undefined && undefined.__extends || function (d, b) {
     }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var Subscriber_1 = __webpack_require__(/*! ../Subscriber */ 2);
+var Subscriber_1 = __webpack_require__(/*! ../Subscriber */ 3);
 /**
  * Returns an Observable that emits whether or not every item of the source satisfies the condition specified.
  *
@@ -29651,7 +29652,7 @@ var __extends = undefined && undefined.__extends || function (d, b) {
     }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var Subscriber_1 = __webpack_require__(/*! ../Subscriber */ 2);
+var Subscriber_1 = __webpack_require__(/*! ../Subscriber */ 3);
 /**
  * Emits the given constant value on the output Observable every time the source
  * Observable emits a value.
@@ -29746,8 +29747,8 @@ var __extends = undefined && undefined.__extends || function (d, b) {
     }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var Subscriber_1 = __webpack_require__(/*! ../Subscriber */ 2);
-var Notification_1 = __webpack_require__(/*! ../Notification */ 38);
+var Subscriber_1 = __webpack_require__(/*! ../Subscriber */ 3);
+var Notification_1 = __webpack_require__(/*! ../Notification */ 44);
 /**
  * Represents all of the notifications from the source Observable as `next`
  * emissions marked with their original types within {@link Notification}
@@ -29859,7 +29860,7 @@ Observable_1.Observable.prototype.max = max_1.max;
 "use strict";
 
 
-var reduce_1 = __webpack_require__(/*! ./reduce */ 106);
+var reduce_1 = __webpack_require__(/*! ./reduce */ 116);
 /**
  * The Max operator operates on an Observable that emits numbers (or items that can be compared with a provided function),
  * and when source Observable completes it emits a single item: the item with the largest value.
@@ -29915,7 +29916,7 @@ exports.max = max;
 
 
 var Observable_1 = __webpack_require__(/*! ../../Observable */ 0);
-var merge_1 = __webpack_require__(/*! ../../operator/merge */ 101);
+var merge_1 = __webpack_require__(/*! ../../operator/merge */ 111);
 Observable_1.Observable.prototype.merge = merge_1.merge;
 //# sourceMappingURL=merge.js.map
 
@@ -29932,7 +29933,7 @@ Observable_1.Observable.prototype.merge = merge_1.merge;
 
 
 var Observable_1 = __webpack_require__(/*! ../../Observable */ 0);
-var mergeAll_1 = __webpack_require__(/*! ../../operator/mergeAll */ 45);
+var mergeAll_1 = __webpack_require__(/*! ../../operator/mergeAll */ 50);
 Observable_1.Observable.prototype.mergeAll = mergeAll_1.mergeAll;
 //# sourceMappingURL=mergeAll.js.map
 
@@ -29949,7 +29950,7 @@ Observable_1.Observable.prototype.mergeAll = mergeAll_1.mergeAll;
 
 
 var Observable_1 = __webpack_require__(/*! ../../Observable */ 0);
-var mergeMap_1 = __webpack_require__(/*! ../../operator/mergeMap */ 183);
+var mergeMap_1 = __webpack_require__(/*! ../../operator/mergeMap */ 193);
 Observable_1.Observable.prototype.mergeMap = mergeMap_1.mergeMap;
 Observable_1.Observable.prototype.flatMap = mergeMap_1.mergeMap;
 //# sourceMappingURL=mergeMap.js.map
@@ -29967,7 +29968,7 @@ Observable_1.Observable.prototype.flatMap = mergeMap_1.mergeMap;
 
 
 var Observable_1 = __webpack_require__(/*! ../../Observable */ 0);
-var mergeMapTo_1 = __webpack_require__(/*! ../../operator/mergeMapTo */ 184);
+var mergeMapTo_1 = __webpack_require__(/*! ../../operator/mergeMapTo */ 194);
 Observable_1.Observable.prototype.flatMapTo = mergeMapTo_1.mergeMapTo;
 Observable_1.Observable.prototype.mergeMapTo = mergeMapTo_1.mergeMapTo;
 //# sourceMappingURL=mergeMapTo.js.map
@@ -30010,7 +30011,7 @@ var __extends = undefined && undefined.__extends || function (d, b) {
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 var tryCatch_1 = __webpack_require__(/*! ../util/tryCatch */ 13);
-var errorObject_1 = __webpack_require__(/*! ../util/errorObject */ 11);
+var errorObject_1 = __webpack_require__(/*! ../util/errorObject */ 12);
 var subscribeToResult_1 = __webpack_require__(/*! ../util/subscribeToResult */ 6);
 var OuterSubscriber_1 = __webpack_require__(/*! ../OuterSubscriber */ 5);
 /**
@@ -30161,7 +30162,7 @@ Observable_1.Observable.prototype.min = min_1.min;
 "use strict";
 
 
-var reduce_1 = __webpack_require__(/*! ./reduce */ 106);
+var reduce_1 = __webpack_require__(/*! ./reduce */ 116);
 /**
  * The Min operator operates on an Observable that emits numbers (or items that can be compared with a provided function),
  * and when source Observable completes it emits a single item: the item with the smallest value.
@@ -30217,7 +30218,7 @@ exports.min = min;
 
 
 var Observable_1 = __webpack_require__(/*! ../../Observable */ 0);
-var multicast_1 = __webpack_require__(/*! ../../operator/multicast */ 30);
+var multicast_1 = __webpack_require__(/*! ../../operator/multicast */ 31);
 Observable_1.Observable.prototype.multicast = multicast_1.multicast;
 //# sourceMappingURL=multicast.js.map
 
@@ -30234,7 +30235,7 @@ Observable_1.Observable.prototype.multicast = multicast_1.multicast;
 
 
 var Observable_1 = __webpack_require__(/*! ../../Observable */ 0);
-var observeOn_1 = __webpack_require__(/*! ../../operator/observeOn */ 74);
+var observeOn_1 = __webpack_require__(/*! ../../operator/observeOn */ 82);
 Observable_1.Observable.prototype.observeOn = observeOn_1.observeOn;
 //# sourceMappingURL=observeOn.js.map
 
@@ -30251,7 +30252,7 @@ Observable_1.Observable.prototype.observeOn = observeOn_1.observeOn;
 
 
 var Observable_1 = __webpack_require__(/*! ../../Observable */ 0);
-var onErrorResumeNext_1 = __webpack_require__(/*! ../../operator/onErrorResumeNext */ 179);
+var onErrorResumeNext_1 = __webpack_require__(/*! ../../operator/onErrorResumeNext */ 189);
 Observable_1.Observable.prototype.onErrorResumeNext = onErrorResumeNext_1.onErrorResumeNext;
 //# sourceMappingURL=onErrorResumeNext.js.map
 
@@ -30292,7 +30293,7 @@ var __extends = undefined && undefined.__extends || function (d, b) {
     }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var Subscriber_1 = __webpack_require__(/*! ../Subscriber */ 2);
+var Subscriber_1 = __webpack_require__(/*! ../Subscriber */ 3);
 /**
  * Groups pairs of consecutive emissions together and emits them as an array of
  * two values.
@@ -30392,7 +30393,7 @@ Observable_1.Observable.prototype.partition = partition_1.partition;
 
 
 var not_1 = __webpack_require__(/*! ../util/not */ 575);
-var filter_1 = __webpack_require__(/*! ./filter */ 105);
+var filter_1 = __webpack_require__(/*! ./filter */ 115);
 /**
  * Splits the source Observable into two, one with values that satisfy a
  * predicate, and another with values that don't satisfy the predicate.
@@ -30492,8 +30493,8 @@ Observable_1.Observable.prototype.publish = publish_1.publish;
 "use strict";
 
 
-var Subject_1 = __webpack_require__(/*! ../Subject */ 10);
-var multicast_1 = __webpack_require__(/*! ./multicast */ 30);
+var Subject_1 = __webpack_require__(/*! ../Subject */ 11);
+var multicast_1 = __webpack_require__(/*! ./multicast */ 31);
 /* tslint:enable:max-line-length */
 /**
  * Returns a ConnectableObservable, which is a variety of Observable that waits until its connect method is called
@@ -30545,8 +30546,8 @@ Observable_1.Observable.prototype.publishBehavior = publishBehavior_1.publishBeh
 "use strict";
 
 
-var BehaviorSubject_1 = __webpack_require__(/*! ../BehaviorSubject */ 193);
-var multicast_1 = __webpack_require__(/*! ./multicast */ 30);
+var BehaviorSubject_1 = __webpack_require__(/*! ../BehaviorSubject */ 203);
+var multicast_1 = __webpack_require__(/*! ./multicast */ 31);
 /**
  * @param value
  * @return {ConnectableObservable<T>}
@@ -30588,8 +30589,8 @@ Observable_1.Observable.prototype.publishReplay = publishReplay_1.publishReplay;
 "use strict";
 
 
-var ReplaySubject_1 = __webpack_require__(/*! ../ReplaySubject */ 46);
-var multicast_1 = __webpack_require__(/*! ./multicast */ 30);
+var ReplaySubject_1 = __webpack_require__(/*! ../ReplaySubject */ 51);
+var multicast_1 = __webpack_require__(/*! ./multicast */ 31);
 /**
  * @param bufferSize
  * @param windowTime
@@ -30639,8 +30640,8 @@ Observable_1.Observable.prototype.publishLast = publishLast_1.publishLast;
 "use strict";
 
 
-var AsyncSubject_1 = __webpack_require__(/*! ../AsyncSubject */ 71);
-var multicast_1 = __webpack_require__(/*! ./multicast */ 30);
+var AsyncSubject_1 = __webpack_require__(/*! ../AsyncSubject */ 79);
+var multicast_1 = __webpack_require__(/*! ./multicast */ 31);
 /**
  * @return {ConnectableObservable<T>}
  * @method publishLast
@@ -30665,7 +30666,7 @@ exports.publishLast = publishLast;
 
 
 var Observable_1 = __webpack_require__(/*! ../../Observable */ 0);
-var race_1 = __webpack_require__(/*! ../../operator/race */ 177);
+var race_1 = __webpack_require__(/*! ../../operator/race */ 187);
 Observable_1.Observable.prototype.race = race_1.race;
 //# sourceMappingURL=race.js.map
 
@@ -30682,7 +30683,7 @@ Observable_1.Observable.prototype.race = race_1.race;
 
 
 var Observable_1 = __webpack_require__(/*! ../../Observable */ 0);
-var reduce_1 = __webpack_require__(/*! ../../operator/reduce */ 106);
+var reduce_1 = __webpack_require__(/*! ../../operator/reduce */ 116);
 Observable_1.Observable.prototype.reduce = reduce_1.reduce;
 //# sourceMappingURL=reduce.js.map
 
@@ -30723,8 +30724,8 @@ var __extends = undefined && undefined.__extends || function (d, b) {
     }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var Subscriber_1 = __webpack_require__(/*! ../Subscriber */ 2);
-var EmptyObservable_1 = __webpack_require__(/*! ../observable/EmptyObservable */ 27);
+var Subscriber_1 = __webpack_require__(/*! ../Subscriber */ 3);
+var EmptyObservable_1 = __webpack_require__(/*! ../observable/EmptyObservable */ 28);
 /**
  * Returns an Observable that repeats the stream of items emitted by the source Observable at most count times.
  *
@@ -30826,9 +30827,9 @@ var __extends = undefined && undefined.__extends || function (d, b) {
     }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var Subject_1 = __webpack_require__(/*! ../Subject */ 10);
+var Subject_1 = __webpack_require__(/*! ../Subject */ 11);
 var tryCatch_1 = __webpack_require__(/*! ../util/tryCatch */ 13);
-var errorObject_1 = __webpack_require__(/*! ../util/errorObject */ 11);
+var errorObject_1 = __webpack_require__(/*! ../util/errorObject */ 12);
 var OuterSubscriber_1 = __webpack_require__(/*! ../OuterSubscriber */ 5);
 var subscribeToResult_1 = __webpack_require__(/*! ../util/subscribeToResult */ 6);
 /**
@@ -30970,7 +30971,7 @@ var __extends = undefined && undefined.__extends || function (d, b) {
     }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var Subscriber_1 = __webpack_require__(/*! ../Subscriber */ 2);
+var Subscriber_1 = __webpack_require__(/*! ../Subscriber */ 3);
 /**
  * Returns an Observable that mirrors the source Observable with the exception of an `error`. If the source Observable
  * calls `error`, this method will resubscribe to the source Observable for a maximum of `count` resubscriptions (given
@@ -31070,9 +31071,9 @@ var __extends = undefined && undefined.__extends || function (d, b) {
     }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var Subject_1 = __webpack_require__(/*! ../Subject */ 10);
+var Subject_1 = __webpack_require__(/*! ../Subject */ 11);
 var tryCatch_1 = __webpack_require__(/*! ../util/tryCatch */ 13);
-var errorObject_1 = __webpack_require__(/*! ../util/errorObject */ 11);
+var errorObject_1 = __webpack_require__(/*! ../util/errorObject */ 12);
 var OuterSubscriber_1 = __webpack_require__(/*! ../OuterSubscriber */ 5);
 var subscribeToResult_1 = __webpack_require__(/*! ../util/subscribeToResult */ 6);
 /**
@@ -31207,8 +31208,8 @@ var __extends = undefined && undefined.__extends || function (d, b) {
     }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var Subscriber_1 = __webpack_require__(/*! ../Subscriber */ 2);
-var async_1 = __webpack_require__(/*! ../scheduler/async */ 16);
+var Subscriber_1 = __webpack_require__(/*! ../Subscriber */ 3);
+var async_1 = __webpack_require__(/*! ../scheduler/async */ 18);
 /**
  * Emits the most recently emitted value from the source Observable within
  * periodic time intervals.
@@ -31333,9 +31334,9 @@ var __extends = undefined && undefined.__extends || function (d, b) {
     }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var Subscriber_1 = __webpack_require__(/*! ../Subscriber */ 2);
+var Subscriber_1 = __webpack_require__(/*! ../Subscriber */ 3);
 var tryCatch_1 = __webpack_require__(/*! ../util/tryCatch */ 13);
-var errorObject_1 = __webpack_require__(/*! ../util/errorObject */ 11);
+var errorObject_1 = __webpack_require__(/*! ../util/errorObject */ 12);
 /**
  * Compares all values of two observables in sequence using an optional comparor function
  * and returns an observable of a single boolean value representing whether or not the two sequences
@@ -31520,8 +31521,8 @@ Observable_1.Observable.prototype.share = share_1.share;
 "use strict";
 
 
-var multicast_1 = __webpack_require__(/*! ./multicast */ 30);
-var Subject_1 = __webpack_require__(/*! ../Subject */ 10);
+var multicast_1 = __webpack_require__(/*! ./multicast */ 31);
+var Subject_1 = __webpack_require__(/*! ../Subject */ 11);
 function shareSubjectFactory() {
     return new Subject_1.Subject();
 }
@@ -31581,8 +31582,8 @@ var __extends = undefined && undefined.__extends || function (d, b) {
     }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var Subscriber_1 = __webpack_require__(/*! ../Subscriber */ 2);
-var EmptyError_1 = __webpack_require__(/*! ../util/EmptyError */ 77);
+var Subscriber_1 = __webpack_require__(/*! ../Subscriber */ 3);
+var EmptyError_1 = __webpack_require__(/*! ../util/EmptyError */ 85);
 /**
  * Returns an Observable that emits the single item emitted by the source Observable that matches a specified
  * predicate, if that Observable emits one such item. If the source Observable emits more than one such item or no
@@ -31702,7 +31703,7 @@ var __extends = undefined && undefined.__extends || function (d, b) {
     }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var Subscriber_1 = __webpack_require__(/*! ../Subscriber */ 2);
+var Subscriber_1 = __webpack_require__(/*! ../Subscriber */ 3);
 /**
  * Returns an Observable that skips the first `count` items emitted by the source Observable.
  *
@@ -31785,8 +31786,8 @@ var __extends = undefined && undefined.__extends || function (d, b) {
     }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var Subscriber_1 = __webpack_require__(/*! ../Subscriber */ 2);
-var ArgumentOutOfRangeError_1 = __webpack_require__(/*! ../util/ArgumentOutOfRangeError */ 54);
+var Subscriber_1 = __webpack_require__(/*! ../Subscriber */ 3);
+var ArgumentOutOfRangeError_1 = __webpack_require__(/*! ../util/ArgumentOutOfRangeError */ 60);
 /**
  * Skip the last `count` values emitted by the source Observable.
  *
@@ -32010,7 +32011,7 @@ var __extends = undefined && undefined.__extends || function (d, b) {
     }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var Subscriber_1 = __webpack_require__(/*! ../Subscriber */ 2);
+var Subscriber_1 = __webpack_require__(/*! ../Subscriber */ 3);
 /**
  * Returns an Observable that skips all items emitted by the source Observable as long as a specified condition holds
  * true, but emits all further source items as soon as the condition becomes false.
@@ -32151,8 +32152,8 @@ var __extends = undefined && undefined.__extends || function (d, b) {
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 var Observable_1 = __webpack_require__(/*! ../Observable */ 0);
-var asap_1 = __webpack_require__(/*! ../scheduler/asap */ 202);
-var isNumeric_1 = __webpack_require__(/*! ../util/isNumeric */ 75);
+var asap_1 = __webpack_require__(/*! ../scheduler/asap */ 212);
+var isNumeric_1 = __webpack_require__(/*! ../util/isNumeric */ 83);
 /**
  * We need this JSDoc comment for affecting ESDoc.
  * @extends {Ignored}
@@ -32226,7 +32227,7 @@ var __extends = undefined && undefined.__extends || function (d, b) {
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 var Immediate_1 = __webpack_require__(/*! ../util/Immediate */ 614);
-var AsyncAction_1 = __webpack_require__(/*! ./AsyncAction */ 39);
+var AsyncAction_1 = __webpack_require__(/*! ./AsyncAction */ 45);
 /**
  * We need this JSDoc comment for affecting ESDoc.
  * @ignore
@@ -32294,7 +32295,7 @@ Some credit for this helper goes to http://github.com/YuzuJS/setImmediate
 */
 
 
-var root_1 = __webpack_require__(/*! ./root */ 9);
+var root_1 = __webpack_require__(/*! ./root */ 10);
 var ImmediateDefinition = function () {
     function ImmediateDefinition(root) {
         this.root = root;
@@ -32495,7 +32496,7 @@ var ImmediateDefinition = function () {
 exports.ImmediateDefinition = ImmediateDefinition;
 exports.Immediate = new ImmediateDefinition(root_1.root);
 //# sourceMappingURL=Immediate.js.map
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(/*! ./../../timers-browserify/main.js */ 203).clearImmediate, __webpack_require__(/*! ./../../timers-browserify/main.js */ 203).setImmediate))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(/*! ./../../timers-browserify/main.js */ 213).clearImmediate, __webpack_require__(/*! ./../../timers-browserify/main.js */ 213).setImmediate))
 
 /***/ }),
 /* 615 */
@@ -32691,7 +32692,7 @@ exports.Immediate = new ImmediateDefinition(root_1.root);
     attachTo.setImmediate = setImmediate;
     attachTo.clearImmediate = clearImmediate;
 })(typeof self === "undefined" ? typeof global === "undefined" ? undefined : global : self);
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(/*! ./../webpack/buildin/global.js */ 97), __webpack_require__(/*! ./../process/browser.js */ 616)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(/*! ./../webpack/buildin/global.js */ 107), __webpack_require__(/*! ./../process/browser.js */ 616)))
 
 /***/ }),
 /* 616 */
@@ -32911,7 +32912,7 @@ var __extends = undefined && undefined.__extends || function (d, b) {
     }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var AsyncScheduler_1 = __webpack_require__(/*! ./AsyncScheduler */ 40);
+var AsyncScheduler_1 = __webpack_require__(/*! ./AsyncScheduler */ 46);
 var AsapScheduler = function (_super) {
     __extends(AsapScheduler, _super);
     function AsapScheduler() {
@@ -33448,9 +33449,9 @@ var __extends = undefined && undefined.__extends || function (d, b) {
     }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var Subscriber_1 = __webpack_require__(/*! ../Subscriber */ 2);
-var ArgumentOutOfRangeError_1 = __webpack_require__(/*! ../util/ArgumentOutOfRangeError */ 54);
-var EmptyObservable_1 = __webpack_require__(/*! ../observable/EmptyObservable */ 27);
+var Subscriber_1 = __webpack_require__(/*! ../Subscriber */ 3);
+var ArgumentOutOfRangeError_1 = __webpack_require__(/*! ../util/ArgumentOutOfRangeError */ 60);
+var EmptyObservable_1 = __webpack_require__(/*! ../observable/EmptyObservable */ 28);
 /**
  * Emits only the first `count` values emitted by the source Observable.
  *
@@ -33568,9 +33569,9 @@ var __extends = undefined && undefined.__extends || function (d, b) {
     }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var Subscriber_1 = __webpack_require__(/*! ../Subscriber */ 2);
-var ArgumentOutOfRangeError_1 = __webpack_require__(/*! ../util/ArgumentOutOfRangeError */ 54);
-var EmptyObservable_1 = __webpack_require__(/*! ../observable/EmptyObservable */ 27);
+var Subscriber_1 = __webpack_require__(/*! ../Subscriber */ 3);
+var ArgumentOutOfRangeError_1 = __webpack_require__(/*! ../util/ArgumentOutOfRangeError */ 60);
+var EmptyObservable_1 = __webpack_require__(/*! ../observable/EmptyObservable */ 28);
 /**
  * Emits only the last `count` values emitted by the source Observable.
  *
@@ -33812,7 +33813,7 @@ var __extends = undefined && undefined.__extends || function (d, b) {
     }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var Subscriber_1 = __webpack_require__(/*! ../Subscriber */ 2);
+var Subscriber_1 = __webpack_require__(/*! ../Subscriber */ 3);
 /**
  * Emits values emitted by the source Observable so long as each value satisfies
  * the given `predicate`, and then completes as soon as this `predicate` is not
@@ -33910,7 +33911,7 @@ var TakeWhileSubscriber = function (_super) {
 
 
 var Observable_1 = __webpack_require__(/*! ../../Observable */ 0);
-var throttle_1 = __webpack_require__(/*! ../../operator/throttle */ 204);
+var throttle_1 = __webpack_require__(/*! ../../operator/throttle */ 214);
 Observable_1.Observable.prototype.throttle = throttle_1.throttle;
 //# sourceMappingURL=throttle.js.map
 
@@ -33951,9 +33952,9 @@ var __extends = undefined && undefined.__extends || function (d, b) {
     }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var Subscriber_1 = __webpack_require__(/*! ../Subscriber */ 2);
-var async_1 = __webpack_require__(/*! ../scheduler/async */ 16);
-var throttle_1 = __webpack_require__(/*! ./throttle */ 204);
+var Subscriber_1 = __webpack_require__(/*! ../Subscriber */ 3);
+var async_1 = __webpack_require__(/*! ../scheduler/async */ 18);
+var throttle_1 = __webpack_require__(/*! ./throttle */ 214);
 /**
  * Emits a value from the source Observable, then ignores subsequent source
  * values for `duration` milliseconds, then repeats this process.
@@ -34078,7 +34079,7 @@ function dispatchNext(arg) {
 
 
 var Observable_1 = __webpack_require__(/*! ../../Observable */ 0);
-var timeInterval_1 = __webpack_require__(/*! ../../operator/timeInterval */ 205);
+var timeInterval_1 = __webpack_require__(/*! ../../operator/timeInterval */ 215);
 Observable_1.Observable.prototype.timeInterval = timeInterval_1.timeInterval;
 //# sourceMappingURL=timeInterval.js.map
 
@@ -34119,10 +34120,10 @@ var __extends = undefined && undefined.__extends || function (d, b) {
     }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var async_1 = __webpack_require__(/*! ../scheduler/async */ 16);
-var isDate_1 = __webpack_require__(/*! ../util/isDate */ 76);
-var Subscriber_1 = __webpack_require__(/*! ../Subscriber */ 2);
-var TimeoutError_1 = __webpack_require__(/*! ../util/TimeoutError */ 206);
+var async_1 = __webpack_require__(/*! ../scheduler/async */ 18);
+var isDate_1 = __webpack_require__(/*! ../util/isDate */ 84);
+var Subscriber_1 = __webpack_require__(/*! ../Subscriber */ 3);
+var TimeoutError_1 = __webpack_require__(/*! ../util/TimeoutError */ 216);
 /**
  *
  * Errors if Observable does not emit a value in given time span.
@@ -34293,8 +34294,8 @@ var __extends = undefined && undefined.__extends || function (d, b) {
     }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var async_1 = __webpack_require__(/*! ../scheduler/async */ 16);
-var isDate_1 = __webpack_require__(/*! ../util/isDate */ 76);
+var async_1 = __webpack_require__(/*! ../scheduler/async */ 18);
+var isDate_1 = __webpack_require__(/*! ../util/isDate */ 84);
 var OuterSubscriber_1 = __webpack_require__(/*! ../OuterSubscriber */ 5);
 var subscribeToResult_1 = __webpack_require__(/*! ../util/subscribeToResult */ 6);
 /* tslint:enable:max-line-length */
@@ -34389,7 +34390,7 @@ var TimeoutWithSubscriber = function (_super) {
 
 
 var Observable_1 = __webpack_require__(/*! ../../Observable */ 0);
-var timestamp_1 = __webpack_require__(/*! ../../operator/timestamp */ 207);
+var timestamp_1 = __webpack_require__(/*! ../../operator/timestamp */ 217);
 Observable_1.Observable.prototype.timestamp = timestamp_1.timestamp;
 //# sourceMappingURL=timestamp.js.map
 
@@ -34430,7 +34431,7 @@ var __extends = undefined && undefined.__extends || function (d, b) {
     }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var Subscriber_1 = __webpack_require__(/*! ../Subscriber */ 2);
+var Subscriber_1 = __webpack_require__(/*! ../Subscriber */ 3);
 /**
  * @return {Observable<any[]>|WebSocketSubject<T>|Observable<T>}
  * @method toArray
@@ -34498,7 +34499,7 @@ Observable_1.Observable.prototype.toPromise = toPromise_1.toPromise;
 "use strict";
 
 
-var root_1 = __webpack_require__(/*! ../util/root */ 9);
+var root_1 = __webpack_require__(/*! ../util/root */ 10);
 /* tslint:enable:max-line-length */
 /**
  * Converts an Observable sequence to a ES2015 compliant promise.
@@ -34612,7 +34613,7 @@ var __extends = undefined && undefined.__extends || function (d, b) {
     }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var Subject_1 = __webpack_require__(/*! ../Subject */ 10);
+var Subject_1 = __webpack_require__(/*! ../Subject */ 11);
 var OuterSubscriber_1 = __webpack_require__(/*! ../OuterSubscriber */ 5);
 var subscribeToResult_1 = __webpack_require__(/*! ../util/subscribeToResult */ 6);
 /**
@@ -34754,8 +34755,8 @@ var __extends = undefined && undefined.__extends || function (d, b) {
     }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var Subscriber_1 = __webpack_require__(/*! ../Subscriber */ 2);
-var Subject_1 = __webpack_require__(/*! ../Subject */ 10);
+var Subscriber_1 = __webpack_require__(/*! ../Subscriber */ 3);
+var Subject_1 = __webpack_require__(/*! ../Subject */ 11);
 /**
  * Branch out the source Observable values as a nested Observable with each
  * nested Observable emitting at most `windowSize` values.
@@ -34919,11 +34920,11 @@ var __extends = undefined && undefined.__extends || function (d, b) {
     }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var Subject_1 = __webpack_require__(/*! ../Subject */ 10);
-var async_1 = __webpack_require__(/*! ../scheduler/async */ 16);
-var Subscriber_1 = __webpack_require__(/*! ../Subscriber */ 2);
-var isNumeric_1 = __webpack_require__(/*! ../util/isNumeric */ 75);
-var isScheduler_1 = __webpack_require__(/*! ../util/isScheduler */ 19);
+var Subject_1 = __webpack_require__(/*! ../Subject */ 11);
+var async_1 = __webpack_require__(/*! ../scheduler/async */ 18);
+var Subscriber_1 = __webpack_require__(/*! ../Subscriber */ 3);
+var isNumeric_1 = __webpack_require__(/*! ../util/isNumeric */ 83);
+var isScheduler_1 = __webpack_require__(/*! ../util/isScheduler */ 22);
 function windowTime(windowTimeSpan) {
     var scheduler = async_1.async;
     var windowCreationInterval = null;
@@ -35116,10 +35117,10 @@ var __extends = undefined && undefined.__extends || function (d, b) {
     }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var Subject_1 = __webpack_require__(/*! ../Subject */ 10);
-var Subscription_1 = __webpack_require__(/*! ../Subscription */ 7);
+var Subject_1 = __webpack_require__(/*! ../Subject */ 11);
+var Subscription_1 = __webpack_require__(/*! ../Subscription */ 8);
 var tryCatch_1 = __webpack_require__(/*! ../util/tryCatch */ 13);
-var errorObject_1 = __webpack_require__(/*! ../util/errorObject */ 11);
+var errorObject_1 = __webpack_require__(/*! ../util/errorObject */ 12);
 var OuterSubscriber_1 = __webpack_require__(/*! ../OuterSubscriber */ 5);
 var subscribeToResult_1 = __webpack_require__(/*! ../util/subscribeToResult */ 6);
 /**
@@ -35326,9 +35327,9 @@ var __extends = undefined && undefined.__extends || function (d, b) {
     }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var Subject_1 = __webpack_require__(/*! ../Subject */ 10);
+var Subject_1 = __webpack_require__(/*! ../Subject */ 11);
 var tryCatch_1 = __webpack_require__(/*! ../util/tryCatch */ 13);
-var errorObject_1 = __webpack_require__(/*! ../util/errorObject */ 11);
+var errorObject_1 = __webpack_require__(/*! ../util/errorObject */ 12);
 var OuterSubscriber_1 = __webpack_require__(/*! ../OuterSubscriber */ 5);
 var subscribeToResult_1 = __webpack_require__(/*! ../util/subscribeToResult */ 6);
 /**
@@ -35462,7 +35463,7 @@ var WindowSubscriber = function (_super) {
 
 
 var Observable_1 = __webpack_require__(/*! ../../Observable */ 0);
-var zip_1 = __webpack_require__(/*! ../../operator/zip */ 102);
+var zip_1 = __webpack_require__(/*! ../../operator/zip */ 112);
 Observable_1.Observable.prototype.zip = zip_1.zipProto;
 //# sourceMappingURL=zip.js.map
 
@@ -35495,7 +35496,7 @@ Observable_1.Observable.prototype.zipAll = zipAll_1.zipAll;
 "use strict";
 
 
-var zip_1 = __webpack_require__(/*! ./zip */ 102);
+var zip_1 = __webpack_require__(/*! ./zip */ 112);
 /**
  * @param project
  * @return {Observable<R>|WebSocketSubject<T>|Observable<T>}
@@ -35531,11 +35532,11 @@ var __extends = undefined && undefined.__extends || function (d, b) {
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 var Observable_1 = __webpack_require__(/*! ../Observable */ 0);
-var Notification_1 = __webpack_require__(/*! ../Notification */ 38);
+var Notification_1 = __webpack_require__(/*! ../Notification */ 44);
 var ColdObservable_1 = __webpack_require__(/*! ./ColdObservable */ 659);
 var HotObservable_1 = __webpack_require__(/*! ./HotObservable */ 660);
-var SubscriptionLog_1 = __webpack_require__(/*! ./SubscriptionLog */ 211);
-var VirtualTimeScheduler_1 = __webpack_require__(/*! ../scheduler/VirtualTimeScheduler */ 213);
+var SubscriptionLog_1 = __webpack_require__(/*! ./SubscriptionLog */ 221);
+var VirtualTimeScheduler_1 = __webpack_require__(/*! ../scheduler/VirtualTimeScheduler */ 223);
 var defaultMaxFrame = 750;
 var TestScheduler = function (_super) {
     __extends(TestScheduler, _super);
@@ -35771,9 +35772,9 @@ var __extends = undefined && undefined.__extends || function (d, b) {
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 var Observable_1 = __webpack_require__(/*! ../Observable */ 0);
-var Subscription_1 = __webpack_require__(/*! ../Subscription */ 7);
-var SubscriptionLoggable_1 = __webpack_require__(/*! ./SubscriptionLoggable */ 210);
-var applyMixins_1 = __webpack_require__(/*! ../util/applyMixins */ 212);
+var Subscription_1 = __webpack_require__(/*! ../Subscription */ 8);
+var SubscriptionLoggable_1 = __webpack_require__(/*! ./SubscriptionLoggable */ 220);
+var applyMixins_1 = __webpack_require__(/*! ../util/applyMixins */ 222);
 /**
  * We need this JSDoc comment for affecting ESDoc.
  * @ignore
@@ -35832,10 +35833,10 @@ var __extends = undefined && undefined.__extends || function (d, b) {
     }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var Subject_1 = __webpack_require__(/*! ../Subject */ 10);
-var Subscription_1 = __webpack_require__(/*! ../Subscription */ 7);
-var SubscriptionLoggable_1 = __webpack_require__(/*! ./SubscriptionLoggable */ 210);
-var applyMixins_1 = __webpack_require__(/*! ../util/applyMixins */ 212);
+var Subject_1 = __webpack_require__(/*! ../Subject */ 11);
+var Subscription_1 = __webpack_require__(/*! ../Subscription */ 8);
+var SubscriptionLoggable_1 = __webpack_require__(/*! ./SubscriptionLoggable */ 220);
+var applyMixins_1 = __webpack_require__(/*! ../util/applyMixins */ 222);
 /**
  * We need this JSDoc comment for affecting ESDoc.
  * @ignore
@@ -35944,7 +35945,7 @@ var __extends = undefined && undefined.__extends || function (d, b) {
     }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var AsyncAction_1 = __webpack_require__(/*! ./AsyncAction */ 39);
+var AsyncAction_1 = __webpack_require__(/*! ./AsyncAction */ 45);
 var AnimationFrame_1 = __webpack_require__(/*! ../util/AnimationFrame */ 663);
 /**
  * We need this JSDoc comment for affecting ESDoc.
@@ -36010,7 +36011,7 @@ exports.AnimationFrameAction = AnimationFrameAction;
 "use strict";
 
 
-var root_1 = __webpack_require__(/*! ./root */ 9);
+var root_1 = __webpack_require__(/*! ./root */ 10);
 var RequestAnimationFrameDefinition = function () {
     function RequestAnimationFrameDefinition(root) {
         if (root.requestAnimationFrame) {
@@ -36061,7 +36062,7 @@ var __extends = undefined && undefined.__extends || function (d, b) {
     }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var AsyncScheduler_1 = __webpack_require__(/*! ./AsyncScheduler */ 40);
+var AsyncScheduler_1 = __webpack_require__(/*! ./AsyncScheduler */ 46);
 var AnimationFrameScheduler = function (_super) {
     __extends(AnimationFrameScheduler, _super);
     function AnimationFrameScheduler() {

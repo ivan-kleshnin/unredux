@@ -1,5 +1,6 @@
 // RAMDA ===========================================================================================
 import assoc from "ramda/src/assoc"
+import equals from "ramda/src/equals"
 import merge from "ramda/src/merge"
 
 window.R = {assoc, merge}

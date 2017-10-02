@@ -86,7 +86,7 @@ let derived = {
       default:
         throw Error("Unknown filter: " + state.filter)
     }
-  })
+  }).distinctUntilChanged().shareReplay(1)
 }
 
 // Rendering & Events

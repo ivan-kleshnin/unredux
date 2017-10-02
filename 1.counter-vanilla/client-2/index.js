@@ -1,21 +1,24 @@
+import {chan, stateChan} from "./chan"
+
 // User intents
 let intents = {
-  increment: new Subject(),
-  decrement: new Subject(),
-  incrementIfOdd: new Subject(),
+  increment: chan(),      // new is no longer required
+  decrement: chan(),      // new is no longer required
+  incrementIfOdd: chan(), // new is no longer required
 }
 
 // State actions
-let stateCycle = new ReplaySubject(1)
+let stateCycle = stateChan()
 
 let actions = {
   increment: Observable.merge(
     intents.increment,
     stateCycle.sample(intents.incrementIfOdd).filter(state => state.counter % 2)
   )
-    .map(() => R.assoc("counter", state.counter + 1)),
+    .map(() => state => R.assoc("counter", state.counter + 1, state)),
+
   decrement: intents.decrement
-    .map(() => R.assoc("counter", state.counter - 1)),
+    .map(() => state => R.assoc("counter", state.counter - 1, state)),
 }
 
 // State stream
@@ -30,7 +33,7 @@ let state = Observable.merge(
  .distinctUntilChanged(R.equals)
  .do(state => {
    console.log("state spy:", state)
-   stateCycle.next(state)
+   stateCycle(state) // .next() is no longer required
  })
  .shareReplay(1)
 
@@ -48,19 +51,19 @@ let App = (state) =>
 
 let bindEvents = () => {
   document.querySelector("#increment").addEventListener("click", () => {
-    intents.increment.next()
+    intents.increment() // .next() is no longer required
   })
 
   document.querySelector("#decrement").addEventListener("click", () => {
-    intents.increment.next()
+    intents.increment() // .next() is no longer required
   })
 
   document.querySelector("#incrementIfOdd").addEventListener("click", () => {
-    intents.incrementIfOdd.next()
+    intents.incrementIfOdd() // .next() is no longer required
   })
 
   document.querySelector("#incrementAsync").addEventListener("click", () => {
-    setTimeout(() => intents.increment.next(), 500)
+    setTimeout(() => intents.increment(), 500) // .next() is no longer required
   })
 }
 

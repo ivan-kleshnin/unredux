@@ -60,20 +60,18 @@
 /******/ 	__webpack_require__.p = "/";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 6);
+/******/ 	return __webpack_require__(__webpack_require__.s = 9);
 /******/ })
 /************************************************************************/
 /******/ ({
 
-/***/ 6:
-/*!*************************!*\
-  !*** ./client/index.js ***!
-  \*************************/
+/***/ 9:
+/*!***************************!*\
+  !*** ./client-1/index.js ***!
+  \***************************/
 /*! no static exports found */
 /*! all exports used */
 /***/ (function(module, exports) {
-
-let stateCycle = new ReplaySubject(1)
 
 // User intents
 let intents = {
@@ -83,14 +81,23 @@ let intents = {
 }
 
 // State actions
+let stateCycle = new ReplaySubject(1)
+
 let actions = {
   increment: Observable.merge(
     intents.increment,
     stateCycle.sample(intents.incrementIfOdd).filter(state => state.counter % 2)
   )
-    .map(() => (state) => R.assoc("counter", state.counter + 1, state)),
+    .map(() => state => R.assoc("counter", state.counter + 1, state)),
+
   decrement: intents.decrement
-    .map(() => (state) => R.assoc("counter", state.counter - 1, state)),
+    .map(() => state => R.assoc("counter", state.counter - 1, state)),
+
+  // Note: we could easily add incrementIfOdd action but I thought it would be more interesting
+  // (and probably more strict) to express it in terms of basic increment.
+  // So increment action can be triggered by both increment or incrementIfOdd intents
+  // In this architecture, the worthless event (attempt to increment counter which won't work by condition)
+  // is not even triggered.
 }
 
 // State stream
@@ -102,16 +109,16 @@ let state = Observable.merge(
 )
  .startWith(initialState)
  .scan((state, fn) => fn(state))
+ .distinctUntilChanged(R.equals)
  .do(state => {
    console.log("state spy:", state)
    stateCycle.next(state)
  })
- .distinctUntilChanged()
  .shareReplay(1)
 
 // Rendering & Events
-function App(state) {
-  return `<div>
+let App = (state) =>
+  `<div>
     <p>
       Clicked: <span id="value">${state.counter}</span> times
       <button id="increment">+</button>
@@ -120,9 +127,8 @@ function App(state) {
       <button id="incrementAsync">Increment async</button>
     </p>
   </div>`
-}
 
-function bindEvents() {
+let bindEvents = () => {
   document.querySelector("#increment").addEventListener("click", () => {
     intents.increment.next()
   })

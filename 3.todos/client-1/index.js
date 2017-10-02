@@ -47,7 +47,7 @@ let actions = {
 
 // State stream
 let initialState = {
-  todos: { // it's easier to have an object of models than an array of them, in general
+  todos: { // it's more convenient to have an object of models than an array of them, in general
     "1": {
       id: "1",
       text: "Write a TODO",

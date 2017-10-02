@@ -8,6 +8,7 @@
     "webpack": "^3.6.0"
   },
   "scripts": {
-    "start": "webpack --watch ./client & http-server"
+    "start1": "webpack --watch ./client-1 & http-server",
+    "start2": "webpack --watch ./client-2 & http-server"
   }
 }

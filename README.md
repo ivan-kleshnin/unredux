@@ -85,22 +85,19 @@ problems in Issues.*
 
 ## Q-A
 
-### Why not Redux?
-
-...
-
 ### Why not AngularJS?
 
-...
+Are you kidding me?
 
 ### Why not VueJS?
 
-...
+MVC is dead.
 
 ### Why not CycleJS?
 
-...
+To keep it simple. CycleJS is great but I have a goal here to avoid any framework.
 
 ### Why not CalmmJS?
 
-...
+Conceptually it's very similar to what I do here, but note the point above.
+Plus I don't like magic injections of observables into React components.

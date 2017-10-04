@@ -1,8 +1,12 @@
 // RAMDA ===========================================================================================
+import append from "ramda/src/append"
 import compose from "ramda/src/compose"
 import curry from "ramda/src/curry"
 import equals from "ramda/src/equals"
 import filter from "ramda/src/filter"
+import find from "ramda/src/find"
+import findIndex from "ramda/src/findIndex"
+import head from "ramda/src/head"
 import lens from "ramda/src/lens"
 import lensIndex from "ramda/src/lensIndex"
 import lensProp from "ramda/src/lensProp"
@@ -10,18 +14,24 @@ import map from "ramda/src/map"
 import merge from "ramda/src/merge"
 import over from "ramda/src/over"
 import pipe from "ramda/src/pipe"
+import prepend from "ramda/src/prepend"
 import reduce from "ramda/src/reduce"
+import repeat from "ramda/src/repeat"
 import set from "ramda/src/set"
+import slice from "ramda/src/slice"
 import sortBy from "ramda/src/sortBy"
+import tail from "ramda/src/tail"
+import take from "ramda/src/take"
+import takeLast from "ramda/src/takeLast"
 import view from "ramda/src/view"
 import zipObj from "ramda/src/zipObj"
 
 let id = x => x
 let always = curry((x, y) => x)
 
-window.R = {always, compose, curry, equals, id, filter,
-            lens, lensIndex, lensProp, map, merge, over, pipe,
-            reduce, set, sortBy, view, zipObj}
+window.R = {always, append, compose, curry, equals, id, filter, find, findIndex,
+            head, lens, lensIndex, lensProp, map, merge, over, pipe, prepend,
+            repeat, reduce, set, slice, sortBy, tail, take, takeLast, view, zipObj}
 
 // Helpers
 let lensify = (lens) => {

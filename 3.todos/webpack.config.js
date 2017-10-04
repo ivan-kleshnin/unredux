@@ -1,9 +1,13 @@
 let Path = require("path")
 
+let folder = process.argv.slice(-1)[0]
+
 module.exports = {
+  devtool: "eval",
+
   entry: {
-    app: "./client/index.js",
-    vendors: "./client/vendors.js",
+    app: `./${folder}/index.js`,
+    vendors: `./${folder}/vendors.js`,
   },
   output: {
     pathinfo: true,

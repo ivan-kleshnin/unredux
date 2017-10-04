@@ -60,99 +60,34 @@
 /******/ 	__webpack_require__.p = "/";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 9);
+/******/ 	return __webpack_require__(__webpack_require__.s = 11);
 /******/ })
 /************************************************************************/
 /******/ ({
 
-/***/ 9:
+/***/ 11:
 /*!***************************!*\
-  !*** ./client-1/index.js ***!
+  !*** ./client-x/index.js ***!
   \***************************/
-/*! no static exports found */
+/*! exports provided:  */
 /*! all exports used */
-/***/ (function(module, exports) {
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
-// User intents
-let intents = {
-  increment: new Subject(),
-  decrement: new Subject(),
-  incrementIfOdd: new Subject(),
-}
+"use strict";
+eval("Object.defineProperty(__webpack_exports__, \"__esModule\", { value: true });\n/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__chan__ = __webpack_require__(/*! ./chan */ 12);\n\n\n// User intents\nlet intents = {\n  increment: Object(__WEBPACK_IMPORTED_MODULE_0__chan__[\"a\" /* chan */])(),      // new is no longer required\n  decrement: Object(__WEBPACK_IMPORTED_MODULE_0__chan__[\"a\" /* chan */])(),      // new is no longer required\n  incrementIfOdd: Object(__WEBPACK_IMPORTED_MODULE_0__chan__[\"a\" /* chan */])(), // new is no longer required\n}\n\n// State actions\nlet stateLoop = Object(__WEBPACK_IMPORTED_MODULE_0__chan__[\"b\" /* stateChan */])()\n\nlet actions = {\n  increment: Observable.merge(\n    intents.increment,\n    stateLoop.sample(intents.incrementIfOdd).filter(state => state.counter % 2)\n  )\n    .map(() => state => R.assoc(\"counter\", state.counter + 1, state)),\n\n  decrement: intents.decrement\n    .map(() => state => R.assoc(\"counter\", state.counter - 1, state)),\n\n  // In the current architecture, the worthless event (attempt to increment counter which won't work by condition)\n  // is not even triggered. It's more reactive though arguably more complex (more moving parts)\n  // It also requires the state looping (which is inevitably imperative).\n}\n\n// State stream\nlet initialState = {counter: 0}\n\nlet state = Observable.merge(\n  actions.increment,\n  actions.decrement,\n)\n .startWith(initialState)\n .scan((state, fn) => fn(state))\n .distinctUntilChanged(R.equals)\n .do(state => {\n   console.log(\"state spy:\", state)\n   stateLoop(state) // .next() is no longer required\n })\n .shareReplay(1)\n\n// Rendering & Events\nlet App = (state) =>\n  `<div>\n    <p>\n      Clicked: <span id=\"value\">${state.counter}</span> times\n      <button id=\"increment\">+</button>\n      <button id=\"decrement\">-</button>\n      <button id=\"incrementIfOdd\">Increment if odd</button>\n      <button id=\"incrementAsync\">Increment async</button>\n    </p>\n  </div>`\n\nlet bindEvents = () => {\n  document.querySelector(\"#increment\").addEventListener(\"click\", () => {\n    intents.increment() // .next() is no longer required\n  })\n\n  document.querySelector(\"#decrement\").addEventListener(\"click\", () => {\n    intents.decrement() // .next() is no longer required\n  })\n\n  document.querySelector(\"#incrementIfOdd\").addEventListener(\"click\", () => {\n    intents.incrementIfOdd() // .next() is no longer required\n  })\n\n  document.querySelector(\"#incrementAsync\").addEventListener(\"click\", () => {\n    setTimeout(() => intents.increment(), 500) // .next() is no longer required\n  })\n}\n\n// Run\nlet root = document.querySelector(\"#root\")\nstate.subscribe(state => {\n  root.innerHTML = App(state)\n  bindEvents()\n})\n\n\n//////////////////\n// WEBPACK FOOTER\n// ./client-x/index.js\n// module id = 11\n// module chunks = 1 2\n\n//# sourceURL=webpack:///./client-x/index.js?");
 
-// State actions
-let stateCycle = new ReplaySubject(1)
+/***/ }),
 
-let actions = {
-  increment: Observable.merge(
-    intents.increment,
-    stateCycle.sample(intents.incrementIfOdd).filter(state => state.counter % 2)
-  )
-    .map(() => state => R.assoc("counter", state.counter + 1, state)),
+/***/ 12:
+/*!**************************!*\
+  !*** ./client-x/chan.js ***!
+  \**************************/
+/*! exports provided: chan, stateChan */
+/*! exports used: chan, stateChan */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
-  decrement: intents.decrement
-    .map(() => state => R.assoc("counter", state.counter - 1, state)),
-
-  // Note: we could easily add incrementIfOdd action but I thought it would be more interesting
-  // (and probably more strict) to express it in terms of basic increment.
-  // So increment action can be triggered by both increment or incrementIfOdd intents
-  // In this architecture, the worthless event (attempt to increment counter which won't work by condition)
-  // is not even triggered.
-}
-
-// State stream
-let initialState = {counter: 0}
-
-let state = Observable.merge(
-  actions.increment,
-  actions.decrement,
-)
- .startWith(initialState)
- .scan((state, fn) => fn(state))
- .distinctUntilChanged(R.equals)
- .do(state => {
-   console.log("state spy:", state)
-   stateCycle.next(state)
- })
- .shareReplay(1)
-
-// Rendering & Events
-let App = (state) =>
-  `<div>
-    <p>
-      Clicked: <span id="value">${state.counter}</span> times
-      <button id="increment">+</button>
-      <button id="decrement">-</button>
-      <button id="incrementIfOdd">Increment if odd</button>
-      <button id="incrementAsync">Increment async</button>
-    </p>
-  </div>`
-
-let bindEvents = () => {
-  document.querySelector("#increment").addEventListener("click", () => {
-    intents.increment.next()
-  })
-
-  document.querySelector("#decrement").addEventListener("click", () => {
-    intents.increment.next()
-  })
-
-  document.querySelector("#incrementIfOdd").addEventListener("click", () => {
-    intents.incrementIfOdd.next()
-  })
-
-  document.querySelector("#incrementAsync").addEventListener("click", () => {
-    setTimeout(() => intents.increment.next(), 500)
-  })
-}
-
-// Run
-let root = document.querySelector("#root")
-state.subscribe(state => {
-  root.innerHTML = App(state)
-  bindEvents()
-})
-
+"use strict";
+eval("/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, \"a\", function() { return chan; });\n/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, \"b\", function() { return stateChan; });\n// chan is both a Subject and a Function\n// here it's a bit simplier, as we don't merge intents with actions\nlet chan = () => {\n  let subj = new Subject()\n  let fn = (...callArgs) => {\n    return subj.next(...callArgs)\n  }\n  Object.setPrototypeOf(fn, subj) // slow, not a problem as calls are super rare (init time only)\n  return fn\n}\n\nlet stateChan = () => {\n  let subj = new ReplaySubject(1)\n  let fn = (...callArgs) => {\n    return subj.next(...callArgs)\n  }\n  Object.setPrototypeOf(fn, subj) // slow, not a problem as calls are super rare (init time only)\n  return fn\n}\n\n// let c = chan()\n// c.subscribe(x => {\n//   console.log(x)\n// })\n//\n// c(1) // instead of c.next(1)\n// c(2) // instead of c.next(2)\n// c(3) // instead of c.next(3)\n\n\n//////////////////\n// WEBPACK FOOTER\n// ./client-x/chan.js\n// module id = 12\n// module chunks = 1 2\n\n//# sourceURL=webpack:///./client-x/chan.js?");
 
 /***/ })
 

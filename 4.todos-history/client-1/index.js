@@ -1,7 +1,7 @@
 import {Component} from "react"
 import chan from "./chan"
 import connect from "./connect"
-import {store, derive} from "./store"
+import {historyStore, derive} from "./store"
 
 // Actions
 let actions = {
@@ -15,30 +15,38 @@ let actions = {
     }, state)
   }),
 
-  toggleTodo: chan(id => R.overL(["todos", id, "completed"], x => !x)),
+  // toggleTodo: chan(id => R.overL(["todos", id, "completed"], x => !x)),
 
-  setFilter: chan(filter => R.setL(["filter"], filter)),
+  // setFilter: chan(filter => R.setL(["filter"], filter)),
+}
+
+let canUndo = (state) =>
+  state.i > Math.max(0, R.findIndex(R.id, state.log))
+
+let canRedo = (state) =>
+  state.i < state.log.length - 1
+
+let historyActions = {
+  undo: chan(() => state =>
+    R.overL(["i"], (i) => canUndo(state) ? i - 1 : i, state)
+  ),
+
+  redo: chan(() => state =>
+    R.overL(["i"], (i) => canRedo(state) ? i + 1 : i, state)
+  ),
 }
 
 // State
 let initialState = {
-  todos: {
-    "1": {
-      id: "1",
-      text: "Write a TODO",
-      completed: false,
-      addedAt: new Date().toISOString(),
-    }
-  },
+  todos: {},
   filter: "all",
 }
 
-let state = store(initialState, actions, (state) => {
-  console.log("state spy:", state)
+let state = historyStore(initialState, actions, historyActions, 3, (hs) => {
+  console.log("state spy:", hs)
+  console.log()
 })
 
-// Derived state should act like normal (instead of some memoized shit), so you can
-// depend on it in actions (unlike so in Redux!)
 let derived = {
   filteredTodos: derive(state, (state) => {
     switch (state.filter) {
@@ -111,11 +119,19 @@ let Footer = (props) =>
     </a>
   </p>
 
+let UndoRedo = (props) =>
+  <div>
+    <button onClick={() => historyActions.undo()}>Undo</button>
+    {" "}
+    <button onClick={() => historyActions.redo()}>Redo</button>
+  </div>
+
 let App = (props) =>
   <div>
     <AddTodo/>
     <TodoList/>
     <Footer/>
+    <UndoRedo/>
   </div>
 
 ReactDOM.render(<App/>, document.getElementById("root"))

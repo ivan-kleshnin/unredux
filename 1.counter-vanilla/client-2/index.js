@@ -1,24 +1,23 @@
-import {chan, stateChan} from "./chan"
+import chan from "./chan"
 
-// User intents
-let intents = {
-  increment: chan(),      // new is no longer required
-  decrement: chan(),      // new is no longer required
-  incrementIfOdd: chan(), // new is no longer required
-}
-
-// State actions
-let stateCycle = stateChan()
-
+// User actions
 let actions = {
-  increment: Observable.merge(
-    intents.increment,
-    stateCycle.sample(intents.incrementIfOdd).filter(state => state.counter % 2)
-  )
-    .map(() => state => R.assoc("counter", state.counter + 1, state)),
+  // Here we merged intents with actions
+  // each intent is simultaneously a function (to trigger that event)
+  // and an observable (to subscribe on that event)
+  increment: chan((...args) => state =>
+    R.assoc("counter", state.counter + 1, state)
+  ),
 
-  decrement: intents.decrement
-    .map(() => state => R.assoc("counter", state.counter - 1, state)),
+  decrement: chan((...args) => state =>
+    R.assoc("counter", state.counter - 1, state)
+  ),
+
+  incrementIfOdd: chan((...args) => state =>
+    state.counter % 2
+      ? R.assoc("counter", state.counter + 1, state)
+      : state
+  ),
 }
 
 // State stream
@@ -27,13 +26,13 @@ let initialState = {counter: 0}
 let state = Observable.merge(
   actions.increment,
   actions.decrement,
+  actions.incrementIfOdd,
 )
  .startWith(initialState)
  .scan((state, fn) => fn(state))
  .distinctUntilChanged(R.equals)
  .do(state => {
    console.log("state spy:", state)
-   stateCycle(state) // .next() is no longer required
  })
  .shareReplay(1)
 
@@ -51,19 +50,19 @@ let App = (state) =>
 
 let bindEvents = () => {
   document.querySelector("#increment").addEventListener("click", () => {
-    intents.increment() // .next() is no longer required
+    actions.increment() // .next() is no longer required
   })
 
   document.querySelector("#decrement").addEventListener("click", () => {
-    intents.increment() // .next() is no longer required
+    actions.decrement() // .next() is no longer required
   })
 
   document.querySelector("#incrementIfOdd").addEventListener("click", () => {
-    intents.incrementIfOdd() // .next() is no longer required
+    actions.incrementIfOdd() // .next() is no longer required
   })
 
   document.querySelector("#incrementAsync").addEventListener("click", () => {
-    setTimeout(() => intents.increment(), 500) // .next() is no longer required
+    setTimeout(() => actions.increment(), 500) // .next() is no longer required
   })
 }
 

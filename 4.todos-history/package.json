@@ -1,5 +1,5 @@
 {
-  "name": "2.counter-b",
+  "name": "4.todos-with-undo",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -13,7 +13,7 @@
     "webpack": "^3.6.0"
   },
   "scripts": {
-    "start": "webpack --watch ./client & http-server"
+    "demo1": "webpack --watch ./client-1 & http-server"
   },
   "babel": {
     "presets": [

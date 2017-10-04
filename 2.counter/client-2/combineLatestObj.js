@@ -1,8 +1,4 @@
 // a nicer analogy of https://github.com/staltz/combineLatestObj/blob/master/index.js
-
-let R = require("ramda")
-let {Observable} = require("rxjs")
-
 let combineLatestObj = (obj) => {
   let keys = Object.keys(obj)     // stream names
   let values = Object.values(obj) // streams

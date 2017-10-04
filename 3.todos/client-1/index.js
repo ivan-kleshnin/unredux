@@ -1,51 +1,25 @@
 import {Component} from "react"
+import chan from "./chan"
 import connect from "./connect"
 
-// Helpers
-let lensify = (lens) => {
-  if (lens instanceof Array) {
-    lens = lens.reduce(
-      (z, s) => R.compose(z, typeof s == "number" ? R.lensIndex(s) : R.lensProp(s)),
-      R.id,
-      lens
-    )
-  }
-  return lens
-}
-
-R.viewX = R.curry((lens, obj) => R.view(lensify(lens), obj))
-R.setX = R.curry((lens, val, obj) => R.set(lensify(lens), val, obj))
-R.overX = R.curry((lens, fn, obj) => R.over(lensify(lens), fn, obj))
-
-// User intents
-let intents = {
-  addTodo: new Subject(),
-  toggleTodo: new Subject(),
-  setFilter: new Subject(),
-}
-
-// State actions
-let stateCycle = new ReplaySubject(1)
-
+// Actions
 let actions = {
-  addTodo: intents.addTodo.withLatestFrom(stateCycle, (text, state) => {
-    return (state) => {
-      let id = String(Object.values(state.todos).length + 1)
-      return R.assocPath(["todos", id], {
-        id,
-        text,
-        completed: false,
-        addedAt: new Date().toISOString(),
-      }, state)
-    }
+  addTodo: chan(text => state => {
+    let id = String(Object.values(state.todos).length + 1)
+    return R.setL(["todos", id], {
+      id,
+      text,
+      completed: false,
+      addedAt: new Date().toISOString(),
+    }, state)
   }),
 
-  toggleTodo: intents.toggleTodo.map(id => R.overX(["todos", id, "completed"], x => !x)),
+  toggleTodo: chan(id => R.overL(["todos", id, "completed"], x => !x)),
 
-  setFilter: intents.setFilter.map(filter => R.assoc("filter", filter)),
+  setFilter: chan(filter => R.setL(["filter"], filter)),
 }
 
-// State stream
+// State
 let initialState = {
   todos: { // it's more convenient to have an object of models than an array of them, in general
     "1": {
@@ -68,7 +42,6 @@ let state = Observable.merge(
  .distinctUntilChanged(R.equals)
  .do(state => {
    console.log("state spy:", state)
-   stateCycle.next(state)
  })
  .shareReplay(1)
 
@@ -86,10 +59,10 @@ let derived = {
       default:
         throw Error("Unknown filter: " + state.filter)
     }
-  }).distinctUntilChanged().shareReplay(1)
+  }).distinctUntilChanged().shareReplay(1),
 }
 
-// Rendering & Events
+// Components
 let AddTodo = (props) => {
   let input
   return <div>
@@ -98,7 +71,7 @@ let AddTodo = (props) => {
       if (!input.value.trim()) {
         return
       }
-      intents.addTodo.next(input.value)
+      actions.addTodo(input.value)
       input.value = ""
     }}>
       <input ref={node => {
@@ -113,7 +86,7 @@ let AddTodo = (props) => {
 
 let TodoItem = (props) =>
   <li
-    onClick={() => intents.toggleTodo.next(props.todo.id)}
+    onClick={() => actions.toggleTodo(props.todo.id)}
     style={{textDecoration: props.todo.completed ? "line-through" : "none"}}
   >
     {props.todo.text}
@@ -133,15 +106,15 @@ let Footer = (props) =>
   <p>
     Show:
     {" "}
-    <a id="all" href="#all" onClick={(e) => { e.preventDefault(); intents.setFilter.next("all"); }}>
+    <a id="all" href="#all" onClick={(e) => { e.preventDefault(); actions.setFilter("all"); }}>
       All
     </a>
     {", "}
-    <a id="active" href="#active" onClick={(e) => { e.preventDefault(); intents.setFilter.next("active"); }}>
+    <a id="active" href="#active" onClick={(e) => { e.preventDefault(); actions.setFilter("active"); }}>
       Active
     </a>
     {", "}
-    <a id="completed" href="#completed" onClick={(e) => { e.preventDefault(); intents.setFilter.next("completed"); }}>
+    <a id="completed" href="#completed" onClick={(e) => { e.preventDefault(); actions.setFilter("completed"); }}>
       Completed
     </a>
   </p>

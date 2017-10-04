@@ -1,42 +1,40 @@
 import {Component} from "react"
+import chan from "./chan"
 
-// User intents
-let intents = {
-  increment: new Subject(),
-  decrement: new Subject(),
-  incrementIfOdd: new Subject(),
-}
-
-// State actions
-let stateCycle = new ReplaySubject(1)
-
+// Actions
 let actions = {
-  increment: Observable.merge(
-    intents.increment,
-    stateCycle.sample(intents.incrementIfOdd).filter(state => state.counter % 2)
-  )
-    .map(() => R.assoc("counter", state.counter + 1)),
-  decrement: intents.decrement
-    .map(() => R.assoc("counter", state.counter - 1)),
+  increment: chan((...args) => state =>
+    R.assoc("counter", state.counter + 1, state)
+  ),
+
+  decrement: chan((...args) => state =>
+    R.assoc("counter", state.counter - 1, state)
+  ),
+
+  incrementIfOdd: chan((...args) => state =>
+    state.counter % 2
+      ? R.assoc("counter", state.counter + 1, state)
+      : state
+  ),
 }
 
-// State stream
+// State
 let initialState = {counter: 0}
 
 let state = Observable.merge(
   actions.increment,
   actions.decrement,
+  actions.incrementIfOdd,
 )
  .startWith(initialState)
  .scan((state, fn) => fn(state))
  .distinctUntilChanged(R.equals)
  .do(state => {
    console.log("state spy:", state)
-   stateCycle.next(state)
  })
  .shareReplay(1)
 
-// Rendering & Events
+// Components
 class App extends Component {
   componentWillMount() {
     this.$ = state.subscribe(state => {
@@ -49,14 +47,13 @@ class App extends Component {
   }
 
   render() {
-    let {state} = this
     return <div>
       <p>
-        Clicked: <span id="value">{state.counter}</span> times
-        <button id="increment" onClick={() => intents.increment.next()}>+</button>
-        <button id="decrement" onClick={() => intents.increment.next()}>-</button>
-        <button id="incrementIfOdd" onClick={() => intents.incrementIfOdd.next()}>Increment if odd</button>
-        <button id="incrementAsync" onClick={() => setTimeout(() => intents.increment.next(), 500)}>Increment async</button>
+        Clicked: <span id="value">{this.state.counter}</span> times
+        <button id="increment" onClick={() => actions.increment()}>+</button>
+        <button id="decrement" onClick={() => actions.decrement()}>-</button>
+        <button id="incrementIfOdd" onClick={() => actions.incrementIfOdd()}>Increment if odd</button>
+        <button id="incrementAsync" onClick={() => { setTimeout(() => actions.increment(), 500)}}>Increment async</button>
       </p>
     </div>
   }

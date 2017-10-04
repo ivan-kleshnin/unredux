@@ -1,8 +1,6 @@
 let Path = require("path")
 
-process.env.NODE_ENV = process.env.NODE_ENV || "development"
-
-let folder = process.argv.slice(-1)[0]
+let folder = JSON.parse(process.env.npm_config_argv).original[1]
 
 module.exports = {
   devtool: "eval",

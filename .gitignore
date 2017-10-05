@@ -2,4 +2,4 @@
 ignore
 node_modules
 npm-debug.log*
-public/js
+*/public/js

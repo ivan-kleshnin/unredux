@@ -2,6 +2,7 @@ import {Component} from "react"
 import chan from "./chan"
 import connect from "./connect"
 import {historyStore, derive} from "./store"
+import {loadFromStorage, saveToStorage} from "./storage"
 
 // Actions
 let actions = {
@@ -37,14 +38,21 @@ let historyActions = {
 }
 
 // State
-let initialState = {
+let initialState = loadFromStorage("state", {
   todos: {},
   filter: "all",
-}
+})
+
+console.log(initialState, "!!!")
 
 let state = historyStore(initialState, actions, historyActions, 3, (hs) => {
   console.log("state spy:", hs)
   console.log()
+})
+
+state.throttleTime(500).subscribe(s => {
+  console.log("saving state...", s)
+  saveToStorage("state", s)
 })
 
 let derived = {

@@ -13,7 +13,7 @@ elaborate examples sequentially.
 
 ## Motivation
 
-### +Reactivity
+### Yes: Reactivity
 
 The first motivation is **reactivity**. The best part about React is its reactive rendering.
 Unfortunately they stop there. And they even say "React ecosystem is intentionally non-reactive".
@@ -32,7 +32,7 @@ The main (and only) benefit of Action reducers is an easier action tracking.
 with Action-based architecture. Everything else is more complex and, to my experience, functional
 reducers need significantly less boilerplate when you stick to functional paradigm.
 
-### -Redux
+### No: Redux
 
 The third reason to make this repo is **Redux**.
 
@@ -60,11 +60,11 @@ Intution instead of math.
 
 ## Examples
 
-1. [Counter Vanilla (no React)](./1.counter-vanilla)
-2. [Counter](./2.counter)
-3. [Todos](./3.todos)
-4. [Todos History](./4.todos-history)
-5. [Todos "MVC"](./5.todos-mvc)
+1. [Counter Vanilla](./1.counter-vanilla) (RxJS)
+2. [Counter](./2.counter) (React + RxJS)
+3. [Todos](./3.todos) (React + RxJS)
+4. [Todos History](./4.todos-history) (React + RxJS)
+5. [Todos "MVC"](./5.todos-mvc) (React + RxJS)
 
 ### Prerequisites
 

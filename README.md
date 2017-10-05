@@ -8,7 +8,7 @@ examples implemented:
 1. Without frameworks
 2. Without an expected boilerplate
 
-We will write our own set of helpers from scratch bit by bit. So here it's strongly recommended to
+We will write our own set of helpers from scratch step by step. So I encourage you to
 elaborate examples sequentially.
 
 ## Motivation
@@ -16,22 +16,21 @@ elaborate examples sequentially.
 ### +Reactivity
 
 The first motivation is **reactivity**. The best part about React is its reactive rendering.
-Unfortunately they stop there. And they say "React ecosystem is intentionally non-reactive".
+Unfortunately they stop there. And they even say "React ecosystem is intentionally non-reactive".
 
-I don't want to guess their reasonings but I believe they're wrong. To my experience, r
-reactivity is the best solution for interactive systems (like UI!).
+I don't want to guess the reasoning but I believe they're wrong. I'm pretty convinced that
+reactivity is the best solution for interactive systems (like UI or web-server!).
 
 We will use Ramda to get cleaner functional code, impossible to achieve with messy native methods of JavaScript.
-
 We will use RxJS to expand the reactive dataflow from view to state and action layers.
-
 We will use [functional reducers](https://github.com/ivan-kleshnin/reactive-states) where you dispatch
 functions instead of actions (start with actions, wrap them in *creators*, wrap them in *thunks*,
-call it a day). The main (and only) benefit of Action reducers is an easier action tracking.
+call it a day).
 
+The main (and only) benefit of Action reducers is an easier action tracking.
 "Impressive" devtool toys like time-machine popularized by Elm are really a bit easier to make
-with Action-based architecture. Everything else is more complex and, to my experience, Functional
-reducers require significanl less boilerplate when you stick to Functional paradigm.
+with Action-based architecture. Everything else is more complex and, to my experience, functional
+reducers need significantly less boilerplate when you stick to functional paradigm.
 
 ### -Redux
 
@@ -40,11 +39,11 @@ The third reason to make this repo is **Redux**.
 Redux ecosystem is becoming incredibly complex. Bloated and overcomplicated to the level of Angular 1.0.
 Many people are switching to Vue.js just because they are tired of adding new and new items to the
 endless list of: React + Redux + Redux patterns + Redux Actions + Redux Thunks + Redux Sagas + ...
-where each comes with a single tiny benefit and nobody ever talks of drawbacks. Redux fatigue is real.
+where each comes with a tiny benefit and nobody ever talks of drawbacks. Redux fatigue is real.
 
 Learning this library, I always had a sense they tend to choose the simplest tactical solution
-(along with pathetic names) sacrificing the strategic goal of simplicity. The end result is a disaster
-(at least to my taste).
+(along with pathetic names) sacrificing the strategic goal of simplicity. The end result is a disaster,
+and the reason some people are starting to unbury MVC.
 
 When you need [tons of code](https://github.com/reactjs/redux/tree/master/examples/todomvc/src)
 to make a simple TODO app – you're doing something wrong. The point of this repo is to reimplement
@@ -52,12 +51,12 @@ the official Redux-Examples without Redux and to demonstrate it's actually easie
 
 I recommend to take a look at these [enlightening articles](https://github.com/calmm-js/documentation).
 They end with the conclusion that Calmm and Redux approaches are directly opposite. Which is true but
-leaves a false feeling of both being equally legit. In theory they kinda are, but not in practice.
+leaves a false feeling of both being equally legit. And they kinda are in theory, but not in practice.
 
 Functional reducers go together with Lenses – deep but relatively well-developed topic. Action reducers
-require Transducers – the more obscure and ill-developed concept. But the point is that Redux author(s)
-don't ever mention transducers, choosing to rely on their own intuition (instead of math) and
-to promote ad-hoc solutions like `composeReducers`.
+require Transducers – the more obscure and ill-developed concept. But the real problem is that Redux
+team decided to not even mention transducers and promote their own ad-hoc solutions a-la `composeReducers`.
+Intution instead of math.
 
 ## Examples
 
@@ -80,9 +79,6 @@ Most examples consists of two parts. In first parts we solve problems, gradually
 concepts. In second parts we refactor our solutions: extract them into separate files, make them
 cleaner and more stable.
 
-*Most of the code is currently written "from head", without a proper verification, so please report
-problems in Issues.*
-
 ## Q-A
 
 ### Why not AngularJS?
@@ -91,14 +87,13 @@ Are you kidding me?
 
 ### Why not VueJS?
 
-MVC is dead.
+RIP MVC. It's just a backlash against Redux.
 
 ### Why not CycleJS?
 
-To keep it simple. CycleJS is great but I have a goal here to avoid frameworks.
+To prove the point. CycleJS is great but I've set a goal to avoid frameworks in this collection.
 
 ### Why not CalmmJS?
 
-Conceptually it's very similar to what I do here but note the point above.
-Plus I don't like magic injections of observables into React components. I'd like to have the
-connections explicit.
+Conceptually it's very similar to what I do here. I don't like magic injections of observables into
+React components. Nevermind – check the previous point.

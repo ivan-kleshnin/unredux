@@ -82,8 +82,8 @@ Example of #2:
 ```
 1. User enters main article index page, walking to page 5
 2. User enters promo article index page (perpage=10)
-    If there were 10+ articles on the index page
-    Users sees promo articles BUT NOT THE SAME that admin sees
+    If there were 10+ articles on the index page,
+    user sees promo articles BUT NOT THE SAME that admin sees
     with the same index settings (filtering + ordering)
 3. It may often be a problem
 ```

@@ -24,13 +24,14 @@ reactivity is the best solution for interactive systems (like UI or web-server!)
 We will use Ramda to get cleaner functional code, impossible to achieve with messy native methods of JavaScript.
 We will use RxJS to expand the reactive dataflow from view to state and action layers.
 We will use [functional reducers](https://github.com/ivan-kleshnin/reactive-states) where you dispatch
-functions instead of actions (start with actions, wrap them in *creators*, wrap them in *thunks*,
+functions instead of actions (start with actions, wrap them in *factories*, wrap those in *thunks*,
 call it a day).
 
-The main (and only) benefit of Action reducers is an easier action tracking.
-"Impressive" devtool toys like time-machine popularized by Elm are really a bit easier to make
-with Action-based architecture. Everything else is more complex and, to my experience, functional
-reducers need significantly less boilerplate when you stick to functional paradigm.
+The main (and only) benefit of Action reducers is that it's easier to track actions when they have
+both names and params attached. *Impressive* devtool toys, like **time-machine** popularized by Elm,
+are really a bit easier to make with Action-based architecture. Everything else is more complex and,
+to my experience, functional reducers need significantly less boilerplate when you stick to functional
+paradigm.
 
 ### No: Redux
 
@@ -42,7 +43,7 @@ endless list of: React + Redux + Redux patterns + Redux Actions + Redux Thunks +
 where each comes with a tiny benefit and nobody ever talks of drawbacks. Redux fatigue is real!
 
 Learning this library, I always had a sense they tend to choose the simplest tactical solution
-(along with pathetic names) sacrificing the strategic goal of simplicity. The end result is a disaster,
+(along with a pathetic name) sacrificing the strategic goal of simplicity. The end result is a disaster,
 and the reason some people are starting to unbury MVC.
 
 When you need [tons of code](https://github.com/reactjs/redux/tree/master/examples/todomvc/src)
@@ -57,6 +58,56 @@ Functional reducers go together with Lenses – deep but relatively well-develop
 require Transducers – the more obscure and ill-developed concept. But the real problem is that Redux
 team decided to not even mention transducers and promote their own ad-hoc solutions a-la `composeReducers`.
 Intution instead of math.
+
+The **real** problem is state handling (as [it was](https://github.com/Yomguithereal/baobab/issues/240) 2+ years ago).
+As far as I can tell, no tool is even approaching the solution stage a.t.m. Both GraphQL or Falcor are far
+from it. Redux state handling is a joke.
+
+One example of a broken approach:
+
+```js
+render() {
+  let filteredSomething = memoize(..., filter(something))
+  // user filteredSomething
+}
+```
+
+1. It leaves no way to subscribe to `filteredSomething`
+2. It does not release cache if both `state.filter` and `state.something` are the same and new
+"something" arrives (or old "something" is updated and should appear in the view).
+3. It mixes data from different pagination views
+
+Example of #3:
+
+#### Case-1
+
+```
+1. User enters main article index page, walking to page 5
+2. User enters promo article index page (perpage=10)
+    If there were 10+ articles on the index page
+    Users sees promo articles BUT NOT THE SAME that admin sees
+    with the same index settings (filtering + ordering)
+3. It may often be a problem
+```
+
+#### Case-2
+
+```
+1. User enters PROMO articles index
+2. User enters main articles index
+3. Users sees only PROMO articles
+4. It may often be a problem
+```
+
+If client-side filtering is applied to a partially loaded data, pagination won't work as **append-only**.
+It will inject items in-between already loaded ones. We know that Facebook does not care about the order
+of items in their feeds. Hovewer I do care about the order of items in project I develop.
+
+Client-side filtering can be safely applied to data only if all items are fetched (or the order does not matter).
+I realized that fact two years ago and implemented some solutions at [React-Ultimate](https://github.com/Paqmind/react-ultimate)...
+Guess how much GraphQL or Falcor consider that in 2017...
+
+All that need a separated article. For now – just a random notes FYI.
 
 ## Examples
 

@@ -3,7 +3,7 @@ import chan from "./chan"
 import connect from "./connect"
 import {store, derive} from "./store"
 
-// Actions
+// Actions =========================================================================================
 let actions = {
   addTodo: chan(text => state => {
     let id = String(Object.values(state.todos).length + 1)
@@ -20,7 +20,7 @@ let actions = {
   setFilter: chan(filter => R.setL(["filter"], filter)),
 }
 
-// State
+// State ===========================================================================================
 let initialState = {
   todos: {
     "1": {
@@ -33,8 +33,9 @@ let initialState = {
   filter: "all",
 }
 
-let state = store(initialState, actions, (state) => {
-  console.log("state spy:", state)
+let state = store(initialState, actions, (s) => {
+  console.log("state:", s)
+  return s
 })
 
 // Derived state should act like normal (instead of some memoized shit), so you can
@@ -54,7 +55,7 @@ let derived = {
   }),
 }
 
-// Components
+// Components ======================================================================================
 let AddTodo = (props) => {
   let input
   return <div>

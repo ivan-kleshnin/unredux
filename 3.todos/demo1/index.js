@@ -2,7 +2,7 @@ import {Component} from "react"
 import chan from "./chan"
 import connect from "./connect"
 
-// Actions
+// Actions =========================================================================================
 let actions = {
   addTodo: chan(text => state => {
     let id = String(Object.values(state.todos).length + 1)
@@ -19,7 +19,7 @@ let actions = {
   setFilter: chan(filter => R.setL(["filter"], filter)),
 }
 
-// State
+// State ===========================================================================================
 let initialState = {
   todos: { // it's more convenient to have an object of models than an array of them, in general
     "1": {
@@ -40,8 +40,8 @@ let state = Observable.merge(
  .startWith(initialState)
  .scan((state, fn) => fn(state))
  .distinctUntilChanged(R.equals)
- .do(state => {
-   console.log("state spy:", state)
+ .do(s => {
+   console.log("state:", s)
  })
  .shareReplay(1)
 
@@ -62,7 +62,7 @@ let derived = {
   }).distinctUntilChanged().shareReplay(1),
 }
 
-// Components
+// Components ======================================================================================
 let AddTodo = (props) => {
   let input
   return <div>

@@ -1,13 +1,13 @@
 import {chan, stateChan} from "./chan"
 
-// User intents
+// Intents =========================================================================================
 let intents = {
   increment: chan(),      // new is no longer required
   decrement: chan(),      // new is no longer required
   incrementIfOdd: chan(), // new is no longer required
 }
 
-// State actions
+// Actions =========================================================================================
 let stateLoop = stateChan()
 
 let actions = {
@@ -25,7 +25,7 @@ let actions = {
   // It also requires the state looping (which is inevitably imperative).
 }
 
-// State stream
+// State stream ====================================================================================
 let initialState = {counter: 0}
 
 let state = Observable.merge(
@@ -35,13 +35,13 @@ let state = Observable.merge(
  .startWith(initialState)
  .scan((state, fn) => fn(state))
  .distinctUntilChanged(R.equals)
- .do(state => {
-   console.log("state spy:", state)
-   stateLoop(state) // .next() is no longer required
+ .do(s => {
+   console.log("state:", s)
+   stateLoop(s) // .next() is no longer required
  })
  .shareReplay(1)
 
-// Rendering & Events
+// Rendering & Events ==============================================================================
 let App = (state) =>
   `<div>
     <p>
@@ -71,7 +71,6 @@ let bindEvents = () => {
   })
 }
 
-// Run
 let root = document.querySelector("#root")
 state.subscribe(state => {
   root.innerHTML = App(state)

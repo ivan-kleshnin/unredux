@@ -1,5 +1,5 @@
 // a nicer analogy of https://github.com/staltz/combineLatestObj/blob/master/index.js
-let combineLatestObj = (obj) => {
+export default combineLatestObj = (obj) => {
   let keys = Object.keys(obj)     // stream names
   let values = Object.values(obj) // streams
   return Observable.combineLatest(values, (...args) => {
@@ -16,5 +16,3 @@ let combineLatestObj = (obj) => {
 // sc.subscribe((data) => {
 //   console.log(data)
 // })
-
-module.exports = combineLatestObj

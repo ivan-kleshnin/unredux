@@ -1,7 +1,6 @@
-// type Noop = (x) -> ()
 // type Actions = Object (Observable (State -> State)
 
-// (State, Actions, Noop) -> Observable State
+// (State, Actions, a -> b) -> Observable State
 export let store = (initialState, actions, mapFn=R.id) => {
   actions = Object.values(actions) // converts objects, leaves arrays untouched
   return Observable.merge(...actions)
@@ -13,13 +12,14 @@ export let store = (initialState, actions, mapFn=R.id) => {
         return fn(state)
       }
    })
+   .throttleTime(1)
    .map(mapFn)
    .distinctUntilChanged(R.equals)
    .shareReplay(1)
 }
 
 // (State, Actions, Actions, Number, Noop) -> Observable State
-export let historyStore = (initialState, stateActions, historyActions, historyLength, spyFn) => {
+export let historyStore = (initialState, stateActions, historyActions, historyLength, mapFn) => {
   stateActions = Object.values(stateActions)     // converts objects, leaves arrays untouched
   historyActions = Object.values(historyActions) // ...
 
@@ -45,7 +45,7 @@ export let historyStore = (initialState, stateActions, historyActions, historyLe
   }))
 
   return store(initialState, stateActions.concat(historyActions), state => {
-    spyFn(state)
+    mapFn(state)
     return state.log[state.i]
   })
 }
@@ -53,6 +53,7 @@ export let historyStore = (initialState, stateActions, historyActions, historyLe
 // (Observable State, (State -> State)) -> Observable State
 export let derive = (state, deriveFn) => {
   return state
+    .throttleTime(1)
     .map(deriveFn)
     .distinctUntilChanged()
     .shareReplay(1)

@@ -1,6 +1,6 @@
 import chan from "./chan"
 
-// User actions
+// Actions =========================================================================================
 let actions = {
   // Here we merged intents with actions
   // each intent is simultaneously a function (to trigger that event)
@@ -20,7 +20,7 @@ let actions = {
   ),
 }
 
-// State stream
+// State ===========================================================================================
 let initialState = {counter: 0}
 
 let state = Observable.merge(
@@ -31,12 +31,12 @@ let state = Observable.merge(
  .startWith(initialState)
  .scan((state, fn) => fn(state))
  .distinctUntilChanged(R.equals)
- .do(state => {
-   console.log("state spy:", state)
+ .do(s => {
+   console.log("state:", s)
  })
  .shareReplay(1)
 
-// Rendering & Events
+// Rendering & Events ==============================================================================
 let App = (state) =>
   `<div>
     <p>
@@ -66,7 +66,6 @@ let bindEvents = () => {
   })
 }
 
-// Run
 let root = document.querySelector("#root")
 state.subscribe(state => {
   root.innerHTML = App(state)

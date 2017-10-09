@@ -1,5 +1,5 @@
 import {Component} from "react"
-import combineLatestObj from "./combineLatestObj"
+import {combineLatestObj} from "./utils"
 
 export default function connect(streamsToProps, ComponentToWrap) {
   class Container extends Component {

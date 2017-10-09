@@ -1,7 +1,7 @@
-let noop = (x) => null
+// type Actions = Object (Observable (State -> State)
 
-// (State, Object (Observable (State -> State)), () -> null) -> Observable State
-export let store = (initialState, actions, spyFn=noop) => {
+// (State, Actions, a -> b) -> Observable State
+export let store = (initialState, actions, mapFn=R.id) => {
   actions = Object.values(actions) // converts objects, leaves arrays untouched
   return Observable.merge(...actions)
    .startWith(initialState)
@@ -12,14 +12,16 @@ export let store = (initialState, actions, spyFn=noop) => {
         return fn(state)
       }
    })
+   .throttleTime(1)
+   .map(mapFn)
    .distinctUntilChanged(R.equals)
-   .do(spyFn)
    .shareReplay(1)
 }
 
-// Observable State, (State -> State) -> Observable State
+// (Observable State, (State -> State)) -> Observable State
 export let derive = (state, deriveFn) => {
   return state
+    .throttleTime(1)
     .map(deriveFn)
     .distinctUntilChanged()
     .shareReplay(1)

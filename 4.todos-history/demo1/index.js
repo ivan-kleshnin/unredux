@@ -3,7 +3,7 @@ import chan from "./chan"
 import connect from "./connect"
 import {historyStore, derive} from "./store"
 
-// Actions
+// Actions =========================================================================================
 let actions = {
   addTodo: chan(text => state => {
     let id = String(Object.values(state.todos).length + 1)
@@ -36,15 +36,15 @@ let historyActions = {
   ),
 }
 
-// State
+// State ===========================================================================================
 let initialState = {
   todos: {},
   filter: "all",
 }
 
 let state = historyStore(initialState, actions, historyActions, 3, (hs) => {
-  console.log("state spy:", hs)
-  console.log()
+  console.log("state:", hs)
+  return hs
 })
 
 let derived = {
@@ -62,7 +62,7 @@ let derived = {
   }),
 }
 
-// Components
+// Components ======================================================================================
 let AddTodo = (props) => {
   let input
   return <div>

@@ -65,6 +65,7 @@ Intution instead of math.
 3. [Todos](./3.todos) (React + RxJS)
 4. [Todos History](./4.todos-history) (React + RxJS)
 5. [Todos "MVC"](./5.todos-mvc) (React + RxJS)
+9. [Async actions](./9.async-actions) (React + RxJS)
 
 ### Prerequisites
 
@@ -97,3 +98,23 @@ To prove the point. CycleJS is great but I've set a goal to avoid frameworks in 
 
 Conceptually it's very similar to what I do here. I don't like magic injections of observables into
 React components. Nevermind – check the previous point.
+
+### Random remarks
+
+#### I don't use linters
+
+Adding this:
+
+```
+"eslint": "^4.0.0",
+"eslint-config-react-app": "^1.0.4",
+"eslint-plugin-flowtype": "^2.29.2",
+"eslint-plugin-import": "^2.2.0",
+"eslint-plugin-jsx-a11y": "^5.0.3",
+"eslint-plugin-react": "^7.1.0",
+...
+```
+
+just to notify me about "wrong indendation" is not what I live for. It's all about signal-to-noise ratio
+so I consider linters almost worthless (Flow is better as a linter btw.). For the same reason I don't
+use `const`.

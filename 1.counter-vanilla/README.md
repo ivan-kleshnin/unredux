@@ -7,7 +7,7 @@ $ npm run demo2
 $ npm run demoX
 ```
 
-## Client-1
+## Demo1
 
 ### Concepts
 
@@ -19,13 +19,13 @@ $ npm run demoX
 * State reducer
 * Observable operators
 
-## Client-2
+## Demo2
 
 ### Concepts
 
 * Channel
 
-## Client-3
+## Demo3
 
 ### Concepts
 

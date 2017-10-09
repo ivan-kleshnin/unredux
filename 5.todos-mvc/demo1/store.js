@@ -13,13 +13,14 @@ export let store = (initialState, actions, mapFn=R.id) => {
         return fn(state)
       }
    })
+   .throttleTime(1)
    .map(mapFn)
    .distinctUntilChanged(R.equals)
    .shareReplay(1)
 }
 
 // (State, Actions, Actions, Number, Noop) -> Observable State
-export let historyStore = (initialState, stateActions, historyActions, historyLength, spyFn) => {
+export let historyStore = (initialState, stateActions, historyActions, historyLength, mapFn) => {
   stateActions = Object.values(stateActions)     // converts objects, leaves arrays untouched
   historyActions = Object.values(historyActions) // ...
 
@@ -45,7 +46,7 @@ export let historyStore = (initialState, stateActions, historyActions, historyLe
   }))
 
   return store(initialState, stateActions.concat(historyActions), state => {
-    spyFn(state)
+    mapFn(state)
     return state.log[state.i]
   })
 }

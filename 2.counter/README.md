@@ -6,13 +6,13 @@ $ npm run demo1
 $ npm run demo2
 ```
 
-## Client-1
+## Demo1
 
 ### Concepts
 
 * React connection via state
 
-## Client-2
+## Demo2
 
 ### Concepts
 

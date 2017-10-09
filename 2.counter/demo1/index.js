@@ -1,7 +1,7 @@
 import {Component} from "react"
 import chan from "./chan"
 
-// Actions
+// Actions =========================================================================================
 let actions = {
   increment: chan((...args) => state =>
     R.assoc("counter", state.counter + 1, state)
@@ -18,7 +18,7 @@ let actions = {
   ),
 }
 
-// State
+// State ===========================================================================================
 let initialState = {counter: 0}
 
 let state = Observable.merge(
@@ -29,12 +29,12 @@ let state = Observable.merge(
  .startWith(initialState)
  .scan((state, fn) => fn(state))
  .distinctUntilChanged(R.equals)
- .do(state => {
-   console.log("state spy:", state)
+ .do(s => {
+   console.log("state:", s)
  })
  .shareReplay(1)
 
-// Components
+// Components ======================================================================================
 class App extends Component {
   componentWillMount() {
     this.$ = state.subscribe(state => {

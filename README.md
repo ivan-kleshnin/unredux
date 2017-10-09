@@ -98,8 +98,9 @@ Example of #2:
 ```
 
 If client-side filtering is applied to a partially loaded data, pagination won't work as **append-only**.
-It will inject items in-between already loaded ones. We know that Facebook does not care about the order
-of items in their feeds. Hovewer I do care about the order of items in projects I develop.
+Pagination fetches will inject items in-between already seen ones leading to a cripppled user experience.
+We know that Facebook does not care about the order of items in their feeds. Hovewer I do care about
+the order of items in projects I develop.
 
 Client-side filtering can be safely applied to data only if all items are fetched (or the order does not matter).
 I realized that fact two years ago and implemented some solutions at [React-Ultimate](https://github.com/Paqmind/react-ultimate)...

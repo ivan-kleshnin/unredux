@@ -39,7 +39,7 @@ The third reason to make this repo is **Redux**.
 Redux ecosystem is becoming incredibly complex. Bloated and overcomplicated to the level of Angular 1.0.
 Many people are switching to Vue.js just because they are tired of adding new and new items to the
 endless list of: React + Redux + Redux patterns + Redux Actions + Redux Thunks + Redux Sagas + ...
-where each comes with a tiny benefit and nobody ever talks of drawbacks. Redux fatigue is real.
+where each comes with a tiny benefit and nobody ever talks of drawbacks. Redux fatigue is real!
 
 Learning this library, I always had a sense they tend to choose the simplest tactical solution
 (along with pathetic names) sacrificing the strategic goal of simplicity. The end result is a disaster,
@@ -65,7 +65,8 @@ Intution instead of math.
 3. [Todos](./3.todos) (React + RxJS)
 4. [Todos History](./4.todos-history) (React + RxJS)
 5. [Todos "MVC"](./5.todos-mvc) (React + RxJS)
-9. [Async actions](./9.async-actions) (React + RxJS)
+6. In progress
+9\. [Async actions](./9.async-actions) (React + RxJS) (in progress)
 
 ### Prerequisites
 
@@ -92,7 +93,7 @@ RIP MVC. It's just a backlash against Redux.
 
 ### Why not CycleJS?
 
-To prove the point. CycleJS is great but I've set a goal to avoid frameworks in this collection.
+To prove the point. CycleJS is great but I have a goal to avoid frameworks in this repo.
 
 ### Why not CalmmJS?
 
@@ -115,6 +116,6 @@ Adding this:
 ...
 ```
 
-just to notify me about "wrong indendation" is not what I live for. It's all about signal-to-noise ratio
-so I consider linters almost worthless (Flow is better as a linter btw.). For the same reason I don't
-use `const`.
+just to notify me about "wrong indendation" is not what I live for. It's all about **signal-to-noise**
+ratio so I consider linters almost worthless (Flow is better as a linter btw.). For the same reason
+I don't use `const`, `===` and other "useful" things.

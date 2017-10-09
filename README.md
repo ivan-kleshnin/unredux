@@ -77,7 +77,7 @@ render() {
 
 Example of #2:
 
-#### Case-1
+**Case-1:**
 
 ```
 1. User enters main article index page, walking to page 5
@@ -88,7 +88,7 @@ Example of #2:
 3. It may often be a business problem
 ```
 
-#### Case-2
+**Case-2:**
 
 ```
 1. User enters PROMO articles index
@@ -99,7 +99,7 @@ Example of #2:
 
 If client-side filtering is applied to a partially loaded data, pagination won't work as **append-only**.
 It will inject items in-between already loaded ones. We know that Facebook does not care about the order
-of items in their feeds. Hovewer I do care about the order of items in project I develop.
+of items in their feeds. Hovewer I do care about the order of items in projects I develop.
 
 Client-side filtering can be safely applied to data only if all items are fetched (or the order does not matter).
 I realized that fact two years ago and implemented some solutions at [React-Ultimate](https://github.com/Paqmind/react-ultimate)...

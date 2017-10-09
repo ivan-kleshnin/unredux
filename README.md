@@ -73,11 +73,9 @@ render() {
 ```
 
 1. It leaves no way to subscribe to `filteredSomething`
-2. It does not release cache if both `state.filter` and `state.something` are the same and new
-"something" arrives (or old "something" is updated and should appear in the view).
-3. It mixes data from different pagination views
+2. It mixes data from different pagination views
 
-Example of #3:
+Example of #2:
 
 #### Case-1
 

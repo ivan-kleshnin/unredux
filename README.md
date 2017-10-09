@@ -82,10 +82,10 @@ Example of #2:
 ```
 1. User enters main article index page, walking to page 5
 2. User enters promo article index page (perpage=10)
-    If there were 10+ articles on the index page,
+    If there were 10+ articles on those index pages,
     user sees promo articles BUT NOT THE SAME that admin sees
     with the same index settings (filtering + ordering)
-3. It may often be a problem
+3. It may often be a business problem
 ```
 
 #### Case-2
@@ -93,8 +93,8 @@ Example of #2:
 ```
 1. User enters PROMO articles index
 2. User enters main articles index
-3. Users sees only PROMO articles
-4. It may often be a problem
+3. Users sees only PROMO articles on the main index
+4. It may often be a business problem
 ```
 
 If client-side filtering is applied to a partially loaded data, pagination won't work as **append-only**.

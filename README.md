@@ -93,7 +93,7 @@ Example of #2:
 ```
 1. User enters PROMO articles index
 2. User enters main articles index
-3. Users sees only PROMO articles on the main index
+3. User sees only PROMO articles on the main index
 4. It may often be a business problem
 ```
 

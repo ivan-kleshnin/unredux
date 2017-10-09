@@ -64,9 +64,10 @@ Intution instead of math.
 2. [Counter](./2.counter) (React + RxJS)
 3. [Todos](./3.todos) (React + RxJS)
 4. [Todos History](./4.todos-history) (React + RxJS)
-5. [Todos "MVC"](./5.todos-mvc) (React + RxJS)<br/>
-6–8\. In progress<br/>
-9\. [Async actions](./9.async-actions) (React + RxJS) (in progress)
+5. [Todos "MVC"](./5.todos-mvc) (React + RxJS)
+9. [Async actions](./9.async-actions) (React + RxJS)
+
+List in progress...
 
 ### Prerequisites
 

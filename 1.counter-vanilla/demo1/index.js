@@ -26,14 +26,12 @@ let actions = {
 }
 
 // State ===========================================================================================
-let initialState = {counter: 0}
-
 let state = Observable.merge(
   actions.increment,
   actions.decrement,
   actions.incrementIfOdd,
 )
- .startWith(initialState)
+ .startWith({counter: 0})
  .scan((state, fn) => fn(state))
  .distinctUntilChanged(R.equals)
  .do(s => {
@@ -72,7 +70,7 @@ let bindEvents = () => {
 }
 
 let root = document.querySelector("#root")
-state.subscribe(state => {
-  root.innerHTML = App(state)
+state.subscribe(s => {
+  root.innerHTML = App(s)
   bindEvents()
 })

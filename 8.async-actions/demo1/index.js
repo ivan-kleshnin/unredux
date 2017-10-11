@@ -95,18 +95,6 @@ state.subscribe()
   console.log(`@ actions.setRepo({id: "1"...})`)
   actions.setRepo({id: "1", foo: "foo"})
 
-  // await delay(2000)
-  // console.log(`@ actions.setRepo({id: "2"...})`)
-  // actions.setRepo({id: "2", bar: "bar"})
-  //
-  // await delay(2000)
-  // console.log(`@ actions.setUser({id: "1"...})`)
-  // actions.setUser({id: "1", foo: "foo"})
-  //
-  // await delay(2000)
-  // console.log(`@ actions.setRepo({id: "1"...})`)
-  // actions.setRepo({id: "1", foo: "foo"})
-  //
   await delay(2000)
   console.log(`loadRepo("1")`)
   asyncActions.loadRepo("1")
@@ -114,12 +102,4 @@ state.subscribe()
   await delay(2000)
   console.log(`loadRepo("2")`)
   asyncActions.loadRepo("2")
-
-  // await delay(2000)
-  // console.log("loadUser(1)")
-  // asyncActions.loadUser("1")
-  //
-  // await delay(2000)
-  // console.log("loadUser(2)")
-  // asyncActions.loadUser("2")
 })()

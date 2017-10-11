@@ -10,13 +10,13 @@ export default function connect(streamsToProps, ComponentToWrap) {
 
     componentWillMount() {
       let props = combineLatestObj(streamsToProps)
-      this.$ = props.subscribe((data) => {
+      this.sb = props.subscribe((data) => {
         this.setState(data)
       })
     }
 
     componentWillUnmount() {
-      this.$.unsubscribe()
+      this.sb.unsubscribe()
     }
 
     render() {

@@ -5,6 +5,6 @@ export let chan = (mapFn) => {
   function channel(...callArgs) {
     return subj.next(...callArgs)
   }
-  Object.setPrototypeOf(channel, obs) // slow, not a problem as calls are init time only
+  Object.setPrototypeOf(channel, obs)
   return channel
 }

@@ -44,7 +44,14 @@ let historyActions = {
 
 // State ===========================================================================================
 let initialState = {
-  todos: {},
+  todos: {
+    "1": {
+      id: "1",
+      text: "Write a TODO",
+      completed: false,
+      addedAt: new Date().toISOString(),
+    }
+  },
   filter: "all",
 }
 

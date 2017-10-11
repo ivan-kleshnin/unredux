@@ -16,7 +16,11 @@ export let chan = (mapFn) => {
 export let stateChan = () => {
   let subj = new ReplaySubject(1)
   function channel(...callArgs) {
-    return subj.next(...callArgs)
+    if (callArgs.length <= 1) {
+      return subj.next(callArgs[0])
+    } else {
+      return subj.next(callArgs)
+    }
   }
   Object.setPrototypeOf(channel, subj)
   return channel

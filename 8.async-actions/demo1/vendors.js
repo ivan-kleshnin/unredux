@@ -35,8 +35,8 @@ import takeLast from "ramda/src/takeLast"
 import view from "ramda/src/view"
 import zipObj from "ramda/src/zipObj"
 
-let id = x => x
 let always = curry((x, y) => x)
+let id = x => x
 let keys = Object.keys
 let values = Object.values
 
@@ -57,7 +57,7 @@ window.R = {
   set, slice, sort,
   tail, take, takeLast,
   values, view,
-  zipObj
+  zipObj,
 }
 
 // Helpers

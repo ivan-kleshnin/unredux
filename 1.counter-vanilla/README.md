@@ -115,7 +115,11 @@ export let chan = (mapFn) => {
           : obs[propName]
       },
       apply: (target, _, args) => {
-        subj.next(...args)
+        if (args.length <= 1) {
+          return subj.next(args[0])
+        } else {
+          return subj.next(args)
+        }
       }
     })
   }

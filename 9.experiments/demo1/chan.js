@@ -3,9 +3,13 @@ export let chan = (mapFn) => {
   let subj = new Subject()
   let obs = mapFn(subj)
   function channel(...callArgs) {
-    return subj.next(...callArgs)
+    if (callArgs.length <= 1) {
+      return subj.next(callArgs[0])
+    } else {
+      return subj.next(callArgs)
+    }
   }
-  Object.setPrototypeOf(channel, obs) // slow, not a problem as calls are init time only
+  Object.setPrototypeOf(channel, obs)
   return channel
 }
 
@@ -14,6 +18,6 @@ export let stateChan = () => {
   function channel(...callArgs) {
     return subj.next(...callArgs)
   }
-  Object.setPrototypeOf(channel, subj) // slow, not a problem as calls are init time only
+  Object.setPrototypeOf(channel, subj)
   return channel
 }

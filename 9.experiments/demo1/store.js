@@ -15,7 +15,7 @@ export let store = (initialState, actions, mapFn=R.id) => {
       }
    })
    //.throttleTime(1) is broken https://github.com/ReactiveX/rxjs/issues/2859
-   .throttleTime(() => Observable.interval(1), undefined, {leading: true, trailing: true})
+   .throttleTime(() => Observable.interval(1), undefined, {leading: true, trailing: true}) // merges potentil sync updates to a single update event
    .map(mapFn)
    .distinctUntilChanged(R.equals)
    .shareReplay(1)

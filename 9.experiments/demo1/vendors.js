@@ -1,4 +1,5 @@
 // RAMDA ===========================================================================================
+import addIndex from "ramda/src/addIndex"
 import append from "ramda/src/append"
 import ascend from "ramda/src/ascend"
 import complement from "ramda/src/complement"
@@ -33,31 +34,38 @@ import tail from "ramda/src/tail"
 import take from "ramda/src/take"
 import takeLast from "ramda/src/takeLast"
 import view from "ramda/src/view"
+import zip from "ramda/src/zip"
 import zipObj from "ramda/src/zipObj"
 
-let id = x => x
 let always = curry((x, y) => x)
+let filter2 = addIndex(filter)
+let id = x => x
 let keys = Object.keys
+let map2 = addIndex(map)
+let mergeFlipped = flip(merge)
+let mergeDeep = mergeDeepRight
+let mergeDeepFlipped = flip(mergeDeep)
+let reduce2 = addIndex(reduce)
 let values = Object.values
 
 window.R = {
-  always, append, ascend,
+  addIndex, always, append, ascend,
   comparator, complement, compose, curry,
   descend,
   equals,
-  filter, find, findIndex, flip,
+  filter, filter2, find, findIndex, flip,
   head,
   id, isEmpty,
   keys,
   lens, lensIndex, lensProp,
-  map, merge, mergeDeepRight,
+  map, map2, merge, mergeFlipped, mergeDeep, mergeDeepFlipped,
   over,
   pipe, pluck, prepend, prop,
-  repeat, reduce,
+  repeat, reduce, reduce2,
   set, slice, sort,
   tail, take, takeLast,
   values, view,
-  zipObj
+  zip, zipObj,
 }
 
 // Helpers
@@ -94,6 +102,7 @@ import "rxjs/add/observable/of"
 // Observable methods
 import "rxjs/add/operator/combineLatest"
 import "rxjs/add/operator/distinctUntilChanged"
+import "rxjs/add/operator/debounceTime"
 import "rxjs/add/operator/do"
 import "rxjs/add/operator/filter"
 import "rxjs/add/operator/merge"

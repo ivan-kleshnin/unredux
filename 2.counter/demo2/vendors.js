@@ -1,4 +1,5 @@
 // RAMDA ===========================================================================================
+// Until we implement tree shaking
 import assoc from "ramda/src/assoc"
 import compose from "ramda/src/compose"
 import curry from "ramda/src/curry"
@@ -13,8 +14,17 @@ import zipObj from "ramda/src/zipObj"
 let id = x => x
 let always = curry((x, y) => x)
 
-window.R = {always, assoc, compose, curry, equals, id, filter,
-            map, merge, pipe, reduce, zipObj}
+window.R = {
+  always, assoc,
+  compose, curry,
+  equals,
+  filter,
+  id,
+  map, merge,
+  pipe,
+  reduce,
+  zipObj,
+}
 
 // RXJS ============================================================================================
 import {Observable} from "rxjs/Observable"

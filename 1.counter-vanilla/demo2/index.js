@@ -1,23 +1,23 @@
-import chan from "./chan"
+import {chan} from "./chan"
 
 // Actions =========================================================================================
 let actions = {
   // Here we merged intents with actions
   // each intent is simultaneously a function (to trigger that event)
   // and an observable (to subscribe on that event)
-  increment: chan((...args) => state =>
+  increment: chan($ => $.map((...args) => state =>
     R.assoc("counter", state.counter + 1, state)
-  ),
+  )),
 
-  decrement: chan((...args) => state =>
+  decrement: chan($ => $.map((...args) => state =>
     R.assoc("counter", state.counter - 1, state)
-  ),
+  )),
 
-  incrementIfOdd: chan((...args) => state =>
+  incrementIfOdd: chan($ => $.map((...args) => state =>
     state.counter % 2
       ? R.assoc("counter", state.counter + 1, state)
       : state
-  ),
+  )),
 }
 
 // State ===========================================================================================

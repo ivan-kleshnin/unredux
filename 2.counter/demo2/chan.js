@@ -1,10 +1,10 @@
 // chan is both an Observable and a Function
-export default (mapFn) => {
+export let chan = (mapFn) => {
   let subj = new Subject()
-  let obs = subj.map(mapFn)
-  let fn = function channel(...callArgs) {
+  let obs = mapFn(subj)
+  function channel(...callArgs) {
     return subj.next(...callArgs)
   }
-  Object.setPrototypeOf(fn, obs) // slow, not a problem as calls are super rare (init time only)
-  return fn
+  Object.setPrototypeOf(channel, obs) // slow, not a problem as calls are init time only
+  return channel
 }

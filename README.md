@@ -2,7 +2,7 @@
 
 **WIP**
 
-I strongly prefer **libraries over frameworks**. In this repo I experiment with different React
+I strongly prefer **libraries** over **frameworks**. In this repo I experiment with different React
 examples implemented:
 
 1. Without frameworks
@@ -110,14 +110,33 @@ All that need a separated article. For now – just a random notes FYI.
 
 ## Examples
 
-1. [Counter Vanilla](./1.counter-vanilla) (RxJS)
-2. [Counter](./2.counter) (React + RxJS)
-3. [Todos](./3.todos) (React + RxJS)
-4. [Todos History](./4.todos-history) (React + RxJS)
-5. [Todos "MVC"](./5.todos-mvc) (React + RxJS)
-9. [Async actions](./9.async-actions) (React + RxJS)
+#### 1. [Counter Vanilla](./1.counter-vanilla)
 
-List in progress...
+* Demo1: the basic architecture.
+* Demo2: + channel extraction (`chan`).
+
+#### 2. [Counter](./2.counter)
+
+* Demo1: + React.
+* Demo2: + connection extraction (`connect`).
+
+#### 3. [Todos](./3.todos)
+
+* Demo1: that classic TODO example.
+* Demo2: + store extraction (`store`).
+
+#### 4. [Todos Advanced](./4.todos-advanced)
+
+* Demo1: + history management
+* Demo2: + local storage
+
+#### 8. [Async actions](./8.async-actions)
+
+**Wip**
+
+#### 9. [Experiments](./9.experiments)
+
+**Wip**
 
 ### Prerequisites
 
@@ -144,7 +163,7 @@ RIP MVC. It's just a backlash against Redux.
 
 ### Why not CycleJS?
 
-To prove the point. CycleJS is great but I have a goal to avoid frameworks in this repo.
+To prove the point. CycleJS is great but I have a goal to avoid frameworks in this project.
 
 ### Why not CalmmJS?
 

@@ -12,7 +12,6 @@ export let store = (initialState, actions, mapFn=R.id) => {
         return fn(state)
       }
    })
-   .throttleTime(1)
    .map(mapFn)
    .distinctUntilChanged(R.equals)
    .shareReplay(1)
@@ -21,7 +20,6 @@ export let store = (initialState, actions, mapFn=R.id) => {
 // (Observable State, (State -> State)) -> Observable State
 export let derive = (state, deriveFn) => {
   return state
-    .throttleTime(1)
     .map(deriveFn)
     .distinctUntilChanged()
     .shareReplay(1)

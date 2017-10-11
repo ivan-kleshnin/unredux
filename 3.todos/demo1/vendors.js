@@ -1,4 +1,5 @@
 // RAMDA ===========================================================================================
+// Until we implement tree shaking
 // assoc, assocPath are replace with lenses
 import compose from "ramda/src/compose"
 import curry from "ramda/src/curry"
@@ -20,9 +21,21 @@ import zipObj from "ramda/src/zipObj"
 let id = x => x
 let always = curry((x, y) => x)
 
-window.R = {always, compose, curry, equals, id, filter,
-            lens, lensIndex, lensProp, map, merge, over, pipe,
-            reduce, set, sortBy, view, zipObj}
+window.R = {
+  always,
+  compose, curry,
+  equals,
+  filter,
+  id,
+  lens, lensIndex, lensProp,
+  map, merge,
+  over,
+  pipe,
+  reduce,
+  set, sortBy,
+  view,
+  zipObj,
+}
 
 // Helpers
 let lensify = (lens) => {

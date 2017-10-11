@@ -1,20 +1,26 @@
 import {Component} from "react"
-import chan from "./chan"
+import {chan} from "./chan"
 
 // Actions =========================================================================================
 let actions = {
-  increment: chan((...args) => state =>
-    R.assoc("counter", state.counter + 1, state)
+  increment: chan($ => $
+    .map((...args) => state =>
+      R.assoc("counter", state.counter + 1, state)
+    )
   ),
 
-  decrement: chan((...args) => state =>
-    R.assoc("counter", state.counter - 1, state)
+  decrement: chan($ => $
+    .map((...args) => state =>
+      R.assoc("counter", state.counter - 1, state)
+    )
   ),
 
-  incrementIfOdd: chan((...args) => state =>
-    state.counter % 2
-      ? R.assoc("counter", state.counter + 1, state)
-      : state
+  incrementIfOdd: chan($ => $
+    .map((...args) => state =>
+      state.counter % 2
+        ? R.assoc("counter", state.counter + 1, state)
+        : state
+    )
   ),
 }
 

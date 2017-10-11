@@ -1,27 +1,33 @@
 import {Component} from "react"
-import chan from "./chan"
+import {chan} from "./chan"
 import connect from "./connect"
 
 // Actions =========================================================================================
 let actions = {
-  addTodo: chan(text => state => {
-    let id = String(Object.values(state.todos).length + 1)
-    return R.setL(["todos", id], {
-      id,
-      text,
-      completed: false,
-      addedAt: new Date().toISOString(),
-    }, state)
-  }),
+  addTodo: chan($ => $
+    .map(text => state => {
+      let id = String(Object.values(state.todos).length + 1)
+      return R.setL(["todos", id], {
+        id,
+        text,
+        completed: false,
+        addedAt: new Date().toISOString(),
+      }, state)
+    })
+  ),
 
-  toggleTodo: chan(id => R.overL(["todos", id, "completed"], x => !x)),
+  toggleTodo: chan($ => $
+    .map(id => R.overL(["todos", id, "completed"], x => !x))
+  ),
 
-  setFilter: chan(filter => R.setL(["filter"], filter)),
+  setFilter: chan($ => $
+    .map(filter => R.setL(["filter"], filter))
+  ),
 }
 
 // State ===========================================================================================
 let initialState = {
-  todos: { // it's more convenient to have an object of models than an array of them, in general
+  todos: {
     "1": {
       id: "1",
       text: "Write a TODO",

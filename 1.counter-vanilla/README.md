@@ -60,10 +60,8 @@ s.next(3) // => 30
 Now imagine that `x` is an action argument, `y` is a state and `subscribe` is a demo hack to combine
 them both, and you get pretty close to our action/state implementation.
 
-*Such callable channels are pretty close (in terms of API) to [Flyd](https://github.com/paldepind/flyd)
+*In terms of API, such callable channels are similar to [Flyd](https://github.com/paldepind/flyd)
 micro-observables. No need to know that – just a remark.*
-
----
 
 ## Advanced notes
 
@@ -86,7 +84,7 @@ Suppose you want to add `do(x => console.log(x))` to the action.
 With our API it's:
 
 ```js
-chan($ => $.map(x => y => x * y)).do(x => console.log(x))
+chan($ => $.map(x => y => x * y).do(x => console.log(x))
 ```
 
 With "simplified" API it's:

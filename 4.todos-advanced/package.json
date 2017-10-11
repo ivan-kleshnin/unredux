@@ -14,7 +14,8 @@
     "webpack": "^3.6.0"
   },
   "scripts": {
-    "demo1": "webpack --watch & http-server"
+    "demo1": "webpack --watch & http-server",
+    "demo2": "webpack --watch & http-server"
   },
   "babel": {
     "presets": [

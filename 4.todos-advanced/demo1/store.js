@@ -20,8 +20,7 @@ export let store = (initialState, actions, options) => {
         return fn(state)
       }
    })
-   //.throttleTime(1) is broken https://github.com/ReactiveX/rxjs/issues/2859
-   .throttleTime(() => O.interval(1), undefined, {leading: true, trailing: true})
+   .throttleTime(10)   // RxJS throttle is half-broken a.t.m. (https://github.com/ReactiveX/rxjs/search?q=throttle&type=Issues)
    .let(options.letFn) // inject observable
    .map(options.mapFn) // inject value to map
    .do (options.doFn)  // inject value

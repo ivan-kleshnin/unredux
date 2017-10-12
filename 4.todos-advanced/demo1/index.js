@@ -55,9 +55,9 @@ let initialState = {
   filter: "all",
 }
 
-let state = historyStore(initialState, actions, historyActions, 3, (s) => {
-  console.log("state:", s)
-  return s
+let state = historyStore(initialState, actions, historyActions, {
+  length: 3,
+  doFn: (s) => console.log("state:", s),
 })
 
 let derived = {

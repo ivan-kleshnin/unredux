@@ -4,7 +4,7 @@ import connect from "./connect"
 import {historyStore, derive} from "./store"
 import {loadFromStorage, saveToStorage} from "./storage"
 
-// Actions ==========================================================================================
+// Actions =========================================================================================
 let actions = {
   addTodo: chan($ => $
     .map(text => state => {
@@ -24,15 +24,6 @@ let actions = {
 
   setFilter: chan($ => $
     .map(filter => R.setL(["filter"], filter))
-  ),
-
-  // Or more generic React-like (less readable, need state in closure)
-  merge: chan($ => $
-    .map(stateFragment => state => R.merge(state, stateFragment))
-  ),
-
-  mergeDeep: chan($ => $
-    .map(stateFragment => state => R.mergeDeepRight(state, stateFragment))
   ),
 }
 
@@ -58,9 +49,9 @@ let initialState = loadFromStorage("state", {
   filter: "all",
 })
 
-let state = historyStore(initialState, actions, historyActions, 3, (s) => {
-  console.log("state:", s)
-  return s
+let state = historyStore(initialState, actions, historyActions, {
+  length: 3,
+  doFn: (s) => console.log("state:", s),
 })
 
 state.throttleTime(500).subscribe(s => {
@@ -105,7 +96,6 @@ let AddTodo = (props) => {
   </div>
 }
 
-// Compare with React-like: onClick={() => actions.merge({todos: {[props.todo.id]: !props.todo.completed}})}
 let TodoItem = (props) =>
   <li
     onClick={() => actions.toggleTodo(props.todo.id)}

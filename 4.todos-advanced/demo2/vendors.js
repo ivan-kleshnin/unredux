@@ -17,7 +17,6 @@ import lensIndex from "ramda/src/lensIndex"
 import lensProp from "ramda/src/lensProp"
 import map from "ramda/src/map"
 import merge from "ramda/src/merge"
-import mergeDeepRight from "ramda/src/mergeDeepRight"
 import over from "ramda/src/over"
 import pipe from "ramda/src/pipe"
 import pluck from "ramda/src/pluck"
@@ -49,7 +48,7 @@ window.R = {
   id, isEmpty,
   keys,
   lens, lensIndex, lensProp,
-  map, merge, mergeDeepRight,
+  map, merge,
   over,
   pipe, pluck, prepend, prop,
   repeat, reduce,
@@ -93,6 +92,7 @@ import "rxjs/add/observable/of"
 import "rxjs/add/operator/distinctUntilChanged"
 import "rxjs/add/operator/do"
 import "rxjs/add/operator/filter"
+import "rxjs/add/operator/let"
 import "rxjs/add/operator/map"
 import "rxjs/add/operator/pluck"
 import "rxjs/add/operator/sample"

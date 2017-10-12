@@ -39,9 +39,8 @@ let initialState = {
   filter: "all",
 }
 
-let state = store(initialState, actions, (s) => {
-  console.log("state:", s)
-  return s
+let state = store(initialState, actions, {
+  doFn: (s) => console.log("state:", s),
 })
 
 // Derived state should act like normal (instead of some memoized shit), so you can

@@ -1,4 +1,18 @@
-import {flattenObj} from "./helpers"
+// Promises ========================================================================================
+
+// (a, Number?) -> Promise a
+export let getAsync = (val, delay=500) => {
+  return new Promise((resolve, reject) => setTimeout(() => resolve(val), delay))
+}
+
+// Number -> Promise ()
+export let delay = (time) => {
+  return new Promise((resolve) => {
+    setTimeout(resolve, time)
+  })
+}
+
+// Observables =====================================================================================
 
 // Filter observable by another observable, truthy = keep
 // :: Observable Boolean -> Observable a -> Observable a
@@ -14,18 +28,49 @@ export let rejectBy = (obs) => (self) => {
 
 // :: Object (Observable *) -> Observable *
 export let mergeObj = (obj) => {
-  obj = flattenObj(obj)
-  let values = Object.values(obj) // streams
-  return Observable.merge(...values)
+  obj = R.flattenObj(obj)
+  let values = R.values(obj) // streams
+  return O.merge(...values)
 }
 
 // a nicer analogy of https://github.com/staltz/combineLatestObj/blob/master/index.js
 // :: Object (Observable *) -> Observable *
 export let combineLatestObj = (obj) => {
-  obj = flattenObj(obj)
-  let keys = Object.keys(obj)     // stream names
-  let values = Object.values(obj) // streams
-  return Observable.combineLatest(values, (...args) => {
+  obj = R.flattenObj(obj)
+  let keys = R.keys(obj)     // stream names
+  let values = R.values(obj) // streams
+  return O.combineLatest(values, (...args) => {
     return R.zipObj(keys, args)
   })
+}
+
+// Framework =======================================================================================
+
+// chan is both an Observable and a Function
+export let chan = (mapFn) => {
+  let subj = new Subject()
+  let obs = mapFn(subj)
+  function channel(...callArgs) {
+    if (callArgs.length <= 1) {
+      return subj.next(callArgs[0])
+    } else {
+      return subj.next(callArgs)
+    }
+  }
+  Object.setPrototypeOf(channel, obs)
+  return channel
+}
+
+// useful for state loops (no examples so far)
+export let stateChan = () => {
+  let subj = new ReplaySubject(1)
+  function channel(...callArgs) {
+    if (callArgs.length <= 1) {
+      return subj.next(callArgs[0])
+    } else {
+      return subj.next(callArgs)
+    }
+  }
+  Object.setPrototypeOf(channel, subj)
+  return channel
 }

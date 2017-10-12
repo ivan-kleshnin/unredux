@@ -1,78 +1,8 @@
-import {Component} from "react"
-import {chan, stateChan} from "./chan"
-import {mergeObj} from "./utils"
-import {store} from "./store"
-
-// Helpers =========================================================================================
-let getAsync = (val, delay=500) => {
-  return new Promise((resolve, reject) => setTimeout(() => resolve(val), delay))
-}
-
-let delay = (time) => {
-  return new Promise((resolve) => {
-    setTimeout(resolve, time)
-  })
-}
+import {chan, delay, getAsync, mergeObj} from "./utils"
+import {makeActions, store, reducers} from "./store"
 
 // Actions =========================================================================================
-let stateLoop = stateChan()
-
-let asyncActions = {
-  loadRepo: chan($ => $
-    .withLatestFrom(stateLoop, (id, state) => {
-      if (state.repos[id]) { // + required fields
-        console.log("cache hit: do nothing")
-      } else {
-        console.log("cache miss: fetch data")
-        return (async () => {
-          let foo = await getAsync("foo", 500)
-          let bar = await getAsync("bar", 500)
-          return {id, foo, bar}
-        })()
-      }
-    })
-    .filter(R.id)
-    .mergeMap(x => Observable.from(x))
-  ),
-
-  loadUser: chan($ => $
-    .withLatestFrom(stateLoop, (id, state) => {
-      if (state.users[id]) { // + required fields
-        console.log("cache hit: do nothing")
-      } else {
-        console.log("cache miss: fetch data")
-        return (async () => {
-          let foo = await getAsync("foo", 500)
-          let bar = await getAsync("bar", 500)
-          return {id, foo, bar}
-        })()
-      }
-    })
-    .filter(R.id)
-    .mergeMap(x => Observable.from(x)),
-  ),
-}
-
-let actions = {
-  setRepo: chan($ => $
-    .merge(asyncActions.loadRepo)
-    .map(repo => R.setL(["repos", repo.id], repo))
-  ),
-
-  setUser: chan($ => $
-    .merge(asyncActions.loadUser)
-    .map(user => R.setL(["users", user.id], user))
-  ),
-
-  // Experimental
-  merge: chan($ => $
-    .map(stateFragment => state => R.merge(state, stateFragment))
-  ),
-
-  mergeDeep: chan($ => $
-    .map(stateFragment => state => R.mergeDeepRight(state, stateFragment))
-  ),
-}
+let actions = makeActions(reducers)
 
 // State ===========================================================================================
 let initialState = {
@@ -81,25 +11,52 @@ let initialState = {
   users: {},
 }
 
-let state = store(initialState, actions, (s) => {
-  console.log("state:", s)
-  stateLoop(s)
-  return s
+let state = store(initialState, actions, {
+  doFn: (s) => console.log("state:", s),
 })
+
+let asyncActions = {
+  loadRepo: chan($ => $.withLatestFrom(state, (id, state) => {
+    if (state.repos[id]) { // + required fields
+      console.log("cache hit: do nothing")
+    } else {
+      console.log("cache miss: fetch data")
+      ;(async () => {
+        let foo = await getAsync("foo", 500)
+        let bar = await getAsync("bar", 500)
+        actions.set(["repos", id], {id, foo, bar})
+      })()
+    }
+  })),
+
+  loadUser: chan($ => $.withLatestFrom(state, (id, state) => {
+    if (state.users[id]) { // + required fields
+      console.log("cache hit: do nothing")
+    } else {
+      console.log("cache miss: fetch data")
+      ;(async () => {
+        let foo = await getAsync("foo", 500)
+        let bar = await getAsync("bar", 500)
+        actions.set(["users", id], {id, foo, bar})
+      })()
+    }
+  })),
+}
 
 // Testbench =======================================================================================
 state.subscribe()
+mergeObj(asyncActions).subscribe()
 
 ;(async () => {
   await delay(2000)
   console.log(`@ actions.setRepo({id: "1"...})`)
-  actions.setRepo({id: "1", foo: "foo"})
+  actions.set(["repos", "1"], {id: "1", foo: "foo"})
 
   await delay(2000)
-  console.log(`loadRepo("1")`)
+  console.log(`@ loadRepo("1")`)
   asyncActions.loadRepo("1")
 
   await delay(2000)
-  console.log(`loadRepo("2")`)
+  console.log(`@ loadRepo("2")`)
   asyncActions.loadRepo("2")
 })()

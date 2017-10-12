@@ -14,14 +14,5 @@ module.exports = {
     filename: 'js/[name].js',
     path: Path.resolve("public"),
     publicPath: "/",
-  },
-  module: {
-    rules: [
-      {test: /\.js$/, use: "babel-loader"},
-    ]
-  },
-  externals: {
-    "react": "React",
-    "react-dom": "ReactDOM",
   }
 }

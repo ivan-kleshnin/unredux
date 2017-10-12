@@ -20,8 +20,7 @@ export let store = (initialState, actions, options) => {
         return fn(state)
       }
    })
-   //.throttleTime(1) is broken https://github.com/ReactiveX/rxjs/issues/2859
-   .throttleTime(() => Observable.interval(1), undefined, {leading: true, trailing: true})
+   .throttleTime(10) // RxJS throttle is half-broken a.t.m. (https://github.com/ReactiveX/rxjs/search?q=throttle&type=Issues)
    .let(options.letFn) // inject observable
    .map(options.mapFn) // inject value to map
    .do (options.doFn)  // inject value
@@ -32,8 +31,8 @@ export let store = (initialState, actions, options) => {
 // type HiStoreOptions = StoreOptions with {length :: Number}
 // (State, Actions, Actions, HiStoreOptions) -> Observable State
 export let historyStore = (initialState, stateActions, historyActions, options) => {
-  stateActions = Object.values(stateActions)     // converts objects, leaves arrays untouched
-  historyActions = Object.values(historyActions) // ...
+  stateActions = R.values(stateActions)     // converts objects, leaves arrays untouched
+  historyActions = R.values(historyActions) // ...
   options = R.merge({
     letFn: R.id,
     mapFn: state => state.log[state.i],

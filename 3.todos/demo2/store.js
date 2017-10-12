@@ -1,16 +1,17 @@
+let {mergeObj} = require("./utils")
+
 // type Actions = Object (Observable (State -> State)
 
 // type StoreOptions = {doFn :: a -> null, mapFn :: a -> b, letFn :: Observable a -> Obserbable b}
 // (State, Actions, StoreOptions) -> Observable State
 export let store = (initialState, actions, options) => {
-  actions = Object.values(actions) // converts objects, leaves arrays untouched
   options = R.merge({
     letFn: R.id,
     mapFn: R.id,
     doFn:  R.id,
   }, options)
 
-  return Observable.merge(...actions)
+  return mergeObj(actions)
    .startWith(initialState)
    .scan((state, fn) => {
       if (typeof fn != "function") {

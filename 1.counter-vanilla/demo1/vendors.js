@@ -10,8 +10,10 @@ import merge from "ramda/src/merge"
 import pipe from "ramda/src/pipe"
 import reduce from "ramda/src/reduce"
 
-let id = x => x
 let always = curry((x, y) => x)
+let id = x => x
+let keys = Object.keys
+let values = Object.values
 
 window.R = {
   always, assoc,
@@ -19,9 +21,11 @@ window.R = {
   equals,
   filter,
   id,
+  keys,
   map, merge,
   pipe,
   reduce,
+  values,
 }
 
 // RXJS ============================================================================================
@@ -44,6 +48,6 @@ import "rxjs/add/operator/scan"
 import "rxjs/add/operator/shareReplay"
 import "rxjs/add/operator/startWith"
 
-window.Observable = Observable
+window.Observable = window.O = Observable
 window.Subject = Subject
 window.ReplaySubject = ReplaySubject

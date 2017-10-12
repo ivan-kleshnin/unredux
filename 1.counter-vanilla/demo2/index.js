@@ -1,4 +1,4 @@
-import {chan} from "./chan"
+import {chan} from "./utils"
 
 // Actions =========================================================================================
 let actions = {
@@ -21,7 +21,7 @@ let actions = {
 }
 
 // State ===========================================================================================
-let state = Observable.merge(
+let state = O.merge(
   actions.increment,
   actions.decrement,
   actions.incrementIfOdd,

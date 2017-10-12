@@ -1,29 +1,27 @@
 import {Component} from "react"
-import {chan} from "./chan"
+import {chan} from "./utils"
 import connect from "./connect"
 import {historyStore, derive} from "./store"
 
 // Actions =========================================================================================
 let actions = {
-  addTodo: chan($ => $
-    .map(text => state => {
-      let id = String(Object.values(state.todos).length + 1)
-      return R.setL(["todos", id], {
-        id,
-        text,
-        completed: false,
-        addedAt: new Date().toISOString(),
-      }, state)
-    })
-  ),
+  addTodo: chan($ => $.map(text => state => {
+    let id = String(R.values(state.todos).length + 1)
+    return R.setL(["todos", id], {
+      id,
+      text,
+      completed: false,
+      addedAt: new Date().toISOString(),
+    }, state)
+  })),
 
-  toggleTodo: chan($ => $
-    .map(id => R.overL(["todos", id, "completed"], x => !x))
-  ),
+  toggleTodo: chan($ => $.map(id => state =>
+    R.overL(["todos", id, "completed"], x => !x, state)
+  )),
 
-  setFilter: chan($ => $
-    .map(filter => R.setL(["filter"], filter))
-  ),
+  setFilter: chan($ => $.map(filter => state =>
+    R.setL(["filter"], filter, state)
+  )),
 }
 
 let canUndo = (state) =>
@@ -64,11 +62,11 @@ let derived = {
   filteredTodos: derive(state, (state) => {
     switch (state.filter) {
       case "all":
-        return Object.values(state.todos)
+        return R.values(state.todos)
       case "completed":
-        return R.sort(R.ascend(R.prop("addedAt")), R.filter(t => t.completed, Object.values(state.todos)))
+        return R.sort(R.ascend(R.prop("addedAt")), R.filter(t => t.completed, R.values(state.todos)))
       case "active":
-        return R.sort(R.ascend(R.prop("addedAt")), R.filter(t => !t.completed, Object.values(state.todos)))
+        return R.sort(R.ascend(R.prop("addedAt")), R.filter(t => !t.completed, R.values(state.todos)))
       default:
         throw Error("Unknown filter: " + state.filter)
     }

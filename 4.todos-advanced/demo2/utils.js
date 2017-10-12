@@ -1,15 +1,34 @@
+// Observables =====================================================================================
+
 // :: Object (Observable *) -> Observable *
 export let mergeObj = (obj) => {
-  let values = Object.values(obj) // streams
-  return Observable.merge(...values)
+  let values = R.values(obj) // streams
+  return O.merge(...values)
 }
 
 // a nicer analogy of https://github.com/staltz/combineLatestObj/blob/master/index.js
 // :: Object (Observable *) -> Observable *
 export let combineLatestObj = (obj) => {
-  let keys = Object.keys(obj)     // stream names
-  let values = Object.values(obj) // streams
-  return Observable.combineLatest(values, (...args) => {
+  let keys = R.keys(obj)     // stream names
+  let values = R.values(obj) // streams
+  return O.combineLatest(values, (...args) => {
     return R.zipObj(keys, args)
   })
+}
+
+// Framework =======================================================================================
+
+// chan is both an Observable and a Function
+export let chan = (mapFn) => {
+  let subj = new Subject()
+  let obs = mapFn(subj)
+  function channel(...callArgs) {
+    if (callArgs.length <= 1) {
+      return subj.next(callArgs[0])
+    } else {
+      return subj.next(callArgs)
+    }
+  }
+  Object.setPrototypeOf(channel, obs)
+  return channel
 }

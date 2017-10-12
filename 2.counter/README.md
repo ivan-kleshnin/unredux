@@ -23,9 +23,9 @@ $ npm run demo2
 Useful to inject props. Does not support nesting (yet).
 
 ```js
-let s1 = Observable.of(1)
-let s2 = Observable.of(2)
-let s3 = Observable.of(3)
+let s1 = O.of(1)
+let s2 = O.of(2)
+let s3 = O.of(3)
 
 let sc = combineLatestObj({s1, s2, s3})
 

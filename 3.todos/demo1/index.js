@@ -1,11 +1,11 @@
 import {Component} from "react"
-import {chan} from "./chan"
+import {chan} from "./utils"
 import connect from "./connect"
 
 // Actions =========================================================================================
 let actions = {
   addTodo: chan($ => $.map(text => state => {
-    let id = String(Object.values(state.todos).length + 1)
+    let id = String(R.values(state.todos).length + 1)
     return R.setL(["todos", id], {
       id,
       text,
@@ -36,7 +36,7 @@ let initialState = {
   filter: "all",
 }
 
-let state = Observable.merge(
+let state = O.merge(
   actions.addTodo,
   actions.toggleTodo,
   actions.setFilter,
@@ -55,11 +55,11 @@ let derived = {
   filteredTodos: state.map((state) => {
     switch (state.filter) {
       case "all":
-        return Object.values(state.todos)
+        return R.values(state.todos)
       case "completed":
-        return R.sortBy(t => t.addedAt, R.filter(t => t.completed, Object.values(state.todos)))
+        return R.sortBy(t => t.addedAt, R.filter(t => t.completed, R.values(state.todos)))
       case "active":
-        return R.sortBy(t => t.addedAt, R.filter(t => !t.completed, Object.values(state.todos)))
+        return R.sortBy(t => t.addedAt, R.filter(t => !t.completed, R.values(state.todos)))
       default:
         throw Error("Unknown filter: " + state.filter)
     }

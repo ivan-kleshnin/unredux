@@ -1,3 +1,5 @@
+// Framework =======================================================================================
+
 // chan is both an Observable and a Function
 export let chan = (mapFn) => {
   let subj = new Subject()
@@ -10,18 +12,5 @@ export let chan = (mapFn) => {
     }
   }
   Object.setPrototypeOf(channel, obs)
-  return channel
-}
-
-export let stateChan = () => {
-  let subj = new ReplaySubject(1)
-  function channel(...callArgs) {
-    if (callArgs.length <= 1) {
-      return subj.next(callArgs[0])
-    } else {
-      return subj.next(callArgs)
-    }
-  }
-  Object.setPrototypeOf(channel, subj)
   return channel
 }

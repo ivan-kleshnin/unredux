@@ -18,8 +18,10 @@ import sortBy from "ramda/src/sortBy"
 import view from "ramda/src/view"
 import zipObj from "ramda/src/zipObj"
 
-let id = x => x
 let always = curry((x, y) => x)
+let id = x => x
+let keys = Object.keys
+let values = Object.values
 
 window.R = {
   always,
@@ -27,13 +29,14 @@ window.R = {
   equals,
   filter,
   id,
+  keys,
   lens, lensIndex, lensProp,
   map, merge,
   over,
   pipe,
   reduce,
   set, sortBy,
-  view,
+  values, view,
   zipObj,
 }
 
@@ -80,6 +83,6 @@ import "rxjs/add/operator/shareReplay"
 import "rxjs/add/operator/startWith"
 import "rxjs/add/operator/withLatestFrom"
 
-window.Observable = Observable
+window.Observable = window.O = Observable
 window.Subject = Subject
 window.ReplaySubject = ReplaySubject

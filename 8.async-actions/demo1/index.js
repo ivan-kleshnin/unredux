@@ -1,5 +1,5 @@
-import {chan, delay, getAsync, mergeObj} from "./utils"
-import {store} from "./store"
+import {chan, delay, getAsync, mergeObj} from "./lib/utils"
+import {store} from "./lib/store"
 
 // Actions =========================================================================================
 let actions = {
@@ -11,11 +11,11 @@ let actions = {
 }
 
 // State ===========================================================================================
-let initialState = {
+let seed = {
   users: {},
 }
 
-let state = store(initialState, actions, {
+let state = store(seed, actions, {
   doFn: (s) => console.log("state:", s),
 })
 

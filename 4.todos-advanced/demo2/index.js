@@ -1,8 +1,8 @@
 import {Component} from "react"
-import {chan} from "./utils"
-import connect from "./connect"
-import {historyStore, derive} from "./store"
-import {loadFromStorage, saveToStorage} from "./storage"
+import {chan} from "./lib/utils"
+import connect from "./lib/connect"
+import {historyStore, derive} from "./lib/store"
+import {loadFromStorage, saveToStorage} from "./lib/storage"
 
 // Actions =========================================================================================
 let actions = {
@@ -25,24 +25,8 @@ let actions = {
   )),
 }
 
-let canUndo = (state) =>
-  state.i > Math.max(0, R.findIndex(R.id, state.log))
-
-let canRedo = (state) =>
-  state.i < state.log.length - 1
-
-let historyActions = {
-  undo: chan($ => $.map(() => state =>
-    R.overL(["i"], (i) => canUndo(state) ? i - 1 : i, state)
-  )),
-
-  redo: chan($ => $.map(() => state =>
-    R.overL(["i"], (i) => canRedo(state) ? i + 1 : i, state)
-  )),
-}
-
 // State ===========================================================================================
-let initialState = loadFromStorage("state", {
+let seed = loadFromStorage("state", {
   todos: {
     "1": {
       id: "1",
@@ -54,30 +38,28 @@ let initialState = loadFromStorage("state", {
   filter: "all",
 })
 
-let state = historyStore(initialState, actions, historyActions, {
+let db = historyStore(seed, actions, {
   length: 3,
   doFn: (s) => console.log("state:", s),
 })
 
-state.throttleTime(500).subscribe(s => {
+db.$.throttleTime(500).subscribe(s => {
   console.log("saving state...", s)
   saveToStorage("state", s)
 })
 
-let derived = {
-  filteredTodos: derive(state, (state) => {
-    switch (state.filter) {
-      case "all":
-        return R.values(state.todos)
-      case "completed":
-        return R.sort(R.ascend(R.prop("addedAt")), R.filter(t => t.completed, R.values(state.todos)))
-      case "active":
-        return R.sort(R.ascend(R.prop("addedAt")), R.filter(t => !t.completed, R.values(state.todos)))
-      default:
-        throw Error("Unknown filter: " + state.filter)
-    }
-  }),
-}
+let filteredTodos = derive(db.$, (state) => {
+  switch (state.filter) {
+    case "all":
+      return R.values(state.todos)
+    case "completed":
+      return R.sort(R.ascend(R.prop("addedAt")), R.filter(t => t.completed, R.values(state.todos)))
+    case "active":
+      return R.sort(R.ascend(R.prop("addedAt")), R.filter(t => !t.completed, R.values(state.todos)))
+    default:
+      throw Error("Unknown filter: " + state.filter)
+  }
+})
 
 // Components ======================================================================================
 let AddTodo = (props) => {
@@ -110,7 +92,7 @@ let TodoItem = (props) =>
   </li>
 
 let TodoList = connect(
-  {todos: derived.filteredTodos},
+  {todos: filteredTodos},
   (props) =>
     <ul>
       {props.todos.map(todo =>
@@ -138,9 +120,9 @@ let Footer = (props) =>
 
 let UndoRedo = (props) =>
   <div>
-    <button onClick={() => historyActions.undo()}>Undo</button>
+    <button onClick={() => db.historyActions.undo()}>Undo</button>
     {" "}
-    <button onClick={() => historyActions.redo()}>Redo</button>
+    <button onClick={() => db.historyActions.redo()}>Redo</button>
   </div>
 
 let App = (props) =>

@@ -2,13 +2,14 @@ let {chan, mergeObj} = require("./utils")
 
 // type Actions = Object (Observable (State -> State)
 
-// type StoreOptions = {doFn :: a -> null, mapFn :: a -> b, letFn :: Observable a -> Obserbable b}
+// type StoreOptions = {doFn :: a -> (), mapFn :: a -> b, letFn :: Observable a -> Obserbable b, cmpFn :: a -> a -> Boolean}
 // (State, Actions, StoreOptions?) -> Observable State
 export let store = (initialState, actions, options={}) => {
   options = R.merge({
     letFn: R.id,
     mapFn: R.id,
     doFn:  R.id,
+    cmpFn: R.equals,
   }, options)
 
   return mergeObj(actions)
@@ -20,24 +21,26 @@ export let store = (initialState, actions, options={}) => {
         return fn(state)
       }
    })
-   .throttleTime(10)   // RxJS throttle is half-broken a.t.m. (https://github.com/ReactiveX/rxjs/search?q=throttle&type=Issues)
+   .throttleTime(10, undefined, {leading: true, trailing: true}) // RxJS throttle is half-broken a.t.m. (https://github.com/ReactiveX/rxjs/search?q=throttle&type=Issues)
    .let(options.letFn) // inject observable
    .map(options.mapFn) // inject value to map
    .do (options.doFn)  // inject value
-   .distinctUntilChanged(R.equals)
+   .distinctUntilChanged(options.cmpFn)
    .shareReplay(1)
 }
 
+export let canUndo = (state) =>
+  state.i > Math.max(0, R.findIndex(R.id, state.log))
+
+export let canRedo = (state) =>
+  state.i < state.log.length - 1
+
 // type HiStoreOptions = StoreOptions with {length :: Number}
-// (State, Actions, Actions, HiStoreOptions?) -> Observable State
-export let historyStore = (initialState, stateActions, historyActions, options={}) => {
-  stateActions = R.values(stateActions)     // converts objects, leaves arrays untouched
-  historyActions = R.values(historyActions) // ...
+// (State, Actions, HiStoreOptions?) -> Observable State
+export let historyStore = (seed, stateActions, options={}) => {
   options = R.merge({
-    letFn: R.id,
-    mapFn: state => state.log[state.i],
-    doFn:  R.id,
     length: 3,
+    cmpFn: R.F,
   }, options)
 
   let normalizeLog = (log) =>
@@ -46,12 +49,12 @@ export let historyStore = (initialState, stateActions, historyActions, options={
   let normalizeI = (i) =>
     (i > options.length - 1 ? options.length - 1 : i)
 
-  initialState = {
-    log: normalizeLog([initialState]), // [null, null, <state>]
-    i: options.length - 1,              //  0     1     2!
-  }
+  seed = R.merge({
+    log: normalizeLog([seed]), // [null, null, <state>]
+    i: options.length - 1,     //  0     1     2!
+  }, seed)
 
-  stateActions = stateActions.map(channel => channel.map(fn => hs => {
+  stateActions = R.map(channel => channel.map(fn => hs => {
     if (hs.i < options.length - 1) {
       hs = R.merge(hs, {
         log: normalizeLog(R.slice(0, hs.i + 1, hs.log)),
@@ -59,10 +62,39 @@ export let historyStore = (initialState, stateActions, historyActions, options={
       })
     }
     return R.setL(["log"], tailAppend(fn(hs.log[hs.i]), hs.log), hs)
-  }))
+  }), R.values(stateActions))
 
-  return store(initialState, stateActions.concat(historyActions), options)
+  let historyActions = {
+    undo: chan($ => $.map(() => state =>
+      R.overL(["i"], (i) => canUndo(state) ? i - 1 : i, state)
+    )),
+
+    redo: chan($ => $.map(() => state =>
+      R.overL(["i"], (i) => canRedo(state) ? i + 1 : i, state)
+    )),
+  }
+
+  let historyState = store(
+    seed,
+    stateActions.concat(R.values(historyActions)),
+    options
+  )
+
+  let state = historyState
+    .map(state => state.log[state.i])
+    .distinctUntilChanged(R.equals)
+
+  return {
+    historyActions,
+    historyState,
+    state,
+    $: state,
+  }
 }
+
+let tailAppend = R.curry((x, xs) => {
+  return R.append(x, R.tail(xs))
+})
 
 // (Observable State, (State -> State)) -> Observable State
 export let derive = (state, deriveFn) => {
@@ -71,10 +103,6 @@ export let derive = (state, deriveFn) => {
     .distinctUntilChanged()
     .shareReplay(1)
 }
-
-let tailAppend = R.curry((x, xs) => {
-  return R.append(x, R.tail(xs))
-})
 
 // Object (* -> State -> State)
 export let obscureReducers = {
@@ -127,8 +155,7 @@ export let obscureReducers = {
   },
 }
 
-export let makeActions = (reducers) => {
-  return R.map(reducer =>
-    chan($ => $.map(reducer))
-  , reducers)
-}
+// Object (Observable (State -> State))
+export let obscureActions = R.map(reducer =>
+  chan($ => $.map(reducer))
+, obscureReducers)

@@ -10,7 +10,7 @@ $ npm run demo2
 
 ### Basic reducers
 
-You can discover that most state updates can almost trivially be expressed with the following reducers:
+You can discover that most state updates can be trivially expressed with the following reducers:
 
 ```js
 let obscureReducers = {
@@ -145,6 +145,8 @@ The old wisdom that some things are easier to prevent than to deal with is total
 
 So our current recommendation is to use `obscureReducers` only for the simplest cases, as a quick and dirty solution.
 
+### Observable actions
+
 Which kind of logic you can want to drop into action streams? There are many: logging, validation, model creations
 (`userFragment -> user`), delaying, throttling, some reactive post-actions like cache-cleaning, etc. etc.
 So it's important to make all that both possible and easy. That's why we keep the current API
@@ -197,3 +199,10 @@ let actions = {
 ```
 
 The bottom line: **keep actions observable**.
+
+--
+
+Pure React, Redux, CalmmJS and most other libraries don't follow this principle and suffer from the
+lack of reactivity. They could argue it's worth to drop reactivity *in this particular place* as a
+reasonable trade-off. But since they remain silent, it's possible to conclude they just *didn't try*
+other approaches... 

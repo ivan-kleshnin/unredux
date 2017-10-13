@@ -1,10 +1,12 @@
 import {chan, delay, getAsync, mergeObj} from "./utils"
-import {store, reducers} from "./store"
+import {store} from "./store"
 
 // Actions =========================================================================================
 let actions = {
   setUser: chan($ => $
-    .map(user => state => R.setL(["users", user.id], user, state))
+    .map(user => state =>
+      R.setL(["users", user.id], user, state)
+    )
   ),
 }
 
@@ -18,16 +20,18 @@ let state = store(initialState, actions, {
 })
 
 let asyncActions = {
-  loadUser: chan($ => $.withLatestFrom(state, async (id, state) => {
-    if (state.users[id]) {
-      console.log("cache hit: do nothing")
-    } else {
-      console.log("cache miss: fetch data")
-      let foo = await getAsync("foo", 500)
-      let bar = await getAsync("bar", 500)
-      actions.setUser({id, foo, bar})
-    }
-  })),
+  loadUser: chan($ => $
+    .withLatestFrom(state, async (id, state) => {
+      if (state.users[id]) {
+        console.log("cache hit: do nothing")
+      } else {
+        console.log("cache miss: fetch data")
+        let foo = await getAsync("foo", 500)
+        let bar = await getAsync("bar", 500)
+        actions.setUser({id, foo, bar})
+      }
+    })
+  ),
 }
 
 // Test-bench ======================================================================================

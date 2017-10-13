@@ -180,12 +180,12 @@ Just don't think there won't be cons.
 The second problem with CycleJS approach is a cohesion gap between an effect initiator and an effect
 consumer. Which is explained in details [here](http://www.christianalfoni.com/articles/2016_09_11_The-case-for-function-tree).
 Basically, to track the linear data flow, you need to switch between reading sinks and sources constantly.
-To achieve 100% reactivity CycleJS app will have more than one cycle inside. and if you think that's
-easy to read or debug... – man, you're wrong.
+To achieve 100% reactivity, most complex CycleJS apps will end with multiple cycles (either in app
+or library code), and if you think that's easy to read or debug... – man, you're wrong.
 
 It's also about the ecosystem. I believe that XStream creation was a mistake. Now they propose to
 use RxJS for the cases XStream can't manage – like bundle size is not an issue anymore @_@.
-React 16 is way more performant and convenient than most its alternatives, including their default
+React 16 is way more performant and convenient than the alternatives, including their default
 Snabbdom. The latter, for example, still doesn't have a Component abstraction which means the whole
 VDOM tree reconcilation is the only option available...
 
@@ -198,7 +198,8 @@ tools" which I don't consider beneficial.
 
 CalmmJS is also very good. Conceptually, it's similar enough to what I'm trying to implement here.
 What I don't like about CalmmJS is magic. They use a lot of magic, like auto-injections of observables
-into React components, or multiple ad hoc reactive operators which seem foreign in Hello-World demos.
+into React components, or multiple high-level ad hoc reactive operators which seem foreign in Hello-World
+examples.
 
 Reading the code I can't help the feeling a lot of things are prematurely optimized and the end
 architecture would look very different without that. Nevermind, Vesa Karvonen is a brilliant engineer
@@ -223,5 +224,5 @@ I don't use linters. Having this:
 
 just to get "wrong indendation" events occasionally, is not what I live for. It's all about
 **signal-to-noise** ratio so I consider linters almost worthless (Flow is better as a linter btw.).
-For the same reason I don't use `const`, `===` and other "best practices" 2x-olds are like to mindlessly
-copy-paste into their projects.
+For the same reason I don't use `const`, `===` and other "best practices" 2x year olds are like to
+mindlessly copy into their projects.

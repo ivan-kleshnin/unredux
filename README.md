@@ -156,26 +156,60 @@ cleaner and more stable.
 
 ### Why not AngularJS?
 
-Are you kidding me?
+Are you kidding me? Front-end templaters should have been banned long time ago.
 
 ### Why not VueJS?
 
-RIP MVC. It's just a backlash against Redux.
+RIP MVC, not interested. It's just a backlash against Redux.
 
 ### Why not CycleJS?
 
 To prove the point. CycleJS is great but I have a goal to avoid frameworks in this project.
 
+FYI CycleJS has it's own problems. At first, the framework is idealistic which is good and bad at the same time.
+The most prominent example of that is side-effect handling. To keep the architectural benefits, you
+need to wrap every library with side-effects exclusively for CycleJS. And sometimes it's basically
+impossible without a full rewrite. So CycleJS ecosystem is isolated from others by some kind of
+transparent yet tangible barrier.
+
+The go-to JS approach to side-effect testing is mocking. Fortunately there aren't so many
+types of side effects... CycleJS approach is entirely different and there are inevitable consequences
+of that. The balance of pros and cons will be determined by the type of app you develop (as always).
+Just don't think there won't be cons.
+
+The second problem with CycleJS approach is a cohesion gap between an effect initiator and an effect
+consumer. Which is explained in details [here](http://www.christianalfoni.com/articles/2016_09_11_The-case-for-function-tree).
+Basically, to track the linear data flow, you need to switch between reading sinks and sources constantly.
+To achieve 100% reactivity CycleJS app will have more than one cycle inside. and if you think that's
+easy to read or debug... – man, you're wrong.
+
+It's also about the ecosystem. I believe that XStream creation was a mistake. Now they propose to
+use RxJS for the cases XStream can't manage – like bundle size is not an issue anymore @_@.
+React 16 is way more performant and convenient than most its alternatives, including their default
+Snabbdom. The latter, for example, still doesn't have a Component abstraction which means the whole
+VDOM tree reconcilation is the only option available...
+
+Finally, I'd like to avoid TypeScript as long as possible (hint: it's a mess). The bottom line is that
+CycleJS community is very fragmented because of all their "diverse" decisions and it feels so. From their
+initial principle of "same tools -> multiple architectures" they switched to "same architecture -> multiple
+tools" which I don't consider beneficial.
+
 ### Why not CalmmJS?
 
-Conceptually it's very similar to what I do here. I don't like magic injections of observables into
-React components. Nevermind – check the previous point.
+CalmmJS is also very good. Conceptually, it's similar enough to what I'm trying to implement here.
+What I don't like about CalmmJS is magic. They use a lot of magic, like auto-injections of observables
+into React components, or multiple ad hoc reactive operators which seem foreign in Hello-World demos.
 
-### Random remarks
+Reading the code I can't help the feeling a lot of things are prematurely optimized and the end
+architecture would look very different without that. Nevermind, Vesa Karvonen is a brilliant engineer
+and I don't want to underrate his work. Re-read the first sentence in the prev. paragraph and accept
+that my goal is to avoid frameworks here.
 
-#### I don't use linters
+## Random remarks
 
-Adding this:
+### Signal-to-noise ratio
+
+I don't use linters. Having this:
 
 ```
 "eslint": "^4.0.0",
@@ -187,6 +221,7 @@ Adding this:
 ...
 ```
 
-just to notify me about "wrong indendation" is not what I live for. It's all about **signal-to-noise**
-ratio so I consider linters almost worthless (Flow is better as a linter btw.). For the same reason
-I don't use `const`, `===` and other "useful" things.
+just to get "wrong indendation" events occasionally, is not what I live for. It's all about
+**signal-to-noise** ratio so I consider linters almost worthless (Flow is better as a linter btw.).
+For the same reason I don't use `const`, `===` and other "best practices" 2x-olds are like to mindlessly
+copy-paste into their projects.

@@ -132,7 +132,8 @@ All that need a separated article. For now – just a random notes FYI.
 
 #### 8. [Async actions](./8.async-actions)
 
-**Wip**
+* Demo1: async actions.
+* Demo2: **wip**
 
 #### 9. [Experiments](./9.experiments)
 

@@ -14,8 +14,7 @@ export let store = (initialState, actions, mapFn=R.id) => {
         return fn(state)
       }
    })
-   //.throttleTime(1) is broken https://github.com/ReactiveX/rxjs/issues/2859
-   .throttleTime(() => Observable.interval(1), undefined, {leading: true, trailing: true}) // merges potentil sync updates to a single update event
+   .throttleTime(10) // RxJS throttle is half-broken a.t.m. (https://github.com/ReactiveX/rxjs/search?q=throttle&type=Issues)
    .map(mapFn)
    .distinctUntilChanged(R.equals)
    .shareReplay(1)
@@ -23,8 +22,8 @@ export let store = (initialState, actions, mapFn=R.id) => {
 
 // (State, Actions, Actions, Number, Noop) -> Observable State
 export let historyStore = (initialState, stateActions, historyActions, historyLength, mapFn) => {
-  stateActions = Object.values(stateActions)     // converts objects, leaves arrays untouched
-  historyActions = Object.values(historyActions) // ...
+  stateActions = R.values(stateActions)     // converts objects, leaves arrays untouched
+  historyActions = R.values(historyActions) // ...
 
   let normalizeLog = (log) =>
     R.takeLast(historyLength, [...R.repeat(null, historyLength), ...log])

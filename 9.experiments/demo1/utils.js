@@ -15,17 +15,17 @@ export let rejectBy = (obs) => (self) => {
 // :: Object (Observable *) -> Observable *
 export let mergeObj = (obj) => {
   obj = flattenObj(obj)
-  let values = Object.values(obj) // streams
-  return Observable.merge(...values)
+  let values = R.values(obj) // streams
+  return O.merge(...values)
 }
 
 // a nicer analogy of https://github.com/staltz/combineLatestObj/blob/master/index.js
 // :: Object (Observable *) -> Observable *
 export let combineLatestObj = (obj) => {
   obj = flattenObj(obj)
-  let keys = Object.keys(obj)     // stream names
-  let values = Object.values(obj) // streams
-  return Observable.combineLatest(values, (...args) => {
+  let keys = R.keys(obj)     // stream names
+  let values = R.values(obj) // streams
+  return O.combineLatest(values, (...args) => {
     return R.zipObj(keys, args)
   })
 }

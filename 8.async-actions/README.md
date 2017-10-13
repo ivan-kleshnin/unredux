@@ -204,5 +204,5 @@ The bottom line: **keep actions observable**.
 
 Pure React, Redux, CalmmJS and most other libraries don't follow this principle and suffer from the
 lack of reactivity. They could argue it's worth to drop reactivity *in this particular place* as a
-reasonable trade-off. But since they remain silent, it's possible to conclude they just *didn't try*
-other approaches... 
+reasonable trade-off, making pros and cons clear. But since they remain silent, it's possible to
+conclude they just didn't try other approaches.

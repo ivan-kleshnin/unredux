@@ -4,7 +4,7 @@ let {mergeObj} = require("./utils")
 
 // type StoreOptions = {doFn :: a -> null, mapFn :: a -> b, letFn :: Observable a -> Obserbable b}
 // (State, Actions, StoreOptions) -> Observable State
-export let store = (initialState, actions, options) => {
+export let store = (seed, actions, options) => {
   options = R.merge({
     letFn: R.id,
     mapFn: R.id,
@@ -12,7 +12,7 @@ export let store = (initialState, actions, options) => {
   }, options)
 
   return mergeObj(actions)
-   .startWith(initialState)
+   .startWith(seed)
    .scan((state, fn) => {
       if (typeof fn != "function") {
         throw Error(`invalid fn ${fn} dispatched`)

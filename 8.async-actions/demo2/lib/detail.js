@@ -1,17 +1,17 @@
 import {chan} from "./utils"
 import {store} from "./store"
 
-export default (initialState, collection, options) => {
-  initialState = R.merge({
+export default (seed, collection, options) => {
+  seed = R.merge({
     id: null,
-  }, initialState)
+  }, seed)
 
   let actions = {
     setId: chan($ => $.map(id => state => R.setL(["id"], id, state))),
-    reset: chan($ => $.map(id => state => initialState)),
+    reset: chan($ => $.map(id => state => seed)),
   }
 
-  let state = store(initialState, actions, options)
+  let state = store(seed, actions, options)
 
   let model = collection
     .combineLatest(state.pluck("id"), (collection, id) => {

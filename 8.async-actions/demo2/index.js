@@ -12,11 +12,11 @@ let dbActions = {
 }
 
 // State ===========================================================================================
-let initialState = {
+let seed = {
   users: {},
 }
 
-let db = store(initialState, dbActions, {
+let db = store(seed, dbActions, {
   doFn: (s) => console.log("# db:", s),
 })
 

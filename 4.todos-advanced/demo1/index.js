@@ -41,7 +41,7 @@ let historyActions = {
 }
 
 // State ===========================================================================================
-let initialState = {
+let seed = {
   todos: {
     "1": {
       id: "1",
@@ -53,7 +53,7 @@ let initialState = {
   filter: "all",
 }
 
-let state = historyStore(initialState, actions, historyActions, {
+let state = historyStore(seed, actions, historyActions, {
   length: 3,
   doFn: (s) => console.log("state:", s),
 })

@@ -5,7 +5,7 @@ export default function connect(streamsToProps, ComponentToWrap) {
   class Container extends Component {
     constructor(props) {
       super(props)
-      this.state = {} // will be replaced with initialState on componentWillMount (before first render)
+      this.state = {} // will be replaced with seed on componentWillMount (before first render)
     }
 
     componentWillMount() {

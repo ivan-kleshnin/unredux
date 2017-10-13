@@ -5,29 +5,29 @@ import {store} from "./store"
 let actions = makeBasicActions()
 
 // State ===========================================================================================
-let initialState = {
+let seed = {
   // data
   // repos: {},
   users: {},
 }
 
-let db = store(initialState, actions, (s) => {
+let db = store(seed, actions, (s) => {
   // console.log("state:", s)
   stateLoop(s)
   return s
 })
 
-let index = (collection, initialState, actions) => {
-  initialState = R.merge({
+let index = (collection, seed, actions) => {
+  seed = R.merge({
     ids: [],
     fullLoad: false,
     filterFn: R.id,                            // default filtering
     sortFn: R.comparator((x1, x2) => x1 < x2), // default sorting
     offset: 0,                                 // default offset
     limit: 10,                                 // default limit
-  }, initialState)
+  }, seed)
 
-  let index = store(initialState, R.merge({
+  let index = store(seed, R.merge({
     autoSet: collection.map(collection => {
       return index => {
         if (index.fullLoad) {

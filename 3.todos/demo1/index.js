@@ -24,7 +24,7 @@ let actions = {
 }
 
 // State ===========================================================================================
-let initialState = {
+let seed = {
   todos: {
     "1": {
       id: "1",
@@ -41,7 +41,7 @@ let state = O.merge(
   actions.toggleTodo,
   actions.setFilter,
 )
- .startWith(initialState)
+ .startWith(seed)
  .scan((state, fn) => fn(state))
  .distinctUntilChanged(R.equals)
  .do(s => {

@@ -25,7 +25,7 @@ let actions = {
 }
 
 // State ===========================================================================================
-let initialState = {
+let seed = {
   todos: {
     "1": {
       id: "1",
@@ -37,7 +37,7 @@ let initialState = {
   filter: "all",
 }
 
-let state = store(initialState, actions, {
+let state = store(seed, actions, {
   doFn: (s) => console.log("state:", s),
 })
 

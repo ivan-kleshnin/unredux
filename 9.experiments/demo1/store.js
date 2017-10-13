@@ -4,9 +4,9 @@ let {mergeObj} = require("./utils")
 // type Actions = Object (Observable (State -> State)
 
 // (State, Actions, Noop) -> Observable State
-export let store = (initialState, actions, mapFn=R.id) => {
+export let store = (seed, actions, mapFn=R.id) => {
   return mergeObj(actions)
-   .startWith(initialState)
+   .startWith(seed)
    .scan((state, fn) => {
       if (typeof fn != "function") {
         throw Error(`invalid fn ${fn} dispatched`)
@@ -21,7 +21,7 @@ export let store = (initialState, actions, mapFn=R.id) => {
 }
 
 // (State, Actions, Actions, Number, Noop) -> Observable State
-export let historyStore = (initialState, stateActions, historyActions, historyLength, mapFn) => {
+export let historyStore = (seed, stateActions, historyActions, historyLength, mapFn) => {
   stateActions = R.values(stateActions)     // converts objects, leaves arrays untouched
   historyActions = R.values(historyActions) // ...
 
@@ -31,8 +31,8 @@ export let historyStore = (initialState, stateActions, historyActions, historyLe
   let normalizeI = (i) =>
     (i > historyLength - 1 ? historyLength - 1 : i)
 
-  initialState = {
-    log: normalizeLog([initialState]), // [null, null, <state>]
+  seed = {
+    log: normalizeLog([seed]), // [null, null, <state>]
     i: historyLength - 1,              //  0     1     2!
   }
 
@@ -46,7 +46,7 @@ export let historyStore = (initialState, stateActions, historyActions, historyLe
     return R.setL(["log"], tailAppend(fn(hs.log[hs.i]), hs.log), hs)
   }))
 
-  return store(initialState, stateActions.concat(historyActions), state => {
+  return store(seed, stateActions.concat(historyActions), state => {
     mapFn(state)
     return state.log[state.i]
   })

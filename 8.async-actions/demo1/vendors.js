@@ -18,7 +18,6 @@ import lens from "ramda/src/lens"
 import lensIndex from "ramda/src/lensIndex"
 import lensProp from "ramda/src/lensProp"
 import map from "ramda/src/map"
-import mapObjIndexed from "ramda/src/map"
 import merge from "ramda/src/merge"
 import mergeDeepRight from "ramda/src/mergeDeepRight"
 import over from "ramda/src/over"
@@ -70,7 +69,7 @@ window.R = {
   id, isEmpty, isPlainObj,
   keys,
   lens, lensIndex, lensProp,
-  map, map2, mapObjIndexed, merge, mergeFlipped, mergeDeep, mergeDeepFlipped,
+  map, map2, merge, mergeFlipped, mergeDeep, mergeDeepFlipped,
   over,
   pipe, pluck, prepend, prop,
   repeat, reduce, reduce2,

@@ -77,7 +77,7 @@ let tailAppend = R.curry((x, xs) => {
 })
 
 // Object (* -> State -> State)
-export let reducers = {
+export let obscureReducers = {
   // set :: State -> State -> State
   // set :: (String, a) -> State -> State
   set: args => state => {
@@ -128,7 +128,7 @@ export let reducers = {
 }
 
 export let makeActions = (reducers) => {
-  return R.mapObjIndexed((reducer, key) =>
+  return R.map(reducer =>
     chan($ => $.map(reducer))
   , reducers)
 }

@@ -1,99 +1,6 @@
 import {Component} from "react"
-import {chan, stateChan} from "./chan"
-import {mergeObj} from "./utils"
+import {chan, delay, getAsync, mergeObj} from "./utils"
 import {store} from "./store"
-
-// Helpers =========================================================================================
-let getAsync = (val, delay=500) => {
-  return new Promise((resolve, reject) => setTimeout(() => resolve(val), delay))
-}
-
-let delay = (time) => {
-  return new Promise((resolve) => {
-    setTimeout(resolve, time)
-  })
-}
-
-let makeBasicActions = () => ({
-  set: chan($ => $.map(args => state => {
-    if (args instanceof Array) {
-      let [path, val] = args
-      return R.setL(path, val, state)
-    } else {
-      let val = args
-      return val
-    }
-  })),
-
-  over: chan($ => $.map(args => state => {
-    if (args instanceof Array) {
-      let [path, fn] = args
-      return R.overL(path, fn, state)
-    } else {
-      let fn = args
-      return fn(state)
-    }
-  })),
-
-  merge: chan($ => $.map(args => state => {
-    if (args instanceof Array) {
-      let [path, stateFragment] = args
-      return R.overL(path, R.mergeFlipped(stateFragment), state)
-    } else {
-      let stateFragment = args
-      return R.merge(state, stateFragment)
-    }
-  })),
-
-  mergeDeep: chan($ => $.map(args => state => {
-    if (args instanceof Array) {
-      let [path, stateFragment] = args
-      return R.overL(path, R.mergeDeepFlipped(stateFragment), state)
-    } else {
-      let stateFragment = args
-      return R.mergeDeep(state, stateFragment)
-    }
-  })),
-})
-
-// Actions =========================================================================================
-let stateLoop = stateChan()
-
-let asyncActions = {
-  // loadRepo: chan($ => $
-  //   .withLatestFrom(stateLoop, (id, state) => {
-  //     if (state.repos[id]) {  // + required fields
-  //       console.log("cache hit: do nothing")
-  //     } else {
-  //       console.log("cache miss: fetch data")
-  //       return (async () => {
-  //         let foo = await getAsync("foo", 500)
-  //         let bar = await getAsync("bar", 500)
-  //         return {id, foo, bar}
-  //       })()
-  //     }
-  //   })
-  //   .filter(R.id)
-  //   .mergeMap(x => Observable.from(x))
-  // ),
-
-  loadUser: chan($ => $
-    .withLatestFrom(stateLoop, (id, state) => {
-      if (state.users[id]) { // + required fields
-        console.log("cache hit: do nothing")
-      } else {
-        console.log("cache miss: fetch data")
-        return (async () => {
-          let foo = await getAsync("foo", 500)
-          let bar = await getAsync("bar", 500)
-          return {id, foo, bar}
-        })()
-      }
-    })
-    .filter(R.id)
-    .mergeMap(x => Observable.from(x)),
-  ),
-}
 
 let actions = makeBasicActions()
 
@@ -270,3 +177,40 @@ usersTop3Index.models.subscribe(models => {
   // console.log("loadUser(2)")
   // asyncActions.loadUser("2")
 })()
+
+
+// let asyncActions = {
+//   // loadRepo: chan($ => $
+//   //   .withLatestFrom(stateLoop, (id, state) => {
+//   //     if (state.repos[id]) {  // + required fields
+//   //       console.log("cache hit: do nothing")
+//   //     } else {
+//   //       console.log("cache miss: fetch data")
+//   //       return (async () => {
+//   //         let foo = await getAsync("foo", 500)
+//   //         let bar = await getAsync("bar", 500)
+//   //         return {id, foo, bar}
+//   //       })()
+//   //     }
+//   //   })
+//   //   .filter(R.id)
+//   //   .mergeMap(x => Observable.from(x))
+//   // ),
+//
+//   loadUser: chan($ => $
+//     .withLatestFrom(stateLoop, (id, state) => {
+//       if (state.users[id]) { // + required fields
+//         console.log("cache hit: do nothing")
+//       } else {
+//         console.log("cache miss: fetch data")
+//         return (async () => {
+//           let foo = await getAsync("foo", 500)
+//           let bar = await getAsync("bar", 500)
+//           return {id, foo, bar}
+//         })()
+//       }
+//     })
+//     .filter(R.id)
+//     .mergeMap(x => Observable.from(x)),
+//   ),
+// }

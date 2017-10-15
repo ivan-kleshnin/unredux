@@ -1,7 +1,7 @@
 import {Component} from "react"
 import {chan} from "./lib/utils"
 import connect from "./lib/connect"
-import {historyStore, derive} from "./lib/store"
+import {historyActions, historyStore, derive} from "./lib/store"
 import {loadFromStorage, saveToStorage} from "./lib/storage"
 
 // Actions =========================================================================================
@@ -38,17 +38,12 @@ let seed = loadFromStorage("state", {
   filter: "all",
 })
 
-let db = historyStore(seed, actions, {
+let state = historyStore(seed, actions, {
   length: 3,
   doFn: (s) => console.log("state:", s),
 })
 
-db.$.throttleTime(500).subscribe(s => {
-  console.log("saving state...", s)
-  saveToStorage("state", s)
-})
-
-let filteredTodos = derive(db.$, (state) => {
+let filteredTodos = derive(state, (state) => {
   switch (state.filter) {
     case "all":
       return R.values(state.todos)
@@ -59,6 +54,12 @@ let filteredTodos = derive(db.$, (state) => {
     default:
       throw Error("Unknown filter: " + state.filter)
   }
+})
+
+// Effects =========================================================================================
+state.throttleTime(500).subscribe(s => {
+  console.log("saving state...", s)
+  saveToStorage("state", s)
 })
 
 // Components ======================================================================================
@@ -120,9 +121,9 @@ let Footer = (props) =>
 
 let UndoRedo = (props) =>
   <div>
-    <button onClick={() => db.historyActions.undo()}>Undo</button>
+    <button onClick={() => historyActions.undo()}>Undo</button>
     {" "}
-    <button onClick={() => db.historyActions.redo()}>Redo</button>
+    <button onClick={() => historyActions.redo()}>Redo</button>
   </div>
 
 let App = (props) =>

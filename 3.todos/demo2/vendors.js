@@ -81,6 +81,7 @@ import "rxjs/add/operator/sample"
 import "rxjs/add/operator/scan"
 import "rxjs/add/operator/shareReplay"
 import "rxjs/add/operator/startWith"
+import "rxjs/add/operator/throttleTime"
 import "rxjs/add/operator/withLatestFrom"
 
 window.Observable = window.O = Observable

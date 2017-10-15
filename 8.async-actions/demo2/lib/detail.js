@@ -1,7 +1,7 @@
 import {chan} from "./utils"
 import {store} from "./store"
 
-export default (seed, collection, options) => {
+export default (seed, collection, options={}) => {
   seed = R.merge({
     id: null,
   }, seed)

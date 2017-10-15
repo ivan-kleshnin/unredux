@@ -1,10 +1,16 @@
 let {mergeObj} = require("./utils")
 
-// type Actions = Object (Observable (State -> State)
+// type Reducer = State -> State
+// type Action = Observable Reducer
+// type Actions = Object Action
+// type DoFn = a -> ()
+// type MapFn = a -> b
+// type LetFn = Observable a -> Observable b
 
-// type StoreOptions = {doFn :: a -> null, mapFn :: a -> b, letFn :: Observable a -> Obserbable b}
-// (State, Actions, StoreOptions) -> Observable State
-export let store = (seed, actions, options) => {
+// type StoreOptions = {doFn :: DoFN, mapFn :: MapFN, letFn :: LetFn}
+
+// store :: (State, Actions, StoreOptions?) -> Observable State
+export let store = (seed, actions, options={}) => {
   options = R.merge({
     letFn: R.id,
     mapFn: R.id,
@@ -20,6 +26,7 @@ export let store = (seed, actions, options) => {
         return fn(state)
       }
    })
+   .throttleTime(10, undefined, {leading: true, trailing: true}) // RxJS throttle is half-broken a.t.m. (https://github.com/ReactiveX/rxjs/search?q=throttle&type=Issues)
    .let(options.letFn) // inject observable
    .map(options.mapFn) // inject value to map
    .do (options.doFn)  // inject value
@@ -27,7 +34,7 @@ export let store = (seed, actions, options) => {
    .shareReplay(1)
 }
 
-// (Observable State, (State -> State)) -> Observable State
+// derive :: (Observable State, (State -> State)) -> Observable State
 export let derive = (state, deriveFn) => {
   return state
     .map(deriveFn)

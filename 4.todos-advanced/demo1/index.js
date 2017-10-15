@@ -1,7 +1,7 @@
 import {Component} from "react"
-import {chan} from "./utils"
-import connect from "./connect"
-import {historyStore, derive} from "./store"
+import {chan} from "./lib/utils"
+import connect from "./lib/connect"
+import {historyActions, historyStore, derive} from "./lib/store"
 
 // Actions =========================================================================================
 let actions = {
@@ -24,22 +24,6 @@ let actions = {
   )),
 }
 
-let canUndo = (state) =>
-  state.i > Math.max(0, R.findIndex(R.id, state.log))
-
-let canRedo = (state) =>
-  state.i < state.log.length - 1
-
-let historyActions = {
-  undo: chan($ => $.map(() => state =>
-    R.overL(["i"], (i) => canUndo(state) ? i - 1 : i, state)
-  )),
-
-  redo: chan($ => $.map(() => state =>
-    R.overL(["i"], (i) => canRedo(state) ? i + 1 : i, state)
-  )),
-}
-
 // State ===========================================================================================
 let seed = {
   todos: {
@@ -58,20 +42,18 @@ let state = historyStore(seed, actions, historyActions, {
   doFn: (s) => console.log("state:", s),
 })
 
-let derived = {
-  filteredTodos: derive(state, (state) => {
-    switch (state.filter) {
-      case "all":
-        return R.values(state.todos)
-      case "completed":
-        return R.sort(R.ascend(R.prop("addedAt")), R.filter(t => t.completed, R.values(state.todos)))
-      case "active":
-        return R.sort(R.ascend(R.prop("addedAt")), R.filter(t => !t.completed, R.values(state.todos)))
-      default:
-        throw Error("Unknown filter: " + state.filter)
-    }
-  }),
-}
+let filteredTodos = derive(state, (state) => {
+  switch (state.filter) {
+    case "all":
+      return R.values(state.todos)
+    case "completed":
+      return R.sort(R.ascend(R.prop("addedAt")), R.filter(t => t.completed, R.values(state.todos)))
+    case "active":
+      return R.sort(R.ascend(R.prop("addedAt")), R.filter(t => !t.completed, R.values(state.todos)))
+    default:
+      throw Error("Unknown filter: " + state.filter)
+  }
+})
 
 // Components ======================================================================================
 let AddTodo = (props) => {
@@ -104,7 +86,7 @@ let TodoItem = (props) =>
   </li>
 
 let TodoList = connect(
-  {todos: derived.filteredTodos},
+  {todos: filteredTodos},
   (props) =>
     <ul>
       {props.todos.map(todo =>

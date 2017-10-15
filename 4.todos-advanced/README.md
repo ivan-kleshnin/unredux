@@ -23,8 +23,8 @@ $ npm run demo2
 The current store implementation of:
 
 ```js
-// store :: (State, Actions, StoreOptions?) -> Observable State
-export let store = (seed, actions, options={}) => {
+// store :: (State, Actions) -> Observable State
+export let store = (seed, actions) => {
   ...
 
   return mergeObj(actions)
@@ -44,10 +44,10 @@ requires initial state as an argument. Strictly speaking, we could pass that arg
 via actions. Let's try that, removing the argument from the implementation:
 
 ```diff
-- // store :: (State, Actions, StoreOptions?) -> Observable State
-+ // store :: (Actions, StoreOptions?) -> Observable State
-- export let store = (seed, actions, options={}) => {
-+ export let store = (actions, options={}) => {
+- // store :: (State, Actions) -> Observable State
++ // store :: (Actions) -> Observable State
+- export let store = (seed, actions) => {
++ export let store = (actions) => {
   ...
 
   return mergeObj(actions)
@@ -73,7 +73,7 @@ and changing the client code:
 Believe me or not – everything will keep working. So isn't that a great idea? An opportunity to remove
 a signature argument is always tempting. I don't think it's so great because:
 
-1. Argument is dropped but the action declaration gets additional complexity.
+1. Argument is dropped but the action declaration gets an additional complexity.
 2. Actions now require `seed` to be declared before them (hurting the cohesion).
 3. You get a lot of additional complexity in more complex store implementations (e.g. stores with history)
 4. Because a change from sync to async can't make it easier...
@@ -82,10 +82,7 @@ will still need to know that name to extract the seed (to wrap or update it some
 be solved by name convention.
 
 So basically we just traded an argument for a name convention and got all the additional
-complexity "for free". Which is a pretty lame decision, if you ask me.
-
-*Note that [Cycle-Onionify](https://github.com/staltz/cycle-onionify) have chosen the "simplified"
-API falling for different pros/cons set than I did.*
+complexity "for free". Which is a pretty lame if you ask me.
 
 For a demo of 3. compare the following:
 
@@ -124,5 +121,9 @@ export let historyStore = (stateActions, historyActions) => {
 
 Async initial state is a leaky abstraction.
 
-Unlike many my colleagues, I'm not big on simplifying client APIs at the cost of extra
-complexity pouring into libraries. Probably because I think we all should write much more libraries.
+P.S.
+
+Just noted that [Cycle-Onionify](https://github.com/staltz/cycle-onionify) has made the opposite
+API decision in almost the same case. Unlike many my colleagues, I'm not big on simplifying client
+APIs at the cost of extra complexity pouring into libraries. Probably, because I think we all should
+write much more libraries.

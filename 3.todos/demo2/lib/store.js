@@ -41,4 +41,3 @@ export let derive = (state, deriveFn) => {
     .distinctUntilChanged()
     .shareReplay(1)
 }
-

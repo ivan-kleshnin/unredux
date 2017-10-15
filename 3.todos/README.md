@@ -132,9 +132,9 @@ possible. And with `store`, in particular, it's not possible as actions are obse
 reducers (`Observable (State -> State)`) and initial value is just a state (`State`). `z` and `a` don't match.
 
 ```js
-// type Actions = Object (State -> State)
+// type Actions = Object (State -> State) -- the first "Complex" case
 // vs
-// type ActionsWTF = Object ((State -> State) | State) -- in the case of "simple API"
+// type ActionsWTF = Object ((State -> State) | State) -- the second "Simple" case
 
 // action :: Actions
 let actions = ...
@@ -146,7 +146,7 @@ Instead of initial state we drop-in the initial "constant" reducer. Now the typi
 ```js
 // actions :: Actions
 let actions = {
-  seed: O.of(R.setL(seed)), // Observable ((z, a) -> State) -- z and State does not match here...
+  seed: O.of(R.setL(seed)), // Observable ((z, a) -> State) -- except z and State mismatch here
   ...
 }
 

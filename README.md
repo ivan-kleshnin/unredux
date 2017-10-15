@@ -130,7 +130,7 @@ All that need a separated article. For now – just a random notes FYI.
 * Demo1: + history management
 * Demo2: + local storage
 
-#### 8. [Async actions](./8.async-actions)
+#### 5. [Async actions](./5.async-actions)
 
 * Demo1: async actions.
 * Demo2: **wip**
@@ -152,11 +152,14 @@ Most examples consists of two parts. In first parts we solve problems, gradually
 concepts. In second parts we refactor our solutions: extract them into separate files, make them
 cleaner and more stable.
 
-## Q-A
+## Library Q-A
+
+I have a goal to avoid frameworks in this project and I will stick to it. But, as people keep asking
+about them, here is a short Q-A list.
 
 ### Why not AngularJS?
 
-Are you kidding me? Front-end templaters should have been banned long time ago.
+Front-end templaters should have been banned long time ago.
 
 ### Why not VueJS?
 
@@ -164,30 +167,29 @@ RIP MVC, not interested. It's just a backlash against Redux.
 
 ### Why not CycleJS?
 
-To prove the point. CycleJS is great but I have a goal to avoid frameworks in this project.
+CycleJS is great. It's probably the best frontend framework at the moment, and many my solutions are
+both inspired by and compatible with CycleJS.
 
-FYI CycleJS has it's own problems. At first, the framework is idealistic which is good and bad at the same time.
-The most prominent example of that is side-effect handling. To keep the architectural benefits, you
-need to wrap every library with side-effects exclusively for CycleJS. And sometimes it's basically
-impossible without a full rewrite. So CycleJS ecosystem is isolated from others by some kind of
-transparent yet tangible barrier.
+Saying that, CycleJS definitely has it's own problems. At first, the framework is idealistic which
+is both good and bad. The most prominent example of that is side-effect handling.
+To keep the architectural benefits, you need to wrap every library with side-effects exclusively for
+CycleJS. And sometimes it's basically impossible without a full rewrite. So CycleJS ecosystem is
+probably the most isolated JS ecosystem our there.
 
 The go-to JS approach to side-effect testing is mocking. Fortunately there aren't so many
-types of side effects... CycleJS approach is entirely different and there are inevitable consequences
-of that. The balance of pros and cons will be determined by the type of app you develop (as always).
-Just don't think there won't be cons.
+types of side effects... CycleJS approach is entirely different and it doesn't come for free.
 
 The second problem with CycleJS approach is a cohesion gap between an effect initiator and an effect
 consumer. Which is explained in details [here](http://www.christianalfoni.com/articles/2016_09_11_The-case-for-function-tree).
 Basically, to track the linear data flow, you need to switch between reading sinks and sources constantly.
 To achieve 100% reactivity, most complex CycleJS apps will end with multiple cycles (either in app
-or library code), and if you think that's easy to read or debug... – man, you're wrong.
+or library code), and sometimes the debug process is a real PITA.
 
-It's also about the ecosystem. I believe that XStream creation was a mistake. Now they propose to
-use RxJS for the cases XStream can't manage – like bundle size is not an issue anymore @_@.
-React 16 is way more performant and convenient than the alternatives, including their default
-Snabbdom. The latter, for example, still doesn't have a Component abstraction which means the whole
-VDOM tree reconcilation is the only option available...
+It's also about the ecosystem. I'm afraid the creation of XStream was a mistake afterall. Now they
+propose to use RxJS for the cases XStream can't manage – like bundle size is not an issue anymore @_@.
+React 16 is way more performant and convenient (because of `return [<Component/>...]` option) than
+the alternatives, including their default Snabbdom. The latter, for example, still doesn't have a
+Component abstraction which means the whole VDOM tree reconcilation is the only option available...
 
 Finally, I'd like to avoid TypeScript as long as possible (hint: it's a mess). The bottom line is that
 CycleJS community is very fragmented because of all their "diverse" decisions and it feels so. From their
@@ -196,15 +198,25 @@ tools" which I don't consider beneficial.
 
 ### Why not CalmmJS?
 
-CalmmJS is also very good. Conceptually, it's similar enough to what I'm trying to implement here.
+CalmmJS is also very good. Conceptually, it's quite enough to what I'm trying to implement here, except
+it CalmmJS does not have reactive actions – just a reactive state.
+
 What I don't like about CalmmJS is magic. They use a lot of magic, like auto-injections of observables
 into React components, or multiple high-level ad hoc reactive operators which seem foreign in Hello-World
 examples.
 
 Reading the code I can't help the feeling a lot of things are prematurely optimized and the end
-architecture would look very different without that. Nevermind, Vesa Karvonen is a brilliant engineer
+architecture would look very different without that. Nevermind, Vesa Karvonen is a TOP level engineer
 and I don't want to underrate his work. Re-read the first sentence in the prev. paragraph and accept
 that my goal is to avoid frameworks here.
+
+---
+
+#### The outline
+
+Native React: reactive views
+React + Redux / React + Baobab / React + CalmmJS: reactive models + reactive views
+CycleJS / "Unredux": reactive actions + reactive models + reactive views
 
 ## Random remarks
 

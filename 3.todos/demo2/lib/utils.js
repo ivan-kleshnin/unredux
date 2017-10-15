@@ -1,13 +1,13 @@
 // Observables =====================================================================================
 
-// :: Object (Observable *) -> Observable *
+// mergeObj :: Object (Observable *) -> Observable *
 export let mergeObj = (obj) => {
   let values = R.values(obj) // streams
   return O.merge(...values)
 }
 
 // a nicer analogy of https://github.com/staltz/combineLatestObj/blob/master/index.js
-// :: Object (Observable *) -> Observable *
+// combineLatestObj :: Object (Observable *) -> Observable *
 export let combineLatestObj = (obj) => {
   let keys = R.keys(obj)     // stream names
   let values = R.values(obj) // streams
@@ -18,7 +18,8 @@ export let combineLatestObj = (obj) => {
 
 // Framework =======================================================================================
 
-// chan is both an Observable and a Function
+// chan :: Observable a
+// chan :: a -> ()
 export let chan = (mapFn) => {
   let subj = new Subject()
   let obs = mapFn(subj)

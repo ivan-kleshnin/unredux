@@ -8,9 +8,13 @@ $ npm run demo2
 
 ## Demo1
 
-### Basic reducers
+app = reactive Actions + reactive State + reactive Async Actions
 
-You can discover that most state updates can be trivially expressed with the following reducers:
+Names and terms are under consideration.
+
+### Obscure reducers
+
+You may discover that most state updates can be trivially expressed with the following reducers:
 
 ```js
 let obscureReducers = {

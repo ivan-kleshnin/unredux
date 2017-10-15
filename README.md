@@ -235,6 +235,6 @@ I don't use linters. Having this:
 ```
 
 just to get "wrong indendation" events occasionally, is not what I live for. It's all about
-**signal-to-noise** ratio so I consider linters almost worthless (Flow is better as a linter btw.).
+**signal-to-noise** ratio, so I consider linters almost worthless (Flow is a better linter btw.).
 For the same reason I don't use `const`, `===` and other "best practices" 2x year olds so like to
-copy from their "gurus".
+copy from their corporate gurus.

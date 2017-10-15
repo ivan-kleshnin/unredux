@@ -1,9 +1,16 @@
 let {chan, mergeObj} = require("./utils")
 
-// type Actions = Object (Observable (State -> State)
+// type Reducer = State -> State
+// type Action = Observable Reducer
+// type Actions = Object Action
+// type DoFn = a -> ()
+// type MapFn = a -> b
+// type LetFn = Observable a -> Observable b
 
-// type StoreOptions = {doFn :: a -> (), mapFn :: a -> b, letFn :: Observable a -> Obserbable b, cmpFn :: a -> a -> Boolean}
-// (State, Actions, StoreOptions?) -> Observable State
+// type StoreOptions = {doFn :: DoFN, mapFn :: MapFN, letFn :: LetFn}
+// type HiStoreOptions = extend StoreOptions {length :: Number}
+
+// store :: (State, Actions, StoreOptions?) -> Observable State
 export let store = (seed, actions, options={}) => {
   options = R.merge({
     letFn: R.id,
@@ -35,9 +42,19 @@ export let canUndo = (state) =>
 export let canRedo = (state) =>
   state.i < state.log.length - 1
 
-// type HiStoreOptions = StoreOptions with {length :: Number}
-// (State, Actions, HiStoreOptions?) -> Observable State
-export let historyStore = (seed, stateActions, options={}) => {
+// historyActions :: Actions
+export let historyActions = {
+  undo: chan($ => $.map(() => state =>
+    R.overL(["i"], (i) => canUndo(state) ? i - 1 : i, state)
+  )),
+
+  redo: chan($ => $.map(() => state =>
+    R.overL(["i"], (i) => canRedo(state) ? i + 1 : i, state)
+  )),
+}
+
+// historyStore :: (State, Actions, Actions, HiStoreOptions?) -> Observable State
+export let historyStore = (seed, stateActions, historyActions, options={}) => {
   options = R.merge({
     length: 3,
     cmpFn: R.F,
@@ -49,12 +66,12 @@ export let historyStore = (seed, stateActions, options={}) => {
   let normalizeI = (i) =>
     (i > options.length - 1 ? options.length - 1 : i)
 
-  seed = R.merge({
+  seed = {
     log: normalizeLog([seed]), // [null, null, <state>]
     i: options.length - 1,     //  0     1     2!
-  }, seed)
+  }
 
-  stateActions = R.map(channel => channel.map(fn => hs => {
+  stateActions = R.map($ => $.map(fn => hs => {
     if (hs.i < options.length - 1) {
       hs = R.merge(hs, {
         log: normalizeLog(R.slice(0, hs.i + 1, hs.log)),
@@ -62,41 +79,20 @@ export let historyStore = (seed, stateActions, options={}) => {
       })
     }
     return R.setL(["log"], tailAppend(fn(hs.log[hs.i]), hs.log), hs)
-  }), R.values(stateActions))
+  }), stateActions)
 
-  let historyActions = {
-    undo: chan($ => $.map(() => state =>
-      R.overL(["i"], (i) => canUndo(state) ? i - 1 : i, state)
-    )),
+  let allActions = R.merge(stateActions, historyActions)
 
-    redo: chan($ => $.map(() => state =>
-      R.overL(["i"], (i) => canRedo(state) ? i + 1 : i, state)
-    )),
-  }
-
-  let historyState = store(
-    seed,
-    stateActions.concat(R.values(historyActions)),
-    options
-  )
-
-  let state = historyState
+  return store(seed, allActions, options)
     .map(state => state.log[state.i])
     .distinctUntilChanged(R.equals)
-
-  return {
-    historyActions,
-    historyState,
-    state,
-    $: state,
-  }
 }
 
 let tailAppend = R.curry((x, xs) => {
   return R.append(x, R.tail(xs))
 })
 
-// (Observable State, (State -> State)) -> Observable State
+// derive :: (Observable State, (State -> State)) -> Observable State
 export let derive = (state, deriveFn) => {
   return state
     .map(deriveFn)
@@ -104,7 +100,7 @@ export let derive = (state, deriveFn) => {
     .shareReplay(1)
 }
 
-// Object (* -> State -> State)
+// obscureReducers :: Object (* -> State -> State)
 export let obscureReducers = {
   // set :: State -> State -> State
   // set :: (String, a) -> State -> State
@@ -155,7 +151,7 @@ export let obscureReducers = {
   },
 }
 
-// Object (Observable (State -> State))
+// obscureActions :: Object (Observable (State -> State))
 export let obscureActions = R.map(reducer =>
   chan($ => $.map(reducer))
 , obscureReducers)

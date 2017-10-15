@@ -14,7 +14,7 @@ TODO
 
 ## Demo2
 
-### Store
+### Store API design
 
 The current store implementation of:
 

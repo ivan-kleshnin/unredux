@@ -196,6 +196,9 @@ CycleJS community is very fragmented because of all their "diverse" decisions an
 initial principle of "same tools -> multiple architectures" they switched to "same architecture -> multiple
 tools" which I don't consider beneficial.
 
+Nevermind, I like CycleJS, I use it in some of my projects and I highly recommend it to
+everyone tired of Redux.
+
 ### Why not CalmmJS?
 
 CalmmJS is also very good. Conceptually, it's quite enough to what I'm trying to implement here, except
@@ -206,9 +209,9 @@ into React components, or multiple high-level ad hoc reactive operators which se
 examples.
 
 Reading the code I can't help the feeling a lot of things are prematurely optimized and the end
-architecture would look very different without that. Nevermind, Vesa Karvonen is a TOP level engineer
-and I don't want to underrate his work. Re-read the first sentence in the prev. paragraph and accept
-that my goal is to avoid frameworks here.
+architecture would look very different without that. But may be it's just me. Vesa Karvonen is a TOP
+level engineer and I wouldn't like to underrate his works. They are well written, well documented and
+have a lot of insights. Highly recommended as well.
 
 ---
 

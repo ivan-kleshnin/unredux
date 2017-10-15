@@ -64,21 +64,23 @@ via actions. Let's try that, removing the argument from the implementation:
 }
 ```
 
-and from the client code:
+and changing the client code:
 
 ```diff
 - let state = store(seed, actions)
 + let state = store(R.merge(actions, {seed: O.of(seed)}))
 ```
 
-Everything will keep working as expected. So isn't this a great idea? An opportunity to remove a
-signature argument is tempting. We don't think it's so great because:
+Believe me or not – everything will keep working. So isn't that a great idea? An opportunity to remove
+a signature argument is always tempting. I don't think it's so great because:
 
 1. Argument is dropped but the action declaration gets additional complexity.
-2. You'll get a lot of additional complexity in more complex store implementations (like one with history)
-3. The action name can be anything: from `seed` to `init`. But the store implementations
-will still need to know that name to extract that seed (to wrap or update it somehow). This can
+2. Actions now require `seed` to be declared before them (hurting the code cohesion).
+3. You get a lot of additional complexity in more complex store implementations (e.g. stores with history)
+4. Because when you change sync for async it's always more complex.
+5. The action name can be anything: from `seed` to `init`. But the store implementations
+will still need to know that name to extract the seed (to wrap or update it somehow). This can
 be solved by name convention.
 
 So basically we just traded an argument for a name convention and got all the additional
-complexity in stores "for free". A pretty lame decision, if you ask me.
+complexity "for free". Which is a pretty lame decision, if you ask me. 

@@ -214,9 +214,9 @@ that my goal is to avoid frameworks here.
 
 #### The outline
 
-Native React: reactive views
-React + Redux / React + Baobab / React + CalmmJS: reactive models + reactive views
-CycleJS / "Unredux": reactive actions + reactive models + reactive views
+* Native React: reactive views
+* React + Redux / React + Baobab / React + CalmmJS: reactive models + reactive views
+* CycleJS / "Unredux": reactive actions + reactive models + reactive views
 
 ## Random remarks
 

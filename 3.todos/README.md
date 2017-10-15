@@ -90,7 +90,7 @@ export let historyStore = (seed, stateActions, historyActions) => {
   seed = {
     log: normalizeLog([seed]), // [null, null, <state>]
     i: options.length - 1,     //  0     1     2!
-  }
+  } // handle non-reactive seed
 
   stateActions = ...
 
@@ -106,12 +106,12 @@ export let historyStore = (stateActions, historyActions) => {
 
   let seed = actions.seed // :: Observable Action
 
-  stateActions = ...
+  stateActions = R.map(..., stateActions) // doing some stuff with each item
 
-  stateActions.seed = stateActions.map(s => ({
+  stateActions.seed = seed.map(s => ({
     log: normalizeLog([s]), // [null, null, <state>]
     i: options.length - 1,  //  0     1     2!
-  })
+  }) // handle reactive seed
 
   ...
 }
@@ -121,7 +121,7 @@ Now let's expand #6. The `store` abstraction is intentionlly designed to look li
 Passing an initial state via actions is like passing a `reduce` accumulator via an array. It messes
 the typing in our case:
 
-```
+```js
 reduce(fn, z, xs)      // :: (z, a) -> z, z, Array a -> z
 // vs
 reduce1(fn, [z, ...xs]) // :: (z, z) -> z, Array z -> z
@@ -141,7 +141,7 @@ let actions = ...
 ```
 
 The last possible appproach (of a "reasonable" set) is used in [Cycle-Onionify](https://github.com/staltz/cycle-onionify).
-Instead of initial state we drop the initial "constant" reducer. Now the typing is fine:
+Instead of initial state we drop-in the initial "constant" reducer. Now the typing is fine:
 
 ```js
 // actions :: Actions
@@ -167,8 +167,8 @@ let store = (actions) => {
 but the points 1–5 still appply.
 
 I have a hard time choosing between those three. Both **extra argument** and **async initial state**
-are leaky abstractions. I'm not big on simplifying client APIs at the cost of pouring extra complexity
-to libraries. Partially, because I think we all should write more libraries.
+are leaky abstractions. I'm not big on simplifying client APIs at the cost of pouring an additional
+complexity into libraries. Partially, because I think we all should write more libraries.
 
 For now, I decided to settle myself on the "explicit argument" version.
 

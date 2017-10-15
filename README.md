@@ -201,8 +201,8 @@ everyone tired of Redux.
 
 ### Why not CalmmJS?
 
-CalmmJS is also very good. Conceptually, it's quite enough to what I'm trying to implement here, except
-it CalmmJS does not have reactive actions – just a reactive state.
+CalmmJS is also very good. Conceptually, it's quite similar to what I'm trying to implement here, except
+in CalmmJS does not have reactive actions – just a reactive state.
 
 What I don't like about CalmmJS is magic. They use a lot of magic, like auto-injections of observables
 into React components, or multiple high-level ad hoc reactive operators which seem foreign in Hello-World

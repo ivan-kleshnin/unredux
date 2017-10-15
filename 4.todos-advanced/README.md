@@ -111,8 +111,8 @@ export let historyStore = (stateActions, historyActions) => {
   stateActions = ...
 
   stateActions.seed = stateActions.map(s => ({
-    log: normalizeLog([seed]), // [null, null, <state>]
-    i: options.length - 1,     //  0     1     2!
+    log: normalizeLog([s]), // [null, null, <state>]
+    i: options.length - 1,  //  0     1     2!
   })
 
   ...
@@ -124,6 +124,5 @@ Async initial state is a leaky abstraction.
 P.S.
 
 Just noted that [Cycle-Onionify](https://github.com/staltz/cycle-onionify) has made the opposite
-API decision in almost the same case. Unlike many my colleagues, I'm not big on simplifying client
-APIs at the cost of extra complexity pouring into libraries. Probably, because I think we all should
-write much more libraries.
+API decision in almost the same case. Once again – I'm not big on simplifying client APIs at the cost
+of extra complexity pouring into libraries. Probably, because I think we all should write much more libraries.

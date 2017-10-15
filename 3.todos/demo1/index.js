@@ -1,6 +1,6 @@
 import {Component} from "react"
-import {chan} from "./utils"
-import connect from "./connect"
+import {chan} from "./lib/utils"
+import connect from "./lib/connect"
 
 // Actions =========================================================================================
 let actions = {

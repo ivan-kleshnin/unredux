@@ -2,9 +2,6 @@ import {chan} from "./utils"
 
 // Actions =========================================================================================
 let actions = {
-  // Here we merged intents with actions
-  // each intent is simultaneously a function (to trigger that event)
-  // and an observable (to subscribe on that event)
   increment: chan($ => $.map((...args) => state =>
     R.assoc("counter", state.counter + 1, state)
   )),

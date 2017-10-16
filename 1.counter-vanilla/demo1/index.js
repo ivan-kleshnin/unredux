@@ -1,28 +1,18 @@
-// Intents =========================================================================================
-let intents = {
-  increment: new Subject(),
-  decrement: new Subject(),
-  incrementIfOdd: new Subject(),
-}
-
 // Actions =========================================================================================
 let actions = {
-  increment: intents.increment
-    .map((...intentArgs) => (state) =>
-      R.assoc("counter", state.counter + 1, state)
-    ),
+  increment: new Subject().map(_ => state =>
+    R.assoc("counter", state.counter + 1, state)
+  ),
 
-  decrement: intents.decrement
-    .map((...intentArgs) => (state) =>
-      R.assoc("counter", state.counter - 1, state)
-    ),
+  decrement: new Subject().map(_ => state =>
+    R.assoc("counter", state.counter - 1, state)
+  ),
 
-  incrementIfOdd: intents.incrementIfOdd
-    .map((...intentArgs) => (state) =>
-      state.counter % 2
-        ? R.assoc("counter", state.counter + 1, state)
-        : state
-    )
+  incrementIfOdd: new Subject().map(_ => state =>
+    state.counter % 2
+      ? R.assoc("counter", state.counter + 1, state)
+      : state
+  )
 }
 
 // State ===========================================================================================
@@ -53,19 +43,19 @@ let App = (state) =>
 
 let bindEvents = () => {
   document.querySelector("#increment").addEventListener("click", () => {
-    intents.increment.next()
+    actions.increment.next()
   })
 
   document.querySelector("#decrement").addEventListener("click", () => {
-    intents.decrement.next()
+    actions.decrement.next()
   })
 
   document.querySelector("#incrementIfOdd").addEventListener("click", () => {
-    intents.incrementIfOdd.next()
+    actions.incrementIfOdd.next()
   })
 
   document.querySelector("#incrementAsync").addEventListener("click", () => {
-    setTimeout(() => intents.increment.next(), 500)
+    setTimeout(() => actions.increment.next(), 500)
   })
 }
 

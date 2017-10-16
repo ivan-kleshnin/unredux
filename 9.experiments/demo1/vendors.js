@@ -40,13 +40,24 @@ import zipObj from "ramda/src/zipObj"
 
 let always = curry((x, y) => x)
 let filter2 = addIndex(filter)
+let fst = (xs) => xs[0]
 let id = x => x
+let isPlainObj = (o) => Boolean(o && o.constructor && o.constructor.prototype && o.constructor.prototype.hasOwnProperty("isPrototypeOf"))
+let flattenObj = (obj, keys=[]) => {
+  return R.keys(obj).reduce((acc, key) => {
+    return R.merge(acc, isPlainObj(obj[key])
+      ? flattenObj(obj[key], keys.concat(key))
+      : {[keys.concat(key).join(".")]: obj[key]}
+    )
+  }, {})
+}
 let keys = Object.keys
 let map2 = addIndex(map)
 let mergeFlipped = flip(merge)
 let mergeDeep = mergeDeepRight
 let mergeDeepFlipped = flip(mergeDeep)
 let reduce2 = addIndex(reduce)
+let snd = (xs) => xs[1]
 let values = Object.values
 
 window.R = {
@@ -54,16 +65,16 @@ window.R = {
   comparator, complement, compose, curry,
   descend,
   equals,
-  filter, filter2, find, findIndex, flip,
+  filter, filter2, find, findIndex, flattenObj, flip, fst,
   head,
-  id, isEmpty,
+  id, isEmpty, isPlainObj,
   keys,
   lens, lensIndex, lensProp,
   map, map2, merge, mergeFlipped, mergeDeep, mergeDeepFlipped,
   over,
   pipe, pluck, prepend, prop,
   repeat, reduce, reduce2,
-  set, slice, sort,
+  set, slice, snd, sort,
   tail, take, takeLast,
   values, view,
   zip, zipObj,
@@ -106,6 +117,7 @@ import "rxjs/add/operator/distinctUntilChanged"
 import "rxjs/add/operator/debounceTime"
 import "rxjs/add/operator/do"
 import "rxjs/add/operator/filter"
+import "rxjs/add/operator/let"
 import "rxjs/add/operator/merge"
 import "rxjs/add/operator/mergeMap"
 import "rxjs/add/operator/map"
@@ -118,6 +130,6 @@ import "rxjs/add/operator/startWith"
 import "rxjs/add/operator/throttleTime"
 import "rxjs/add/operator/withLatestFrom"
 
-window.Observable = Observable
+window.Observable = window.O = Observable
 window.Subject = Subject
 window.ReplaySubject = ReplaySubject

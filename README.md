@@ -146,6 +146,25 @@ All that need a separated article. For now – just a random notes FYI.
 * React (100% of official docs level)
 * Basics of RxJS
 
+### Common imports
+
+All code snippets (in README.md files) imply the following imports:
+
+```js
+import R from "ramda"
+// CJS: let R = require("ramda")
+import {Observable as O, Subject} from "rxjs"
+// CJS: let {Observable: O, Subject} = require("rxjs")
+```
+
+which are omitted for brevity. We'll also use ASCII [marble diagrams](http://rxmarbles.com/):
+
+```
+observable: ---v1---v2---> (time)
+```
+
+where `v1` may denote a string `"v1"` or something else, which should be clear from a context.
+
 ### Guide
 
 Most examples consists of two parts. In first parts we solve problems, gradually introducing new

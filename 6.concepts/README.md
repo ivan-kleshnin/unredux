@@ -51,9 +51,7 @@ obs.subscribe(x => {
   console.log("  args:", JSON.stringify(x.val))
   console.log()
 })
-```
 
-```js
 actions.foo("f1")
 actions.foo("f2")
 
@@ -61,13 +59,9 @@ actions.bar("b1")
 actions.bar("b2")
 
 actions.foo(["f3a", "f3b"])
-```
 
-produces the following diagram:
-
-```
-key: ---"foo"---"foo"---"bar"---"bar"---"foo"------------>
-val: ---"f1"----"f2"----"b1"----"b2"----["f3a", "f3b"]--->
+// key: ---foo---foo---bar---bar---foo-------->
+// val: ---f1----f2----b1----b2----f3a, f3b--->
 ```
 
 That's why obscure reducers aren't a great idea. And this feature is impossible to achieve
@@ -148,7 +142,7 @@ export default makeApp = (dependencies, options) => {
   let makeAsyncActions = (state, actions) =>
     throw Error("not implemented") // some parts can be omitted
 
-  return {makeActions makeState, makeAsyncActions}
+  return {makeActions, makeState, makeAsyncActions}
 }
 ```
 
@@ -249,3 +243,6 @@ it's expected to separate apps into smaller apps(!) and test them separately.
 TODO: list the following articles:
 * https://staltz.com/unidirectional-user-interface-architectures.html
 * https://staltz.com/some-problems-with-react-redux.html
+
+## Channel wrapping
+

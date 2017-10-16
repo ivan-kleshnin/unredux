@@ -1,7 +1,7 @@
 // Observables =====================================================================================
 
 // a nicer analogy of https://github.com/staltz/combineLatestObj/blob/master/index.js
-// :: Object (Observable *) -> Observable *
+// combineLatestObj :: Object (Observable *) -> Observable *
 export let combineLatestObj = (obj) => {
   let keys = R.keys(obj)     // stream names
   let values = R.values(obj) // streams
@@ -17,11 +17,7 @@ export let chan = (mapFn) => {
   let subj = new Subject()
   let obs = mapFn(subj)
   function channel(...callArgs) {
-    if (callArgs.length <= 1) {
-      return subj.next(callArgs[0])
-    } else {
-      return subj.next(callArgs)
-    }
+    return subj.next(callArgs[0]) // callArgs[1..n] are reserved
   }
   Object.setPrototypeOf(channel, obs)
   return channel

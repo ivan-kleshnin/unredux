@@ -20,48 +20,94 @@ $ npm run demo2
 
 ## Demo2
 
-### Concepts
+### Channel
 
-* Channel
+Consider the following code:
 
-#### Channel
+```js
+let actions = {
+  foo: (new Subject()).map(x => x),
+  bar: (new Subject()).map(x => x),
+}
 
-Channel is a callable observable (or a subscribable function). The [implementation](./demo2/chan.js)
-is pretty simple as well as the usage:
+actions.foo.subscribe(console.log)
+actions.bar.subscribe(console.log)
+
+actions.foo.next("f1")
+actions.foo.next("f2")
+
+actions.bar.next("b1")
+actions.bar.next("b2")
+
+// foo: ---f1---f2------------->
+// bar: -------------b1---b2--->
+```
+
+We'd like to omit `.next` method as actions never end and never get error manually. We'd like to
+do the following:
+
+```js
+actions.foo("f1")
+actions.bar("b1")
+```
+
+so we have to introduce a new concept. **Channel** is a callable observable (or a subscribable function).
+The implementation is pretty simple:
+
+```js
+// chan :: Observable a
+// chan :: a -> ()
+let chan = (mapFn) => {
+  let subj = new Subject()
+  let obs = mapFn(subj)
+  function channel(...callArgs) {
+    return subj.next(callArgs[0]) // callArgs[1..n] are reserved
+  }
+  Object.setPrototypeOf(channel, obs)
+  return channel
+}
+```
+
+as well as the usage:
+
+```js
+let actions = {
+  foo: chan($ => $),
+  bar: chan($ => $),
+}
+
+actions.foo.subscribe(console.log)
+actions.bar.subscribe(console.log)
+
+actions.foo("f1")
+actions.foo("f2")
+
+actions.bar("b1")
+actions.bar("b2")
+
+// foo: ---f1---f2------------->
+// bar: -------------b1---b2--->
+```
+
+*In terms of API, such callable channels are similar to [Flyd](https://github.com/paldepind/flyd)
+micro-observables. No need to know that – just a remark.*
+
+In this project, channels are used to define actions which, in turn, represent streams of state reducers.
 
 ```js
 let c = chan($ => $.map(x => y => x * y)))
+// where
+//   x is an action argument
+//   y is a state
 
 c.subscribe(fn => {
   console.log(fn(10))
 })
 
-c(1) // => 10
-c(2) // => 20
-c(3) // => 30
+c(1) // => 1 * 10 = 10
+c(2) // => 2 * 10 = 20
+c(3) // => 3 * 10 = 30
 ```
-
-Which is equivalent to the following:
-
-```js
-let s = new Subject()
-
-let o = s.map(x => y => x * y)
-
-o.subscribe(fn => {
-  console.log(fn(10))
-})
-
-s.next(1) // => 10
-s.next(2) // => 20
-s.next(3) // => 30
-```
-
-Now imagine that `x` is an action argument, `y` is a state and `subscribe` is a demo hack to combine
-them both, and you get pretty close to our action/state implementation.
-
-*In terms of API, such callable channels are similar to [Flyd](https://github.com/paldepind/flyd)
-micro-observables. No need to know that – just a remark.*
 
 ## Advanced notes
 
@@ -129,3 +175,64 @@ export let chan = (mapFn) => {
 
 This works for methods but fails for static calls like `Observable.merge`. Yet another prove
 that metaprogramming just doesn't "work" in the end and should be avoided.
+
+The possibility to use "naked" subjects like:
+
+```js
+let actions = {
+  foo: (new Subject()).map(x => x),
+  bar: (new Subject()).map(x => x),
+}
+```
+
+seems not so bad at first. Other stream libraries may not support such API. For example, `map` will
+turn the subject into a vanilla, non-nextable observable (or whatever it's called there).
+Well, even RxJS surrenders pretty soon:
+
+```js
+let actions = {
+  foo: chan($ => $), // entry point A
+}
+
+let actions2 = {
+  foo: chan($ => O.merge($, actions.foo.map(x => x + "!"))), // entry point B, observing A
+}
+
+actions2.foo.subscribe(console.log)
+
+actions .foo("f1") // f1!
+actions2.foo("f2") // f2
+```
+
+An attempt to emulate that on subjects fails:
+
+```js
+let actions = {
+  foo: new Subject(), // entry point A
+}
+
+let actions2 = {
+  foo: (new Subject()).merge(actions.foo.map(x => x + "!")), // entry point B or observing A – can't be both
+}
+
+actions2.foo.subscribe(console.log)
+
+actions .foo.next("f1") // f1!
+actions2.foo.next("f2") // ___ nothing: `merge` spoiled the second subject.
+```
+
+RxJS isn't smart enough to combine both subjects above. `actions2.foo` becomes either a separate
+subject or a mirror of `actions.foo`.
+
+So when you only need to make an imperative "entry point" copying the other "entry point", the
+skeleton code is the following:
+
+```js
+let actions = {
+  foo: chan($ => $),
+}
+
+let actions2 = {
+  foo: chan($ => $.merge(actions.foo)), // $.merge can accept more than one endpoints
+}
+```

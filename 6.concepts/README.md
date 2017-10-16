@@ -135,7 +135,7 @@ and easily accessible by the Programmer.
 
 ```js
 // "Detail View" blueprint
-export default makeApp = (mainApp, options) => {
+export default makeApp = (dependencies, options) => {
   // ACTIONS
   let makeActions = () =>
     ...
@@ -220,12 +220,12 @@ vs
 // app = foo + bar + baz (and nothing else) // App is just a namespace
                                             // of it's parts
 
-let blueprint = Blueprint(options)          // Blueprint is just a namespace
+let blueprint = makeBlueprint(options)      // Blueprint is just a namespace
 let {makeFoo, makeBar, makeBaz} = blueprint // of factories of each application part
 
-// makeFoo, makeBar, makeBaz -- make app defaults!
+// makeFoo, makeBar, makeBaz -- factories that make app defaults!
 
-// which you tweak and combine yourself
+// you tweak and combine that parts yourself
 let foo = makeFoo()           // foo = {...} -- plain transparent object
 foo.x = x                     // easy to change "features"
 

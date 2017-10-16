@@ -1,4 +1,5 @@
 // RAMDA ===========================================================================================
+import assoc from "ramda/src/assoc"
 import addIndex from "ramda/src/addIndex"
 import append from "ramda/src/append"
 import ascend from "ramda/src/ascend"
@@ -7,12 +8,14 @@ import comparator from "ramda/src/comparator"
 import compose from "ramda/src/compose"
 import curry from "ramda/src/curry"
 import descend from "ramda/src/descend"
+import dissoc from "ramda/src/dissoc"
 import equals from "ramda/src/equals"
 import filter from "ramda/src/filter"
 import find from "ramda/src/find"
 import findIndex from "ramda/src/findIndex"
 import flip from "ramda/src/flip"
 import head from "ramda/src/head"
+import is from "ramda/src/is"
 import isEmpty from "ramda/src/isEmpty"
 import lens from "ramda/src/lens"
 import lensIndex from "ramda/src/lensIndex"
@@ -20,7 +23,9 @@ import lensProp from "ramda/src/lensProp"
 import map from "ramda/src/map"
 import merge from "ramda/src/merge"
 import mergeDeepRight from "ramda/src/mergeDeepRight"
+import omit from "ramda/src/omit"
 import over from "ramda/src/over"
+import pick from "ramda/src/pick"
 import pipe from "ramda/src/pipe"
 import pluck from "ramda/src/pluck"
 import prepend from "ramda/src/prepend"
@@ -60,18 +65,18 @@ let snd = (xs) => xs[1]
 let values = Object.values
 
 window.R = {
-  addIndex, always, append, ascend,
+  addIndex, always, append, ascend, assoc,
   comparator, complement, compose, curry,
-  descend,
+  descend, dissoc,
   equals,
   filter, filter2, find, findIndex, flattenObj, flip, fst,
   head,
-  id, isEmpty, isPlainObj,
+  id, is, isEmpty, isPlainObj,
   keys,
   lens, lensIndex, lensProp,
   map, map2, merge, mergeFlipped, mergeDeep, mergeDeepFlipped,
-  over,
-  pipe, pluck, prepend, prop,
+  omit, over,
+  pick, pipe, pluck, prepend, prop,
   repeat, reduce, reduce2,
   set, slice, snd, sort,
   tail, take, takeLast,
@@ -83,7 +88,7 @@ window.R = {
 let lensify = (lens) => {
   if (R.is(Array, lens)) {
     return reduce(
-      (z, s) => compose(z, typeof s == "number" ? lensIndex(s) : lensProp(s)),
+      (z, s) => compose(z, R.is(Number, s) ? lensIndex(s) : lensProp(s)),
       id,
       lens
     )
@@ -112,6 +117,7 @@ import "rxjs/add/observable/of"
 
 // Observable methods
 import "rxjs/add/operator/combineLatest"
+import "rxjs/add/operator/concat"
 import "rxjs/add/operator/distinctUntilChanged"
 import "rxjs/add/operator/debounceTime"
 import "rxjs/add/operator/do"
@@ -124,8 +130,11 @@ import "rxjs/add/operator/pairwise"
 import "rxjs/add/operator/pluck"
 import "rxjs/add/operator/sample"
 import "rxjs/add/operator/scan"
+import "rxjs/add/operator/share"
 import "rxjs/add/operator/shareReplay"
 import "rxjs/add/operator/startWith"
+import "rxjs/add/operator/skip"
+import "rxjs/add/operator/take"
 import "rxjs/add/operator/throttleTime"
 import "rxjs/add/operator/withLatestFrom"
 

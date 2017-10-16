@@ -135,8 +135,6 @@ All that need a separated article. For now – just a random notes FYI.
 * Demo1: async actions.
 * Demo2: **wip**
 
-#### 9. [Experiments](./9.experiments)
-
 **Wip**
 
 ### Prerequisites

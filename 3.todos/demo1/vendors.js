@@ -45,7 +45,7 @@ window.R = {
 let lensify = (lens) => {
   if (R.is(Array, lens)) {
     return reduce(
-      (z, s) => compose(z, typeof s == "number" ? lensIndex(s) : lensProp(s)),
+      (z, s) => compose(z, R.is(Number, s) ? lensIndex(s) : lensProp(s)),
       id,
       lens
     )

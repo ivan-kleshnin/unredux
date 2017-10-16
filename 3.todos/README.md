@@ -26,7 +26,7 @@ export let store = (seed, actions) => {
   return mergeObj(actions)
    .startWith(seed)
    .scan((state, fn) => {
-      if (typeof fn != "function") {
+      if (R.is(Function, fn)) {
         throw Error(`invalid fn ${fn} dispatched`)
       } else {
         return fn(state)
@@ -49,7 +49,7 @@ via actions. Let's try that, removing the argument from the implementation:
   return mergeObj(actions)
 -   .startWith(seed)
    .scan((state, fn) => {
-      if (typeof fn != "function") {
+      if (R.is(Function, fn)) {
         throw Error(`invalid fn ${fn} dispatched`)
       } else {
         return fn(state)
@@ -154,7 +154,7 @@ let store = (actions) => {
   return mergeObj(actions)
    .startWith(null) // -- any value, is ignored in initial reducer
    .scan((state, fn) => {
-      if (typeof fn != "function") {
+      if (R.is(Function, fn)) {
         throw Error(`invalid fn ${fn} dispatched`)
       } else {
         return fn(state)

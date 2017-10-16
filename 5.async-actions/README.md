@@ -21,7 +21,7 @@ let obscureReducers = {
   // set :: State -> State -> State
   // set :: (String, a) -> State -> State
   set: args => state => {
-    if (args instanceof Array) {
+    if (R.is(Array, args)) {
       let [path, val] = args
       return R.setL(path, val, state)
     } else {
@@ -33,7 +33,7 @@ let obscureReducers = {
   // over :: (State -> State) -> State -> State
   // over :: (String, (a -> b)) -> State -> State
   over: args => state => {
-    if (args instanceof Array) {
+    if (R.is(Array, args)) {
       let [path, fn] = args
       return R.overL(path, fn, state)
     } else {
@@ -45,7 +45,7 @@ let obscureReducers = {
   // merge :: a -> State -> State
   // merge :: (String, a) -> State -> State
   merge: args => state => {
-    if (args instanceof Array) {
+    if (R.is(Array, args)) {
       let [path, stateFragment] = args
       return R.overL(path, R.mergeFlipped(stateFragment), state)
     } else {
@@ -57,7 +57,7 @@ let obscureReducers = {
   // mergeDeep :: a -> State -> State
   // mergeDeep :: (String, a) -> State -> State
   mergeDeep: args => state => {
-    if (args instanceof Array) {
+    if (R.is(Array, args)) {
       let [path, stateFragment] = args
       return R.overL(path, R.mergeDeepFlipped(stateFragment), state)
     } else {

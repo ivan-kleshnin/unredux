@@ -10,8 +10,8 @@ let {chan, mergeObj} = require("./utils")
 // type StoreOptions = {doFn :: DoFN, mapFn :: MapFN, letFn :: LetFn}
 // type HiStoreOptions = extend StoreOptions {length :: Number}
 
-// store :: (Actions, StoreOptions?) -> Observable State
-export let store = (actions, options={}) => {
+// store :: (State, Actions, StoreOptions?) -> Observable State
+export let store = (seed, actions, options={}) => {
   options = R.merge({
     letFn: R.id,
     mapFn: R.id,
@@ -20,15 +20,14 @@ export let store = (actions, options={}) => {
   }, options)
 
   return mergeObj(actions)
-   .startWith(null)
+   .startWith(seed)
    .scan((state, fn) => {
-      if (typeof fn != "function") {
+      if (R.is(Function, fn)) {
         throw Error(`invalid fn ${JSON.stringify(fn)} dispatched`)
       } else {
         return fn(state)
       }
    })
-   .skip(1)
    .throttleTime(10, undefined, {leading: true, trailing: true}) // RxJS throttle is half-broken a.t.m. (https://github.com/ReactiveX/rxjs/search?q=throttle&type=Issues)
    .let(options.letFn) // inject observable
    .map(options.mapFn) // inject value to map
@@ -54,8 +53,8 @@ export let historyActions = {
   )),
 }
 
-// historyStore :: (Actions, Actions, HiStoreOptions?) -> Observable State
-export let historyStore = (stateActions, historyActions, options={}) => {
+// historyStore :: (State, Actions, Actions, HiStoreOptions?) -> Observable State
+export let historyStore = (seed, stateActions, historyActions, options={}) => {
   options = R.merge({
     length: 3,
     cmpFn: R.equals,
@@ -67,27 +66,24 @@ export let historyStore = (stateActions, historyActions, options={}) => {
   let normalizeI = (i) =>
     (i > options.length - 1 ? options.length - 1 : i)
 
-  let seed = stateActions.seed.map(fn => state => ({
-    log: normalizeLog([fn(state)]), // [null, null, <state>]
-    i: options.length - 1,          //  0     1     2!
-  }))
-  stateActions = R.dissoc("seed", stateActions)
+  seed = {
+    log: normalizeLog([seed]), // [null, null, <state>]
+    i: options.length - 1,     //  0     1     2!
+  }
 
   stateActions = R.map($ => $.map(fn => hs => {
     if (hs.i < options.length - 1) {
-      hs = R.merge(hs, {
+      hs = {
         log: normalizeLog(R.slice(0, hs.i + 1, hs.log)),
         i: options.length - 1,
-      })
+      }
     }
     return R.setL(["log"], tailAppend(fn(hs.log[hs.i]), hs.log), hs)
   }), stateActions)
 
-  stateActions = R.assoc("seed", seed, stateActions)
-
   let allActions = R.merge(stateActions, historyActions)
 
-  return store(allActions, R.merge(options, {cmpFn: R.F}))
+  return store(seed, allActions, {...options, cmpFn: R.F})
     .map(state => state.log[state.i])
     .distinctUntilChanged(options.cmpFn)
 }

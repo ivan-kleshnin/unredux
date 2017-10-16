@@ -21,7 +21,7 @@ export let store = (seed, actions, options={}) => {
   return mergeObj(actions)
    .startWith(seed)
    .scan((state, fn) => {
-      if (typeof fn != "function") {
+      if (R.is(Function, fn)) {
         throw Error(`invalid fn ${JSON.stringify(fn)} dispatched`)
       } else {
         return fn(state)

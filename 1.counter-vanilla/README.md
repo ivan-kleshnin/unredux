@@ -151,10 +151,10 @@ export let chan = (mapFn) => {
     return new Proxy(() => obj, {
       get: (target, propName, _) => {
         let obs = target()
-        return (typeof obs[propName] == "function")
+        return R.is(Function, obs[propName])
           ? (...args) => {
             let res = obs[propName](...args)
-            return res instanceof Observable
+            return R.is(O, res)
               ? linkToSubj(res) // observable methods making a new observable now make a new proxied observable
               : res             // other observable methods behave as usual
           }

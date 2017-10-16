@@ -1,4 +1,5 @@
 // RAMDA ===========================================================================================
+// Until we implement tree shaking
 import assoc from "ramda/src/assoc"
 import append from "ramda/src/append"
 import ascend from "ramda/src/ascend"
@@ -13,6 +14,7 @@ import find from "ramda/src/find"
 import findIndex from "ramda/src/findIndex"
 import flip from "ramda/src/flip"
 import head from "ramda/src/head"
+import is from "ramda/src/is"
 import isEmpty from "ramda/src/isEmpty"
 import lens from "ramda/src/lens"
 import lensIndex from "ramda/src/lensIndex"
@@ -49,7 +51,7 @@ window.R = {
   equals,
   filter, find, findIndex, flip,
   head,
-  id, isEmpty,
+  id, is, isEmpty,
   keys,
   lens, lensIndex, lensProp,
   map, merge,
@@ -66,7 +68,7 @@ window.R = {
 let lensify = (lens) => {
   if (R.is(Array, lens)) {
     return reduce(
-      (z, s) => compose(z, typeof s == "number" ? lensIndex(s) : lensProp(s)),
+      (z, s) => compose(z, R.is(Number, s) ? lensIndex(s) : lensProp(s)),
       id,
       lens
     )

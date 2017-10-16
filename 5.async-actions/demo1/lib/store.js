@@ -22,7 +22,7 @@ export let store = (seed, actions, options={}) => {
   return mergeObj(actions)
    .startWith(seed)
    .scan((state, fn) => {
-      if (typeof fn != "function") {
+      if (R.is(Function, fn)) {
         throw Error(`invalid fn ${JSON.stringify(fn)} dispatched`)
       } else {
         return fn(state)
@@ -73,10 +73,10 @@ export let historyStore = (seed, stateActions, historyActions, options={}) => {
 
   stateActions = R.map($ => $.map(fn => hs => {
     if (hs.i < options.length - 1) {
-      hs = R.merge(hs, {
+      hs = {
         log: normalizeLog(R.slice(0, hs.i + 1, hs.log)),
         i: options.length - 1,
-      })
+      }
     }
     return R.setL(["log"], tailAppend(fn(hs.log[hs.i]), hs.log), hs)
   }), stateActions)

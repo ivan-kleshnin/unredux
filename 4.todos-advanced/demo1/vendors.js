@@ -1,10 +1,12 @@
 // RAMDA ===========================================================================================
+import assoc from "ramda/src/assoc"
 import append from "ramda/src/append"
 import ascend from "ramda/src/ascend"
 import complement from "ramda/src/complement"
 import compose from "ramda/src/compose"
 import curry from "ramda/src/curry"
 import descend from "ramda/src/descend"
+import dissoc from "ramda/src/dissoc"
 import equals from "ramda/src/equals"
 import filter from "ramda/src/filter"
 import find from "ramda/src/find"
@@ -17,7 +19,9 @@ import lensIndex from "ramda/src/lensIndex"
 import lensProp from "ramda/src/lensProp"
 import map from "ramda/src/map"
 import merge from "ramda/src/merge"
+import omit from "ramda/src/omit"
 import over from "ramda/src/over"
+import pick from "ramda/src/pick"
 import pipe from "ramda/src/pipe"
 import pluck from "ramda/src/pluck"
 import prepend from "ramda/src/prepend"
@@ -39,9 +43,9 @@ let keys = Object.keys
 let values = Object.values
 
 window.R = {
-  always, append, ascend,
+  always, append, ascend, assoc,
   complement, compose, curry,
-  descend,
+  descend, dissoc,
   equals,
   filter, find, findIndex, flip,
   head,
@@ -49,8 +53,8 @@ window.R = {
   keys,
   lens, lensIndex, lensProp,
   map, merge,
-  over,
-  pipe, pluck, prepend, prop,
+  omit, over,
+  pick, pipe, pluck, prepend, prop,
   repeat, reduce,
   set, slice, sort,
   tail, take, takeLast,
@@ -60,13 +64,13 @@ window.R = {
 
 // Helpers
 let lensify = (lens) => {
-  if (lens instanceof Array) {
+  if (R.is(Array, lens)) {
     return reduce(
       (z, s) => compose(z, typeof s == "number" ? lensIndex(s) : lensProp(s)),
       id,
       lens
     )
-  } else if (lens instanceof Function) {
+  } else if (R.is(Function, lens)) {
     return lens
   } else {
     throw Error(`invalid lens ${lens}`)
@@ -89,6 +93,7 @@ import "rxjs/add/observable/merge"
 import "rxjs/add/observable/of"
 
 // Observable methods
+import "rxjs/add/operator/concat"
 import "rxjs/add/operator/distinctUntilChanged"
 import "rxjs/add/operator/do"
 import "rxjs/add/operator/filter"
@@ -97,8 +102,11 @@ import "rxjs/add/operator/map"
 import "rxjs/add/operator/pluck"
 import "rxjs/add/operator/sample"
 import "rxjs/add/operator/scan"
+import "rxjs/add/operator/share"
 import "rxjs/add/operator/shareReplay"
 import "rxjs/add/operator/startWith"
+import "rxjs/add/operator/skip"
+import "rxjs/add/operator/take"
 import "rxjs/add/operator/throttleTime"
 import "rxjs/add/operator/withLatestFrom"
 

@@ -16,10 +16,9 @@ export let seed = {
   id: null,
 }
 
-export let state = store(seed, actions).pluck("id")
-  .combineLatest(main.state.pluck("users"), (id, collection) => {
-    return collection[id]
-  })
+export let state = store(seed, actions)
+  .pluck("id")
+  .combineLatest(main.state.pluck("users"), (id, coll) => coll[id])
   .do(s => console.log("# userDetail state:", s))
   .debounceTime(1) // diamond case*
   .distinctUntilChanged(R.equals)

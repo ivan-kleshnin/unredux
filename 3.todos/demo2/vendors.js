@@ -5,6 +5,7 @@ import compose from "ramda/src/compose"
 import curry from "ramda/src/curry"
 import equals from "ramda/src/equals"
 import filter from "ramda/src/filter"
+import is from "ramda/src/is"
 import lens from "ramda/src/lens"
 import lensIndex from "ramda/src/lensIndex"
 import lensProp from "ramda/src/lensProp"
@@ -28,7 +29,7 @@ window.R = {
   compose, curry,
   equals,
   filter,
-  id,
+  id, is,
   keys,
   lens, lensIndex, lensProp,
   map, merge,

@@ -23,7 +23,7 @@ export let store = (seed, actions, options={}) => {
    .startWith(seed)
    .scan((state, fn) => {
       if (typeof fn != "function") {
-        throw Error(`invalid fn ${fn} dispatched`)
+        throw Error(`invalid fn ${JSON.stringify(fn)} dispatched`)
       } else {
         return fn(state)
       }
@@ -57,7 +57,7 @@ export let historyActions = {
 export let historyStore = (seed, stateActions, historyActions, options={}) => {
   options = R.merge({
     length: 3,
-    cmpFn: R.F,
+    cmpFn: R.equals,
   }, options)
 
   let normalizeLog = (log) =>
@@ -83,9 +83,9 @@ export let historyStore = (seed, stateActions, historyActions, options={}) => {
 
   let allActions = R.merge(stateActions, historyActions)
 
-  return store(seed, allActions, options)
+  return store(seed, allActions, {...options, cmpFn: R.F})
     .map(state => state.log[state.i])
-    .distinctUntilChanged(R.equals)
+    .distinctUntilChanged(options.cmpFn)
 }
 
 let tailAppend = R.curry((x, xs) => {
@@ -105,7 +105,7 @@ export let obscureReducers = {
   // set :: State -> State -> State
   // set :: (String, a) -> State -> State
   set: args => state => {
-    if (args instanceof Array) {
+    if (R.is(Array, args)) {
       let [path, val] = args
       return R.setL(path, val, state)
     } else {
@@ -117,7 +117,7 @@ export let obscureReducers = {
   // over :: (State -> State) -> State -> State
   // over :: (String, (a -> b)) -> State -> State
   over: args => state => {
-    if (args instanceof Array) {
+    if (R.is(Array, args)) {
       let [path, fn] = args
       return R.overL(path, fn, state)
     } else {
@@ -129,7 +129,7 @@ export let obscureReducers = {
   // merge :: a -> State -> State
   // merge :: (String, a) -> State -> State
   merge: args => state => {
-    if (args instanceof Array) {
+    if (R.is(Array, args)) {
       let [path, stateFragment] = args
       return R.overL(path, R.mergeFlipped(stateFragment), state)
     } else {
@@ -141,7 +141,7 @@ export let obscureReducers = {
   // mergeDeep :: a -> State -> State
   // mergeDeep :: (String, a) -> State -> State
   mergeDeep: args => state => {
-    if (args instanceof Array) {
+    if (R.is(Array, args)) {
       let [path, stateFragment] = args
       return R.overL(path, R.mergeDeepFlipped(stateFragment), state)
     } else {

@@ -23,7 +23,7 @@ export let store = (seed, actions, options={}) => {
    .startWith(seed)
    .scan((state, fn) => {
       if (typeof fn != "function") {
-        throw Error(`invalid fn ${fn} dispatched`)
+        throw Error(`invalid fn ${JSON.stringify(fn)} dispatched`)
       } else {
         return fn(state)
       }
@@ -57,7 +57,7 @@ export let historyActions = {
 export let historyStore = (seed, stateActions, historyActions, options={}) => {
   options = R.merge({
     length: 3,
-    cmpFn: R.F,
+    cmpFn: R.equals,
   }, options)
 
   let normalizeLog = (log) =>
@@ -73,19 +73,19 @@ export let historyStore = (seed, stateActions, historyActions, options={}) => {
 
   stateActions = R.map($ => $.map(fn => hs => {
     if (hs.i < options.length - 1) {
-      hs = R.merge(hs, {
+      hs = {
         log: normalizeLog(R.slice(0, hs.i + 1, hs.log)),
         i: options.length - 1,
-      })
+      }
     }
     return R.setL(["log"], tailAppend(fn(hs.log[hs.i]), hs.log), hs)
   }), stateActions)
 
   let allActions = R.merge(stateActions, historyActions)
 
-  return store(seed, allActions, options)
+  return store(seed, allActions, {...options, cmpFn: R.F})
     .map(state => state.log[state.i])
-    .distinctUntilChanged(R.equals)
+    .distinctUntilChanged(options.cmpFn)
 }
 
 let tailAppend = R.curry((x, xs) => {

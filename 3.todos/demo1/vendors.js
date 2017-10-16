@@ -1,10 +1,11 @@
 // RAMDA ===========================================================================================
 // Until we implement tree shaking
-// assoc, assocPath are replace with lenses
+import assoc from "ramda/src/assoc"
 import compose from "ramda/src/compose"
 import curry from "ramda/src/curry"
 import equals from "ramda/src/equals"
 import filter from "ramda/src/filter"
+import is from "ramda/src/is"
 import lens from "ramda/src/lens"
 import lensIndex from "ramda/src/lensIndex"
 import lensProp from "ramda/src/lensProp"
@@ -24,11 +25,11 @@ let keys = Object.keys
 let values = Object.values
 
 window.R = {
-  always,
+  always, assoc,
   compose, curry,
   equals,
   filter,
-  id,
+  id, is,
   keys,
   lens, lensIndex, lensProp,
   map, merge,
@@ -42,13 +43,13 @@ window.R = {
 
 // Helpers
 let lensify = (lens) => {
-  if (lens instanceof Array) {
+  if (R.is(Array, lens)) {
     return reduce(
       (z, s) => compose(z, typeof s == "number" ? lensIndex(s) : lensProp(s)),
       id,
       lens
     )
-  } else if (lens instanceof Function) {
+  } else if (R.is(Function, lens)) {
     return lens
   } else {
     throw Error(`invalid lens ${lens}`)

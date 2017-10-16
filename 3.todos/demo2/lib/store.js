@@ -15,13 +15,14 @@ export let store = (seed, actions, options={}) => {
     letFn: R.id,
     mapFn: R.id,
     doFn:  R.id,
+    cmpFn: R.equals,
   }, options)
 
   return mergeObj(actions)
    .startWith(seed)
    .scan((state, fn) => {
       if (typeof fn != "function") {
-        throw Error(`invalid fn ${fn} dispatched`)
+        throw Error(`invalid fn ${JSON.stringify(fn)} dispatched`)
       } else {
         return fn(state)
       }
@@ -30,7 +31,7 @@ export let store = (seed, actions, options={}) => {
    .let(options.letFn) // inject observable
    .map(options.mapFn) // inject value to map
    .do (options.doFn)  // inject value
-   .distinctUntilChanged(R.equals)
+   .distinctUntilChanged(options.cmpFn)
    .shareReplay(1)
 }
 

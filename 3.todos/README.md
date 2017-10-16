@@ -172,6 +172,108 @@ complexity into libraries. Partially, because I think we all should write more l
 
 For now, I decided to settle myself on the "explicit argument" version.
 
+**Update**
+
+Couldn't stop myself and tried all 3 APIs. That `seed` "wants" to be separated from other actions
+in many cases:
+
+```
+// historyStore :: (Actions, Actions, HiStoreOptions?) -> Observable State
+export let historyStore = ({seed, ...stateActions}, historyActions, options={}) => {
+  options = R.merge({
+    length: 3,
+    cmpFn: R.equals,
+  }, options)
+
+  let normalizeLog = (log) =>
+    R.takeLast(options.length, [...R.repeat(null, options.length), ...log])
+
+  let normalizeI = (i) =>
+    (i > options.length - 1 ? options.length - 1 : i)
+
+  seed = seed.map(fn => state => ({
+    log: normalizeLog([fn(state)]), // [null, null, <state>]
+    i: options.length - 1,          //  0     1     2!
+  }))
+
+  stateActions = R.map($ => $
+    .map(fn => hs => {
+      if (hs.i < options.length - 1) {
+        hs = {
+          log: normalizeLog(R.slice(0, hs.i + 1, hs.log)),
+          i: options.length - 1,
+        }
+      }
+      return R.setL(["log"], tailAppend(fn(hs.log[hs.i]), hs.log), hs)
+    })
+  , stateActions)
+
+  return store({seed, ...stateActions, ...historyActions}, {...options, cmpFn: R.F})
+    .map(state => state.log[state.i])
+    .distinctUntilChanged(options.cmpFn)
+}
+```
+
+So it totally doable... but seems to add more problems than solve.
+For example, try to merge seeds from blueprints (TODO explanations?):
+
+```js
+// 1) Separate Seed API: let seed = {...}
+let seeds = R.merge(seed1, seed2)
+// The problem does not even exist...
+
+// 2) "Naive" API: {seed: O.of(seed)}
+let mergeObs = (k, o1, o2) => {
+  if (R.is(O, o1) && R.is(O, o2)) {
+    return O.zip(o1, o2).map(([o1, o2]) => {
+      return R.merge(o1, o2)
+    })
+  } else {
+    throw Error(`unexpected name clash for the key "${k}"`)
+  }
+}
+R.mergeWithMergeObsFlipped = R.flip(R.mergeWithKey(mergeObs))
+
+let actions = R.pipe(
+  R.mergeWithMergeObsFlipped({foo: "foo", seed: O.of({foo: "foo"})}), // sets {seed: O.of(() => seed1) ...}
+  R.mergeWithMergeObsFlipped({foo: "bar", seed: O.of({bar: "bar"})}), // sets {seed: O.of(() => R.merge(seed1, seed2)) ...}
+  // ...
+)({})
+
+actions.seed.subscribe(x => {
+  console.log(x)
+})
+
+// works but @_@
+
+// 3) "Staltz'" API: {seed: O.of(() => seed)}
+let mergeObs = (o1, o2) => {
+  if (R.is(O, o1) && R.is(O, o2)) {
+    return O.zip(o1, o2).map(([o1, o2]) => {
+      return () => R.merge(o1(), o2())
+    })
+  } else {
+    throw Error(`unexpected name clash for the key "${k}"`)
+  }
+}
+R.mergeWithMergeObsFlipped = R.flip(R.mergeWith(mergeObs))
+
+let actions = R.pipe(
+  R.mergeWithMergeObsFlipped({seed: O.of(() => ({foo: "foo"}))}), // sets {seed: O.of(() => seed1) ...}
+  R.mergeWithMergeObsFlipped({seed: O.of(() => ({bar: "bar"}))}), // sets {seed: O.of(() => R.merge(seed1, seed2)) ...}
+  // ...
+)({})
+
+actions.seed.subscribe(x => {
+  console.log(x(null))
+})
+
+// works but @_@
+```
+
+Still considering all options, but now I'm even more inclined to a simple separate seed.
+Async seed just shifts the complexity to library code as I initially predicted.
+
 ### Derived state
 
 TODO

@@ -81,13 +81,13 @@ window.R = {
 
 // Helpers
 let lensify = (lens) => {
-  if (lens instanceof Array) {
+  if (R.is(Array, lens)) {
     return reduce(
       (z, s) => compose(z, typeof s == "number" ? lensIndex(s) : lensProp(s)),
       id,
       lens
     )
-  } else if (lens instanceof Function) {
+  } else if (R.is(Function, lens)) {
     return lens
   } else {
     throw Error(`invalid lens ${lens}`)

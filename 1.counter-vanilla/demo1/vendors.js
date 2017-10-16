@@ -5,6 +5,7 @@ import compose from "ramda/src/compose"
 import curry from "ramda/src/curry"
 import equals from "ramda/src/equals"
 import filter from "ramda/src/filter"
+import is from "ramda/src/is"
 import map from "ramda/src/map"
 import merge from "ramda/src/merge"
 import pipe from "ramda/src/pipe"
@@ -20,7 +21,7 @@ window.R = {
   compose, curry,
   equals,
   filter,
-  id,
+  id, is,
   keys,
   map, merge,
   pipe,

@@ -282,29 +282,62 @@ not know whether you expect `null`, `{}` or something else in this regard.
 
 ### Derived state
 
-Derived state is a part of a state that 1) is calculated on base of the main state 2) contains something
-you don't want to persist (in most cases).
+Derived state is a part of an application state that 1) is calculated on base of the main state
+2) contains something you don't want to persist (in most cases).
 
 For example, a list of filtered articles (assuming that frontend has access to the full list of them
-at once) is a state derived from article "database" and the current filters, sorts and pagination.
-Another example is a "detail" page (which can be seen conceptually as an index filtered by a single id
-and so containing 1 or 0 items). Detail page can derived from those two data points.
+at once) is a state derived from the reactive collection of articles and the (half-reactive) set of
+current filters, sorts and pagination. Another example is a "detail" page (which can be seen
+conceptually as an index filtered by a single id and so containing 1 or 0 items). Detail page can
+derived from those two data points.
 
 Data derivation is similar in purpose to the graph links Falcor uses. It frees you from a constant
 threat of data unsync. I think data derivation is more powerful because it allows to describe
 more dependencies in a declarative way.
 
-Compare the following:
+Consider the following:
 
 ```js
 let users = {"1": {...}, "2": {...}, ...]
 let currentUser = users["1"]
 ```
 
-Now changes in `users` will be automatically "captured" in `currentUser`. This is the principle
+Now changes in `users` will be automatically represented in `currentUser`. This is the principle
 Falcor uses (kinda simplified but relevant for the purpose of this explanation).
 
 The problem with the above is `["1"]`. Current user has a "hardcoded" key and the key itself can't
 be derived from anything. It has to be changed in a non-reactive way.
 
-TODO moar explanations
+Now consider the following:
+
+```js
+let users$     // a stream of users "collection"
+let currentId$
+
+let currentUser = deriveDetailView(users$, currentId$)
+```
+
+This time `currentUser` can be recalculated whenever one of `users[currentId]` or `currentId` changes.
+It's fully reactive in the case when you take that from URL and need manual set actions otherwise
+(because then your logic is custom and can't be predicted).
+
+The division between URL-controlled and state-controlled indexes, detail and edit pages were already
+present at [React-Ultimate](https://github.com/Paqmind/react-ultimate) but that time I failed to
+capture a single universal mechanics. Probably because I thought of derived states as necessary
+stateless and strictly formula-based.
+
+Now I've changed my mind and I believe derived states can be store-based. The formula I use now were
+given above, but worth repeating: derived state is a part of an application state that 1) is calculated
+on base of the *main* state 2) contains something you don't want to persist (in most cases).
+Main state hereby, is a state that can (or should) be persisted.
+
+You don't want to persist current page id, filters, sorts **by default** because they
+a) can be taken directly from URL in some cases
+b) can not be persisted to the main backend storage
+
+You can find the exceptions to the previous points but they are rare and the point of this project
+is to review the approaches to the common cases, not to cover all cases which is obviously impossible.
+
+If you want to persist the last filters + sorts + pagination into localStorage – nothing prevents
+you from doing it separately. The point of having the main state here is to represent the server-side
+data (tables/collections) as close as possible and without any duplication.

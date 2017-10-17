@@ -202,19 +202,31 @@ Basically, to track the linear data flow, you need to switch between reading sin
 To achieve 100% reactivity, most complex CycleJS apps will end with multiple cycles (either in app
 or library code), and sometimes the debug process is a real PITA.
 
-It's also about the ecosystem. I'm afraid the creation of XStream was a mistake afterall. Now they
-propose to use RxJS for the cases XStream can't manage – like bundle size is not an issue anymore @_@.
-React 16 is way more performant and convenient (because of `return [<Component/>...]` option) than
-the alternatives, including their default Snabbdom. The latter, for example, still doesn't have a
-Component abstraction which means the whole VDOM tree reconcilation is the only option available...
+The previous point leads to a separate problem. When everything have to be expressed with observables
+the ["scoping hell"](http://paqmind.com/blog/async-patterns-and-scoping/) emerges. This is also
+explained in details by the link so I refrain from repeating myself.
 
-Finally, I'd like to avoid TypeScript as long as possible (hint: it's a mess). The bottom line is that
-CycleJS community is very fragmented because of all their "diverse" decisions and it feels so. From their
-initial principle of "same tools -> multiple architectures" they switched to "same architecture -> multiple
-tools" which I don't consider beneficial.
+It's also about the ecosystem. I thought the creation of XStream was a mistake back then, and now I'm
+even more convinced. They seriously propose to use RxJS for the cases XStream can't manage – like bundle
+size is not an issue anymore @_@. Or learning two similar libraries is not a time waste. Then the
+DOM rendering... React 16 is way more performant and convenient (because of `return [<Component/>...]`
+option) than its alternatives, including their "default" Snabbdom. The latter, for example, still
+doesn't have a Component abstraction which means the whole VDOM tree reconcilation is the only option
+available...
 
-Nevermind, I like CycleJS, I use it in some of my projects and I highly recommend it to
-everyone tired of Redux.
+Cycle community would argue that *everything is optional* but I don't buy this. You can use React
+but you can't use ReactRouter, Helmet and other popular solutions that don't fit into CycleJS architecture.
+It's all about the volume of examples and accumulated knowledge. Popular tools have books, videos,
+etc. dedicated to them. Being marginal is sometimes necessary but it's always hard.
+
+Finally, I'd like to avoid TypeScript (hint: it's a mess). TypeScript makes JavaScript the next Java,
+which is a tragedy. I will probably switch to PureScript instead as I see all the smartest people
+grouping there :) The bottom line is that CycleJS community is very fragmented because of their
+["diverse"](https://github.com/cyclejs/cyclejs/issues/196) decisions and it feels so. From their
+initial principle of "same tools -> multiple architectures" they switched to "same architecture -> multiple tools"
+which I don't consider beneficial.
+
+Nevermind, I like CycleJS, I use it in some of my projects and I highly recommend it to everyone tired of Redux.
 
 ### Why not CalmmJS?
 

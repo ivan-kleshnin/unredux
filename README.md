@@ -137,14 +137,14 @@ All that need a separated article. For now – just a random notes FYI.
 
 **Wip**
 
-### Prerequisites
+## Prerequisites
 
 * Basics of Functional Programming
 * Basics of Lensing
 * React (100% of official docs level)
 * Basics of RxJS
 
-### Common imports
+## Conventions
 
 All code snippets (in README.md files) imply the following imports:
 
@@ -163,7 +163,26 @@ observable: ---v1---v2---> (time)
 
 where `v1` may denote a string `"v1"` or something else, which should be clear from a context.
 
-### Guide
+I don't use Andre Staltz' convention of marking observables with `$` for the reasons described [here](https://github.com/ivan-kleshnin/cyclejs-examples#no-trailing-)
+Sometimes I mark a standalone observable with `$` which is kinda like an `xs` array. The data
+architecture in this project is almost 100% namespace based (namespaces rock!) so I don't see a reason
+to duplicate that with suffixes:
+
+```js
+let observableActions = {
+  doThis: ...
+  doThat: ...
+}
+
+// vs
+
+let observableActions = {
+  doThis$: ...  // ugly
+  doThat$: ...  // !
+}
+```
+
+## Guide
 
 Most examples consists of two parts. In first parts we solve problems, gradually introducing new
 concepts. In second parts we refactor our solutions: extract them into separate files, make them

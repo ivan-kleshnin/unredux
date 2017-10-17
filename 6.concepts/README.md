@@ -75,16 +75,16 @@ Redux which does only b) is not affected, but the feature can be implemented onl
 A missing link between libraries and frameworks.
 
 ```
-^ ready to use                                    Apps
+^ real-world product                              Apps
 |                                      Starters
                           Frameworks
              Blueprints
  Libraries
 <----------------------------------------------------->
- * extensibility                                     * hypeability
- * reusability                                       * 1/time to "working" code
- * simple                                            * complex
- * hard                                              * easy
+ * extensibility                         * hypeability
+ * reusability                           * 1/time to "working" code
+ * simple                                * complex
+ * hard                                  * easy
 ```
 
 Starters imply a selected subset of frameworks and libraries.

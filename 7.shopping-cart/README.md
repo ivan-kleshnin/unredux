@@ -1,4 +1,8 @@
+## Review some Redux shit
+
 https://github.com/reactjs/redux/tree/master/examples/shopping-cart
+
+### Gist #1
 
 How many redux you need to <strike>change a light bulb</strike> implement a text-row div? Let's see:
 
@@ -88,6 +92,8 @@ Btw. they use `<Product/>` in cart like this:
 Noticed `quantity` instead of `inventory`? All the `propTypes` and tests didn't help to prevent
 the bug...
 
+### Gist #2
+
 ```js
 // ProductList.js
 import React from 'react'
@@ -140,6 +146,8 @@ describe('ProductsList component', () => {
 
 Is this for real? Does Facebook pay their developers on per-line basis?
 
+### Gist #3
+
 ```js
 const initialState = {
   addedIds: [],
@@ -149,6 +157,8 @@ const initialState = {
 
 Make dict of `{<id>: <quantity>}`. Then make an array of the same ids. Data backups for certainty,
 I guess :D
+
+### Gist #4
 
 Just noticed another fun thing. Let's count how many times `Product.propTypes ` is repeated:
 

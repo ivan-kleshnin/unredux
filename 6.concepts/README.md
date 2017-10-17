@@ -243,6 +243,3 @@ it's expected to separate apps into smaller apps(!) and test them separately.
 TODO: list the following articles:
 * https://staltz.com/unidirectional-user-interface-architectures.html
 * https://staltz.com/some-problems-with-react-redux.html
-
-## Channel wrapping
-

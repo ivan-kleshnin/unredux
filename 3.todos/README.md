@@ -274,6 +274,37 @@ actions.seed.subscribe(x => {
 Still considering all options, but now I'm even more inclined to a simple separate seed.
 Async seed just shifts the complexity to library code as I initially predicted.
 
+**Update**
+
+The last possible option is to accept `initialState` as an option key. That won't work
+because all options have a default value and initial state can't have one. Store does not and can
+not know whether you expect `null`, `{}` or something else in this regard.
+
 ### Derived state
 
-TODO
+Derived state is a part of a state that 1) is calculated on base of the main state 2) contains something
+you don't want to persist (in most cases).
+
+For example, a list of filtered articles (assuming that frontend has access to the full list of them
+at once) is a state derived from article "database" and the current filters, sorts and pagination.
+Another example is a "detail" page (which can be seen conceptually as an index filtered by a single id
+and so containing 1 or 0 items). Detail page can derived from those two data points.
+
+Data derivation is similar in purpose to the graph links Falcor uses. It frees you from a constant
+threat of data unsync. I think data derivation is more powerful because it allows to describe
+more dependencies in a declarative way.
+
+Compare the following:
+
+```js
+let users = {"1": {...}, "2": {...}, ...]
+let currentUser = users["1"]
+```
+
+Now changes in `users` will be automatically "captured" in `currentUser`. This is the principle
+Falcor uses (kinda simplified but relevant for the purpose of this explanation).
+
+The problem with the above is `["1"]`. Current user has a "hardcoded" key and the key itself can't
+be derived from anything. It has to be changed in a non-reactive way.
+
+TODO moar explanations

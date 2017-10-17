@@ -75,17 +75,19 @@ Redux which does only b) is not affected, but the feature can be implemented onl
 A missing link between libraries and frameworks.
 
 ```
+^ ready to use                                    Apps
+|                                      Starters
+                          Frameworks
+             Blueprints
  Libraries
-                                   Frameworks
-            Blueprints
-                                                  Apps
-                          Starters
 <----------------------------------------------------->
  * extensibility            * hypeability
  * reusability              * 1/time to "working" code
  * simple                   * complex
  * hard                     * easy
 ```
+
+Starters imply a selected subset of frameworks and libraries.
 
 TODO: replace the diagram with an image because the labels does not mean points, but overlapping circles.
 Put a link to **Simple vs Easy** by Rich Hickey.

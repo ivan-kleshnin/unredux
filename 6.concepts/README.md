@@ -81,10 +81,10 @@ A missing link between libraries and frameworks.
              Blueprints
  Libraries
 <----------------------------------------------------->
- * extensibility            * hypeability
- * reusability              * 1/time to "working" code
- * simple                   * complex
- * hard                     * easy
+ * extensibility                                     * hypeability
+ * reusability                                       * 1/time to "working" code
+ * simple                                            * complex
+ * hard                                              * easy
 ```
 
 Starters imply a selected subset of frameworks and libraries.

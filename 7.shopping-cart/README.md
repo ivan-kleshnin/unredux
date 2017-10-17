@@ -145,6 +145,8 @@ describe('ProductsList component', () => {
 ```
 
 Is this for real? Does Facebook pay their developers on per-line basis?
+Two files, four libraries and almost 50 lines of code are necessary to test that HTML div definitely
+renders it's content...
 
 ### Gist #3
 
@@ -177,7 +179,7 @@ ProductItem.propTypes = {
   product: PropTypes.shape({ // I saw that somewhere...
     title: PropTypes.string.isRequired,
     price: PropTypes.number.isRequired,
-    inventory: PropTypes.number.isRequired // here it's called inventory and is required
+    inventory: PropTypes.number.isRequired // here it's called "inventory"
   }).isRequired,
   onAddToCartClicked: PropTypes.func.isRequired
 }
@@ -199,7 +201,7 @@ CartContainer.propTypes = {
     id: PropTypes.number.isRequired,
     title: PropTypes.string.isRequired,
     price: PropTypes.number.isRequired,
-    quantity: PropTypes.number.isRequired // here the same field is called "quantity" and is required
+    quantity: PropTypes.number.isRequired // here the same field is called "quantity" 
   })).isRequired,
   total: PropTypes.string,
   checkout: PropTypes.func.isRequired

@@ -75,7 +75,7 @@ End of story. Copy-pasting this lines in multiple places is not different from c
 ```
 
 Well, sure the latter is a tiny bit cleaner. But by my estimations, there should be 50+ places of
-`<Product.../>` in code base to pay it back. And it never happens so often. So there's absolutely
+`<Product.../>` in codebase to pay it back. And it never happens so often. So there's absolutely
 no reason to extract such tiny components prematurely. Two freaking files are gone!
 
 Btw. they use `<Product/>` in cart like this:
@@ -145,8 +145,8 @@ describe('ProductsList component', () => {
 ```
 
 Is this for real? Does Facebook pay their developers on per-line basis?
-Two files, four libraries and almost 50 lines of code are necessary to test that HTML div definitely
-renders it's content...
+Two files, four libraries and almost 50 lines of code were used to prove that two HTML tags render
+their contents... :ambulance:
 
 ### Gist #3
 
@@ -165,7 +165,7 @@ I guess :D
 Just noticed another fun thing. Let's count how many times `Product.propTypes ` is repeated:
 
 ```js
-// Product.js (1)
+// Product.js (#1)
 Product.propTypes = {
   price: PropTypes.number,
   inventory: PropTypes.number,
@@ -174,7 +174,7 @@ Product.propTypes = {
 ```
 
 ```js
-// ProductItem.js (2)
+// ProductItem.js (#2)
 ProductItem.propTypes = {
   product: PropTypes.shape({ // I saw that somewhere...
     title: PropTypes.string.isRequired,
@@ -195,13 +195,13 @@ Cart.propTypes = {
 ```
 
 ```js
-// CartContainer.js (3)
+// CartContainer.js (#3)
 CartContainer.propTypes = {
   products: PropTypes.arrayOf(PropTypes.shape({ // dejavu?
     id: PropTypes.number.isRequired,
     title: PropTypes.string.isRequired,
     price: PropTypes.number.isRequired,
-    quantity: PropTypes.number.isRequired // here the same field is called "quantity" 
+    quantity: PropTypes.number.isRequired // here the same field is called "quantity"
   })).isRequired,
   total: PropTypes.string,
   checkout: PropTypes.func.isRequired
@@ -209,7 +209,7 @@ CartContainer.propTypes = {
 ```
 
 ```js
-// ProductsContainer.js (4)
+// ProductsContainer.js (#4)
 ProductsContainer.propTypes = {
   products: PropTypes.arrayOf(PropTypes.shape({ // the same shit once over again :scream:
     id: PropTypes.number.isRequired,

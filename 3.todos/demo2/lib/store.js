@@ -22,9 +22,9 @@ export let store = (seed, actions, options={}) => {
    .startWith(seed)
    .scan((state, fn) => {
       if (R.is(Function, fn)) {
-        throw Error(`invalid fn ${JSON.stringify(fn)} dispatched`)
-      } else {
         return fn(state)
+      } else {
+        throw Error(`invalid fn ${JSON.stringify(fn)} dispatched`)
       }
    })
    .throttleTime(10, undefined, {leading: true, trailing: true}) // RxJS throttle is half-broken a.t.m. (https://github.com/ReactiveX/rxjs/search?q=throttle&type=Issues)

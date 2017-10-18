@@ -27,9 +27,9 @@ export let store = (seed, actions) => {
    .startWith(seed)
    .scan((state, fn) => {
       if (R.is(Function, fn)) {
-        throw Error(`invalid fn ${fn} dispatched`)
-      } else {
         return fn(state)
+      } else {
+        throw Error(`invalid fn ${fn} dispatched`)
       }
    })
    ...
@@ -50,9 +50,9 @@ via actions. Let's try that, removing the argument from the implementation:
 -   .startWith(seed)
    .scan((state, fn) => {
       if (R.is(Function, fn)) {
-        throw Error(`invalid fn ${fn} dispatched`)
-      } else {
         return fn(state)
+      } else {
+        throw Error(`invalid fn ${fn} dispatched`)
       }
    })
    ...
@@ -155,9 +155,9 @@ let store = (actions) => {
    .startWith(null) // -- any value, is ignored in initial reducer
    .scan((state, fn) => {
       if (R.is(Function, fn)) {
-        throw Error(`invalid fn ${fn} dispatched`)
-      } else {
         return fn(state)
+      } else {
+        throw Error(`invalid fn ${fn} dispatched`)
       }
    })
    ...

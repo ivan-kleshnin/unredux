@@ -168,7 +168,7 @@ console.log(a.get()) // C
 
 *But this is not reactive!!!" – I think it's appropriate to give up reactivity in some cases.
 
-For examples, the following is a hell to achieve in CycleJS:
+For example, the following is a hell to achieve in CycleJS:
 
 ```
 Single "Action" sequence:
@@ -182,9 +182,9 @@ Single "Action" sequence:
     wait for the change to apply
 ```
 
-Why/when you need that? Optimistic updates, sophisticated loading indicators,
-some controlled communication with backend. It's kinda like one-way dataflow in React: a good default
-which you'd like to sidestep occasionally.
+Why/when you may need that? Optimistic updates, sophisticated *loading* indications,
+some controlled communication with backend, some testing scenarios... It's kinda like one-way dataflow
+in React: a good default which is nice to sidestep occasionally.
 
 In short, when you need to achieve a controlled UI &harr; State &harr; Server **interaction**.
 Control is (by definition) proactive, which is the opposite of reactive and requires different code

@@ -254,7 +254,10 @@ Nevermind, I like CycleJS, I use it in some of my projects and I highly recommen
 ### Why not CalmmJS?
 
 CalmmJS is also very good. Conceptually, it's quite similar to what I'm trying to implement here, except
-in CalmmJS does not have reactive actions – just a reactive state.
+that CalmmJS does not have reactive actions – just a reactive state. Nothing prevents you from adding
+them, of course, but we can reasonably discuss only the recommended/documented approaches. Otherwise we
+can say that nothing prevents us from turning Redux into CalmmJS (step by step) and drown in philosophy
+like "what makes X an x".
 
 What I don't like about CalmmJS is magic. They use a lot of magic, like auto-injections of observables
 into React components, or multiple high-level ad hoc reactive operators which seem foreign in Hello-World

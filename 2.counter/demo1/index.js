@@ -35,9 +35,11 @@ let state = O.merge(
 // Components ======================================================================================
 class App extends Component {
   componentWillMount() {
-    this.sb = state.subscribe(state => {
-      this.setState(state)
-    })
+    this.sb = state
+      .throttleTime(10, undefined, {leading: true, trailing: true}) // RxJS throttle is half-broken (https://github.com/ReactiveX/rxjs/search?q=throttle&type=Issues)
+      .subscribe(state => {
+        this.setState(state)
+      })
   }
 
   componentWillUnmount() {

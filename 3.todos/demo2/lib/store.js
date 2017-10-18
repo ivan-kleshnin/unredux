@@ -27,7 +27,6 @@ export let store = (seed, actions, options={}) => {
         throw Error(`invalid fn ${JSON.stringify(fn)} dispatched`)
       }
    })
-   .throttleTime(10, undefined, {leading: true, trailing: true}) // RxJS throttle is half-broken a.t.m. (https://github.com/ReactiveX/rxjs/search?q=throttle&type=Issues)
    .let(options.letFn) // inject observable
    .map(options.mapFn) // inject value to map
    .do (options.doFn)  // inject value

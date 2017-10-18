@@ -10,6 +10,7 @@ export default function connect(streamsToProps, ComponentToWrap) {
 
     componentWillMount() {
       let props = combineLatestObj(streamsToProps)
+        .throttleTime(10, undefined, {leading: true, trailing: true}) // RxJS throttle is half-broken (https://github.com/ReactiveX/rxjs/search?q=throttle&type=Issues)
       this.sb = props.subscribe((data) => {
         this.setState(data)
       })

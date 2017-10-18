@@ -166,7 +166,7 @@ console.log(a.set(["counter"], 2)) // B
 console.log(a.get()) // C
 ```
 
-This "breaks reactivity" but I think it's worth breaking in some cases.
+*But this is not reactive!!!" – I think it's appropriate to give up reactivity in some cases.
 
 For examples, the following is a hell to achieve in CycleJS:
 
@@ -182,11 +182,14 @@ Single "Action" sequence:
     wait for the change to apply
 ```
 
-Why or when you need something like that? Optimistic updates, sophisticated loading indicators,
-some controlled communication with backend. In short, when you need to achieve a controlled
-UI <-> State <-> Server **interation**. Control is (by definition) proactive, which is the opposite of
-reactive and requires different code patterns. Taking control you often need a lot of variables
-in scope. The obvious drawback is that you need to prevent those variable from getting unsync.
+Why/when you need that? Optimistic updates, sophisticated loading indicators,
+some controlled communication with backend. It's kinda like one-way dataflow in React: a good default
+which you'd like to sidestep occasionally.
+
+In short, when you need to achieve a controlled UI &harr; State &harr; Server **interaction**.
+Control is (by definition) proactive, which is the opposite of reactive and requires different code
+patterns. Taking control you often need a lot of variables in scope. The obvious drawback is that you
+need to prevent those variable from getting unsync.
 
 ```js
 // WORST control case
@@ -207,7 +210,7 @@ function (state) {
     actions.setCounter(0) // updates state
   }
   // state is outdated here
-  state = assoc("counter", state, 0) // manual sync
+  state = R.assoc("counter", state, 0) // manual sync
   // state is actual here
   console.log(state.counter + 1) // 1 – ok!
   ...

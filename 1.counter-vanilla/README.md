@@ -223,16 +223,3 @@ actions2.foo.next("f2") // ___ nothing: `merge` spoiled the second subject.
 
 RxJS isn't smart enough to combine both subjects above. `actions2.foo` becomes either a separate
 subject or a mirror of `actions.foo`.
-
-So when you only need to make an imperative "entry point" copying the other "entry point", the
-skeleton code is the following:
-
-```js
-let actions = {
-  foo: chan($ => $),
-}
-
-let actions2 = {
-  foo: chan($ => $.merge(actions.foo)), // $.merge can accept more than one endpoints
-}
-```

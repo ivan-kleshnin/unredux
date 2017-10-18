@@ -57,9 +57,9 @@ The implementation is pretty simple:
 ```js
 // chan :: Observable a
 // chan :: a -> ()
-let chan = (mapFn) => {
+let chan = (letFn) => {
   let subj = new Subject()
-  let obs = mapFn(subj)
+  let obs = letFn(subj)
   function channel(...callArgs) {
     return subj.next(callArgs[0]) // callArgs[1..n] are reserved
   }
@@ -144,9 +144,9 @@ The channel is not callable anymore because the observable returned from `do` re
 You can try to proxy calls and wrap resulting observables, as we did.
 
 ```js
-export let chan = (mapFn) => {
+export let chan = (letFn) => {
   let subj = new Subject()
-  let obs = subj.map(mapFn)
+  let obs = subj.map(letFn)
   let linkToSubj = (obj) => {
     return new Proxy(() => obj, {
       get: (target, propName, _) => {

@@ -14,9 +14,9 @@ export let combineLatestObj = (obj) => {
 
 // chan :: Observable a
 // chan :: a -> ()
-export let chan = (mapFn) => {
+export let chan = (letFn) => {
   let subj = new Subject()
-  let obs = mapFn(subj)
+  let obs = letFn(subj)
   function channel(...callArgs) {
     return subj.next(callArgs[0]) // callArgs[1..n] are reserved
   }

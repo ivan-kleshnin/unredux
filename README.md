@@ -137,6 +137,12 @@ All that need a separated article. For now – just a random notes FYI.
 
 **Wip**
 
+#### [Concepts](./CONCEPTS.md)
+
+#### [Ideas](./IDEAS.md)
+
+**Wip**
+
 Most examples consists of two parts. In first parts we solve problems, gradually introducing new
 concepts. In second parts we refactor our solutions: extract them into separate files, make them
 cleaner and more stable.

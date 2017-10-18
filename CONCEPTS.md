@@ -1,72 +1,6 @@
-# 6. Concepts
+# Concepts
 
-Random notes to not forget. Will be better distributed by "lessons"/"examples" later.
-
-## Trackable actions
-
-Can be used to build Redux-like devtool.
-
-```js
-let R = require("ramda")
-let {Observable: O, Subject} = require("rxjs")
-
-// chan :: Observable a
-// chan :: a -> ()
-let chan = (mapFn) => {
-  let subj = new Subject()
-  let obs = mapFn(subj)
-  function channel(...callArgs) {
-    return subj.next(callArgs[0]) // callArgs[1..n] are reserved
-  }
-  Object.setPrototypeOf(channel, obs)
-  return channel
-}
-
-// mergeObj :: Object (Observable *) -> Observable *
-let mergeObj = (obj) => {
-  let values = R.values(obj) // streams
-  return O.merge(...values)
-}
-
-// mergeObjTracking :: Object (Observable *) -> Observable {key :: String, value :: *}
-let mergeObjTracking = (obj) => {
-  obj = R.mapObjIndexed((value, key) => {
-    return value.map(val => ({key, val}))
-  }, obj)
-  let values = R.values(obj) // streams
-  return O.merge(...values)
-}
-
-
-let actions = {
-  foo: chan(R.identity),
-  bar: chan(R.identity)
-}
-
-let obs = mergeObjTracking(actions)
-// `obs.pluck("val")` converts to vanilla `mergeObj` format
-
-obs.subscribe(x => {
-  console.log("action", JSON.stringify(x.key))
-  console.log("  args:", JSON.stringify(x.val))
-  console.log()
-})
-
-actions.foo("f1")
-actions.foo("f2")
-
-actions.bar("b1")
-actions.bar("b2")
-
-actions.foo(["f3a", "f3b"])
-
-// key: ---foo---foo---bar---bar---foo-------->
-// val: ---f1----f2----b1----b2----f3a, f3b--->
-```
-
-That's why obscure reducers aren't a great idea. And this feature is impossible to achieve
-in CalmmJS which a) uses functional reducer approach b) merges actions and state into a single concept.
-Redux which does only b) is not affected, but the feature can be implemented only in library code.
+Random, undeveloped ideas.
 
 ## Blueprints
 
@@ -75,7 +9,7 @@ Redux which does only b) is not affected, but the feature can be implemented onl
 A missing link between libraries and frameworks.
 
 ```
-^ real-world product                              Apps
+^ level of code                                   Apps
 |                                      Starters
                           Frameworks
              Blueprints

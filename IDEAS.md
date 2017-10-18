@@ -126,6 +126,7 @@ console.log("proactive state.counter:", c)
 
 A cross-line between reactive and proactive paradigms.
 
+```js
 let atom = (seed, options) => {
   let actions = obscureActions
 

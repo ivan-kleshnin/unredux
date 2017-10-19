@@ -130,7 +130,7 @@ export let obscureReducers = {
   merge: args => state => {
     if (R.is(Array, args)) {
       let [path, stateFragment] = args
-      return R.overL(path, R.mergeFlipped(stateFragment), state)
+      return R.over(path, R.mergeFlipped(stateFragment), state)
     } else {
       let stateFragment = args
       return R.merge(state, stateFragment)
@@ -142,7 +142,7 @@ export let obscureReducers = {
   mergeDeep: args => state => {
     if (R.is(Array, args)) {
       let [path, stateFragment] = args
-      return R.overL(path, R.mergeDeepFlipped(stateFragment), state)
+      return R.over(path, R.mergeDeepFlipped(stateFragment), state)
     } else {
       let stateFragment = args
       return R.mergeDeep(state, stateFragment)

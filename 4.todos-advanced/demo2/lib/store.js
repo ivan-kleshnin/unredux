@@ -44,11 +44,11 @@ export let canRedo = (state) =>
 // historyActions :: Actions
 export let historyActions = {
   undo: chan($ => $.map(() => state =>
-    R.overL(["i"], (i) => canUndo(state) ? i - 1 : i, state)
+    R.over(["i"], (i) => canUndo(state) ? i - 1 : i, state)
   )),
 
   redo: chan($ => $.map(() => state =>
-    R.overL(["i"], (i) => canRedo(state) ? i + 1 : i, state)
+    R.over(["i"], (i) => canRedo(state) ? i + 1 : i, state)
   )),
 }
 
@@ -77,7 +77,7 @@ export let historyStore = (seed, stateActions, historyActions, options={}) => {
         i: options.length - 1,
       }
     }
-    return R.setL(["log"], tailAppend(fn(hs.log[hs.i]), hs.log), hs)
+    return R.set(["log"], tailAppend(fn(hs.log[hs.i]), hs.log), hs)
   }), stateActions)
 
   let allActions = R.merge(stateActions, historyActions)

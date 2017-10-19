@@ -44,11 +44,11 @@ export let canRedo = (state) =>
 // historyActions :: Actions
 export let historyActions = {
   undo: chan($ => $.map(() => state =>
-    R.overL(["i"], (i) => canUndo(state) ? i - 1 : i, state)
+    R.over(["i"], (i) => canUndo(state) ? i - 1 : i, state)
   )),
 
   redo: chan($ => $.map(() => state =>
-    R.overL(["i"], (i) => canRedo(state) ? i + 1 : i, state)
+    R.over(["i"], (i) => canRedo(state) ? i + 1 : i, state)
   )),
 }
 
@@ -77,7 +77,7 @@ export let historyStore = (seed, stateActions, historyActions, options={}) => {
         i: options.length - 1,
       }
     }
-    return R.setL(["log"], tailAppend(fn(hs.log[hs.i]), hs.log), hs)
+    return R.set(["log"], tailAppend(fn(hs.log[hs.i]), hs.log), hs)
   }), stateActions)
 
   let allActions = R.merge(stateActions, historyActions)
@@ -106,7 +106,7 @@ export let obscureReducers = {
   set: args => state => {
     if (R.is(Array, args)) {
       let [path, val] = args
-      return R.setL(path, val, state)
+      return R.set(path, val, state)
     } else {
       let val = args
       return val
@@ -118,7 +118,7 @@ export let obscureReducers = {
   over: args => state => {
     if (R.is(Array, args)) {
       let [path, fn] = args
-      return R.overL(path, fn, state)
+      return R.over(path, fn, state)
     } else {
       let fn = args
       return fn(state)

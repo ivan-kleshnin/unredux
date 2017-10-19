@@ -23,7 +23,7 @@ let obscureReducers = {
   set: args => state => {
     if (R.is(Array, args)) {
       let [path, val] = args
-      return R.setL(path, val, state)
+      return R.set(path, val, state)
     } else {
       let val = args
       return val
@@ -35,7 +35,7 @@ let obscureReducers = {
   over: args => state => {
     if (R.is(Array, args)) {
       let [path, fn] = args
-      return R.overL(path, fn, state)
+      return R.over(path, fn, state)
     } else {
       let fn = args
       return fn(state)
@@ -47,7 +47,7 @@ let obscureReducers = {
   merge: args => state => {
     if (R.is(Array, args)) {
       let [path, stateFragment] = args
-      return R.overL(path, R.mergeFlipped(stateFragment), state)
+      return R.over(path, R.mergeFlipped(stateFragment), state)
     } else {
       let stateFragment = args
       return R.merge(state, stateFragment)
@@ -59,7 +59,7 @@ let obscureReducers = {
   mergeDeep: args => state => {
     if (R.is(Array, args)) {
       let [path, stateFragment] = args
-      return R.overL(path, R.mergeDeepFlipped(stateFragment), state)
+      return R.over(path, R.mergeDeepFlipped(stateFragment), state)
     } else {
       let stateFragment = args
       return R.mergeDeep(state, stateFragment)
@@ -102,7 +102,7 @@ Suppose you have the following action layout:
 ```js
 let actions = {
   setUser: chan($ => $
-    .map(user => state => R.setL(["users", user.id], user, state)
+    .map(user => state => R.set(["users", user.id], user, state)
   ),
   // ...
 }
@@ -114,7 +114,7 @@ checking. It's very simple:
 ```js
 let actions = {
   setUser: chan($ => $
-    .map(user => state => R.setL(["users", user.id], user, state)
+    .map(user => state => R.set(["users", user.id], user, state)
     .do(console.log) // !!!
   ),
 }

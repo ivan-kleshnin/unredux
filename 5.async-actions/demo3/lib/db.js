@@ -9,15 +9,15 @@ let makeDB = (seed, options={}) => {
       let meta = v[COLLECTION]
       return R.merge(z, {
         ["set" + meta.modelName]: chan($ => $
-          .map(model => state => R.setL([k, id], model, state))
+          .map(model => state => R.set([k, id], model, state))
         ),
 
         ["update" + meta.modelName]: chan($ => $
-          .map(model => state => R.overL([k, id], R.mergeFlipped(model), state))
+          .map(model => state => R.over([k, id], R.mergeFlipped(model), state))
         ),
 
         ["delete" + meta.modelName]: chan($ => $
-          .map(id => state => R.setL([k, id], undefined, state))
+          .map(id => state => R.set([k, id], undefined, state))
         ),
       })
     } else {

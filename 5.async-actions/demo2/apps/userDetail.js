@@ -6,7 +6,7 @@ import * as main from "./main"
 export let actions = {
   setId: chan($ => $
     .map(id => state =>
-      R.setL(["id"], id, state)
+      R.set(["id"], id, state)
     )
   ),
 }

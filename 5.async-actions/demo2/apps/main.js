@@ -5,7 +5,7 @@ import {store} from "../lib/store"
 export let actions = {
   setUser: chan($ => $
     .map(user => state =>
-      R.setL(["users", user.id], user, state)
+      R.set(["users", user.id], user, state)
     )
   ),
 }

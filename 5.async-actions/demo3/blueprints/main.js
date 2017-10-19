@@ -6,7 +6,7 @@ export default makeBlueprint = (main, modelName, collectionName) => {
   let makeActions = () => ({
     ["set" + modelName]: chan($ => $
       .map(model => state =>
-        R.setL([collectionName, model.id], model, state)
+        R.set([collectionName, model.id], model, state)
       )
     ),
   })

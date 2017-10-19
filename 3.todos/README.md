@@ -145,7 +145,7 @@ Instead of initial state we drop-in the initial "constant" reducer. Now the typi
 ```js
 // actions :: Actions
 let actions = {
-  seed: O.of(R.setL(seed)), // Observable ((z, a) -> State) -- except z and State mismatch here
+  seed: O.of(R.set(seed)), // Observable ((z, a) -> State) -- except z and State mismatch here
   ...
 }
 
@@ -203,7 +203,7 @@ export let historyStore = ({seed, ...stateActions}, historyActions, options={}) 
           i: options.length - 1,
         }
       }
-      return R.setL(["log"], tailAppend(fn(hs.log[hs.i]), hs.log), hs)
+      return R.set(["log"], tailAppend(fn(hs.log[hs.i]), hs.log), hs)
     })
   , stateActions)
 

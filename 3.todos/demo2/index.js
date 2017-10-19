@@ -7,7 +7,7 @@ import {store, derive} from "./lib/store"
 let actions = {
   addTodo: chan($ => $.map(text => state => {
     let id = String(R.values(state.todos).length + 1)
-    return R.setL(["todos", id], {
+    return R.set(["todos", id], {
       id,
       text,
       completed: false,
@@ -16,11 +16,11 @@ let actions = {
   })),
 
   toggleTodo: chan($ => $.map(id => state =>
-    R.overL(["todos", id, "completed"], x => !x, state)
+    R.over(["todos", id, "completed"], x => !x, state)
   )),
 
   setFilter: chan($ => $.map(filter => state =>
-    R.setL(["filter"], filter, state)
+    R.set(["filter"], filter, state)
   )),
 }
 

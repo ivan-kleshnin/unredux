@@ -1,3 +1,4 @@
+import * as R from "ramda"
 import {Component} from "react"
 import {combineLatestObj} from "./utils"
 

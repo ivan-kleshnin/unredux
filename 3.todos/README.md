@@ -22,7 +22,6 @@ The current store implementation of:
 // store :: (State, Actions) -> Observable State
 export let store = (seed, actions) => {
   ...
-
   return mergeObj(actions)
    .startWith(seed)
    .scan((state, fn) => {

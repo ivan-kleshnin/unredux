@@ -7,7 +7,6 @@ module.exports = {
 
   entry: {
     app: `./${folder}/index.js`,
-    vendors: `./${folder}/vendors.js`,
   },
   output: {
     pathinfo: true,

@@ -1,3 +1,6 @@
+import * as R from "ramda"
+import {O, S} from "rxjs"
+
 // Actions =========================================================================================
 let actions = {
   increment: new Subject().map(_ => state =>

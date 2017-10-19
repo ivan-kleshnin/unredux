@@ -49,9 +49,9 @@ let derived = {
       case "all":
         return R.values(state.todos)
       case "completed":
-        return R.sortBy(t => t.addedAt, R.filter(t => t.completed, R.values(state.todos)))
+        return R.sort(R.ascend(R.prop("addedAt")), R.filter(t => t.completed, R.values(state.todos)))
       case "active":
-        return R.sortBy(t => t.addedAt, R.filter(t => !t.completed, R.values(state.todos)))
+        return R.sort(R.ascend(R.prop("addedAt")), R.filter(t => !t.completed, R.values(state.todos)))
       default:
         throw Error("Unknown filter: " + state.filter)
     }

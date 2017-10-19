@@ -1,4 +1,5 @@
-// Framework =======================================================================================
+import * as R from "ramda"
+import {O, S} from "rxjs"
 
 // chan is both an Observable and a Function
 export let chan = (letFn) => {

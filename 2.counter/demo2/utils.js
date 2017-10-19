@@ -1,3 +1,6 @@
+import * as R from "ramda"
+import {O, S} from "rxjs"
+
 // Observables =====================================================================================
 
 // a nicer analogy of https://github.com/staltz/combineLatestObj/blob/master/index.js

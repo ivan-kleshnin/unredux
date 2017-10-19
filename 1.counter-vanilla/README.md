@@ -26,8 +26,8 @@ Consider the following code:
 
 ```js
 let actions = {
-  foo: (new Subject()).map(x => x),
-  bar: (new Subject()).map(x => x),
+  foo: (new S()).map(x => x),
+  bar: (new S()).map(x => x),
 }
 
 actions.foo.subscribe(console.log)
@@ -58,7 +58,7 @@ The implementation is pretty simple:
 // chan :: Observable a
 // chan :: a -> ()
 let chan = (letFn) => {
-  let subj = new Subject()
+  let subj = new S()
   let obs = letFn(subj)
   function channel(...callArgs) {
     return subj.next(callArgs[0]) // callArgs[1..n] are reserved
@@ -145,7 +145,7 @@ You can try to proxy calls and wrap resulting observables, as we did.
 
 ```js
 export let chan = (letFn) => {
-  let subj = new Subject()
+  let subj = new S()
   let obs = subj.map(letFn)
   let linkToSubj = (obj) => {
     return new Proxy(() => obj, {
@@ -180,8 +180,8 @@ The possibility to use "naked" subjects like:
 
 ```js
 let actions = {
-  foo: (new Subject()).map(x => x),
-  bar: (new Subject()).map(x => x),
+  foo: (new S()).map(x => x),
+  bar: (new S()).map(x => x),
 }
 ```
 
@@ -208,11 +208,11 @@ An attempt to emulate that on subjects fails:
 
 ```js
 let actions = {
-  foo: new Subject(), // entry point A
+  foo: new S(), // entry point A
 }
 
 let actions2 = {
-  foo: (new Subject()).merge(actions.foo.map(x => x + "!")), // entry point B or observing A – can't be both
+  foo: (new S()).merge(actions.foo.map(x => x + "!")), // entry point B or observing A – can't be both
 }
 
 actions2.foo.subscribe(console.log)

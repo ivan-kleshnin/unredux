@@ -3,15 +3,15 @@ import {O, S} from "rxjs"
 
 // Actions =========================================================================================
 let actions = {
-  increment: new Subject().map(_ => state =>
+  increment: new S().map(_ => state =>
     R.assoc("counter", state.counter + 1, state)
   ),
 
-  decrement: new Subject().map(_ => state =>
+  decrement: new S().map(_ => state =>
     R.assoc("counter", state.counter - 1, state)
   ),
 
-  incrementIfOdd: new Subject().map(_ => state =>
+  incrementIfOdd: new S().map(_ => state =>
     state.counter % 2
       ? R.assoc("counter", state.counter + 1, state)
       : state

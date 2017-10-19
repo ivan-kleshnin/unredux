@@ -1,4 +1,6 @@
-let {chan, mergeObj} = require("./utils")
+import R from "ramda"
+import {O} from "rxjs"
+import {chan, mergeObj} from "./utils"
 
 // type Reducer = State -> State
 // type Action = Observable Reducer
@@ -98,59 +100,3 @@ export let derive = (state, deriveFn) => {
     .distinctUntilChanged()
     .shareReplay(1)
 }
-
-// obscureReducers :: Object (* -> State -> State)
-export let obscureReducers = {
-  // set :: State -> State -> State
-  // set :: (String, a) -> State -> State
-  set: args => state => {
-    if (R.is(Array, args)) {
-      let [path, val] = args
-      return R.set(path, val, state)
-    } else {
-      let val = args
-      return val
-    }
-  },
-
-  // over :: (State -> State) -> State -> State
-  // over :: (String, (a -> b)) -> State -> State
-  over: args => state => {
-    if (R.is(Array, args)) {
-      let [path, fn] = args
-      return R.over(path, fn, state)
-    } else {
-      let fn = args
-      return fn(state)
-    }
-  },
-
-  // merge :: a -> State -> State
-  // merge :: (String, a) -> State -> State
-  merge: args => state => {
-    if (R.is(Array, args)) {
-      let [path, stateFragment] = args
-      return R.over(path, R.mergeFlipped(stateFragment), state)
-    } else {
-      let stateFragment = args
-      return R.merge(state, stateFragment)
-    }
-  },
-
-  // mergeDeep :: a -> State -> State
-  // mergeDeep :: (String, a) -> State -> State
-  mergeDeep: args => state => {
-    if (R.is(Array, args)) {
-      let [path, stateFragment] = args
-      return R.over(path, R.mergeDeepFlipped(stateFragment), state)
-    } else {
-      let stateFragment = args
-      return R.mergeDeep(state, stateFragment)
-    }
-  },
-}
-
-// obscureActions :: Object (Observable (State -> State))
-export let obscureActions = R.map(reducer =>
-  chan($ => $.map(reducer))
-, obscureReducers)

@@ -1,5 +1,5 @@
-import {chan} from "../lib/utils"
-import {store} from "../lib/store"
+import {chan} from "../utils"
+import {store} from "../store"
 
 export default makeApp = (main, modelName, collectionName) => {
   let collection = main.state.pluck(collectionName)

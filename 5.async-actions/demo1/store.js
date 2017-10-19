@@ -1,4 +1,6 @@
-let {chan, mergeObj} = require("./utils")
+import R from "ramda"
+import {O} from "rxjs"
+import {chan, mergeObj} from "./utils"
 
 // type Reducer = State -> State
 // type Action = Observable Reducer

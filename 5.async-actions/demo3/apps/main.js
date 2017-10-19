@@ -1,5 +1,5 @@
-import {chan} from "../lib/utils"
-import {store} from "../lib/store"
+import {chan} from "../utils"
+import {store} from "../store"
 
 let repoBlueprint = makeBlueprint(main, "Repo", "repos")
 let userBlueprint = makeBlueprint(main, "User", "users")

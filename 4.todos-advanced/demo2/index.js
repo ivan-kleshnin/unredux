@@ -1,8 +1,8 @@
 import {Component} from "react"
-import {chan} from "./lib/utils"
-import connect from "./lib/connect"
-import {historyActions, historyStore, derive} from "./lib/store"
-import {loadFromStorage, saveToStorage} from "./lib/storage"
+import {chan} from "./utils"
+import connect from "./connect"
+import {historyActions, historyStore, derive} from "./store"
+import {loadFromStorage, saveToStorage} from "./storage"
 
 // Actions =========================================================================================
 let actions = {

@@ -1,5 +1,5 @@
-import {chan, delay, getAsync, mergeObj} from "./lib/utils"
-import {store} from "./lib/store"
+import {chan, delay, getAsync, mergeObj} from "./utils"
+import {store} from "./store"
 
 // Actions =========================================================================================
 let actions = {

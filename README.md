@@ -96,8 +96,8 @@ All code snippets (in README.md files) imply the following imports:
 ```js
 import R from "ramda"
 // CJS: let R = require("ramda")
-import {Observable as O, Subject} from "rxjs"
-// CJS: let {Observable: O, Subject} = require("rxjs")
+import {Observable as O, ReplaySubject as RS, Subject as S} from "rxjs"
+// CJS: let {Observable: O, ReplaySubject: RS, Subject: S} = require("rxjs")
 ```
 
 which are omitted for brevity. We'll also use ASCII [marble diagrams](http://rxmarbles.com/):

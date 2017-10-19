@@ -1,4 +1,13 @@
+import * as R from "ramda"
+import {O, S} from "rxjs"
+
 // Observables =====================================================================================
+
+// mergeObj :: Object (Observable *) -> Observable *
+export let mergeObj = (obj) => {
+  let values = R.values(obj) // streams
+  return O.merge(...values)
+}
 
 // a nicer analogy of https://github.com/staltz/combineLatestObj/blob/master/index.js
 // combineLatestObj :: Object (Observable *) -> Observable *
@@ -10,12 +19,12 @@ export let combineLatestObj = (obj) => {
   })
 }
 
-// Framework =======================================================================================
+// Custom ==========================================================================================
 
 // chan :: Observable a
 // chan :: a -> ()
 export let chan = (letFn) => {
-  let subj = new Subject()
+  let subj = new S()
   let obs = letFn(subj)
   function channel(...callArgs) {
     return subj.next(callArgs[0]) // callArgs[1..n] are reserved

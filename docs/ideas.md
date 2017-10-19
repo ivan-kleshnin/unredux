@@ -21,13 +21,13 @@ That's kinda curios.
 Can be used to build Redux-like devtool.
 
 ```js
-let R = require("ramda")
-let {Observable: O, Subject} = require("rxjs")
+import R from "ramda"
+import {Observable as O, ReplaySubject as RS, Subject as S} from "rxjs"
 
 // chan :: Observable a
 // chan :: a -> ()
 let chan = (letFn) => {
-  let subj = new Subject()
+  let subj = new S()
   let obs = letFn(subj)
   function channel(...callArgs) {
     return subj.next(callArgs[0]) // callArgs[1..n] are reserved

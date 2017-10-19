@@ -1,3 +1,6 @@
+import * as R from "ramda"
+import {O, RS, S} from "rxjs"
+
 // Promises ========================================================================================
 
 // (a, Number?) -> Promise a
@@ -44,12 +47,12 @@ export let combineLatestObj = (obj) => {
   })
 }
 
-// Framework =======================================================================================
+// Custom ==========================================================================================
 
 // chan :: Observable a
 // chan :: a -> ()
 export let chan = (letFn) => {
-  let subj = new Subject()
+  let subj = new S()
   let obs = letFn(subj)
   function channel(...callArgs) {
     return subj.next(callArgs[0]) // callArgs[1..n] are reserved
@@ -62,7 +65,7 @@ export let chan = (letFn) => {
 // stateChan :: Observable a
 // stateChan :: a -> ()
 export let stateChan = () => {
-  let subj = new ReplaySubject(1)
+  let subj = new RS(1)
   function channel(...callArgs) {
     return subj.next(callArgs[0]) // callArgs[1..n] are reserved
   }

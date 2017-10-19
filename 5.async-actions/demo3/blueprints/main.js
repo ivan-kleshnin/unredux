@@ -1,5 +1,5 @@
-import {chan, delay} from "../lib/utils"
-import {store} from "../lib/store"
+import {chan, delay} from "../utils"
+import {store} from "../store"
 
 export default makeBlueprint = (main, modelName, collectionName) => {
   // Actions =======================================================================================

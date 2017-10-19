@@ -1,4 +1,4 @@
-import {delay, mergeObj} from "./lib/utils"
+import {delay, mergeObj} from "./utils"
 import * as main from "./apps/main"
 import * as userDetail from "./apps/userDetail"
 

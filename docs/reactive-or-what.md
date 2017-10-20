@@ -1,28 +1,38 @@
 # Reactive or... what?
 
-What it the opposite of being "reactive"? Should we always say "non-reactive" like it's something bad?
-Let's start with a more simple question and accept, at first, that there are two types of programs:
+What it the opposite of being **reactive**? Should we always say "non-reactive" like it's something bad?
+Let's take a step back and accept, at first, that there are two types of programs:
 **one-off** and **interactive**. Those terms aren't *official* but neither are, which is strange, by
 the way, because it's such a fundamental distinction!
 
-One-off programs have no loop. Examples: command line utils. The result of their work is their
-return value and the side effects made during their run time. The run time is an unnecessary evil.
-We can definitely apply the rule "the faster – the better" for them. Moreover, the time is the enemy
-of one-off programs. Check that file exists. Write to it. If the file disappears between those two –
-we have a bug. Efficiency metrics: throughput. Common optimization technique: parallelism.
+**One-off** programs have no interaction loop. Examples: most command line utils. Counter-example: `less`
+util (`$ cat package.json | less`) which can be interacted with UP/DOWN keys.
 
-Interactive programs (basically, it's what we often call "applications") have a loop inside them.
-Examples: servers (web, database, etc.), games, cronjobs (egde case). The result of their work
-is both the process itself (being ready to respond to the request) and the side-effects it makes.
-Efficiency metrics: latency. Common optimization technique: concurrency.
+The result of one-off programs is their return value and side effects they produce during their run time. The
+run time is an unnecessary evil. We can definitely apply the rule "the faster – the better" for them.
+Moreover, the time is the enemy of one-off programs. Check that file exists. Write to it. If the file
+disappears between those two – we have a bug. Efficiency metrics: throughput. Optimization technique:
+parallelism.
+
+**Interactive** programs (applications) have an interaction loop inside them.
+Examples: servers (web, database, etc.), games, cronjobs (egde case). Counter-example: a casino game
+where you guess a number and get the yes/no result. The next attempt is the next game.
+
+The result of interactive programs is both the process itself and the side-effects it produces. The
+run time is rather good. Imagine your dev. ops saying "Our server has finally finished it's work". :smile:
+We can tell that "the faster is better" for servers but it's not faster in the same sense. The overal
+computation time is irrelevant. You care for individual delays for each client instead.
+Efficiency metrics: latency. Optimization technique: concurrency.
+
+---
 
 So back to "reactive". Andre Staltz "proposed" (in quotes because it wasn't formally a *proposition*)
-two words as definitions of being non-reactive: interactive and passive. I don't particularly like both.
+two words as definitions of being non-reactive: **interactive** and **passive**. I don't particularly like both.
 
-"Interactive" sounds good, the word is not too overloaded. The problem comes with connotations.
+**Interactive** sounds good, the word is not too overloaded. The problem comes with connotations.
 Reactive architectures fit the best for Interactive systems. So we have a contradiction.
 
-"Passive" is even worth because in non-reactive systems we mostly deal with the active part.
+**Passive** is even worth because in non-reactive systems we mostly deal with the active part.
 Contradiction in its essence.
 
 ```
@@ -34,12 +44,14 @@ active -> passive
 
 From [dataflows](https://github.com/ivan-kleshnin/dataflows).
 
-To break this wall we can try to search for inspirational ideas outside of the programming field.
-We'll quickly find one particularly curious binary group: "proactive vs reactive" in the field of Psychology.
-"Proactive" basically means "doing something *before* something else happens" while "reactive" carries
-the opposite meaning: "doing something *after* something else happens".
+## Reactive or Proactive
 
-That's kinda interesting because it seems to describe OUR situation exceptionally well.
+To break this wall we can try to search for inspirational ideas outside of the programming field.
+We'll quickly find one particularly curious binary group: "reactive/proactive" in the field of Psychology
+and Business. "Proactive" basically means "doing something BEFORE something else happens" while "reactive" carries
+the opposite meaning: "doing something AFTER something else happens".
+
+That's kinda interesting because it seems to describe our situation pretty well.
 In the `emitter <- reactor` case we code "something that happens after something".
 In the `active -> passive` case we code "something that will happen after something".
 
@@ -51,11 +63,13 @@ to describe non-reactive systems. Anyway, "passive" and "active" terms are just 
 Telling people you're doing "active programming" you'll make them think you're coding on walks.
 Telling people you're doing "passive programming" you'll evoke "passive smoker" kind of connotations.
 
-So a think proactive is the best candidate of "non-reactive" so far.
+So a think **proactive** is the best candidate of "non-reactive" so far.
 
-There is one more good term though and it's **Control**. Being reactive means you give up the control
+There is one more good term though and it's **control**. Being reactive means you give up the control
 over some situation. Because the situation can't be affected, or it's plainly too expensive in terms
 of resources. Being proactive means taking a control.
+
+## MVC and MVR
 
 Now let's recall the MVC term. There are multiple variations of it struggling to be considered canonical.
 The Model can update the View or the View can be subscribed to the Model yadda yadda.
@@ -129,6 +143,8 @@ function reactor(request) {
 ```
 
 which would be a better match for servers and worse for clients.
+
+## Applications
 
 So how can I claim "MVC is dead" and show it's dual to MVR at the same time? Am I stupid or something?
 Well, MVC is a good choice to describe stateless Request-Response sequences. When there're no

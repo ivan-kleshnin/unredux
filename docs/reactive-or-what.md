@@ -5,35 +5,59 @@ Let's take a step back and accept, at first, that there are two types of program
 **one-off** and **interactive**. Those terms aren't *official* but neither are, which is strange, by
 the way, because it's such a fundamental distinction!
 
-**One-off** programs have no interaction loop. Examples: most command line utils. Counter-example: `less`
-util (`$ cat package.json | less`) which can be interacted with UP/DOWN keys.
+**One-off** programs have no interaction loop. Examples: most command line utils, frozen application (edge-case).
+Counter-example: `less` util (`$ cat package.json | less`) which can be interacted with UP/DOWN keys.
 
 The result of one-off programs is their return value and side effects they produce during their run time. The
 run time is an unnecessary evil. We can definitely apply the rule "the faster – the better" for them.
 Moreover, the time is the enemy of one-off programs. Check that file exists. Write to it. If the file
-disappears between those two – we have a bug. Efficiency metrics: throughput. Optimization technique:
-parallelism.
+is removed *between* both actions – we have a bug.
+
+* Efficiency metrics: throughput
+* Optimization technique: parallelism
 
 **Interactive** programs (applications) have an interaction loop inside them.
 Examples: servers (web, database, etc.), games, cronjobs (egde case). Counter-example: a casino game
-where you guess a number and get the yes/no result. The next attempt is the next game.
+where you guess a number and get the yes/no result – the next attempt is the next game.
 
 The result of interactive programs is both the process itself and the side-effects it produces. The
 run time is rather good. Imagine your dev. ops saying "Our server has finally finished it's work". :smile:
-We can tell that "the faster is better" for servers but it's not faster in the same sense. The overal
-computation time is irrelevant. You care for individual delays for each client instead.
-Efficiency metrics: latency. Optimization technique: concurrency.
+We can claim "the faster is better" for servers but it's not that same *faster* as it was before. The overal
+computation time is irrelevant. We care for individual delays for each client instead.
+
+* Efficiency metrics: latency
+* Optimization technique: concurrency
 
 ---
 
 So back to "reactive". Andre Staltz "proposed" (in quotes because it wasn't formally a *proposition*)
-two words as definitions of being non-reactive: **interactive** and **passive**. I don't particularly like both.
+two words as definitions of being non-reactive: [**interactive**](https://futurice.com/blog/reactive-mvc-and-the-virtual-dom)
+and [**passive**](https://staltz.com/on-passive-programming.html). I don't particularly like both.
 
 **Interactive** sounds good, the word is not too overloaded. The problem comes with connotations.
-Reactive architectures fit the best for Interactive systems. So we have a contradiction.
+Reactive architectures is actually the best fit for Interactive systems. So we get a contradiction.
 
 **Passive** is even worth because in non-reactive systems we mostly deal with the active part.
-Contradiction in its essence.
+Another, more serious contradiction.
+
+In case you aren't big about the terms, I recommend to look at my [dataflows](https://github.com/ivan-kleshnin/dataflows)
+article and the read the above articles. You'll get the meaning despite the term disrepancy.
+
+Then there's a question of with visual representation
+
+Andre's approach it to move arrows close to one or another part. Arrows represent the direction
+of dataflow.
+
+```
+------------------> time
+emitter ->reactor
+active-> passive
+------------------> time
+reactor<- emitter   FINE
+```
+
+In my version, arrow represent the direction of *dependency* or *control* so I just flip them.
+The direction of dataflow is captured by the position on diagram:
 
 ```
 ------------------> time
@@ -42,7 +66,7 @@ active -> passive
 ------------------> time
 ```
 
-From [dataflows](https://github.com/ivan-kleshnin/dataflows).
+Both versions mean the same, they just accent on different properties of the system.
 
 ## Reactive or Proactive
 
@@ -143,6 +167,15 @@ function reactor(request) {
 ```
 
 which would be a better match for servers and worse for clients.
+
+We can update our diagram as so:
+
+```
+------------------> time
+emitter <- reactor
+controller -> controllable
+------------------> time
+```
 
 ## Applications
 

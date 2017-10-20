@@ -11,11 +11,15 @@ examples implemented:
 We will write our own set of helpers from scratch step by step. So I encourage you to
 elaborate examples sequentially.
 
+### The cauldron
+
 #### [Motivation (wip)](./docs/motivation.md)
 
 #### [Concepts (wip)](./docs/concepts.md)
 
 #### [Ideas (wip)](./docs/ideas.md)
+
+#### [Reactive or... what?](./docs/reactive-or-what.md)
 
 ### Examples
 

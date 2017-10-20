@@ -180,28 +180,29 @@ controller -> controllable
 ## Applications
 
 So how can I claim "MVC is dead" and show it's dual to MVR at the same time? Am I stupid or something?
-Well, MVC is a good choice to describe stateless Request-Response sequences. When there're no
+Well, MVC is a good tool to describe those Request-Response sequences. When there're no
 implicit relations between the current and the previous requests. Recall that HTTP is stateless which
 we overcome with cookies and other extraneous artefacts.
 
 Now the industry is gradually switching to the real-time servers. You have to push data to clients.
 You have to throttle some less important channels. You have to debounce requests. You have to
-describe relations between data channels over time. And all that means you need reactivity.
+describe relations between data channels over time. And all that means you need reactivity. It's just
+the level of immersion into the problem is to shallow for most web devs today.
 
-The only thing that slows down the process is the inertia of ecosystem. Sockets, servers side events,
-etc. etc. still aren't properly supported by the major market players. There is no go-to approach
+And there is a big slowing factor – the inertia of an ecosystem. Sockets, servers side events,
+etc. etc. aren't still properly supported by the major market players. There is no go-to approach
 and the nececcisity to keep multiple fallbacks is burdening. There are unresolved security issues.
-But all that is about to change soon enough.
+But all that is about to change anyway.
 
 To design good systems, we need to have a good undestanding of the *underlying* reality. Many people
 say that the best solutions in math and programming have a sense of discovery. They are found, rather
 than constructed.
 
-The understanding starts with terms because we think in words (except for artists), so I refrain
-myself from "writing a new framework" and choose to peer into reality. We have to find and approve
-the terms before going further.
+Understanding starts with terms because we think in words (except for artists), so I refrain
+myself from "writing a new framework" and choose to peer into Reality again and again. And you should
+probably too.
 
-My next goal is to dig deeper into the relationships of reactivity and control because it's not
+My next goal is to dig deeper into the relationships of **reactivity** and **control** because it's not
 a binary good-evil or left-right dichotomy. A reactive system can totally have some controlled parts and
-a controlled system can totally have some reactive parts. They can be nested within each other and
-the task is to find some clues, at least, to rationally choose between them.
+a controlled system can totally have some reactive parts. Hey, they can be even nested within each other!
+So the task of the utter importance is to find clues, if not principles, to guide our design decisions.

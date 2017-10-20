@@ -103,15 +103,20 @@ All that need a separated article. For now – just a random notes FYI.
 I have a goal to avoid frameworks in this project and I will stick to it. But, as people keep asking
 about them, here is a short Q-A list.
 
-### Why not AngularJS?
+### AngularJS?
 
 Front-end templaters should have been banned long time ago.
 
-### Why not VueJS?
+### VueJS?
 
-RIP MVC, not interested. It's just a backlash against Redux.
+Need to investigate further. I guess it's growing popularity is a backlash against Redux to a big part.
 
-### Why not CycleJS?
+### MobX?
+
+The documentation is simply bad. I had a few attempts to read it, leaving with a feeling of "wut?" each time.
+Looks like they prefer an Object-oriented style which I can't resist anymore.
+
+### CycleJS?
 
 CycleJS is great. It's probably the best frontend framework at the moment, and many my solutions are
 both inspired by and compatible with CycleJS.
@@ -160,27 +165,20 @@ I don't reveal anything special here as Andre Staltz, to his credit, never said 
 tool (nothing is) and even provided some usage guides on that. Can't remember getting such an honest
 approach from Facebook or Google (see a section below).
 
-### Why not CalmmJS?
+### CalmmJS?
 
-CalmmJS is also very good. Conceptually, it's quite similar to what I'm trying to implement here, except
-that CalmmJS does not have reactive actions – just a reactive state. Nothing prevents you from adding
-them, of course, but we can reasonably discuss only the recommended/documented approaches. Otherwise we
-can say that nothing prevents us from turning Redux into CalmmJS (step by step) and drown in philosophy
-like "what makes X an x".
+CalmmJS is also very good. Conceptually, it's quite similar to what I'm trying to implement here.
+What I don't like about CalmmJS is magic. They use quite a lot of magic, like auto-injections of
+observables into React components, or multiple high-level ad hoc reactive operators which seem
+foreign in Hello-World examples.
 
-What I don't like about CalmmJS is magic. They use a lot of magic, like auto-injections of observables
-into React components, or multiple high-level ad hoc reactive operators which seem foreign in Hello-World
-examples.
+Anyway, apart from the few things I don't like, CalmmJS is awesome. Maybe, the most of the "magic" is
+just a documentation problem. Vesa Karvonen is a TOP level engineer, his experience is much larger
+than mine, and I highly recommend his libraries and articles for thorough reviews.
 
-Reading the code I can't help the feeling a lot of things are prematurely optimized and the end
-architecture would look very different without that. But may be it's just me. Vesa Karvonen is a TOP
-level engineer and I wouldn't like to underrate his works. They are well written, well documented and
-have a lot of insights. Highly recommended as well.
+### Facebook?
 
-### Why not Facebook?
-
-For example, it's disgusting to see how Facebook promotes their `create-react-app` with the elements
-of psychology.
+It's disgusting to see how Facebook promotes their `create-react-app` with the elements of psychology.
 
 ```
 ? Are you sure you want to eject? This action is permanent. (y/N) y

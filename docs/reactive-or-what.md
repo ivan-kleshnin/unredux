@@ -21,7 +21,7 @@ Examples: servers (web, database, etc.), games, cronjobs (egde case). Counter-ex
 where you guess a number and get the yes/no result – the next attempt is the next game.
 
 The result of interactive programs is both the process itself and the side-effects it produces. The
-run time is rather good. Imagine your dev. ops saying "Our server has finally finished it's work". :smile:
+run time is rather good. Imagine your dev-ops saying "Our server has finally finished it's work". :smile:
 We can claim "the faster is better" for servers but it's not that same *faster* as it was before. The overal
 computation time is irrelevant. We care for individual delays for each client instead.
 
@@ -180,17 +180,18 @@ controller -> controllable
 ## Applications
 
 So how can I claim "MVC is dead" and show it's dual to MVR at the same time? Am I stupid or something?
-Well, MVC is a good tool to describe those Request-Response sequences. When there're no
-implicit relations between the current and the previous requests. Recall that HTTP is stateless which
-we overcome with cookies and other extraneous artefacts.
+Well, MVC is a good tool to describe those Request-Response sequences. When there're no implicit
+relations between the current and the previous requests. Recall that HTTP is stateless which we
+overcome with cookies and other extraneous artefacts.
 
-Now the industry is gradually switching to the real-time servers. You have to push data to clients.
+Today the industry is gradually switching to the real-time servers. You have to push data to clients.
 You have to throttle some less important channels. You have to debounce requests. You have to
 describe relations between data channels over time. And all that means you need reactivity. It's just
-the level of immersion into the problem is to shallow for most web devs today.
+the level of immersion into the problem is too shallow for most web devs today. Few people are busy
+writing real-time servers and the total volume of "collective wisdom" is very small.
 
-And there is a big slowing factor – the inertia of an ecosystem. Sockets, servers side events,
-etc. etc. aren't still properly supported by the major market players. There is no go-to approach
+Now there is a big slowing factor – the inertia of an ecosystem. Sockets, servers side events,
+etc. still aren't properly supported by the major market players. There is no go-to approach
 and the nececcisity to keep multiple fallbacks is burdening. There are unresolved security issues.
 But all that is about to change anyway.
 
@@ -203,6 +204,10 @@ myself from "writing a new framework" and choose to peer into Reality again and 
 probably too.
 
 My next goal is to dig deeper into the relationships of **reactivity** and **control** because it's not
-a binary good-evil or left-right dichotomy. A reactive system can totally have some controlled parts and
-a controlled system can totally have some reactive parts. Hey, they can be even nested within each other!
-So the task of the utter importance is to find clues, if not principles, to guide our design decisions.
+a binary good-evil or left-right dichotomy. If Declarative is always better than Imperative, then why
+Haskell adopted the `do` syntax for IO monads? Why the dev-ops field, mostly dealing with side-effects
+is totally dominated by Rubyists? I don't think it's just a coincidence.
+
+Technically speaking, a reactive system can totally have some controlled parts and a controlled system
+can totally have some reactive parts. Hey, they can be even nested within each other! So the task of
+the utter importance is to find clues, if not principles, to guide our design decisions.

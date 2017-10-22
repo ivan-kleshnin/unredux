@@ -48,6 +48,12 @@ elaborate examples sequentially.
 * Demo1: async actions.
 * Demo2: **wip**
 
+#### 6. [Concepts](./6.concepts)
+
+* Demo1: [Baobab](https://github.com/Yomguithereal/baobab) analogy in 100 LOC
+
+---
+
 Most examples consists of 2 or 3 parts. At first we solve problems, gradually introducing new
 concepts. Then we refactor our solutions: extract them into separate files, make them cleaner
 and more stable.

@@ -1,8 +1,0 @@
-{
-  "dependencies": {},
-  "scripts": {
-    "postinstall": "mkdir node_modules ; ln -sfn ../../node_modules/.bin/ ./node_modules/.bin ; ln -sfn ../../vendors/ramda ./node_modules/ramda ; ln -sfn ../../vendors/rxjs ./node_modules/rxjs",
-    "demo1": "webpack --watch & http-server",
-    "demo2": "webpack --watch & http-server"
-  }
-}

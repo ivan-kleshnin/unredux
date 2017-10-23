@@ -109,7 +109,7 @@ Front-end templaters should have been banned long time ago.
 
 ### VueJS?
 
-Need to investigate further. I guess it's growing popularity is a backlash against Redux to a big part.
+The same mess as Redux, or even worse :(
 
 ### MobX?
 

@@ -1,8 +1,8 @@
-import {Component} from "react"
-import {combineLatestObj} from "./utils"
+import * as R from "ramda"
+import {combineLatestObj} from "unredux"
 
 export default function connect(streamsToProps, ComponentToWrap) {
-  class Container extends Component {
+  class Container extends React.Component {
     constructor(props) {
       super(props)
       this.state = {} // will be replaced with seed on componentWillMount (before first render)

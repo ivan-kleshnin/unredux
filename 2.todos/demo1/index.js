@@ -1,10 +1,9 @@
-import {Component} from "react"
-import {chan} from "./utils"
+import * as R from "ramda"
+import {Atom, logging} from "unredux"
 import connect from "./connect"
 
-// Actions =========================================================================================
-let actions = {
-  addTodo: chan($ => $.map(text => state => {
+let meta = logging({
+  addTodo: (text, state) => {
     let id = String(R.values(state.todos).length + 1)
     return R.set(["todos", id], {
       id,
@@ -12,19 +11,16 @@ let actions = {
       completed: false,
       addedAt: new Date().toISOString(),
     }, state)
-  })),
+  },
 
-  toggleTodo: chan($ => $.map(id => state =>
-    R.over(["todos", id, "completed"], x => !x, state)
-  )),
+  toggleTodo: (id, state) =>
+    R.over(["todos", id, "completed"], x => !x, state),
 
-  setFilter: chan($ => $.map(filter => state =>
-    R.set(["filter"], filter, state)
-  )),
-}
+  setFilter: (id, state) =>
+    R.set(["filter"], filter, state),
+})
 
-// State ===========================================================================================
-let seed = {
+let state = Atom({
   todos: {
     "1": {
       id: "1",
@@ -34,25 +30,11 @@ let seed = {
     }
   },
   filter: "all",
-}
-
-let state = O.merge(
-  actions.addTodo,
-  actions.toggleTodo,
-  actions.setFilter,
-)
- .startWith(seed)
- .scan((state, fn) => fn(state))
- .distinctUntilChanged(R.equals)
- .do(s => {
-   console.log("state:", s)
- })
- .shareReplay(1)
+})
 
 // Derived state should act like normal (instead of some memoized shit), so you can
 // depend on it in actions (unlike so in Redux!)
-let derived = {
-  filteredTodos: state.map((state) => {
+let filteredTodos = state.derive([]).map((state) => {
     switch (state.filter) {
       case "all":
         return R.values(state.todos)
@@ -64,7 +46,6 @@ let derived = {
         throw Error("Unknown filter: " + state.filter)
     }
   }).distinctUntilChanged().shareReplay(1),
-}
 
 // Components ======================================================================================
 let AddTodo = (props) => {

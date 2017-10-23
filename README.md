@@ -23,34 +23,10 @@ elaborate examples sequentially.
 
 ### Examples
 
-#### 1. [Counter Vanilla](./1.counter-vanilla)
+#### 1. [Counter](./1.counter)
+#### 2. [Todos](./2.todos)
 
-* Demo1: the basic architecture.
-* Demo2: + channel extraction (`chan`).
-
-#### 2. [Counter](./2.counter)
-
-* Demo1: + React.
-* Demo2: + connection extraction (`connect`).
-
-#### 3. [Todos](./3.todos)
-
-* Demo1: that classic TODO example.
-* Demo2: + store extraction (`store`).
-
-#### 4. [Todos Advanced](./4.todos-advanced)
-
-* Demo1: + history management
-* Demo2: + local storage
-
-#### 5. [Async actions](./5.async-actions)
-
-* Demo1: async actions.
-* Demo2: **wip**
-
-#### 6. [Concepts](./6.concepts)
-
-* Demo1: [Baobab](https://github.com/Yomguithereal/baobab) analogy in 100 LOC
+**...wip**
 
 ---
 
@@ -104,7 +80,7 @@ This is a normal practice for applications (never do that in public libraries!).
 All code snippets (in README.md files) imply the following imports:
 
 ```js
-import R from "ramda"
+import * as R from "ramda"
 // CJS: let R = require("ramda")
 import {Observable as O, ReplaySubject as RS, Subject as S} from "rxjs"
 // CJS: let {Observable: O, ReplaySubject: RS, Subject: S} = require("rxjs")

@@ -1,4 +1,4 @@
-import R from "ramda"
+import * as R from "ramda"
 import {O} from "rxjs"
 import {chan} from "./utils"
 

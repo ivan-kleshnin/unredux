@@ -21,7 +21,7 @@ That's kinda curios.
 Can be used to build Redux-like devtool.
 
 ```js
-import R from "ramda"
+import * as R from "ramda"
 import {Observable as O, ReplaySubject as RS, Subject as S} from "rxjs"
 
 // chan :: Observable a

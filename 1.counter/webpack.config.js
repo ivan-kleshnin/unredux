@@ -6,12 +6,21 @@ module.exports = {
   devtool: "eval",
 
   entry: {
-    app: `./${folder}/index.js`,
+    app: `./src/index.js`,
   },
   output: {
     pathinfo: true,
     filename: 'js/[name].js',
     path: Path.resolve("public"),
     publicPath: "/",
+  },
+  module: {
+    rules: [
+      {test: /\.js$/, use: "babel-loader", exclude: /node_modules/},
+    ]
+  },
+  externals: {
+    "react": "React",
+    "react-dom": "ReactDOM",
   }
 }

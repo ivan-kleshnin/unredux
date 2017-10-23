@@ -92,7 +92,6 @@ let LensedAtom = (atom, lens, options={cmpFn}) => {
 let Molecule = (atoms, mapFn, options={cmpFn}) => {
   let $ = combineLatestObj(R.pluck("$", atoms))
     .map(mapFn)
-    // .debounceTime(1) // mute possible diamond cases
     .distinctUntilChanged(options.cmpFn)
     .shareReplay(1)
 
@@ -127,7 +126,6 @@ let logging = (fnObj) => {
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-// https://github.com/Yomguithereal/baobab analogy in ~100 LOC
 
 let db = Atom({
   users: {

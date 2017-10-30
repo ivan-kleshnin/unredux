@@ -1,5 +1,5 @@
 import * as Rx from "rxjs"
-import {fromDOMEventSTD} from "framework"
+import {fromDOMEventSTD} from "./lib"
 import App from "./app/App"
 
 let APP_KEY = "root"

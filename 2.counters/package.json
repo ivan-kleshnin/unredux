@@ -1,0 +1,7 @@
+{
+  "dependencies": {},
+  "scripts": {
+    "postinstall": ". postinstall.sh",
+    "start": "webpack --watch & http-server"
+  }
+}

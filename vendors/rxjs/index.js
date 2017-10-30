@@ -1,16 +1,18 @@
-export {Observable as O} from "rxjs/Observable"
-export {Subject as S} from "rxjs/Subject"
-export {ReplaySubject as RS} from "rxjs/ReplaySubject"
+export {Observable} from "rxjs/Observable"
+export {Subject} from "rxjs/Subject"
+export {ReplaySubject} from "rxjs/ReplaySubject"
 
 // Observable functions
 import "rxjs/add/observable/combineLatest"
 import "rxjs/add/observable/from"
+import "rxjs/add/observable/fromEvent"
 import "rxjs/add/observable/merge"
 import "rxjs/add/observable/of"
 
 // Observable methods
 import "rxjs/add/operator/combineLatest"
 import "rxjs/add/operator/concat"
+import "rxjs/add/operator/concatMap"
 import "rxjs/add/operator/distinctUntilChanged"
 import "rxjs/add/operator/debounceTime"
 import "rxjs/add/operator/delay"
@@ -28,8 +30,7 @@ import "rxjs/add/operator/share"
 import "rxjs/add/operator/shareReplay"
 import "rxjs/add/operator/startWith"
 import "rxjs/add/operator/skip"
+import "rxjs/add/operator/switch"
 import "rxjs/add/operator/take"
 import "rxjs/add/operator/throttleTime"
 import "rxjs/add/operator/withLatestFrom"
-
-// let Observable = window.O = Observable

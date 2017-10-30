@@ -9,30 +9,17 @@ examples implemented:
 2. Without an expected boilerplate
 
 We will write our own set of helpers from scratch step by step. So I encourage you to
-elaborate examples sequentially.
-
-### The cauldron
-
-#### [Motivation (wip)](./docs/motivation.md)
-
-#### [Concepts (wip)](./docs/concepts.md)
-
-#### [Ideas (wip)](./docs/ideas.md)
-
-#### [Reactive or... what?](./docs/reactive-or-what.md)
+elaborate examples sequentially. The end results will resemble CycleJS framework/app with a few
+notable differences.
 
 ### Examples
 
-#### 1. [Counter](./1.counter)
-#### 2. [Todos](./2.todos)
+#### 1. [Counter](./1.counter) – the most basic example
+#### 2. [Counters](./2.counters) – isolation tests (4 types of components, 2 instances of 2 of them)
 
 **...wip**
 
 ---
-
-Most examples consists of 2 or 3 parts. At first we solve problems, gradually introducing new
-concepts. Then we refactor our solutions: extract them into separate files, make them cleaner
-and more stable.
 
 ### Usage
 
@@ -50,11 +37,11 @@ $ npm install http-server -g
 2. `$ npm install` in the root to pull common dependencies.
 3. `$ cd <example_folder>`.
 4. `$ npm install` to pull local example dependencies and symlink vendor libraries (see below).
-5. `$ npm run demo1...` (check `package.json` scripts).
+5. `$ npm start` (check `package.json` scripts).
 
 #### NodeJS
 
-1. Create some `.js` file in the root.
+1. Create some `.js` file in the project root.
 2. In that file import from `./vendors/ramda`, `./vendors/rxjs` to get the same code as in Browser.
 3. Run you file with `$ babel-node <scriptName.js>` instead of `$ node <scriptName.js>`.
 

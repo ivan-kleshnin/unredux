@@ -3,24 +3,6 @@ import {inspect} from "util"
 import {Observable as O} from "rxjs"
 
 // Lib ===========================================================================================
-let cmpFn = R.identical
-
-let assertFn = (v) => {
-  if (process.env.NODE_ENV != "production") {
-    let v2
-    try {
-      v2 = JSON.parse(JSON.stringify(v))
-      if (R.equals(v, v2)) {
-        return v
-      }
-    } catch (err) {
-      // break
-    }
-    throw Error(`state must be JSON-serializable, got ${inspect(v)}`)
-  }
-  return v
-}
-
 let storeCount = 0
 
 // Let's hide that `seed` into options where it fits better. One argument less...
@@ -40,7 +22,7 @@ function makeStore(options) {
         } else {
           throw Error(`dispatched value must be a function, got ${inspect(fn)}`)
         }
-        return options.assertFn(nextState) // sanity checks in the abscence of static typing
+        return nextState
       })
       .distinctUntilChanged(options.cmpFn)
       .shareReplay(1)
@@ -53,7 +35,6 @@ function makeStore(options) {
 // Why noone teaches them?!
 makeStore.options = {
   cmpFn: R.identical,
-  assertFn,
   name: "",
   seed: null,
 }

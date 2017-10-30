@@ -14,23 +14,23 @@ notable differences.
 
 ### Examples
 
-#### 1. [Counter](./1.counter)
+#### [1. Counter](./1.counter)
 
 The most basic example.
 
-#### 2. [Counters](./2.counters)
+#### [2. Counters](./2.counters)
 
 Event and stream isolation tests (4 types of components, 2 instances of 2 of them).
 
 ### Tutorials
 
-#### 1. [State](./1.state)
+#### [1. State](./1.state)
 
-Getting started with reactive states
+Getting started with reactive states.
 
-#### 2. [Store](./2.store)
+#### [2. Store](./2.store)
 
-Making a better store abstraction step by step
+Making a better store abstraction step by step.
 
 **...wip**
 

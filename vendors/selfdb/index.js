@@ -13,7 +13,7 @@ export let delay = (time) => {
   })
 }
 
-// Atom ============================================================================================
+// Store ===========================================================================================
 
 let cmpFn = R.identical
 
@@ -39,7 +39,7 @@ let assertFn = (v) => {
   return v
 }
 
-function commandToFunction({fn, args}) {
+let commandToFunction = ({fn, args}) => {
   if (args) {
     args = R.map(arg => {
       return arg.fn
@@ -52,7 +52,7 @@ function commandToFunction({fn, args}) {
   }
 }
 
-function commandToString(command) {
+let commandToString = (command) => {
   if (command.fn) {
     if (command.args) {
       // command :: {fn :: Function, args :: Array a}
@@ -72,17 +72,17 @@ function commandToString(command) {
   }
 }
 
-let atomCount = 0
+let storeCount = 0
 
-export let makeAtom = (options) => {
-  function Atom(actions) {
-    options = R.merge(makeAtom.options, options)
-    options.name = options.name || "atom" + (++atomCount) // Anonymous atoms will be "atom1", "atom2", etc.
-    actions = R.merge(Atom.actions, actions)
+export let makeStore = (options) => {
+  function Store(actions) {
+    options = R.merge(makeStore.options, options)
+    options.name = options.name || "store" + (++storeCount) // Anonymous stores will be "store1", "store2", etc.
+    actions = R.merge(Store.actions, actions)
 
     let _val // cross-stream "global" value
 
-    let get = () => _val // can't just access atom._val because we don't use prototype(-like) chains
+    let get = () => _val // can't just access store._val because we don't use prototype(-like) chains
 
     let self = {options, get}
 
@@ -110,43 +110,44 @@ export let makeAtom = (options) => {
     return self
   }
 
-  Atom.actions = {
+  Store.actions = {
     map: O.of(), // :: Observable (a -> b)
   }
 
-  return Atom
+  returnStore
 }
 
-makeAtom.options = {
+makeStore.options = {
   cmpFn,
   freezeFn,
   assertFn,
   name: "",
+  seed: null,
 }
 
 // Logging mixin ===================================================================================
-let logFn = (atomName, action, command) => {
+let logFn = (storeName, action, command) => {
   if (process.env.NODE_ENV != "production") {
-    console.log(`@ ${atomName}.${action}: ${commandToString(command)}`)
+    console.log(`@ ${storeName}.${action}: ${commandToString(command)}`)
   }
 }
 
-let logState = (atomName, state) => {
+let logState = (storeName, state) => {
   if (process.env.NODE_ENV != "production") {
-    console.log(`# ${atomName} =`, state)
+    console.log(`# ${storeName} =`, state)
   }
 }
 
-export let withLog = R.curry((options, Atom) => {
-  function LoggingAtom(actions) {
+export let withLog = R.curry((options, Store) => {
+  function LoggingStore(actions) {
     options = R.merge(withLog.options, options)
-    actions = R.merge(LoggingAtom.actions, actions)
+    actions = R.merge(LoggingStore.actions, actions)
 
     let _loggingInput = false
     let _loggingOutput = false
 
-    let atom = Atom(actions)
-    let self = R.merge(atom, {
+    let store = Store(actions)
+    let self = R.merge(store, {
       log: {
         options,
       }
@@ -159,7 +160,7 @@ export let withLog = R.curry((options, Atom) => {
       if (!_loggingInput) {
         _loggingInput = true
         self.log.$.subscribe((packet) => {
-          logFn(atom.options.name, packet.action, packet.data)
+          logFn(store.options.name, packet.action, packet.data)
         })
       }
     }
@@ -168,7 +169,7 @@ export let withLog = R.curry((options, Atom) => {
       if (!_loggingOutput) {
         _loggingOutput = true
         self.$.subscribe(state => {
-          logState(atom.options.name, state)
+          logState(store.options.name, state)
         })
       }
     }
@@ -181,18 +182,18 @@ export let withLog = R.curry((options, Atom) => {
     return self
   }
 
-  LoggingAtom.actions = Atom.actions
+  LoggingStore.actions = Store.actions
 
-  return LoggingAtom
+  return LoggingStore
 })
 
 withLog.options = {}
 
 // Lensed mixin ====================================================================================
-// export let withLens = R.curry((options, Atom) => {
-//   function LensedAtom(actions) {
+// export let withLens = R.curry((options, Store) => {
+//   function LensedStore(actions) {
 //     options = R.merge(withLens.options, options)
-//     actions = R.merge(LensedAtom.actions, actions)
+//     actions = R.merge(LensedStore.actions, actions)
 //
 //     // Recreate an original toolkit on base of `over`
 //     actions.over = O.merge(
@@ -205,8 +206,8 @@ withLog.options = {}
 //     actions.merge = O.of()     // so this three are disabled
 //     actions.mergeDeep = O.of() // and recreated "from scratch"
 //
-//     let atom = Atom(actions)
-//     let self = R.merge(atom, {
+//     let store = Store(actions)
+//     let self = R.merge(store, {
 //       lens: {
 //         options,
 //       }
@@ -220,9 +221,9 @@ withLog.options = {}
 //   }
 //
 //   // Disable this two as superfluous
-//   LensedAtom.actions = R.omit(["lensedOver", "lensedSet"], Atom.actions)
+//   LensedStore.actions = R.omit(["lensedOver", "lensedSet"], Store.actions)
 //
-//   return LensedAtom
+//   return LensedStore
 // })
 
 // withLens.options = {
@@ -230,26 +231,26 @@ withLog.options = {}
 // }
 
 // Control =========================================================================================
-export let control = (Atom) => {
-  let inputs = R.keys(Atom.actions)
+export let control = (Store) => {
+  let inputs = R.keys(Store.actions)
 
   let actions = R.reduce((z, k) => {
     z[k] = new S()
     return z
   }, {}, inputs)
 
-  let atom = Atom(actions)
+  let store = Store(actions)
 
   let outputs = R.reduce((z, k) => {
     z[k] = (...args) => {
       actions[k].next(args.length > 1 ? args : args[0])
-      console.log(atom)
-      return atom.get()
+      console.log(store)
+      return store.get()
     }
     return z
   }, {}, inputs)
 
-  return R.merge(atom, outputs)
+  return R.merge(store, outputs)
 }
 
 // let moleculeCount = 0

@@ -1,10 +1,10 @@
 // import PT from "prop-types"
 import * as R from "ramda"
 import {Observable as O} from "rxjs"
-import {makeAtom, withLog} from "selfdb"
+import {makeStore, withLog} from "selfdb"
 import {connect} from "../lib"
 
-export default function CounterA(sinks, key) {
+export default function CounterB(sinks, key) {
   let intents = {
     inc: sinks.DOM("inc", "click"),
     dec: sinks.DOM("dec", "click"),
@@ -12,15 +12,15 @@ export default function CounterA(sinks, key) {
   }
 
   let $ = O.merge(
-    intents.inc.map(_ => R.inc),
-    intents.dec.map(_ => R.dec),
-    intents.add.map(v => R.add(Number(v))),
+    intents.inc.map(_ => ({fn: R.inc})),
+    intents.dec.map(_ => ({fn: R.dec})),
+    intents.add.map(v => ({fn: R.add, args: [Number(v)]})),
   )
 
   let seed = 0
 
   let state = R.pipe(
-    () => makeAtom({seed, name: "a"}),
+    () => makeStore({seed, name: "b"}),
     withLog({}),
   )()({
     map: $,
@@ -32,7 +32,7 @@ export default function CounterA(sinks, key) {
     {counter: state.$},
     (props) =>
       <p>
-        CounterA: <span>{props.counter}</span>
+        CounterB: <span>{props.counter}</span>
         {" "}
         <button data-key="inc">+1</button>
         {" "}

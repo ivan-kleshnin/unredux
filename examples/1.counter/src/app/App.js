@@ -1,5 +1,5 @@
 import {Observable as O} from "rxjs"
-import {makeAtom, withLog} from "selfdb"
+import {makeStore, withLog} from "selfdb"
 import {connect} from "framework"
 
 let inc = (x) => x + 1
@@ -13,16 +13,14 @@ export default (sinks) => {
     dec: sinks.DOM("*", "dec", "click"),
   }
 
-  let $ = O.merge(
-    intents.inc.map(_ => ({fn: inc})),
-    intents.dec.map(_ => ({fn: dec})),
-  )
+  let Store = makeStore({seed, name: "state"})
+  Store = withLog({}, Store)
 
-  let Atom = makeAtom({seed, name: "state"})
-  Atom = withLog({}, Atom)
-
-  let state = Atom({
-    map: $,
+  let state = Store({
+    map: O.merge(
+      intents.inc.map(_ => ({fn: inc})), // {fn: inc} <=> inc (is obscure for logging with args in closure)
+      intents.dec.map(_ => dec),         // dec <=> {fn: dec} (is transparent for logging)
+    ),
   })
 
   state.log.all()

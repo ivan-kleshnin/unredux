@@ -1,6 +1,6 @@
 import * as R from "ramda"
 import {Observable as O} from "rxjs"
-import {makeAtom, withLog} from "selfdb"
+import {makeStore, withLog} from "selfdb"
 import {isolate} from "../meta"
 import CounterA from "../counter-a/CounterA"
 import CounterB from "../counter-b/CounterB"
@@ -26,7 +26,7 @@ export default (sinks, appKey) => {
   }
 
   let state = R.pipe(
-    () => makeAtom({seed, name: "db"}),
+    () => makeStore({seed, name: "db"}),
     withLog({}),
   )()({
     map: O.merge(

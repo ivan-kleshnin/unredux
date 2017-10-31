@@ -1,5 +1,5 @@
+import {Observable as O} from "rxjs"
 import * as R from "../../vendors/ramda"
-import {Observable as O} from "../../vendors/rxjs"
 import {makeStore, withLog, withControl} from "../../vendors/selfdb"
 
 let seed = {x1: 0, x2: 0}

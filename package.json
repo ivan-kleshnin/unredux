@@ -16,5 +16,14 @@
     "rxjs": "^5.4.3",
     "shallow-diff": "0.0.5",
     "webpack": "^3.8.1"
+  },
+  "babel": {
+    "plugins": [
+      "transform-object-rest-spread"
+    ],
+    "presets": [
+      "es2015",
+      "react"
+    ]
   }
 }

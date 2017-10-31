@@ -1,8 +1,8 @@
 import {inspect} from "util"
 import deepFreeze from "deep-freeze"
+import {Observable as O} from "rxjs"
 import {mergeObj, mergeObjTracking, chan} from "rx-utils"
 import * as R from "../ramda"
-import {Observable as O, Subject} from "../rxjs"
 
 // Async Helpers ===================================================================================
 
@@ -194,6 +194,7 @@ withLog.options = {}
 
 export let withControl = R.curry((options, Store) => {
   function ControlledStore(actions) {
+    actions = R.merge(Store.actions, actions)
     let inputs = R.keys(actions)
 
     let subjects = R.reduce((z, k) => {

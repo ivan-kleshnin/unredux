@@ -1,7 +1,7 @@
 # Content
 
 ```
-$ export NODE_ENV=development (for Webpack)
+$ npm install
 $ npm start
 ```
 

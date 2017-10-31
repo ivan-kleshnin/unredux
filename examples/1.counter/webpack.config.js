@@ -19,15 +19,11 @@ module.exports = {
       {test: /\.js$/, use: "babel-loader", exclude: /node_modules/},
     ]
   },
-  externals: {
-    "react": "React",
-    "react-dom": "ReactDOM",
-  },
   resolve: {
     modules: [
       Path.resolve(__dirname, "node_modules"),
-      Path.resolve(Path.resolve(__dirname, "../vendors")),
-      Path.resolve(Path.resolve(__dirname, "../node_modules")),
+      Path.resolve(Path.resolve(__dirname, "../../vendors")),
+      Path.resolve(Path.resolve(__dirname, "../../node_modules")),
     ],
   },
 }

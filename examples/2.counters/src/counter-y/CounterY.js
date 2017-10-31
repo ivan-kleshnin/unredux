@@ -1,7 +1,8 @@
 // import PT from "prop-types"
 import * as R from "ramda"
 import {Observable as O} from "rxjs"
-import {connect} from "../lib"
+import React from "react"
+import {connect} from "framework"
 
 export default function CounterY(sinks, key) {
   let intents = {

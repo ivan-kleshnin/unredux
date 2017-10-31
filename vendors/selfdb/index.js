@@ -114,7 +114,7 @@ export let makeStore = (options) => {
     map: O.of(), // :: Observable (a -> b)
   }
 
-  returnStore
+  return Store
 }
 
 makeStore.options = {

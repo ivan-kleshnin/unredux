@@ -1,5 +1,6 @@
 import * as R from "ramda"
-import {makeIsolate} from "./lib"
+import React from "react"
+import {makeIsolate} from "framework"
 
 // Unlike CycleJS sinks and sources can be of any type
 export let isolate = makeIsolate({

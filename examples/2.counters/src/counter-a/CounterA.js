@@ -1,8 +1,9 @@
 // import PT from "prop-types"
 import * as R from "ramda"
 import {Observable as O} from "rxjs"
+import React from "react"
 import {makeStore, withLog} from "selfdb"
-import {connect} from "../lib"
+import {connect} from "framework"
 
 export default function CounterA(sinks, key) {
   let intents = {

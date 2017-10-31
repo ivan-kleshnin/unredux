@@ -1,4 +1,5 @@
 import * as R from "ramda"
+import React from "react"
 import {Observable as O} from "rxjs"
 import {combineLatestObj} from "rx-utils"
 

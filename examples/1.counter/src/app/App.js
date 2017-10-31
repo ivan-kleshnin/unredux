@@ -1,4 +1,5 @@
 import {Observable as O} from "rxjs"
+import React from "react"
 import {makeStore, withLog} from "selfdb"
 import {connect} from "framework"
 

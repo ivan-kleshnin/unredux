@@ -1,5 +1,6 @@
 import * as R from "ramda"
 import {Observable as O} from "rxjs"
+import React from "react"
 import {makeStore, withLog} from "selfdb"
 import {isolate} from "../meta"
 import CounterA from "../counter-a/CounterA"

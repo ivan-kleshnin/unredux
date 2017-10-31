@@ -89,7 +89,11 @@ export function curryAs(name, fn) {
 export let always = curryAs("always", (x, y) => x)
 export function id(x) { return x }
 export let complement = (fn) => (...args) => !fn(...args)
-export let flip = (fn) => (...args) => fn([...args].reverse())
+export function flip(fn) {
+  return withName(fn.name, curryN(fn.length, (...args) => {
+    return fn(...[...args].reverse())
+  }))
+}
 export function F() { return false }
 export function T() { return true }
 

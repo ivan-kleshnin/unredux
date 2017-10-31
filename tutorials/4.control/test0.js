@@ -4,10 +4,6 @@ import {makeStore, withLog, withControl} from "../../vendors/selfdb"
 
 let seed = {x1: 0, x2: 0}
 
-R.run = (...fns) => {
-  return R.pipe(...fns)()
-}
-
 let mappers = {
   incrX1(s) {
     return R.over("x1", R.inc, s)
@@ -31,3 +27,5 @@ state.log.all()
 // Proactive actions are logged (so middleware stack is applied) ^_^
 state.map(mappers.incrX1)
 state.map(mappers.decrX2)
+
+// Next: test names and curried mappers

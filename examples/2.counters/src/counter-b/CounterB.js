@@ -21,7 +21,7 @@ export default function CounterB(sinks, key) {
   let seed = 0
 
   let state = withLog({},
-    makeStore({seed, name: "a"})
+    makeStore({seed, name: "b"})
   )({
     map: $,
   })

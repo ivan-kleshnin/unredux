@@ -20,10 +20,9 @@ export default function CounterA(sinks, key) {
 
   let seed = 0
 
-  let state = R.pipe(
-    () => makeStore({seed, name: "a"}),
-    withLog({}),
-  )()({
+  let state = withLog({},
+    makeStore({seed, name: "a"})
+  )({
     map: $,
   })
 

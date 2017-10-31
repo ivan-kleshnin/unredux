@@ -14,8 +14,9 @@ export default (sinks) => {
     dec: sinks.DOM("*", "dec", "click"),
   }
 
-  let Store = makeStore({seed, name: "state"})
-  Store = withLog({}, Store)
+  let Store = withLog({},
+    makeStore({seed, name: "state"})
+  )
 
   let state = Store({
     map: O.merge(

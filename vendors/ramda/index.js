@@ -100,7 +100,7 @@ export let divide = curryAs("divide", (x, y) => x / y)
 export let filter2 = addIndex(filter)
 export function fst(xs) { return xs[0] }
 export function inc(x) { return x + 1 }
-export let isPlainObj = (o) => Boolean(o && o.constructor && o.constructor.prototype && o.constructor.prototype.hasOwnProperty("isPrototypeOf"))
+export function isPlainObj(o) { return Boolean(o && o.constructor && o.constructor.prototype && o.constructor.prototype.hasOwnProperty("isPrototypeOf")) }
 export let flattenObj = (obj, keys=[]) => {
   return Object.keys(obj).reduce((acc, key) => {
     return merge(acc, isPlainObj(obj[key])
@@ -112,8 +112,8 @@ export let flattenObj = (obj, keys=[]) => {
 export function head(xs) { return xs[0] }
 export let join = curryAs("join", (sep, xs) => xs.join(sep))
 export let keys = Object.keys
-export let length = function length(x) { return x.length }
-export let lensify = (lens) => {
+export function length(x) { return x.length }
+export function lensify(lens) {
   if (is(Array, lens)) {
     return reduce(
       (z, s) => compose(z, is(Number, s) ? lensIndex(s) : lensProp(s)),
@@ -145,6 +145,9 @@ export let mergeDeep = mergeDeepRight
 export let mergeDeepFlipped = flip(mergeDeep)
 // TODO nth
 export let reduce2 = addIndex(reduce)
+export function run(...fns) {
+  return pipe(...fns)()
+}
 export let set = curry((lens, val, obj) => _set(lensify(lens), val, obj))
 export function snd(xs) { return xs[1] }
 export let split = curryAs("split", (sep, xs) => xs.split(sep))

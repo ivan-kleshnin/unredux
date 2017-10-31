@@ -26,10 +26,9 @@ export default (sinks, appKey) => {
     y2: 0,
   }
 
-  let state = R.pipe(
-    () => makeStore({seed, name: "db"}),
-    withLog({}),
-  )()({
+  let state = withLog({},
+    makeStore({seed, name: "db"})
+  )({
     map: O.merge(
       X1.$,
       X2.$,

@@ -125,7 +125,8 @@ makeStore.options = {
   seed: null,
 }
 
-// Logging mixin ===================================================================================
+// Logging mixin/middleware ========================================================================
+
 let logFn = (storeName, action, command) => {
   if (process.env.NODE_ENV != "production") {
     console.log(`@ ${storeName}.${action}: ${commandToString(command)}`)
@@ -189,6 +190,58 @@ export let withLog = R.curry((options, Store) => {
 
 withLog.options = {}
 
+// Control mixin/middleware ========================================================================
+
+export let withControl = R.curry((options, Store) => {
+  function ControlledStore(actions) {
+    let inputs = R.keys(actions)
+
+    let subjects = R.reduce((z, k) => {
+      z[k] = chan($ => O.merge(actions[k], $))
+      return z
+    }, {}, inputs)
+
+    let store = Store(subjects)
+    let self = R.merge(store, {
+      control: {
+        options,
+      }
+    })
+
+    let outputs = R.reduce((z, k) => {
+      z[k] = (...args) => {
+        subjects[k](args.length > 1 ? args : args[0])
+        return store.get()
+      }
+      return z
+    }, {}, inputs)
+
+    return R.merge(self, outputs)
+  }
+
+  ControlledStore.actions = Store.actions
+
+  return ControlledStore
+})
+
+// let moleculeCount = 0
+
+//
+// set: O.merge(self.set, actions.set)
+//   .map(val => R.always(val)),
+//
+// merge: O.merge(self.merge, actions.merge)
+//   .map(val => R.mergeFlipped(val)),
+//
+// mergeDeep: O.merge(self, mergeDeep, actions.mergeDeep)
+//   .map(val => R.mergeDeepFlipped(val)),
+//
+// lensedOver: O.merge(self.lensedOver, actions.lensedOver)
+//   .map(([lens, fn]) => R.over(lens, fn)),
+//
+// lensedSet: O.merge(self.lensedSet, actions.lensedSet)
+//   .map(([lens, val]) => R.over(lens, R.always(val))),
+
 // Lensed mixin ====================================================================================
 // export let withLens = R.curry((options, Store) => {
 //   function LensedStore(actions) {
@@ -229,44 +282,3 @@ withLog.options = {}
 // withLens.options = {
 //   lens: ""
 // }
-
-// Control =========================================================================================
-export let control = (Store) => {
-  let inputs = R.keys(Store.actions)
-
-  let actions = R.reduce((z, k) => {
-    z[k] = new S()
-    return z
-  }, {}, inputs)
-
-  let store = Store(actions)
-
-  let outputs = R.reduce((z, k) => {
-    z[k] = (...args) => {
-      actions[k].next(args.length > 1 ? args : args[0])
-      console.log(store)
-      return store.get()
-    }
-    return z
-  }, {}, inputs)
-
-  return R.merge(store, outputs)
-}
-
-// let moleculeCount = 0
-
-//
-// set: O.merge(self.set, actions.set)
-//   .map(val => R.always(val)),
-//
-// merge: O.merge(self.merge, actions.merge)
-//   .map(val => R.mergeFlipped(val)),
-//
-// mergeDeep: O.merge(self, mergeDeep, actions.mergeDeep)
-//   .map(val => R.mergeDeepFlipped(val)),
-//
-// lensedOver: O.merge(self.lensedOver, actions.lensedOver)
-//   .map(([lens, fn]) => R.over(lens, fn)),
-//
-// lensedSet: O.merge(self.lensedSet, actions.lensedSet)
-//   .map(([lens, val]) => R.over(lens, R.always(val))),

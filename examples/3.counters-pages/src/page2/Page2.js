@@ -22,7 +22,7 @@ export default (sources, key) => {
   let DOM = F.connect(
     {counter: state.$},
     (props) =>
-      <div>Counter 2: {props.counter} <button>Click!</button></div>
+      <div>Page 2: {props.counter} <button>Click!</button></div>
   )
 
   return {DOM}

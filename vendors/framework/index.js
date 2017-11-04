@@ -8,8 +8,8 @@ export let init = (seed) =>
   O.of(R.fn("init", () => seed))
 
 // TODO rx-utils candidate
-export let derive = (lens, store, mapFn) =>
-  store.$.map(R.view(lens))
+export let derive = (lens, state$, mapFn) =>
+  state$.map(R.view(lens))
     .distinctUntilChanged(R.identical)
     .map(mapFn)
     .publishReplay(1)

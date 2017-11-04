@@ -3,6 +3,7 @@ import {Observable as O} from "rxjs"
 import React from "react"
 import * as D from "selfdb"
 import * as F from "framework"
+import {isolate} from "../meta"
 import Home from "./Home"
 import Page1 from "../page1/Page1"
 import Page2 from "../page2/Page2"
@@ -22,42 +23,19 @@ export default (sources, key) => {
       .share(),
 
     navigateHistory: O.fromEvent(window, "popstate")
-      .map(data => {
-        // let [
-        //   {state: {c: prevC, url: prevUrl}},
-        //   {state: {c: nextC, url: nextUrl}},
-        // ] = data
-
-        // console.log("c:", c)
-        // console.log("data:", data)
-
-        // let prevC = c
-        // let nextC = data.state.c
-        // let prevUrl =
-        // let nextUrl = document.location.pathname
-
-        // console.log("c:", c)
-        // console.log("data.state.c:", data.state.c)
-        // console.log("data.state.url:", data.state.url)
-        // console.log("document.location.pathname:", document.location.pathname)
-
-        // if (nextC >= prevC) return {url: nextUrl, direction: "forward"}
-        // else                return {url: nextUrl, direction: "back"}
-
-        return document.location.pathname
-      })
+      .map(data => document.location.pathname),
   }
 
   let content$ = F.derive("url", sources.$, (url) => {
     let content
     if (url == "/") {
-      content = {DOM: Home}         // react component
+      content = {$: O.of(), DOM: Home}        // react component
     } else if (url == "/page1") {
-      content = Page1(sources, key) // unredux component
+      content = isolate(Page1, "c1")(sources) // unredux component
     } else if (url == "/page2") {
-      content = Page2(sources, key) // unredux component
+      content = isolate(Page2, "c2")(sources) // unredux component
     } else {
-      content = {DOM: () => <div>Not Found</div>} // on-the-fly component
+      content = {$: O.of(), DOM: () => <div>Not Found</div>} // on-the-fly component
     }
     return content
   })
@@ -66,11 +44,18 @@ export default (sources, key) => {
     () => D.makeStore({name: key + ".db"}),
     D.withLog({}),
   )(O.merge(
-    F.init({url: document.location.pathname}),
+    F.init({
+      url: document.location.pathname,
+      c1: 0,
+      c2: 0,
+    }),
 
     // navigation
     intents.navigateTo.map(url => R.fn("navigateTo", R.set("url", url))),
     intents.navigateHistory.map(url => R.fn("navigateHistory", R.set("url", url))),
+
+    // content
+    content$.pluck("$").switch(),
   ))
 
   let DOM = F.connect(

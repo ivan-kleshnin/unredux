@@ -145,15 +145,15 @@ Redux-like.
 ### [CycleJS](https://github.com/cyclejs/cyclejs/)
 
 The design of Unredux is heavily inspired by CycleJS. I think CycleJS is based on two great and
-one bad ideas. The great ideas are: reactive dataflow and isolation approach. The bad idea is drivers.
+one bad ideas. The great ideas are: reactive dataflow and isolation approach. The bad idea is: drivers.
 
-I believe the Driver concept is broken on the very fundamental level. CycleJS drivers are said to
-"remove side effects from your code". And they really do it, but not in the sense you want.
+I believe the *driver* concept, like it is in CycleJS, is fundamentally broken. CycleJS drivers are
+said to "remove side effects from your code". And they really do it, but not in the sense you want.
 
 * Haskell(-like) + "do" syntax: *write code that looks like imperative, but is actually pure*.
 * CycleJS + drivers: *write code that looks like pure, but is actually imperative*.
 
-And no, this is not caused by monad vs observable API distinction. This is a design difference.
+And no, this is not caused by monad/stream distinction. This is a design difference.
 
 Haskell approach is very grounded: side effects are sequential by nature so it's convenient to express
 them so. Meanwhile we don't want to break the language purity, so we express effects as functions under
@@ -178,16 +178,17 @@ and HTTP stuff is mostly like that. In pseudo-code:
 
 ```
 make doThis
-take response of doThis
+on response of doThis
   make doThat
-take response of doThat
-  final
+on response of doThat
+  end
 
 request doThis
-request doThat
+on response of doThis
+  request doThat
 ```
 
-And it's a complete spaghettified mess with 3+ steps.
+This is a "callback hell" on a new level. And you can imagine the mess happening with 3+ steps...
 
 I wonder why CycleJS community is so concerned about drivers. Most drivers, with a few exceptions,
 incapsulate fairly trivial code. They simply can't take complex premises to do something more useful
@@ -219,3 +220,9 @@ We don't support the claim that "imperative is bad, so imperative in time is als
 imperative syntax is the best to express sequential side effects (like in Haskell) so non-reactive
 paradigm has it's place in code. With our approach, we'll have **reactivity** where it fits the best
 (DOM + DOM events) and **control** where it fits the best (HTTP + optimistic updates).
+
+DOM read-writes are very different from HTTP request-responses because in the first case the app
+is the passive part, the receiver, and in the second case the app is the active part, the initiator.
+We think that expressing both in the same way if conceptually wrong. Active part is modelled the
+best as Controller and passive part is modelled the best as Reactor. But that's a content for another
+article, just a spoiler for now.

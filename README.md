@@ -50,6 +50,10 @@ Using (optional) proactive/non-reactive store interface.
 
 **...wip**
 
+### Docs
+
+#### [Framework Comparison](./docs/framework-comparison.md)
+
 ---
 
 ### Usage

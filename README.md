@@ -52,7 +52,7 @@ Using (optional) proactive/non-reactive store interface.
 
 ### Docs
 
-#### [Framework Comparison](./docs/framework-comparison.md)
+#### [Framework design comparison](./docs/frameworks.md)
 
 ---
 

@@ -1,5 +1,6 @@
 .idea
-ignore
+/ignore/
+/dev/
 node_modules
 npm-debug.log*
 */*/public/js

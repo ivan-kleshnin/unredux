@@ -1,10 +1,10 @@
 import {inspect} from "util"
 import deepFreeze from "deep-freeze"
 import {Observable as O} from "rxjs"
-import {mergeObj, mergeObjTracking, chan} from "rx-utils"
+import {mergeObj, mergeObjTracking, chan as Chan} from "rx-utils"
 import * as R from "../ramda"
 
-// Async Helpers ===================================================================================
+// Different Helpers ===============================================================================
 
 // Number -> Promise ()
 export let delay = (time) => {
@@ -12,6 +12,10 @@ export let delay = (time) => {
     setTimeout(resolve, time)
   })
 }
+
+export let isBrowser = new Function("try { return this === window } catch(e) { return false }")
+
+export let isNode = new Function("try { return this === global } catch(e) { return false }")
 
 // Store ===========================================================================================
 
@@ -39,11 +43,11 @@ let assertFn = (v) => {
   return v
 }
 
-let commandToFunction = ({fn, args}) => {
+let actionToFunction = ({fn, args}) => {
   if (args) {
     args = R.map(arg => {
       return arg.fn
-        ? commandToFunction(arg)
+        ? actionToFunction(arg)
         : arg
     }, args)
     return fn(...args)
@@ -52,234 +56,240 @@ let commandToFunction = ({fn, args}) => {
   }
 }
 
-let commandToString = (command) => {
-  if (command.fn) {
-    if (command.args) {
-      // command :: {fn :: Function, args :: Array a}
-      let args = R.map(arg => {
-        return arg.fn
-          ? ["+", commandToString(arg)]
-          : ["-", arg]
-      }, command.args)
-      return `${command.fn.name}(${R.join(", ", R.map(arg => arg[0] == "+" ? arg[1] : inspect(arg[1]), args))})` // , __state__)
+let actionToString = (action) => {
+  if (action.fn) {
+    if (action.args) {
+      // action :: {fn :: Function, args :: Array a}
+      let args = R.map(actionToString, action.args)
+      return `${actionToString(action.fn)}(${R.join(", ", args)})`
     } else {
-      // command :: {fn :: Function}
-      return command.fn.name // + "(__state__)"
+      // action :: {fn :: Function}
+      return actionToString(action.fn)
     }
+  } else if (R.is(Function, action)) {
+    // action :: Function
+    return action.name || "anonymous"
   } else {
-    // command :: Function
-    return command.name
+    return inspect(action)
   }
 }
 
 let storeCount = 0
 
 export let makeStore = (options) => {
-  function Store(actions) {
+  function Store(action$) {
     options = R.merge(makeStore.options, options)
     options.name = options.name || "store" + (++storeCount) // Anonymous stores will be "store1", "store2", etc.
-    actions = R.merge(Store.actions, actions)
 
-    let _val // cross-stream "global" value
+    let _val
 
     let get = () => _val // can't just access store._val because we don't use prototype(-like) chains
 
     let self = {options, get}
 
-    self.$ = mergeObj(actions)
-      .startWith(options.seed)
+    self.$ = action$
       .scan((prevState, fn) => {
         let nextState
         if (R.is(Function, fn)) {
           nextState = fn(prevState)
         } else if (fn.fn) {
-          nextState = commandToFunction(fn)(prevState)
+          nextState = actionToFunction(fn)(prevState)
         } else {
           throw Error(`dispatched value must be a function, got ${inspect(fn)}`)
         }
         return options.freezeFn(options.assertFn(nextState))
-      })
+      }, null)
       .distinctUntilChanged(options.cmpFn)
       .do(val => { _val = val })
-      .shareReplay(1)
-
-    // self.$ = options.seed === undefined ? $.skip(1) : $
+      .publishReplay(1)
+      .refCount()
 
     // TODO implement self.$.next? (will shortcut logging and other stuff) = BAD
 
     return self
   }
 
-  Store.actions = {
-    map: O.of(), // :: Observable (a -> b)
-  }
-
   return Store
 }
+
+export let makeAtom = makeStore
 
 makeStore.options = {
   cmpFn,
   freezeFn,
   assertFn,
   name: "",
-  seed: null,
 }
 
 // Logging mixin/middleware ========================================================================
 
-let logFn = (storeName, action, command) => {
-  if (process.env.NODE_ENV != "production") {
-    console.log(`@ ${storeName}.${action}: ${commandToString(command)}`)
+let logActionFn = (storeName, action) => {
+  if (isBrowser()) {
+    console.log(`%c @ ${storeName} λ ${actionToString(action)}`, `color: green`)
+  } else {
+    console.log(`@ ${storeName} λ ${actionToString(action)}`)
   }
 }
 
-let logState = (storeName, state) => {
-  if (process.env.NODE_ENV != "production") {
-    console.log(`# ${storeName} =`, state)
+let logStateFn = (storeName, state) => {
+  if (isBrowser()) {
+    console.log(`%c # ${storeName} = ${inspect(state)}`, `color: brown`)
+  } else {
+    console.log(`# ${storeName} = ${inspect(state)}`)
   }
 }
 
 export let withLog = R.curry((options, Store) => {
-  function LoggingStore(actions) {
+  function LoggingStore(action$) {
     options = R.merge(withLog.options, options)
-    actions = R.merge(LoggingStore.actions, actions)
 
-    let _loggingInput = false
-    let _loggingOutput = false
-
-    let store = Store(actions)
+    let store = Store(action$)
     let self = R.merge(store, {
       log: {
         options,
       }
     })
 
-    self.log.$ = mergeObjTracking(actions)
-      .map(({key, data}) => ({action: key, data}))
+    let input$ = action$
+      .do(action => {
+        options.logActionFn(store.options.name, action)
+      }).share()
 
-    self.log.input = () => {
-      if (!_loggingInput) {
-        _loggingInput = true
-        self.log.$.subscribe((packet) => {
-          logFn(store.options.name, packet.action, packet.data)
-        })
-      }
+    let output$ = self.$
+      .do(state => {
+        options.logStateFn(store.options.name, state)
+      }).share()
+
+    if (options.input) {
+      self.$ = O.merge(input$.filter(R.F), self.$) // the order of `merge` IS important
     }
-
-    self.log.output = () => {
-      if (!_loggingOutput) {
-        _loggingOutput = true
-        self.$.subscribe(state => {
-          logState(store.options.name, state)
-        })
-      }
-    }
-
-    self.log.all = () => {
-      self.log.input()
-      self.log.output()
+    if (options.output) {
+      self.$ = O.merge(self.$, output$.filter(R.F)) // ...
     }
 
     return self
   }
 
-  LoggingStore.actions = Store.actions
-
   return LoggingStore
 })
 
-withLog.options = {}
+withLog.options = {
+  logActionFn,
+  logStateFn,
+  input: true,
+  output: true,
+}
 
 // Control mixin/middleware ========================================================================
 
 export let withControl = R.curry((options, Store) => {
-  function ControlledStore(actions) {
-    actions = R.merge(Store.actions, actions)
-    let inputs = R.keys(actions)
+  function ControlledStore(action$) {
+    options = R.merge(withControl.options, options)
 
-    let subjects = R.reduce((z, k) => {
-      z[k] = chan($ => O.merge(actions[k], $))
-      return z
-    }, {}, inputs)
+    let chan = Chan($ => O.merge(action$, $))
 
-    let store = Store(subjects)
+    let store = Store(chan)
     let self = R.merge(store, {
       control: {
         options,
       }
     })
 
-    let outputs = R.reduce((z, k) => {
-      z[k] = (...args) => {
-        subjects[k](args.length > 1 ? args : args[0])
-        return store.get()
+    let helpers = {
+      // over :: (a -> b) -> ()
+      over: (fn) => {
+        chan(fn)
+      },
+
+      // set :: a -> ()
+      set: (val) => {
+        chan({
+          fn: R.always,
+          args: [val]
+        })
+      },
+
+      // setLensed :: (String, a) -> ()
+      setLensed: (lens, val) => {
+        chan({
+          fn: R.over,
+          args: [lens, {fn: R.set, args: [val]}]
+        })
+      },
+
+      // merge :: a -> ()
+      merge: (val) => {
+        chan({
+          fn: R.mergeFlipped,
+          args: [val]
+        })
+      },
+
+      // mergeLensed :: (String, a) -> ()
+      mergeLensed: (lens, val) => {
+        chan({
+          fn: R.over,
+          args: [lens, {fn: R.mergeFlipped, args: [val]}]
+        })
+      },
+
+      // mergeDeep :: a -> ()
+      mergeDeep: (val) => {
+        chan({
+          fn: R.mergeDeepFlipped,
+          args: [val]
+        })
+      },
+
+      // mergeDeepLensed :: a -> ()
+      mergeDeepLensed: (lens, val) => {
+        chan({
+          fn: R.over, args: [lens, {fn: R.mergeDeepFlipped, args: [val]}]
+        })
       }
-      return z
-    }, {}, inputs)
+    }
 
-    return R.merge(self, outputs)
+    return R.merge(self, helpers)
   }
-
-  ControlledStore.actions = Store.actions
 
   return ControlledStore
 })
 
+withControl.options = {}
+
+// Persistent mixins/middlewares ===================================================================
+
+// TODO timeout option?!
+let _memCache = {}
+
+export let withMemoryPersistence = R.curry((options, Store) => {
+  function MemoryPersistentStore(action$) {
+    options = R.merge(withMemoryPersistence.options, options)
+
+    if (options.key && options.key in _memCache) {
+      action$ = action$.skip(1).startWith(function initFromMemory() {
+        return _memCache[options.key]
+      })
+    }
+
+    let store = Store(action$)
+
+    if (options.key) {
+      store.$ = store.$.do(s => {
+        _memCache[options.key] = s
+      })
+    }
+
+    let self = R.merge(store, {})
+
+    return self
+  }
+
+  return MemoryPersistentStore
+})
+
+withMemoryPersistence.options = {
+  key: "",
+}
+
 // let moleculeCount = 0
-
-//
-// set: O.merge(self.set, actions.set)
-//   .map(val => R.always(val)),
-//
-// merge: O.merge(self.merge, actions.merge)
-//   .map(val => R.mergeFlipped(val)),
-//
-// mergeDeep: O.merge(self, mergeDeep, actions.mergeDeep)
-//   .map(val => R.mergeDeepFlipped(val)),
-//
-// lensedOver: O.merge(self.lensedOver, actions.lensedOver)
-//   .map(([lens, fn]) => R.over(lens, fn)),
-//
-// lensedSet: O.merge(self.lensedSet, actions.lensedSet)
-//   .map(([lens, val]) => R.over(lens, R.always(val))),
-
-// Lensed mixin ====================================================================================
-// export let withLens = R.curry((options, Store) => {
-//   function LensedStore(actions) {
-//     options = R.merge(withLens.options, options)
-//     actions = R.merge(LensedStore.actions, actions)
-//
-//     // Recreate an original toolkit on base of `over`
-//     actions.over = O.merge(
-//       actions.over.map(fn => R.over(options.lens, fn)),
-//       actions.set.map(val => R.over(options.lens, R.always(val))),
-//       actions.merge.map(val => R.over(options.lens, R.mergeFlipped(val))),
-//       actions.mergeDeep.map(val => R.over(options.lens, R.mergeDeepFlipped(val))),
-//     )
-//     actions.set = O.of()       // Don't have access to full state
-//     actions.merge = O.of()     // so this three are disabled
-//     actions.mergeDeep = O.of() // and recreated "from scratch"
-//
-//     let store = Store(actions)
-//     let self = R.merge(store, {
-//       lens: {
-//         options,
-//       }
-//     })
-//
-//     self.doSomething = () => {
-//       console.log("doSomething")
-//     }
-//
-//     return self
-//   }
-//
-//   // Disable this two as superfluous
-//   LensedStore.actions = R.omit(["lensedOver", "lensedSet"], Store.actions)
-//
-//   return LensedStore
-// })
-
-// withLens.options = {
-//   lens: ""
-// }

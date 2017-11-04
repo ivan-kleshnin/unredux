@@ -1,34 +1,25 @@
 import * as R from "ramda"
 import {Observable as O} from "rxjs"
 import React from "react"
-import {makeStore, withLog} from "selfdb"
-import {connect} from "framework"
+import * as D from "selfdb"
+import * as F from "framework"
 
-let inc = (x) => x + 1
-let dec = (x) => x - 1
-
-export default (sinks) => {
-  let seed = 0
-
+export default (sources, key) => {
   let intents = {
     inc: sources.DOM.fromKey("inc").listen("click"),
     dec: sources.DOM.fromKey("dec").listen("click"),
   }
 
-  let Store = withLog({},
-    makeStore({seed, name: "state"})
-  )
+  let state = R.run(
+    () => D.makeStore({name: key + ".state"}),
+    D.withLog({}),
+  )(O.merge(
+    F.init(0),
+    intents.inc.map(_ => R.inc),
+    intents.dec.map(_ => R.dec),
+  ))
 
-  let state = Store({
-    map: O.merge(
-      intents.inc.map(_ => ({fn: inc})), // {fn: inc} <=> inc (is obscure for logging with args in closure)
-      intents.dec.map(_ => dec),         // dec <=> {fn: dec} (is transparent for logging)
-    ),
-  })
-
-  state.log.all()
-
-  let DOM = connect(
+  let DOM = F.connect(
     {counter: state.$},
     (props) =>
       <p>

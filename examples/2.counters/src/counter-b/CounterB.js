@@ -1,34 +1,27 @@
-// import PT from "prop-types"
 import * as R from "ramda"
 import {Observable as O} from "rxjs"
 import React from "react"
-import {makeStore, withLog} from "selfdb"
-import {connect} from "framework"
+import * as D from "selfdb"
+import * as F from "framework"
 
-export default function CounterB(sinks, key) {
+export default function CounterB(sources, key) {
   let intents = {
     inc: sources.DOM.fromKey("inc").listen("click"),
     dec: sources.DOM.fromKey("dec").listen("click"),
     add: sources.DOM.fromKey("add").listen("click"),
   }
 
-  let $ = O.merge(
+  let state = R.run(
+    () => D.makeStore({name: "b"}),
+    D.withLog({}),
+  )(O.merge(
+    F.init(0),
     intents.inc.map(_ => ({fn: R.inc})),
     intents.dec.map(_ => ({fn: R.dec})),
     intents.add.map(v => ({fn: R.add, args: [Number(v)]})),
-  )
+  ))
 
-  let seed = 0
-
-  let state = withLog({},
-    makeStore({seed, name: "b"})
-  )({
-    map: $,
-  })
-
-  state.log.all()
-
-  let DOM = connect(
+  let DOM = F.connect(
     {counter: state.$},
     (props) =>
       <p>
@@ -44,9 +37,3 @@ export default function CounterB(sinks, key) {
 
   return {DOM}
 }
-
-// TODO does not work with CDN for some reason @_@
-// Counter.propTypes = {
-//   componentKey: PT.string.isRequired,
-//   counter: PT.number.isRequired,
-// }

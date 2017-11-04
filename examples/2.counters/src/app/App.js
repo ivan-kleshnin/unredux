@@ -1,23 +1,24 @@
 import * as R from "ramda"
 import {Observable as O} from "rxjs"
 import React from "react"
-import {makeStore, withLog} from "selfdb"
+import * as D from "selfdb"
+import * as F from "framework"
 import {isolate} from "../meta"
 import CounterA from "../counter-a/CounterA"
 import CounterB from "../counter-b/CounterB"
 import CounterX from "../counter-x/CounterX"
 import CounterY from "../counter-y/CounterY"
 
-export default (sinks, appKey) => {
+export default (sources, key) => {
   // State-independent components
-  let A = isolate(CounterA, "a")(sinks)
-  let B = isolate(CounterB, "b")(sinks)
+  let a = isolate(CounterA, "a")(sources)
+  let b = isolate(CounterB, "b")(sources)
 
   // State-connected components
-  let X1 = isolate(CounterX, "x1")(sinks)
-  let X2 = isolate(CounterX, "x2")(sinks)
-  let Y1 = isolate(CounterY, "y1")(sinks)
-  let Y2 = isolate(CounterY, "y2")(sinks)
+  let x1 = isolate(CounterX, "x1")(sources)
+  let x2 = isolate(CounterX, "x2")(sources)
+  let y1 = isolate(CounterY, "y1")(sources)
+  let y2 = isolate(CounterY, "y2")(sources)
 
   let seed = {
     x1: 0,
@@ -26,30 +27,26 @@ export default (sinks, appKey) => {
     y2: 0,
   }
 
-  let state = withLog({},
-    makeStore({seed, name: "db"})
-  )({
-    map: O.merge(
-      X1.$,
-      X2.$,
-      Y1.$,
-      Y2.$,
-    ),
-  })
-
-  state.log.all()
-  state.$.subscribe(sinks.$)
+  let state = R.run(
+    () => D.makeStore({name: key + ".db"}),
+    D.withLog({}),
+  )(O.merge(
+    F.init({x1: 0, x2: 0, y1: 0, y2: 0}),
+    O.merge(x1.$, x2.$, y1.$, y2.$),
+  ))
 
   let DOM = (props) => {
     return <div>
-      <A.DOM/>
-      <B.DOM/>
-      <X1.DOM/>
-      <X2.DOM/>
-      <Y1.DOM/>
-      <Y2.DOM/>
+      <a.DOM/>
+      <b.DOM/>
+      <x1.DOM/>
+      <x2.DOM/>
+      <y1.DOM/>
+      <y2.DOM/>
     </div>
   }
+
+  state.$.subscribe(sources.$)
 
   return {DOM}
 }

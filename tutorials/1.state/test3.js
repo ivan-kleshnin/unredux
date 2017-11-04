@@ -1,11 +1,11 @@
 import * as R from "ramda"
 import {Observable as O} from "rxjs"
 
-let actions = O.of(R.inc, R.identity, R.identity, R.identity, R.identity)
+let action$ = O.of(R.inc, R.identity, R.identity, R.identity, R.identity)
   .concatMap(x => O.of(x).delay(200))
 
 let seed = 0
-let state = actions
+let state = action$
   .startWith(seed)
   .scan((state, fn) => fn(state))
   .distinctUntilChanged((x, y) => x === y) // without this line we'll the same state repeatedly

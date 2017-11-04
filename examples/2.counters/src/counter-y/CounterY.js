@@ -1,26 +1,25 @@
-// import PT from "prop-types"
 import * as R from "ramda"
 import {Observable as O} from "rxjs"
 import React from "react"
-import {connect} from "framework"
+import * as F from "framework"
 
-export default function CounterY(sinks, key) {
+export default function CounterY(sources, key) {
   let intents = {
-    inc:  sinks.DOM("inc", "click"),
-    dec:  sinks.DOM("dec", "click"),
-    add2: sinks.DOM("add2", "click"),
-    sub2: sinks.DOM("sub2", "click"),
+    inc:  sources.DOM.fromKey("inc").listen("click"),
+    dec:  sources.DOM.fromKey("dec").listen("click"),
+    add2: sources.DOM.fromKey("add2").listen("click"),
+    sub2: sources.DOM.fromKey("sub2").listen("click"),
   }
 
   let $ = O.merge(
-    intents.inc.map(_ => ({fn: R.inc})),
-    intents.dec.map(_ => ({fn: R.dec})),
-    intents.add2.map(_ => ({fn: R.add, args: [2]})),
-    intents.sub2.map(_ => ({fn: R.subtract, args: [2]})),
+    intents.inc.map(_ => R.inc),
+    intents.dec.map(_ => R.dec),
+    intents.add2.map(_ => R.add(2)),
+    intents.sub2.map(_ => R.flip(R.subtract)(2)),
   )
 
-  let DOM = connect(
-    {counter: sinks.$},
+  let DOM = F.connect(
+    {counter: sources.$},
     (props) =>
       <p>
         CounterY ({key}): <span>{props.counter}</span>
@@ -37,9 +36,3 @@ export default function CounterY(sinks, key) {
 
   return {$, DOM}
 }
-
-// TODO does not work with CDN for some reason @_@
-// Counter.propTypes = {
-//   componentKey: PT.string.isRequired,
-//   counter: PT.number.isRequired,
-// }

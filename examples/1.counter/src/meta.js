@@ -2,27 +2,27 @@ import * as R from "ramda"
 import React from "react"
 import {makeIsolate} from "framework"
 
-// Unlike CycleJS sinks and sources can be of any type
+// Unlike CycleJS, sinks and sources can be of any type. You manage them here.
 export let isolate = makeIsolate({
   $: {
-    isolateSink: (sink, key) => {
-      return sink.pluck(key)
+    isolateSource: (source, key) => {
+      return source.pluck(key)
     },
 
-    isolateSource: (source, key) => {
-      return source.map(command => {
+    isolateSink: (sink, key) => {
+      return sink.map(command => {
         return {fn: R.over, args: [key, command]}
       })
     },
   },
 
   DOM: {
-    isolateSink: (sink, key) => {
-      return sink(key)
+    isolateSource: (source, key) => {
+      return source.fromKey(key)
     },
 
-    isolateSource: (source, key) => {
-      let Component = source
+    isolateSink: (sink, key) => {
+      let Component = sink
       return (props) => <div data-key={key}>
         <Component {...props}/>
       </div>

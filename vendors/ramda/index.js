@@ -4,6 +4,7 @@ import ascend from "ramda/src/ascend"
 import chain from "ramda/src/chain"
 import comparator from "ramda/src/comparator"
 import compose from "ramda/src/compose"
+import concat from "ramda/src/concat"
 import contains from "ramda/src/contains"
 import descend from "ramda/src/descend"
 import difference from "ramda/src/difference"
@@ -46,13 +47,15 @@ import _view from "ramda/src/view"
 import without from "ramda/src/without"
 import zip from "ramda/src/zip"
 
-// Core Fn utils
+// Convinience helpers
 export function withName(name, fn) {
   return Object.defineProperty(fn, "name", {
     value: name,
   })
 }
+export let fn = withName
 
+// Core Fn utils
 export function curryN(N, fn) {
   let self = undefined
   let collectFn = Object.defineProperties(function (...args) {
@@ -90,7 +93,7 @@ export let always = curryAs("always", (x, y) => x)
 export function id(x) { return x }
 export let complement = (fn) => (...args) => !fn(...args)
 export function flip(fn) {
-  return withName(fn.name, curryN(fn.length, (...args) => {
+  return curryN(fn.length, withName(fn.name + "_flipped", (...args) => {
     return fn(...[...args].reverse())
   }))
 }
@@ -147,6 +150,7 @@ export let merge = curryAs("merge", (xs, ys) => Object.assign({}, xs, ys))
 export let mergeFlipped = flip(merge)
 export let mergeDeep = mergeDeepRight
 export let mergeDeepFlipped = flip(mergeDeep)
+export function not(x) { return !x }
 // TODO nth
 export let reduce2 = addIndex(reduce)
 export function run(...fns) {
@@ -170,7 +174,7 @@ export let zipObj = curryAs("zipObj", (keys, values) => {
 
 export {
   addIndex, append, ascend,
-  chain, comparator, compose, contains,
+  chain, comparator, compose, concat, contains,
   descend, difference, dropLast,
   equals,
   filter, find, findIndex, findLast, forEach,

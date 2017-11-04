@@ -6,13 +6,13 @@ let storeCount = 0
 
 // We name all functions to keep self-discoverability via `console.log`
 function makeStore(options) {
-  return function Store(seed, actions) {
+  return function Store(seed, action$) {
     options = R.merge(makeStore.options, options)
     options.name = options.name || "store" + (++storeCount) // Anonymous stores will be "store1", "store2", etc.
 
     let self = {options} // no OOP
 
-    self.$ = actions
+    self.$ = action$
       .startWith(seed)
       .scan((state, fn) => fn(state))
       .distinctUntilChanged(options.cmpFn)
@@ -30,17 +30,19 @@ makeStore.options = {
 }
 
 // App =============================================================================================
-let actions = O.of(R.inc, R.inc, R.inc, R.inc, R.inc)
+let action$ = O.of(R.inc, R.inc, R.inc, R.inc, R.inc)
   .concatMap(x => O.of(x).delay(200))
 
-let state1 = makeStore({name: "state1"})(1, actions)
+let state1 = makeStore({name: "state1"})
+  (1, action$)
 
 state1.$.subscribe(s => {
   console.log(state1.options.name + ":", s)
 })
 
 setTimeout(() => {
-  let state10 = makeStore({name: "state10"})(10, actions)
+  let state10 = makeStore({name: "state10"})
+    (10, action$)
 
   state10.$.subscribe(s => {
     console.log(state10.options.name + ":", s)

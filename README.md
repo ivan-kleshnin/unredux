@@ -26,9 +26,9 @@ Component isolation (4 types of components, 2 instances of 2 of them).
 
 Simple routing.
 
-#### [4. Counters-Pages2](./4.counters)
+#### [4. Todos](./4.todos)
 
-Simple routing + nested page actions.
+Classic "TodoMVC" example.
 
 ### Tutorials
 

@@ -2,6 +2,7 @@ import React from "react"
 import {Observable as O} from "rxjs"
 import {combineLatestObj} from "rx-utils"
 import * as R from "../ramda"
+import uid from "uid-safe"
 
 // TODO rx-utils candidate
 export let init = (seed) =>
@@ -43,23 +44,40 @@ export let fromDOMEvent = (appSelector) => {
 }
 
 // Unlike CycleJS sources and sinks can be of any type
-export let makeIsolate = (template) =>
-  R.curry((app, key) =>
-    (sources) => {
+export let makeIsolate = (templates) =>
+  function isolate(app, appKey=null) {
+    appKey = appKey || uid.sync(4)
+    return function App(sources) {
+      // Prepare sources
+      let defaultSources = R.mapObjIndexed(
+        (_, sourceKey) => templates[sourceKey].defaultSource(appKey),
+        templates
+      )
       let isolatedSources = R.mapObjIndexed(
-        (source, sourceType) =>
-          template[sourceType].isolateSource(source, key),
+        (source, sourceKey) =>
+          templates[sourceKey].isolateSource(source, appKey),
         sources
       )
-      let sinks = app(isolatedSources, key)
+      let properSources = R.merge(defaultSources, isolatedSources)
+
+      // Run app (unredux component)
+      let sinks = app(properSources, appKey)
+
+      // Prepare sinks
       let isolatedSinks = R.mapObjIndexed(
-        (sink, sinkType) =>
-          template[sinkType].isolateSink(sink, key),
+        (sink, sinkKey) =>
+          templates[sinkKey].isolateSink(sink, appKey),
         sinks
       )
-      return isolatedSinks
+      let defaultSinks = R.mapObjIndexed(
+        (_, sinkKey) => templates[sinkKey].defaultSink(appKey),
+        templates
+      )
+      let properSinks = R.merge(defaultSinks, isolatedSinks)
+
+      return properSinks
     }
-  )
+  }
 
 export function connect(streamsToProps, ComponentToWrap, hooks={}) {
   class Container extends React.Component {
@@ -69,7 +87,6 @@ export function connect(streamsToProps, ComponentToWrap, hooks={}) {
     }
 
     componentWillMount(...args) {
-      // console.log(`${Object.keys(streamsToProps)} container mounts!`)
       let props = combineLatestObj(streamsToProps)
         .throttleTime(10, undefined, {leading: true, trailing: true}) // RxJS throttle is half-broken (https://github.com/ReactiveX/rxjs/search?q=throttle&type=Issues)
       this.sb = props.subscribe((data) => {
@@ -81,7 +98,6 @@ export function connect(streamsToProps, ComponentToWrap, hooks={}) {
     }
 
     componentWillUnmount(...args) {
-      // console.log(`${Object.keys(streamsToProps)} container unmounts!`)
       this.sb.unsubscribe()
       if (R.is(Function, hooks.componentWillUnmount)) {
         hooks.componentWillUnmount(...args)

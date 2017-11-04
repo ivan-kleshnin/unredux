@@ -1,7 +1,0 @@
-{
-  "dependencies": {},
-  "scripts": {
-    "postinstall": ". postinstall.sh",
-    "start": "NODE_ENV=development webpack --watch & http-server"
-  }
-}

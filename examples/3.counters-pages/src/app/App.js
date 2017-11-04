@@ -3,6 +3,7 @@ import {Observable as O} from "rxjs"
 import React from "react"
 import * as D from "selfdb"
 import * as F from "framework"
+import {isolate, liftReact} from "../meta"
 import Home from "./Home"
 import Page1 from "../page1/Page1"
 import Page2 from "../page2/Page2"
@@ -51,13 +52,16 @@ export default (sources, key) => {
   let content$ = F.derive("url", sources.$, (url) => {
     let content
     if (url == "/") {
-      content = {DOM: Home}         // react component
+      content = {$: O.of(), DOM: Home} // react component lifted to unredux API
     } else if (url == "/page1") {
-      content = Page1(sources, key) // unredux component
+      content = isolate(Page1)(sources) // unredux component (using standalone state)
     } else if (url == "/page2") {
-      content = Page2(sources, key) // unredux component
+      content = isolate(Page2, "c2")(sources) // unredux component (using global state)
+                                              // `isolate` is used here to isolate `$` channel (`DOM` will work equally WITH and WITHOUT it)
     } else {
-      content = {DOM: () => <div>Not Found</div>} // on-the-fly component
+      content = liftReact(() => <div>Not Found</div>)                     // on-the-fly component (opt #1: helper)
+      // content = {$: O.of(), DOM: () => <div>Not Found</div>}           // on-the-fly component (opt #2: manual)
+      // content = isolate(() => ({DOM: () => <div>Not Found</div>}))({}) // on-the-fly component (opt #3: isolate)
     }
     return content
   })
@@ -66,11 +70,18 @@ export default (sources, key) => {
     () => D.makeStore({name: key + ".db"}),
     D.withLog({}),
   )(O.merge(
-    F.init({url: document.location.pathname}),
+    F.init({
+      url: document.location.pathname,
+      // c1 uses it's own state (for the sake of demonstration)
+      c2: 0,
+    }),
 
     // navigation
     intents.navigateTo$.map(url => R.fn("navigateTo", R.set("url", url))),
     intents.navigateHistory$.map(url => R.fn("navigateHistory", R.set("url", url))),
+
+    // content
+    content$.pluck("$").switch(),
   ))
 
   let DOM = F.connect(
@@ -81,12 +92,18 @@ export default (sources, key) => {
     (props) => {
       let {url, Content} = props
       return <div>
-        Current URL: {url}<br/>
+        <p>
+          Current URL: {url}
+        </p>
+        <p>
         <a href="/" className="link">Home</a>
         {" "}
         <a href="/page1" className="link">Page 1</a>
         {" "}
         <a href="/page2" className="link">Page 2</a>
+        {" "}
+        <a href="/not-found" className="link">Not Found</a>
+        </p>
         <hr/>
         <Content/>
       </div>

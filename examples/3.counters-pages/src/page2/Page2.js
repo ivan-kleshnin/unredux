@@ -1,37 +1,33 @@
 import * as R from "ramda"
 import React from "react"
 import {Observable as O} from "rxjs"
-import * as D from "selfdb"
 import * as F from "framework"
 
 export default (sources, key) => {
   let intents = {
     // unsubscribed on state unsubscribe which happens on willUnmount
-    click$: sources.DOM.from("button").listen("click")
+    inc$: sources.DOM.fromKey("inc").listen("click"),
+    dec$: sources.DOM.fromKey("dec").listen("click"),
   }
 
-  let state = R.run(
-    () => D.makeStore({name: key + ".page2.counter"}),
-    D.withLog({}),
-    D.withMemoryPersistence({key: key + ".page2.counter"}),
-  )(O.merge(
-    F.init(0),
-    intents.click$.map(_ => R.inc),
-  ))
+  let $ = O.merge(
+    intents.inc$.map(_ => R.inc),
+    intents.dec$.map(_ => R.dec),
+  )
 
   let DOM = F.connect(
-    {counter: state.$},
+    {counter: sources.$},
     (props) =>
-      <div>Page 2: {props.counter} <button>Click!</button></div>,
+      <div>Page 2: {props.counter} <button data-key="inc">+1</button> <button data-key="dec">-1</button></div>,
     {
-      componentWillMount() {
+      componentWillMount(...args) {
         console.log("Page2 will mount!")
       },
-      componentWillUnmount() {
+      componentWillUnmount(...args) {
         console.log("Page2 will unmount!")
       }
     }
   )
 
-  return {DOM}
+  return {$, DOM}
 }

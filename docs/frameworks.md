@@ -131,16 +131,16 @@ let state = State(O.merge(
 
 The Cycle-React is a vanilla React + some streaming facilities.
 
-Pros: ?
-Cons: [imperative](https://github.com/pH200/cycle-react/blob/master/examples/web/todomvc/todo-model.js#L22) state updates,
+* Pros: ?
+* Cons: [imperative](https://github.com/pH200/cycle-react/blob/master/examples/web/todomvc/todo-model.js#L22) state updates,
 [imperative](https://github.com/pH200/cycle-react/blob/master/examples/web/todomvc/todo-view.js#L57-L64) actions/intents.
 
 ### [CalmmJS](https://github.com/calmm-js)
 
 Redux-like.
 
-Pros: allows multiple stores.
-Cons: obscure non-loggable actions, a lot of magic.
+* Pros: allows multiple stores.
+* Cons: obscure non-loggable actions, a lot of magic.
 
 ### [CycleJS](https://github.com/cyclejs/cyclejs/)
 
@@ -191,8 +191,9 @@ And it's a complete spaghettified mess with 3+ steps.
 
 I wonder why CycleJS community is so concerned about drivers. Most drivers, with a few exceptions,
 incapsulate fairly trivial code. They simply can't take complex premises to do something more useful
-than hiding subscription lines. The fact is: the app's IO layer is often **less** predictable
-than app's logic layer, so it's not a benefit to have 2nd class side-effects in your framework.
+than hiding subscription lines except for DOM where sinks of effects has a single form of "render that"
+(in simplest case, ater on you'll be screwed by non-incapsulable animations). The fact is: the IO layer
+is often **less** predictable than Logic layer, so it's not a benefit to have 2nd class side-effects in your framework.
 
 Going further, anything with 2+ effect types can't be exressed as driver, and will be classified as...
 middleware? Nothing of that is even mentioned in the docs. `cycle-onionify` and `isolate` are
@@ -204,8 +205,8 @@ but YOU aren't expected to write one.
 
 TODO describe the lack of lifecycle events
 
-Our decision is to ditch the drivers completely. When it's about *hard testing vs hard development* choice
-you should always choose the first. The benefit of unit tests is overrated, the pain of messy development
+Our decision is to ditch the drivers completely. When it's about *harder unit testing* vs *harder development*
+choice you should always choose the first. The benefit of unit tests is overrated, the pain of messy development
 is underrated. CycleJS will force you to manually marshal N+ effectful streams from your components.
 And, without a compiler help, it's not trivial at all (TypeScript won't help you because effects are still
 untyped).
@@ -214,7 +215,7 @@ In Unredux, most components will have 1 or 2 streams: `$ (state-action)` (like i
 and `DOM` (like in basic CycleJS). HTTP, logging, etc are kept inside the components. Their
 resources can still be handled and properly released via `DOM` stream or React lifecycle events.
 
-We don't support the claim that "imperative is bad so imperative in time is also bad". We think
+We don't support the claim that "imperative is bad, so imperative in time is also bad". We think
 imperative syntax is the best to express sequential side effects (like in Haskell) so non-reactive
-paradigm has it's place in code. With our approach, we'll have Reactivity where it fits the best
-(DOM + DOM events) and Control where it fits the best (HTTP + optimistic updates).
+paradigm has it's place in code. With our approach, we'll have **reactivity** where it fits the best
+(DOM + DOM events) and **control** where it fits the best (HTTP + optimistic updates).

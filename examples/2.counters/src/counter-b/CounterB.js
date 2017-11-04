@@ -7,9 +7,9 @@ import {connect} from "framework"
 
 export default function CounterB(sinks, key) {
   let intents = {
-    inc: sinks.DOM("inc", "click"),
-    dec: sinks.DOM("dec", "click"),
-    add: sinks.DOM("add", "click"),
+    inc: sources.DOM.fromKey("inc").listen("click"),
+    dec: sources.DOM.fromKey("dec").listen("click"),
+    add: sources.DOM.fromKey("add").listen("click"),
   }
 
   let $ = O.merge(

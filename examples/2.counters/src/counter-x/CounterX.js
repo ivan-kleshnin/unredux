@@ -6,10 +6,10 @@ import {connect} from "framework"
 
 export default function CounterX(sinks, key) {
   let intents = {
-    inc:  sinks.DOM("inc", "click"),
-    dec:  sinks.DOM("dec", "click"),
-    add2: sinks.DOM("add2", "click"),
-    sub2: sinks.DOM("sub2", "click"),
+    inc:  sources.DOM.fromKey("inc").listen("click"),
+    dec:  sources.DOM.fromKey("dec").listen("click"),
+    add2: sources.DOM.fromKey("add2").listen("click"),
+    sub2: sources.DOM.fromKey("sub2").listen("click"),
   }
 
   let $ = O.merge(

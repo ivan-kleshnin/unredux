@@ -1,3 +1,4 @@
+import * as R from "ramda"
 import {Observable as O} from "rxjs"
 import React from "react"
 import {makeStore, withLog} from "selfdb"
@@ -10,8 +11,8 @@ export default (sinks) => {
   let seed = 0
 
   let intents = {
-    inc: sinks.DOM("*", "inc", "click"),
-    dec: sinks.DOM("*", "dec", "click"),
+    inc: sources.DOM.fromKey("inc").listen("click"),
+    dec: sources.DOM.fromKey("dec").listen("click"),
   }
 
   let Store = withLog({},

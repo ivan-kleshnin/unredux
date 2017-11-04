@@ -16,11 +16,19 @@ notable differences.
 
 #### [1. Counter](./1.counter)
 
-The most basic example.
+The basic counter.
 
 #### [2. Counters](./2.counters)
 
-Event and stream isolation tests (4 types of components, 2 instances of 2 of them).
+Component isolation (4 types of components, 2 instances of 2 of them).
+
+#### [3. Counters-Pages](./3.counters)
+
+Simple routing.
+
+#### [4. Counters-Pages2](./4.counters)
+
+Simple routing + nested page actions.
 
 ### Tutorials
 
@@ -31,6 +39,14 @@ Getting started with reactive states.
 #### [2. Store](./2.store)
 
 Making a better store abstraction step by step.
+
+#### [10. Logging](./10.log)
+
+Using logging middleware.
+
+#### [11. Control](./11.control)
+
+Using (optional) proactive/non-reactive store interface.
 
 **...wip**
 

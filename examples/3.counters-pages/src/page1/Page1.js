@@ -7,7 +7,7 @@ import * as F from "framework"
 export default (sources, key) => {
   let intents = {
     // unsubscribed on state unsubscribe which happens on willUnmount
-    click: sources.DOM.from("button").listen("click")
+    click$: sources.DOM.from("button").listen("click")
   }
 
   let state = R.run(
@@ -16,13 +16,21 @@ export default (sources, key) => {
     D.withMemoryPersistence({key: key + ".page1.counter"}),
   )(O.merge(
     F.init(0),
-    intents.click.map(_ => R.inc),
+    intents.click$.map(_ => R.inc),
   ))
 
   let DOM = F.connect(
     {counter: state.$},
     (props) =>
-      <div>Page 1: {props.counter} <button>Click!</button></div>
+      <div>Page 1: {props.counter} <button>Click!</button></div>,
+    {
+      componentWillMount() {
+        console.log("Page1 will mount!")
+      },
+      componentWillUnmount() {
+        console.log("Page1 will unmount!")
+      }
+    }
   )
 
   return {DOM}

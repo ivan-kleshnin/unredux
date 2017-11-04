@@ -61,25 +61,31 @@ export let makeIsolate = (template) =>
     }
   )
 
-export let connect = R.curryAs("connect", (streamsToProps, ComponentToWrap) =>{
+export function connect(streamsToProps, ComponentToWrap, hooks={}) {
   class Container extends React.Component {
     constructor(props) {
       super(props)
       this.state = {} // will be replaced with seed on componentWillMount
     }
 
-    componentWillMount() {
+    componentWillMount(...args) {
       // console.log(`${Object.keys(streamsToProps)} container mounts!`)
       let props = combineLatestObj(streamsToProps)
         .throttleTime(10, undefined, {leading: true, trailing: true}) // RxJS throttle is half-broken (https://github.com/ReactiveX/rxjs/search?q=throttle&type=Issues)
       this.sb = props.subscribe((data) => {
         this.setState(data)
       })
+      if (R.is(Function, hooks.componentWillMount)) {
+        hooks.componentWillMount(...args)
+      }
     }
 
-    componentWillUnmount() {
+    componentWillUnmount(...args) {
       // console.log(`${Object.keys(streamsToProps)} container unmounts!`)
       this.sb.unsubscribe()
+      if (R.is(Function, hooks.componentWillUnmount)) {
+        hooks.componentWillUnmount(...args)
+      }
     }
 
     render() {
@@ -87,5 +93,6 @@ export let connect = R.curryAs("connect", (streamsToProps, ComponentToWrap) =>{
       return React.createElement(ComponentToWrap, R.merge(this.props, this.state), this.props.children)
     }
   }
+
   return Container
-})
+}

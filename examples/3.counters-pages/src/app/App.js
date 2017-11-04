@@ -13,7 +13,7 @@ window.history.replaceState({url: document.location.pathname, c}, "", document.l
 
 export default (sources, key) => {
   let intents = {
-    navigateTo: sources.DOM.from("a").listen("click")
+    navigateTo$: sources.DOM.from("a").listen("click")
       .do(event => event.preventDefault())
       .map(event => event.target.attributes.href.value)
       .do(url => {
@@ -21,7 +21,7 @@ export default (sources, key) => {
       })
       .share(),
 
-    navigateHistory: O.fromEvent(window, "popstate")
+    navigateHistory$: O.fromEvent(window, "popstate")
       .map(data => {
         // let [
         //   {state: {c: prevC, url: prevUrl}},
@@ -69,8 +69,8 @@ export default (sources, key) => {
     F.init({url: document.location.pathname}),
 
     // navigation
-    intents.navigateTo.map(url => R.fn("navigateTo", R.set("url", url))),
-    intents.navigateHistory.map(url => R.fn("navigateHistory", R.set("url", url))),
+    intents.navigateTo$.map(url => R.fn("navigateTo", R.set("url", url))),
+    intents.navigateHistory$.map(url => R.fn("navigateHistory", R.set("url", url))),
   ))
 
   let DOM = F.connect(

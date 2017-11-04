@@ -6,9 +6,9 @@ import * as F from "framework"
 
 export default function CounterA(sources, key) {
   let intents = {
-    inc: sources.DOM.fromKey("inc").listen("click"),
-    dec: sources.DOM.fromKey("dec").listen("click"),
-    add: sources.DOM.fromKey("add").listen("click"),
+    inc$: sources.DOM.fromKey("inc").listen("click"),
+    dec$: sources.DOM.fromKey("dec").listen("click"),
+    add$: sources.DOM.fromKey("add").listen("click"),
   }
 
   let state = R.run(
@@ -16,9 +16,9 @@ export default function CounterA(sources, key) {
     D.withLog({}),
   )(O.merge(
     F.init(0),
-    intents.inc.map(_ => R.inc),
-    intents.dec.map(_ => R.dec),
-    intents.add.map(v => R.add(Number(v))),
+    intents.inc$.map(_ => R.inc),
+    intents.dec$.map(_ => R.dec),
+    intents.add$.map(v => R.add(Number(v))),
   ))
 
   let DOM = F.connect(

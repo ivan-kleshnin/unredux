@@ -1,6 +1,6 @@
 import {inspect} from "util"
 import deepFreeze from "deep-freeze"
-import {Observable as O, Subject, ReplaySubject} from "../rxjs"
+import {Observable as O} from "../rxjs"
 import {mergeObj, mergeObjTracking, chan as Chan} from "rx-utils"
 import * as R from "../ramda"
 
@@ -77,8 +77,6 @@ let actionToString = (action) => {
     return inspect(action)
   }
 }
-
-// let storeCount = 0
 
 export let makeStore = (options) => {
   function Store(action$) {

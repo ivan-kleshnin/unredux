@@ -1,5 +1,5 @@
 import React from "react"
-import {Observable as O} from "../rxjs"
+import {Observable as O, ReplaySubject} from "../rxjs"
 import {combineLatestObj} from "rx-utils"
 import * as R from "../ramda"
 import uid from "uid-safe"
@@ -189,7 +189,7 @@ export function connect(streamsToProps, ComponentToWrap, hooks={}) {
 export let lastKey = R.pipe(R.split("."), R.nth(-1))
 
 export let defaultSources = {
-  $: () => O.of(),
+  $: () => new ReplaySubject(1),
   DOM: () => {
     let DOM = {
       fromKey: () => DOM,

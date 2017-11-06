@@ -31,7 +31,7 @@ let action$ = O.of
     ).concatMap(x => O.of(x).delay(200))
   )
 
-let state = R.run(
+let state = D.run(
   () => D.makeStore({name: "db"}),
   D.withLog({}),
   D.withControl({}),

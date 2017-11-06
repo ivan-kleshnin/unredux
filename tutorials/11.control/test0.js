@@ -4,7 +4,7 @@ import * as D from "../../vendors/selfdb"
 
 let seed = {x1: 0, x2: 0}
 
-let state = R.run(
+let state = D.run(
   () => D.makeStore({name: "db"}),
   D.withLog({}),
   D.withControl({}),

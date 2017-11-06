@@ -153,10 +153,7 @@ export let mergeDeepFlipped = flip(mergeDeep)
 export function not(x) { return !x }
 // TODO nth
 export let reduce2 = addIndex(reduce)
-export function run(...fns) {
-  return pipe(...fns)()
-}
-export let set = curry((lens, val, obj) => _set(lensify(lens), val, obj))
+export let set = curryAs("set", (lens, val, obj) => _set(lensify(lens), val, obj))
 export function snd(xs) { return xs[1] }
 export let split = curryAs("split", (sep, xs) => xs.split(sep))
 export let subtract = curryAs("subtract", (x, y) => x - y)

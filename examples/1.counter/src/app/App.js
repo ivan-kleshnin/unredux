@@ -10,17 +10,19 @@ export default (sources, key) => {
     dec$: sources.DOM.fromKey("dec").listen("click"),
   }
 
-  let state = R.run(
-    () => D.makeStore({name: key + ".state"}),
-    D.withLog({}),
+  let state$ = D.run(
+    () => D.makeStore({}),
+    D.withLog({name: key}),
   )(O.merge(
     F.init(0),
     intents.inc$.map(_ => R.inc),
     intents.dec$.map(_ => R.dec),
-  ))
+  )).$
+
+  state$.subscribe(sources.$)
 
   let DOM = F.connect(
-    {counter: state.$},
+    {counter: state$},
     (props) =>
       <p>
         Counter: <span>{props.counter}</span>

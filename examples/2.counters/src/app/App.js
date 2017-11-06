@@ -3,22 +3,21 @@ import {Observable as O} from "rxjs"
 import React from "react"
 import * as D from "selfdb"
 import * as F from "framework"
-import {isolate} from "../meta"
-import CounterA from "../counter-a/CounterA"
-import CounterB from "../counter-b/CounterB"
-import CounterX from "../counter-x/CounterX"
-import CounterY from "../counter-y/CounterY"
+import CounterAApp from "../counter-a/CounterAApp"
+import CounterBApp from "../counter-b/CounterBApp"
+import CounterXApp from "../counter-x/CounterXApp"
+import CounterYApp from "../counter-y/CounterYApp"
 
 export default (sources, key) => {
   // State-independent components
-  let a = isolate(CounterA, "a")(sources)
-  let b = isolate(CounterB, "b")(sources)
+  let counterAApp = F.isolate(CounterAApp, "a")(sources)
+  let counterBApp = F.isolate(CounterBApp, "b")(sources)
 
   // State-connected components
-  let x1 = isolate(CounterX, "x1")(sources)
-  let x2 = isolate(CounterX, "x2")(sources)
-  let y1 = isolate(CounterY, "y1")(sources)
-  let y2 = isolate(CounterY, "y2")(sources)
+  let counterX1App = F.isolate(CounterXApp, "x1")(sources)
+  let counterX2App = F.isolate(CounterXApp, "x2")(sources)
+  let counterY1App = F.isolate(CounterYApp, "y1")(sources)
+  let counterY2App = F.isolate(CounterYApp, "y2")(sources)
 
   let seed = {
     x1: 0,
@@ -27,26 +26,30 @@ export default (sources, key) => {
     y2: 0,
   }
 
-  let state = R.run(
-    () => D.makeStore({name: key + ".db"}),
-    D.withLog({}),
+  let state$ = D.run(
+    () => D.makeStore({}),
+    D.withLog({name: key}),
   )(O.merge(
     F.init({x1: 0, x2: 0, y1: 0, y2: 0}),
-    O.merge(x1.$, x2.$, y1.$, y2.$),
-  ))
+
+    counterX1App.$,
+    counterX2App.$,
+    counterY1App.$,
+    counterY2App.$,
+  )).$
+
+  state$.subscribe(sources.$)
 
   let DOM = (props) => {
     return <div>
-      <a.DOM/>
-      <b.DOM/>
-      <x1.DOM/>
-      <x2.DOM/>
-      <y1.DOM/>
-      <y2.DOM/>
+      <counterAApp.DOM/>
+      <counterBApp.DOM/>
+      <counterX1App.DOM/>
+      <counterX2App.DOM/>
+      <counterY1App.DOM/>
+      <counterY2App.DOM/>
     </div>
   }
-
-  state.$.subscribe(sources.$)
 
   return {DOM}
 }

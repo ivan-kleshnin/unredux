@@ -11,18 +11,18 @@ export default (sources, key) => {
     dec$: sources.DOM.fromKey("dec").listen("click"),
   }
 
-  let state = R.run(
-    () => D.makeStore({name: "page1.counter"}),
-    D.withLog({}),
+  let state$ = D.run(
+    () => D.makeStore({}),
+    D.withLog({name: "page1.counter"}),
     D.withMemoryPersistence({key: "page1.counter"}),
   )(O.merge(
     F.init(0),
     intents.inc$.map(_ => R.inc),
     intents.dec$.map(_ => R.dec),
-  ))
+  )).$
 
   let DOM = F.connect(
-    {counter: state.$},
+    {counter: state$},
     (props) =>
       <div>Page 1: {props.counter} <button data-key="inc">+1</button> <button data-key="dec">-1</button></div>,
     {

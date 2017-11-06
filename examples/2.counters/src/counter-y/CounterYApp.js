@@ -3,7 +3,7 @@ import {Observable as O} from "rxjs"
 import React from "react"
 import * as F from "framework"
 
-export default function CounterX(sources, key) {
+export default function CounterYApp(sources, key) {
   let intents = {
     inc$:  sources.DOM.fromKey("inc").listen("click"),
     dec$:  sources.DOM.fromKey("dec").listen("click"),
@@ -22,7 +22,7 @@ export default function CounterX(sources, key) {
     {counter: sources.$},
     (props) =>
       <p>
-        CounterX ({key}): <span>{props.counter}</span>
+        CounterY ({key}): <span>{props.counter}</span>
         {" "}
         <button data-key="inc">+1</button>
         {" "}

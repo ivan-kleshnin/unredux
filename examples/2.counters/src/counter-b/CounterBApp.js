@@ -4,25 +4,25 @@ import React from "react"
 import * as D from "selfdb"
 import * as F from "framework"
 
-export default function CounterB(sources, key) {
+export default function CounterBApp(sources, key) {
   let intents = {
     inc$: sources.DOM.fromKey("inc").listen("click"),
     dec$: sources.DOM.fromKey("dec").listen("click"),
     add$: sources.DOM.fromKey("add").listen("click"),
   }
 
-  let state = R.run(
-    () => D.makeStore({name: "b"}),
-    D.withLog({}),
+  let state$ = D.run(
+    () => D.makeStore({}),
+    D.withLog({name: key}),
   )(O.merge(
     F.init(0),
     intents.inc$.map(_ => ({fn: R.inc})),
     intents.dec$.map(_ => ({fn: R.dec})),
     intents.add$.map(v => ({fn: R.add, args: [Number(v)]})),
-  ))
+  )).$
 
   let DOM = F.connect(
-    {counter: state.$},
+    {counter: state$},
     (props) =>
       <p>
         CounterB: <span>{props.counter}</span>

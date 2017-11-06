@@ -1,6 +1,6 @@
 import {inspect} from "util"
 import deepFreeze from "deep-freeze"
-import {Observable as O} from "rxjs"
+import {Observable as O, Subject, ReplaySubject} from "../rxjs"
 import {mergeObj, mergeObjTracking, chan as Chan} from "rx-utils"
 import * as R from "../ramda"
 
@@ -16,6 +16,10 @@ export let delay = (time) => {
 export let isBrowser = new Function("try { return this === window } catch(e) { return false }")
 
 export let isNode = new Function("try { return this === global } catch(e) { return false }")
+
+export function run(...fns) {
+  return R.pipe(...fns)()
+}
 
 // Store ===========================================================================================
 
@@ -74,12 +78,11 @@ let actionToString = (action) => {
   }
 }
 
-let storeCount = 0
+// let storeCount = 0
 
 export let makeStore = (options) => {
   function Store(action$) {
     options = R.merge(makeStore.options, options)
-    options.name = options.name || "store" + (++storeCount) // Anonymous stores will be "store1", "store2", etc.
 
     let _val
 
@@ -104,24 +107,20 @@ export let makeStore = (options) => {
       .publishReplay(1)
       .refCount()
 
-    // TODO implement self.$.next? (will shortcut logging and other stuff) = BAD
-
     return self
   }
 
   return Store
 }
 
-export let makeAtom = makeStore
-
 makeStore.options = {
   cmpFn,
   freezeFn,
   assertFn,
-  name: "",
 }
 
 // Logging mixin/middleware ========================================================================
+let storeCount = 0
 
 let logActionFn = (storeName, action) => {
   if (isBrowser()) {
@@ -142,6 +141,13 @@ let logStateFn = (storeName, state) => {
 export let withLog = R.curry((options, Store) => {
   function LoggingStore(action$) {
     options = R.merge(withLog.options, options)
+    options.name = options.name || "store" + (++storeCount) // Anonymous stores will be "store1", "store2", etc.
+
+    if (options.input) {
+      action$ = action$.do(action => {
+        options.logActionFn(options.name, action)
+      })
+    }
 
     let store = Store(action$)
     let self = R.merge(store, {
@@ -150,21 +156,10 @@ export let withLog = R.curry((options, Store) => {
       }
     })
 
-    let input$ = action$
-      .do(action => {
-        options.logActionFn(store.options.name, action)
-      }).share()
-
-    let output$ = self.$
-      .do(state => {
-        options.logStateFn(store.options.name, state)
-      }).share()
-
-    if (options.input) {
-      self.$ = O.merge(input$.filter(R.F), self.$) // the order of `merge` IS important
-    }
     if (options.output) {
-      self.$ = O.merge(self.$, output$.filter(R.F)) // ...
+      self.$ = self.$.do(state => {
+        options.logStateFn(options.name, state)
+      }).publishReplay(1).refCount()
     }
 
     return self
@@ -172,6 +167,40 @@ export let withLog = R.curry((options, Store) => {
 
   return LoggingStore
 })
+
+// export let withLog = R.curry((options, Store) => {
+//   function LoggingStore(action$) {
+//     options = R.merge(withLog.options, options)
+//
+//     let store = Store(action$)
+//     let self = R.merge(store, {
+//       log: {
+//         options,
+//       }
+//     })
+//
+//     let input$ = action$
+//       .do(action => {
+//         options.logActionFn(store.options.name, action)
+//       }).publishReplay(1).refCount()
+//
+//     let output$ = self.$
+//       .do(state => {
+//         options.logStateFn(store.options.name, state)
+//       }).publishReplay(1).refCount()
+//
+//     if (options.input) {
+//       self.$ = O.merge(input$.filter(R.F), self.$) // the order of `merge` IS important
+//     }
+//     if (options.output) {
+//       self.$ = O.merge(self.$, output$.filter(R.F)) // ...
+//     }
+//
+//     return self
+//   }
+//
+//   return LoggingStore
+// })
 
 withLog.options = {
   logActionFn,
@@ -291,5 +320,3 @@ export let withMemoryPersistence = R.curry((options, Store) => {
 withMemoryPersistence.options = {
   key: "",
 }
-
-// let moleculeCount = 0

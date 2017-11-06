@@ -35,8 +35,8 @@ let action$ = O.of(
 ).concatMap(x => O.of(x).delay(200))
 
 let state = D.run(
-  () => D.makeStore({name: "db"}),
-  D.withLog({}),
+  () => D.makeStore({}),
+  D.withLog({name: "db"}),
   D.withControl({}),
 )(action$)
 

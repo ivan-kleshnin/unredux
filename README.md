@@ -22,9 +22,9 @@ The basic counter.
 
 Component isolation (4 types of components, 2 instances of 2 of them).
 
-#### [3. Counters-Pages](./3.counters)
+#### [3. Counters-Pages](./3.counters-pages)
 
-Simple routing.
+Basic routing.
 
 #### [4. Todos](./4.todos)
 

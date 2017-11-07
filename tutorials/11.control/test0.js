@@ -6,7 +6,7 @@ let seed = {x1: 0, x2: 0}
 
 let state = D.run(
   () => D.makeStore({}),
-  D.withLog({name: "db"}),
+  D.withLog({key: "db"}),
   D.withControl({}),
 )(O.merge(
   O.of(() => seed),

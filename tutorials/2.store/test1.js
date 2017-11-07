@@ -8,7 +8,6 @@ let storeCount = 0
 function makeStore(options) {
   return function Store(seed, action$) {
     options = R.merge(makeStore.options, options)
-    options.name = options.name || "store" + (++storeCount) // Anonymous stores will be "store1", "store2", etc.
 
     let self = {options} // no OOP
 
@@ -26,26 +25,25 @@ function makeStore(options) {
 // Why noone teaches them?!
 makeStore.options = {
   cmpFn: R.identical,
-  name: "",
 }
 
 // App =============================================================================================
 let action$ = O.of(R.inc, R.inc, R.inc, R.inc, R.inc)
   .concatMap(x => O.of(x).delay(200))
 
-let state1 = makeStore({name: "state1"})
+let state1 = makeStore({})
   (1, action$)
 
 state1.$.subscribe(s => {
-  console.log(state1.options.name + ":", s)
+  console.log("state1:", s)
 })
 
 setTimeout(() => {
-  let state10 = makeStore({name: "state10"})
+  let state10 = makeStore({})
     (10, action$)
 
   state10.$.subscribe(s => {
-    console.log(state10.options.name + ":", s)
+    console.log("state10:", s)
   })
 }, 1200)
 

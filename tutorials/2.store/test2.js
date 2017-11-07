@@ -10,7 +10,6 @@ let storeCount = 0
 function makeStore(options) {
   return function Store(action$) {
     options = R.merge(makeStore.options, options)
-    options.name = options.name || "store" + (++storeCount) // Anonymous stores will be "store1", "store2", etc.
 
     let self = {options} // no OOP
 
@@ -35,27 +34,25 @@ function makeStore(options) {
 // Why noone teaches you them?
 makeStore.options = {
   cmpFn: R.identical,
-  name: "",
-  seed: null,
 }
 
 // App =============================================================================================
 let action$ = O.of(R.inc, R.inc, R.inc, R.inc, R.inc) // try to append `R.add` to see an error
   .concatMap(x => O.of(x).delay(200))                 // caused by a wrong arity!
 
-let state1 = makeStore({name: "state1"})
+let state1 = makeStore({})
   (action$.startWith(() => 1))
 
 state1.$.subscribe(s => {
-  console.log(state1.options.name + ":", s)
+  console.log("state1:", s)
 })
 
 setTimeout(() => {
-  let state10 = makeStore({name: "state10"})
+  let state10 = makeStore({})
     (action$.startWith(() => 10))
 
   state10.$.subscribe(s => {
-    console.log(state10.options.name + ":", s)
+    console.log("state10:", s)
   })
 }, 1200)
 

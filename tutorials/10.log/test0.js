@@ -33,7 +33,7 @@ let action$ = O.of
 
 let state = D.run(
   () => D.makeStore({}),
-  D.withLog({name: "db"}),
+  D.withLog({key: "db"}),
   D.withControl({}),
 )(action$)
 

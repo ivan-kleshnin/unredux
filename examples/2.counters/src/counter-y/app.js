@@ -3,7 +3,7 @@ import {Observable as O} from "rxjs"
 import React from "react"
 import * as F from "framework"
 
-export default function CounterYApp(sources, key) {
+export default (sources, key) => {
   let intents = {
     inc$:  sources.DOM.fromKey("inc").listen("click"),
     dec$:  sources.DOM.fromKey("dec").listen("click"),

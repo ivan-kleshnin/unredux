@@ -3,11 +3,11 @@ import React from "react"
 import ReactDOM from "react-dom"
 import {APP_KEY} from "./meta"
 import * as F from "framework"
-import App from "./app/App"
+import app from "./root/app"
 
-let app = App({
+let sinks = app({
   $: new ReplaySubject(1),
   DOM: F.fromDOMEvent("#" + APP_KEY),
 }, APP_KEY)
 
-ReactDOM.render(<app.DOM/>, document.getElementById(APP_KEY))
+ReactDOM.render(<sinks.DOM/>, document.getElementById(APP_KEY))

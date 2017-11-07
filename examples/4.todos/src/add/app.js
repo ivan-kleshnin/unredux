@@ -2,7 +2,7 @@ import * as R from "ramda"
 import {Observable as O} from "rxjs"
 import * as D from "selfdb"
 import * as F from "framework"
-import {makeTodo} from "../helpers"
+import * as M from "../models"
 import Form from "./form"
 
 export default (sources, key) => {
@@ -15,26 +15,22 @@ export default (sources, key) => {
       .mapTo(true),
   }
 
-  let seed = {
-    text: "",
-  }
-
   let state$ = D.run(
     () => D.makeStore({}),
-    D.withLog({name: key}),
+    D.withLog({key}),
   )(O.merge(
-    F.init(seed),
+    F.init(M.makeAdd()),
 
     // Updates
     intents.inputText$.map(text => R.set("text", text)),
 
     // Resets
-    intents.submitForm$.delay(1).map(_ => R.always(seed)),
+    intents.submitForm$.delay(1).map(_ => R.always(M.makeAdd())),
   )).$
 
   let $ = O.merge(
     state$.sample(intents.submitForm$).map(form => {
-      let todo = makeTodo({text: form.text})
+      let todo = M.makeTodo({text: form.text})
       return R.set(["todos", todo.id], todo)
     }),
   )

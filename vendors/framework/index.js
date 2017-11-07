@@ -85,30 +85,6 @@ export let makeIsolates = (templates) => {
     }
   }
 
-  function isolateNone(app, appKey=null) {
-    appKey = appKey || uid.sync(4)
-    return function App(sources) {
-      // Prepare sources
-      let defaultSources = R.mapObjIndexed(
-        (_, sourceKey) => templates[sourceKey].defaultSource(appKey),
-        templates
-      )
-      let properSources = R.merge(defaultSources, sources)
-
-      // Run app (unredux component)
-      let sinks = app(properSources, appKey)
-
-      // Prepare sinks
-      let defaultSinks = R.mapObjIndexed(
-        (_, sinkKey) => templates[sinkKey].defaultSink(appKey),
-        templates
-      )
-      let properSinks = R.merge(defaultSinks, sinks)
-
-      return properSinks
-    }
-  }
-
   function isolateSingle(busKey, app, appKey=null) {
     appKey = appKey || uid.sync(4)
     return function App(sources) {
@@ -149,7 +125,7 @@ export let makeIsolates = (templates) => {
     }
   }
 
-  return {isolate, isolateNone, isolateSingle}
+  return {isolate, isolateSingle}
 }
 
 export function connect(streamsToProps, ComponentToWrap, hooks={}) {
@@ -208,7 +184,7 @@ export let defaultSinks = {
   }
 }
 
-export let {isolate, isolateNone, isolateSingle} = makeIsolates({
+export let {isolate, isolateSingle} = makeIsolates({
   $: {
     isolateSource: (source, key) => {
       return source.pluck(lastKey(key))

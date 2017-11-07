@@ -13,8 +13,8 @@ export default (sources, key) => {
 
   let state$ = D.run(
     () => D.makeStore({}),
-    D.withLog({name: "page1.counter"}),
-    D.withMemoryPersistence({key: "page1.counter"}),
+    D.withLog({key}),
+    D.withMemoryPersistence({key}),
   )(O.merge(
     F.init(0),
     intents.inc$.map(_ => R.inc),
@@ -24,7 +24,10 @@ export default (sources, key) => {
   let DOM = F.connect(
     {counter: state$},
     (props) =>
-      <div>Page 1: {props.counter} <button data-key="inc">+1</button> <button data-key="dec">-1</button></div>,
+      <div>
+        Page 1: {props.counter} <button data-key="inc">+1</button> <button data-key="dec">-1</button>
+        <p><i>Memory persistence</i></p>
+      </div>,
     {
       componentWillMount(...args) {
         console.log("Page1 will mount!")

@@ -122,7 +122,7 @@ let storeCount = 0
 
 let logActionFn = (storeName, action) => {
   if (isBrowser()) {
-    console.log(`%c @ ${storeName} λ ${actionToString(action)}`, `color: green`)
+    console.log(`%c@ ${storeName} λ ${actionToString(action)}`, `color: green`)
   } else {
     console.log(`@ ${storeName} λ ${actionToString(action)}`)
   }
@@ -130,7 +130,7 @@ let logActionFn = (storeName, action) => {
 
 let logStateFn = (storeName, state) => {
   if (isBrowser()) {
-    console.log(`%c # ${storeName} = ${inspect(state)}`, `color: brown`)
+    console.log(`%c# ${storeName} = ${inspect(state)}`, `color: brown`)
   } else {
     console.log(`# ${storeName} = ${inspect(state)}`)
   }
@@ -139,11 +139,11 @@ let logStateFn = (storeName, state) => {
 export let withLog = R.curry((options, Store) => {
   function LoggingStore(action$) {
     options = R.merge(withLog.options, options)
-    options.name = options.name || "store" + (++storeCount) // Anonymous stores will be "store1", "store2", etc.
+    options.key = options.key || "store" + (++storeCount) // Anonymous stores will be "store1", "store2", etc.
 
     if (options.input) {
       action$ = action$.do(action => {
-        options.logActionFn(options.name, action)
+        options.logActionFn(options.key, action)
       })
     }
 
@@ -156,7 +156,7 @@ export let withLog = R.curry((options, Store) => {
 
     if (options.output) {
       self.$ = self.$.do(state => {
-        options.logStateFn(options.name, state)
+        options.logStateFn(options.key, state)
       }).publishReplay(1).refCount()
     }
 
@@ -166,45 +166,12 @@ export let withLog = R.curry((options, Store) => {
   return LoggingStore
 })
 
-// export let withLog = R.curry((options, Store) => {
-//   function LoggingStore(action$) {
-//     options = R.merge(withLog.options, options)
-//
-//     let store = Store(action$)
-//     let self = R.merge(store, {
-//       log: {
-//         options,
-//       }
-//     })
-//
-//     let input$ = action$
-//       .do(action => {
-//         options.logActionFn(store.options.name, action)
-//       }).publishReplay(1).refCount()
-//
-//     let output$ = self.$
-//       .do(state => {
-//         options.logStateFn(store.options.name, state)
-//       }).publishReplay(1).refCount()
-//
-//     if (options.input) {
-//       self.$ = O.merge(input$.filter(R.F), self.$) // the order of `merge` IS important
-//     }
-//     if (options.output) {
-//       self.$ = O.merge(self.$, output$.filter(R.F)) // ...
-//     }
-//
-//     return self
-//   }
-//
-//   return LoggingStore
-// })
-
 withLog.options = {
   logActionFn,
   logStateFn,
   input: true,
   output: true,
+  key: "",
 }
 
 // Control mixin/middleware ========================================================================
@@ -294,20 +261,19 @@ export let withMemoryPersistence = R.curry((options, Store) => {
     options = R.merge(withMemoryPersistence.options, options)
 
     if (options.key && options.key in _memCache) {
-      action$ = action$.skip(1).startWith(function initFromMemory() {
-        return _memCache[options.key]
-      })
+      let initFn = R.fn("initFromMemory", R.always(_memCache[options.key]))
+      action$ = action$
+        .skip(1)
+        .startWith(initFn)
     }
 
-    let store = Store(action$)
+    let self = Store(action$)
 
     if (options.key) {
-      store.$ = store.$.do(s => {
+      self.$ = self.$.do(s => {
         _memCache[options.key] = s
       })
     }
-
-    let self = R.merge(store, {})
 
     return self
   }
@@ -316,5 +282,55 @@ export let withMemoryPersistence = R.curry((options, Store) => {
 })
 
 withMemoryPersistence.options = {
+  key: "",
+}
+
+export let withLocalStoragePersistence = R.curry((options, Store) => {
+  if (!isBrowser()) {
+    throw Error("withLocalStoragePersistence can be used only in Browser")
+  }
+
+  function LocalStoragePersistentStore(action$) {
+    options = R.merge(withLocalStoragePersistence.options, options)
+
+    if (options.key && localStorage.getItem(options.key) !== null) {
+      let initFn
+      try {
+        initFn = R.fn("initFromLocalStorage", R.always(JSON.parse(localStorage.getItem(options.key))))
+      } catch (err) {
+        console.warn("error at read from localStorage")
+        initFn = R.fn("initWithNull", R.always(null))
+      }
+      action$ = action$
+        .skip(1)
+        .startWith(initFn)
+    }
+
+    let self = Store(action$)
+
+    if (options.key) {
+      self.$ = self.$.merge(
+        self.$
+          .throttleTime(1000, undefined, {leading: true, trailing: true})
+          .do(state => {
+            try {
+              localStorage.setItem(options.key, JSON.stringify(state))
+            } catch (err) {
+              console.warn("error at write to localStorage")
+            }
+          })
+          .filter(R.F)
+        )
+        .publishReplay(1)
+        .refCount()
+    }
+
+    return self
+  }
+
+  return LocalStoragePersistentStore
+})
+
+withLocalStoragePersistence.options = {
   key: "",
 }

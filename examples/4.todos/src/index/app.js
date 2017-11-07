@@ -2,6 +2,7 @@ import * as R from "ramda"
 import {Observable as O} from "rxjs"
 import * as D from "selfdb"
 import * as F from "framework"
+import * as M from "../models"
 import Index from "./Index"
 
 export default (sources, key) => {
@@ -12,18 +13,17 @@ export default (sources, key) => {
     setFilter$: sources.DOM.fromKey("filter").listen("click")
       .do(event => event.preventDefault())
       .map(event => event.target.dataset.val),
-  }
 
-  let seed = {
-    filterFn: R.id,
-    sortFn: R.fn("sortByAddedAt", R.ascend(R.prop("addedAt"))),
+    reset$: sources.DOM.fromKey("reset").listen("click")
+      .do(event => event.preventDefault())
+      .mapTo(true),
   }
 
   let state$ = D.run(
     () => D.makeStore({assertFn: R.id}),
-    D.withLog({name: key}),
+    D.withLog({key}),
   )(O.merge(
-    F.init(seed),
+    F.init(M.makeIndex()),
 
     // Updates
     intents.setFilter$.map(filter => {
@@ -52,6 +52,7 @@ export default (sources, key) => {
 
   let $ = O.merge(
     intents.toggleTodo$.map(id => R.over(["todos", id, "completed"], R.not)),
+    intents.reset$.map(_ => R.fn("reset", () => M.makeRoot())),
   )
 
   let DOM = F.connect(

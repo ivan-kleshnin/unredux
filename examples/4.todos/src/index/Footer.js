@@ -1,15 +1,20 @@
 import React from "react"
 
 export default function Footer(props) {
-  return <p>
-    Show:
-    {" "}
-    <a href="#all" data-key="filter" data-val="all">All</a>
-    {", "}
-    <a href="#active" data-key="filter" data-val="active">Active</a>
-    {", "}
-    <a href="#completed" data-key="filter" data-val="completed">Completed</a>
-  </p>
+  return <div>
+    <p>
+      Show:
+      {" "}
+      <a href="#all" data-key="filter" data-val="all">All</a>
+      {", "}
+      <a href="#active" data-key="filter" data-val="active">Active</a>
+      {", "}
+      <a href="#completed" data-key="filter" data-val="completed">Completed</a>
+    </p>
+    <p>
+      <a href="#reset" data-key="reset">Reset</a>
+    </p>
+  </div>
 }
 
 Footer.propTypes = {}

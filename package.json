@@ -13,6 +13,7 @@
     "ramda": "^0.25.0",
     "react": "^16.0.0",
     "react-dom": "^16.0.0",
+    "route-parser": "0.0.5",
     "rx-utils": "^2.0.0",
     "rxjs": "^5.4.3",
     "shallow-diff": "0.0.5",

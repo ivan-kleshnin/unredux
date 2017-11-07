@@ -207,9 +207,8 @@ export let {isolate, isolateSingle} = makeIsolates({
     },
 
     isolateSink: (sink, key) => {
-      let Component = sink
       return (props) => <div data-key={lastKey(key)}>
-        <Component {...props}/>
+        {React.createElement(sink, props)}
       </div>
     },
 

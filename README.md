@@ -22,13 +22,17 @@ The basic counter.
 
 Component isolation (4 types of components, 2 instances of 2 of them).
 
-#### [3. Counters-Pages](./3.counters-pages)
+#### [3.1 Counters-Pages](./3.1.counters-pages)
 
 Basic routing.
 
+#### [3.2 Counters-Pages](./3.2.counters-pages+)
+
+Advanced routing (**wip**).
+
 #### [4. Todos](./4.todos)
 
-Classic "TodoMVC" example.
+Classic "TodoMVC" example (**wip**).
 
 ### Tutorials
 

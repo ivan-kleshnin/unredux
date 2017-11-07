@@ -3,32 +3,15 @@ import {Observable as O} from "rxjs"
 import React from "react"
 import * as D from "selfdb"
 import * as F from "framework"
-import Home from "./Home"
-import page1App from "../page1/app"
-import page2App from "../page2/app"
-import page3App from "../page3/app"
+import routes from "./routes"
+import makeRouter from "./router"
 
-window.history.replaceState({}, "", document.location.pathname)
+let router = makeRouter(routes)
 
 export default (sources, key) => {
   let contentSinks$ = F.derive("url", sources.$, (url) => {
-    let sinks
-    console.log(url)
-    if (url == "/") {
-      sinks = {$: O.of(), DOM: Home}                       // react component lifted to unredux app
-    } else if (url == "/page1") {
-      sinks = F.isolate(page1App, key + ".page1")(sources) // unredux component (using standalone state)
-    } else if (url == "/page2") {
-      sinks = F.isolate(page2App, key + ".page2")(sources) // unredux component (using global state)
-                                                           // `isolate` is used here to isolate `$` channel (`DOM` will work equally WITH and WITHOUT it)
-    } else if (url == "/page3") {
-      sinks = F.isolate(page3App, key + ".page3")(sources) // unredux component (using global state)
-                                                           // `isolate` is used here to isolate `$` channel (`DOM` will work equally WITH and WITHOUT it)
-    } else {
-      sinks = F.liftReact(() => <div>Not Found</div>)                       // on-the-fly component (opt #1: helper)
-      // content = {$: O.of(), DOM: () => <div>Not Found</div>}             // on-the-fly component (opt #2: manual)
-      // content = F.isolate(() => ({DOM: () => <div>Not Found</div>}))({}) // on-the-fly component (opt #3: isolate)
-    }
+    let {mask, payload: app, key} = router.doroute(url)
+    let sinks = F.isolate(app, key + mask.replace(/^\//, "."))(sources)
     return sinks
   })
 
@@ -68,10 +51,10 @@ export default (sources, key) => {
   let DOM = F.connect(
     {
       url: state$.pluck("url"),
-      Content: contentSinks$.pluck("DOM"),
+      contentSinks: contentSinks$,
     },
     (props) => {
-      let {url, Content} = props
+      let {url, contentSinks} = props
       return <div>
         <p>
           Current URL: {url}
@@ -88,7 +71,7 @@ export default (sources, key) => {
         <a href="/not-found" className="link">Not Found</a>
         </p>
         <hr/>
-        <Content/>
+        <contentSinks.DOM/>
       </div>
     }
   )

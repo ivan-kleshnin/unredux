@@ -4,36 +4,32 @@ import React from "react"
 import * as D from "selfdb"
 import * as F from "framework"
 
-export default function(sources, key) {
+export default (sources, key) => {
   let intents = {
-    inc$: sources.DOM.fromKey("inc").listen("click"),
-    dec$: sources.DOM.fromKey("dec").listen("click"),
-    add$: sources.DOM.fromKey("add").listen("click"),
+    inc$: sources.DOM.fromKey("inc").listen("click").mapTo(true),
+    dec$: sources.DOM.fromKey("dec").listen("click").mapTo(true),
   }
 
   let state$ = D.run(
     () => D.makeStore({}),
     D.withLog({key}),
   )(O.merge(
-    F.init(0),
+    D.init(0),
     intents.inc$.map(_ => R.inc),
     intents.dec$.map(_ => R.dec),
-    intents.add$.map(v => R.add(Number(v))),
   )).$
 
-  let DOM = F.connect(
+  let Component = F.connect(
     {counter: state$},
-    (props) =>
+    ({counter}) =>
       <p>
-        CounterA: <span>{props.counter}</span>
+        {sources.props.title}: <span>{counter}</span>
         {" "}
         <button data-key="inc">+1</button>
         {" "}
         <button data-key="dec">-1</button>
-        {" "}
-        <button data-key="add" data-val="2">+2</button>
       </p>
     )
 
-  return {DOM}
+  return {Component}
 }

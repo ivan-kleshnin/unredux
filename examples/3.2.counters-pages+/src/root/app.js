@@ -9,11 +9,14 @@ import makeRouter from "./router"
 let router = makeRouter(routes)
 
 export default (sources, key) => {
-  let contentSinks$ = F.derive("url", sources.$, (url) => {
-    let {mask, payload: app, key} = router.doroute(url)
-    let sinks = F.isolate(app, key + mask.replace(/^\//, "."))(sources)
-    return sinks
-  })
+  let contentSinks$ = F.derive(
+    {url: sources.state$.pluck("url")},
+    ({url}) => {
+      let {mask, payload: app} = router.doroute(url)
+      let sinks = F.isolate(app, key + mask.replace(/^\//, "."))(sources)
+      return R.merge({action$: O.of()}, sinks)
+    }
+  )
 
   let intents = {
     navigateTo$: sources.DOM.from("a").listen("click")
@@ -32,7 +35,7 @@ export default (sources, key) => {
     () => D.makeStore({}),
     D.withLog({key}),
   )(O.merge(
-    F.init({
+    D.init({
       url: document.location.pathname,
       // page1, page2 use their own states (for the sake of demonstration)
       page3: 0,
@@ -43,18 +46,15 @@ export default (sources, key) => {
     intents.navigateHistory$.map(url => R.fn("navigateHistory", R.set("url", url))),
 
     // content
-    contentSinks$.pluck("$").switch(),
+    contentSinks$.pluck("action$").switch(),
   )).$
 
-  state$.subscribe(sources.$)
-
-  let DOM = F.connect(
+  let Component = F.connect(
     {
       url: state$.pluck("url"),
-      contentSinks: contentSinks$,
+      Content: contentSinks$.pluck("Component"),
     },
-    (props) => {
-      let {url, contentSinks} = props
+    ({url, Content}) => {
       return <div>
         <p>
           Current URL: {url}
@@ -71,10 +71,10 @@ export default (sources, key) => {
         <a href="/not-found" className="link">Not Found</a>
         </p>
         <hr/>
-        <contentSinks.DOM/>
+        <Content/>
       </div>
     }
   )
 
-  return {DOM}
+  return {state$, Component}
 }

@@ -23,7 +23,7 @@ export default (sources, key) => {
     () => D.makeStore({assertFn: R.id}),
     D.withLog({key}),
   )(O.merge(
-    F.init(M.makeIndex()),
+    D.init(M.makeIndex()),
 
     // Updates
     intents.setFilter$.map(filter => {

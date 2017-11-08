@@ -1,5 +1,5 @@
 import React from "react"
 
-export default (props) => {
+export default function Home(props) {
   return <div>The beginning...</div>
 }

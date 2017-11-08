@@ -1,6 +1,6 @@
 import * as R from "ramda"
-import React from "react"
 import {Observable as O} from "rxjs"
+import React from "react"
 import * as D from "selfdb"
 import * as F from "framework"
 
@@ -16,16 +16,16 @@ export default (sources, key) => {
     D.withLog({key}),
     D.withLocalStoragePersistence({key}),
   )(O.merge(
-    F.init(0),
+    D.init(0),
     intents.inc$.map(_ => R.inc),
     intents.dec$.map(_ => R.dec),
   )).$
 
-  let DOM = F.connect(
+  let Component = F.connect(
     {counter: state$},
-    (props) =>
+    ({counter}) =>
       <div>
-        Page 2: {props.counter} <button data-key="inc">+1</button> <button data-key="dec">-1</button>
+        Page 2: {counter} <button data-key="inc">+1</button> <button data-key="dec">-1</button>
         <p><i>Local Storage persistence</i></p>
       </div>,
     {
@@ -38,5 +38,5 @@ export default (sources, key) => {
     }
   )
 
-  return {DOM}
+  return {Component}
 }

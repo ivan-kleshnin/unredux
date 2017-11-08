@@ -7,11 +7,11 @@ import page2App from "../page2/app"
 import page3App from "../page3/app"
 
 let homeApp = () => ({
-  DOM: Home,
+  Component: Home,
 })
 
 let notFoundApp = () => ({
-  DOM: (props) => <div>Not Found</div>,
+  Component: (props) => <div>Not Found</div>,
 })
 
 let routes = [

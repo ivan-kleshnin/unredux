@@ -23,7 +23,7 @@ export default (sources, key) => {
     D.withLog({key}),
     D.withLocalStoragePersistence({key}),
   )(O.merge(
-    F.init(M.makeRoot()),
+    D.init(M.makeRoot()),
 
     addSinks.$,
     indexSinks.$,

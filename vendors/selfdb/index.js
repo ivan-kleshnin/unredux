@@ -17,9 +17,13 @@ export let isBrowser = new Function("try { return this === window } catch(e) { r
 
 export let isNode = new Function("try { return this === global } catch(e) { return false }")
 
-export function run(...fns) {
+export let run = (...fns) => {
   return R.pipe(...fns)()
 }
+
+// TODO rx-utils candidate
+export let init = (seed) =>
+  O.of(R.fn("init", R.always(seed)))
 
 // Store ===========================================================================================
 

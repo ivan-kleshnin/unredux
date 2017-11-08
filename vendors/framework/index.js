@@ -5,14 +5,10 @@ import * as R from "../ramda"
 import uid from "uid-safe"
 
 // TODO rx-utils candidate
-export let init = (seed) =>
-  O.of(R.fn("init", () => seed))
-
-// TODO rx-utils candidate
-export let derive = (lens, state$, mapFn) =>
-  state$.map(lens ? R.view(lens) : R.id)
-    .distinctUntilChanged(R.identical)
+export let derive = (streamsToProps, mapFn) =>
+  combineLatestObj(streamsToProps)
     .map(mapFn)
+    .distinctUntilChanged(R.identical)
     .publishReplay(1)
     .refCount()
 
@@ -47,85 +43,6 @@ export let fromDOMEvent = (appSelector) => {
     }
   }
   return collectFn([appSelector])
-}
-
-// Unlike CycleJS sources and sinks can be of any type
-export let makeIsolates = (templates) => {
-  function isolate(app, appKey=null) {
-    appKey = appKey || uid.sync(4)
-    return function App(sources) {
-      // Prepare sources
-      let defaultSources = R.mapObjIndexed(
-        (_, sourceKey) => templates[sourceKey].defaultSource(appKey),
-        templates
-      )
-      let isolatedSources = R.mapObjIndexed(
-        (source, sourceKey) =>
-          templates[sourceKey].isolateSource(source, appKey),
-        sources
-      )
-      let properSources = R.merge(defaultSources, isolatedSources)
-
-      // Run app (unredux component)
-      let sinks = app(properSources, appKey)
-
-      // Prepare sinks
-      let isolatedSinks = R.mapObjIndexed(
-        (sink, sinkKey) =>
-          templates[sinkKey].isolateSink(sink, appKey),
-        sinks
-      )
-      let defaultSinks = R.mapObjIndexed(
-        (_, sinkKey) => templates[sinkKey].defaultSink(appKey),
-        templates
-      )
-      let properSinks = R.merge(defaultSinks, isolatedSinks)
-
-      return properSinks
-    }
-  }
-
-  function isolateSingle(busKey, app, appKey=null) {
-    appKey = appKey || uid.sync(4)
-    return function App(sources) {
-      // Prepare sources
-      let defaultSources = R.mapObjIndexed(
-        (_, sourceKey) => templates[sourceKey].defaultSource(appKey),
-        templates
-      )
-      let isolatedSources = R.mapObjIndexed(
-        (source, sourceKey) => {
-          return sourceKey == busKey
-            ? templates[busKey].isolateSource(source, appKey)
-            : source
-        },
-        sources
-      )
-      let properSources = R.merge(defaultSources, isolatedSources)
-
-      // Run app (unredux component)
-      let sinks = app(properSources, appKey)
-
-      // Prepare sinks
-      let isolatedSinks = R.mapObjIndexed(
-        (sink, sinkKey) => {
-          return sinkKey == busKey
-            ? templates[sinkKey].isolateSink(sink, appKey)
-            : sink
-        },
-        sinks
-      )
-      let defaultSinks = R.mapObjIndexed(
-        (_, sinkKey) => templates[sinkKey].defaultSink(appKey),
-        templates
-      )
-      let properSinks = R.merge(defaultSinks, isolatedSinks)
-
-      return properSinks
-    }
-  }
-
-  return {isolate, isolateSingle}
 }
 
 export function connect(streamsToProps, ComponentToWrap, hooks={}) {
@@ -164,66 +81,110 @@ export function connect(streamsToProps, ComponentToWrap, hooks={}) {
 
 export let lastKey = R.pipe(R.split("."), R.nth(-1))
 
-export let defaultSources = {
-  $: () => new ReplaySubject(1),
-  DOM: () => {
-    let DOM = {
-      fromKey: () => DOM,
-      from: () => DOM,
-      listen: () => O.of(),
-    }
-    return DOM
+// export let defaultSources = () => {
+//   let state$ = new ReplaySubject(1)
+//   let props = {}
+//   let DOM = {
+//     fromKey: () => DOM,
+//     from: () => DOM,
+//     listen: () => O.of(),
+//   }
+//   return {state$, props, DOM}
+// }
+
+export let isolateSources = {
+  state$: (source, key) => source
+    .pluck(lastKey(key))
+    .distinctUntilChanged(R.identical),
+    // .publishReplay(1)
+    // .refCount(),
+
+  props: R.always,
+
+  DOM: (source, key) => source.fromKey(lastKey(key))
+}
+
+// export let defaultSinks = () => {
+//   let action$ = O.of()
+//   let state$ = O.of()
+//   let DOM = (props) => null
+//   return {action$, state$, DOM}
+// }
+
+export let isolateSinks = {
+  action$: (sink, key) => {
+    return sink.map(command => {
+      return {fn: R.over, args: [lastKey(key), command]}
+    })
+  },
+
+  state$: (sink, key) => {
+    return sink // has to be isolated on consumer part
+  },
+
+  Component: (sink, key) => {
+    return (props) => <div data-key={lastKey(key)}>
+      {React.createElement(sink, props)}
+    </div>
   },
 }
 
-export let defaultSinks = {
-  $: () => O.of(),
+export let isolate = (app, appKey=null) => {
+  appKey = appKey || uid.sync(4)
+  return function App(sources) {
+    // Prepare sources
+    let isolatedSources = R.mapObjIndexed(
+      (source, sourceKey) => isolateSources[sourceKey](source, appKey),
+      sources
+    )
+    let properSources = R.merge({} /*defaultSources()*/, isolatedSources)
 
-  DOM: () => {
-    return (props) => null
+    // Run app (unredux component)
+    let sinks = app(properSources, appKey)
+
+    // Prepare sinks
+    let isolatedSinks = R.mapObjIndexed(
+      (sink, sinkKey) => isolateSinks[sinkKey](sink, appKey),
+      sinks
+    )
+    let properSinks = R.merge({} /*defaultSinks()*/, isolatedSinks)
+
+    return properSinks
   }
 }
 
-export let {isolate, isolateSingle} = makeIsolates({
-  $: {
-    isolateSource: (source, key) => {
-      return source.pluck(lastKey(key))
-    },
+// function isolateSingle(busKey, app, appKey=null) {
+//   appKey = appKey || uid.sync(4)
+//   return function App(sources) {
+//     // Prepare sources
+//     let isolatedSources = R.mapObjIndexed(
+//       (source, sourceKey) => {
+//         return sourceKey == busKey
+//           ? templates[busKey].isolateSource(source, appKey)
+//           : source
+//       },
+//       sources
+//     )
+//     let properSources = R.merge(defaultSources(), isolatedSources)
+//
+//     // Run app (unredux component)
+//     let sinks = app(properSources, appKey)
+//
+//     // Prepare sinks
+//     let isolatedSinks = R.mapObjIndexed(
+//       (sink, sinkKey) => {
+//         return sinkKey == busKey
+//           ? templates[sinkKey].isolateSink(sink, appKey)
+//           : sink
+//       },
+//       sinks
+//     )
+//     let properSinks = R.merge(defaultSinks(), isolatedSinks)
+//
+//     return properSinks
+//   }
+// }
 
-    isolateSink: (sink, key) => {
-      return sink.map(command => {
-        return {fn: R.over, args: [lastKey(key), command]}
-      })
-    },
-
-    defaultSource: defaultSources.$,
-
-    defaultSink: defaultSinks.$,
-  },
-
-  DOM: {
-    isolateSource: (source, key) => {
-      return source.fromKey(lastKey(key))
-    },
-
-    isolateSink: (sink, key) => {
-      return (props) => <div data-key={lastKey(key)}>
-        {React.createElement(sink, props)}
-      </div>
-    },
-
-    defaultSource: defaultSources.DOM,
-
-    defaultSink: defaultSinks.DOM,
-  }
-})
-
-export let liftReact = (reactComponent) => {
-  let unreduxComponent = R.merge({
-    $: defaultSinks.$(),
-    DOM: defaultSinks.DOM(),
-  }, {
-    DOM: reactComponent,
-  })
-  return unreduxComponent
+export let liftSinks = (sinks) => {
+  return R.merge(defaultSinks(), sinks)
 }

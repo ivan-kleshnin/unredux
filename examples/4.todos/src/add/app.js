@@ -19,7 +19,7 @@ export default (sources, key) => {
     () => D.makeStore({}),
     D.withLog({key}),
   )(O.merge(
-    F.init(M.makeAdd()),
+    D.init(M.makeAdd()),
 
     // Updates
     intents.inputText$.map(text => R.set("text", text)),

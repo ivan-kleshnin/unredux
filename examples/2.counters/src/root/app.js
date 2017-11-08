@@ -5,51 +5,50 @@ import * as D from "selfdb"
 import * as F from "framework"
 import aApp from "../counter-a/app"
 import bApp from "../counter-b/app"
-import xApp from "../counter-x/app"
-import yApp from "../counter-y/app"
+import cApp from "../counter-c/app"
 
 export default (sources, key) => {
-  // State-independent components
-  let aSinks = F.isolate(aApp, "a")(sources)
-  let bSinks = F.isolate(bApp, "b")(sources)
+  // Counters A* aren't connected to the root state
+  let a1Sinks = F.isolate(aApp, "a1")({...sources, props: {title: "CounterA1"}})
+  let a2Sinks = F.isolate(aApp, "a2")({...sources, props: {title: "CounterA2"}})
 
-  // State-connected components
-  let x1Sinks = F.isolate(xApp, "x1")(sources)
-  let x2Sinks = F.isolate(xApp, "x2")(sources)
-  let y1Sinks = F.isolate(yApp, "y1")(sources)
-  let y2Sinks = F.isolate(yApp, "y2")(sources)
+  // Counters B* are connected to the root state via state$ sinks
+  let b1Sinks = F.isolate(bApp, "b1")({...sources, props: {title: "CounterB1"}})
+  let b2Sinks = F.isolate(bApp, "b2")({...sources, props: {title: "CounterB2"}})
+
+  // CounterC is connected to the root state via action$ sink
+  let c1Sinks = F.isolate(cApp, "c1")({...sources, props: {title: "CounterC1"}})
+  let c2Sinks = F.isolate(cApp, "c2")({...sources, props: {title: "CounterC2"}})
 
   let seed = {
-    x1: 0,
-    x2: 0,
-    y1: 0,
-    y2: 0,
+    b1: 2,
+    b2: 2,
+    c1: 2,
+    c2: 2,
   }
 
   let state$ = D.run(
     () => D.makeStore({}),
     D.withLog({key}),
   )(O.merge(
-    F.init({x1: 0, x2: 0, y1: 0, y2: 0}),
+    D.init(seed),
 
-    x1Sinks.$,
-    x2Sinks.$,
-    y1Sinks.$,
-    y2Sinks.$,
+    b1Sinks.state$.map(v => R.set("b1", v)),
+    b2Sinks.state$.map(v => R.set("b2", v)),
+    c1Sinks.action$,
+    c2Sinks.action$,
   )).$
 
-  state$.subscribe(sources.$)
-
-  let DOM = (props) => {
+  let Component = (props) => {
     return <div>
-      <aSinks.DOM/>
-      <bSinks.DOM/>
-      <x1Sinks.DOM/>
-      <x2Sinks.DOM/>
-      <y1Sinks.DOM/>
-      <y2Sinks.DOM/>
+      <a1Sinks.Component/>
+      <a2Sinks.Component/>
+      <b1Sinks.Component/>
+      <b2Sinks.Component/>
+      <c1Sinks.Component/>
+      <c2Sinks.Component/>
     </div>
   }
 
-  return {DOM}
+  return {state$, Component}
 }

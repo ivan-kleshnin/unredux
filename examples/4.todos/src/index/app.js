@@ -27,38 +27,36 @@ export default (sources, key) => {
 
     // Updates
     intents.setFilter$.map(filter => {
-      let filterFn
-      switch (filter) {
-        case "completed":
-          filterFn = function filterCompleted(t) { return t.completed }
-          break
-        case "active":
-          filterFn = function filterActive(t) { return !t.completed }
-          break
-        default:
-          filterFn = R.id
+      let filterFn = R.id
+      if (filter == "completed") {
+        filterFn = M.isCompleted
+      } else if (filter == "active") {
+        filterFn = M.isActive
       }
       return R.set("filterFn", filterFn)
     }),
   )).$
 
-  let todos$ = state$.combineLatest(sources.$.pluck("todos"), (index, todos) => {
-    return R.pipe(
-      R.values,
-      R.filter(index.filterFn),
-      R.sort(index.sortFn),
-    )(todos)
-  }).publishReplay(1).refCount()
+  let todos$ = F.derive(
+    {index: state$, todos: sources.state$.pluck("todos")},
+    ({index, todos}) => {
+      return R.pipe(
+        R.values,
+        R.filter(index.filterFn),
+        R.sort(index.sortFn),
+      )(todos)
+    }
+  )
 
-  let $ = O.merge(
+  let action$ = O.merge(
     intents.toggleTodo$.map(id => R.over(["todos", id, "completed"], R.not)),
     intents.reset$.map(_ => R.fn("reset", () => M.makeRoot())),
   )
 
-  let DOM = F.connect(
+  let Component = F.connect(
     {todos: todos$},
     Index,
   )
 
-  return {$, DOM}
+  return {action$, Component}
 }

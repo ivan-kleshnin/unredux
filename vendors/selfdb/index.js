@@ -121,7 +121,7 @@ makeStore.options = {
   assertFn,
 }
 
-// Logging mixin/middleware ========================================================================
+// Logging mixins ==================================================================================
 let storeCount = 0
 
 let logActionFn = (storeName, action) => {
@@ -178,7 +178,7 @@ withLog.options = {
   key: "",
 }
 
-// Control mixin/middleware ========================================================================
+// Control mixins ==================================================================================
 
 export let withControl = R.curry((options, Store) => {
   function ControlledStore(action$) {
@@ -255,7 +255,7 @@ export let withControl = R.curry((options, Store) => {
 
 withControl.options = {}
 
-// Persistent mixins/middlewares ===================================================================
+// Persistence mixins ==============================================================================
 
 // TODO timeout option?!
 let _memCache = {}

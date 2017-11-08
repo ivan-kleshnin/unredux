@@ -28,17 +28,17 @@ export default (sources, key) => {
     intents.submitForm$.delay(1).map(_ => R.always(M.makeAdd())),
   )).$
 
-  let $ = O.merge(
+  let action$ = O.merge(
     state$.sample(intents.submitForm$).map(form => {
       let todo = M.makeTodo({text: form.text})
       return R.set(["todos", todo.id], todo)
     }),
   )
 
-  let DOM = F.connect(
+  let Component = F.connect(
     {text: state$.pluck("text")},
     Form,
   )
 
-  return {$, DOM}
+  return {action$, Component}
 }

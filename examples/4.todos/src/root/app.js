@@ -25,17 +25,15 @@ export default (sources, key) => {
   )(O.merge(
     D.init(M.makeRoot()),
 
-    addSinks.$,
-    indexSinks.$,
+    addSinks.action$,
+    indexSinks.action$,
   )).$
 
-  state$.subscribe(sources.$)
-
-  let DOM = (props) =>
+  let Component = (props) =>
     <div>
-     <addSinks.DOM/>
-     <indexSinks.DOM/>
+     <addSinks.Component/>
+     <indexSinks.Component/>
    </div>
 
-  return {DOM}
+  return {state$, Component}
 }

@@ -28,3 +28,7 @@ export let makeRoot = () => {
     todos: {}
   }
 }
+
+export let isCompleted = (t) => t.completed
+
+export let isActive = (t) => !t.completed

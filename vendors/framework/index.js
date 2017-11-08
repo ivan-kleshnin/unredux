@@ -4,7 +4,6 @@ import {combineLatestObj} from "rx-utils"
 import * as R from "../ramda"
 import uid from "uid-safe"
 
-// TODO rx-utils candidate
 export let derive = (streamsToProps, mapFn) =>
   combineLatestObj(streamsToProps)
     .map(mapFn)
@@ -12,7 +11,6 @@ export let derive = (streamsToProps, mapFn) =>
     .publishReplay(1)
     .refCount()
 
-// TODO check how O.fromEvent is built. Do we need memoization?
 export let fromDOMEvent = (appSelector) => {
   function collectFn(selectors) {
     return {
@@ -45,7 +43,7 @@ export let fromDOMEvent = (appSelector) => {
   return collectFn([appSelector])
 }
 
-export function connect(streamsToProps, ComponentToWrap, hooks={}) {
+export let connect = (streamsToProps, ComponentToWrap, hooks={}) => {
   class Container extends React.Component {
     constructor(props) {
       super(props)

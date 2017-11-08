@@ -16,17 +16,17 @@ notable differences.
 
 #### [1. Counter](./1.counter)
 
-The basic counter.
+The basic example.
 
 #### [2. Counters](./2.counters)
 
-Component isolation (4 types of components, 2 instances of 2 of them).
+Component isolation and reuse.
 
-#### [3.1 Counters-Pages](./3.1.counters-pages)
+#### [3.1 Pages](./3.1.pages)
 
-Basic routing.
+Pages and simple routing.
 
-#### [3.2 Counters-Pages](./3.2.counters-pages+)
+#### [3.2 Router](./3.2.router)
 
 Advanced routing (**wip**).
 

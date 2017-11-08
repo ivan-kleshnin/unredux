@@ -1,7 +1,9 @@
+import routes from "./routes"
+
 // type Routes = Array (String, Payload)
 
 // makeRouter :: Routes -> {doroute :: Function, unroute :: Function}
-export default (routes) => {
+let makeRouter = (routes) => {
   // doroute :: String -> {mask :: String, params :: Object, payload :: any)
   let doroute = (url) => {
     for (let [route, payload] of routes) {
@@ -25,3 +27,5 @@ export default (routes) => {
 
   return {doroute, unroute}
 }
+
+export default makeRouter(routes)

@@ -412,7 +412,14 @@ export let withHistory = R.curry((options, Store) => {
     })
 
     self.$ = self.$
-      .map(state => state.log[state.i])
+      .map(hs => {
+        return R.merge(hs.log[hs.i], {
+          _flags: {
+            canUndo: canUndo(hs),
+            canRedo: canRedo(hs),
+          }
+        })
+      })
       .distinctUntilChanged(R.identical)
       .publishReplay(1)
       .refCount()

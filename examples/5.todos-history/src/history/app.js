@@ -1,6 +1,8 @@
 import {Observable as O} from "rxjs"
+import React from "react"
 import * as D from "selfdb"
-import Panel from "./Panel"
+import * as F from "framework"
+import UndoRedo from "./UndoRedo"
 
 export default (sources, key) => {
   let intents = {
@@ -13,7 +15,14 @@ export default (sources, key) => {
     intents.redo$.map(_ => D.redo),
   )
 
-  let Component = Panel
+  let Component = F.connect(
+    {
+      canUndo: sources.state$.map(s => s._flags.canUndo),
+      canRedo: sources.state$.map(s => s._flags.canRedo),
+    },
+    (props) =>
+      <UndoRedo {...props}/>
+  )
 
   return {action$, Component}
 }

@@ -5,6 +5,6 @@ $ npm install
 $ npm start
 ```
 
-## Compare to
+#### Compare to
 
 * [Redux todos](https://github.com/reactjs/redux/tree/master/examples/todos)

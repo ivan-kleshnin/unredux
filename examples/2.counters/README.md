@@ -5,6 +5,6 @@ $ npm install
 $ npm start
 ```
 
-## Compare to
+#### Compare to
 
 TODO

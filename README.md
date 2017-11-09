@@ -14,41 +14,45 @@ notable differences.
 
 ### Examples
 
-#### [1. Counter](./1.counter)
+#### [1. Counter](./examples/1.counter)
 
 The basic example.
 
-#### [2. Counters](./2.counters)
+#### [2. Counters](./examples/2.counters)
 
 Component isolation and reuse.
 
-#### [3.1 Pages](./3.1.pages)
+#### [3.1 Pages](./examples/3.1.pages)
 
 Pages and simple routing.
 
-#### [3.2 Router](./3.2.router)
+#### [3.2 Router](./examples/3.2.router)
 
 Advanced routing (**wip**).
 
-#### [4. Todos](./4.todos)
+#### [4. Todos](./examples/4.todos)
 
-Classic "TodoMVC" example (**wip**).
+Classic "TodoMVC" example.
+
+#### [5. Todos-History](./examples/5.todos-history)
+
+Todos with a flexible history management.
 
 ### Tutorials
 
-#### [1. State](./1.state)
+#### [1. State](./tutorials/1.state)
 
 Getting started with reactive states.
 
-#### [2. Store](./2.store)
+#### [2. Store](./tutorials/2.store)
 
 Making a better store abstraction step by step.
 
-#### [10. Logging](./10.log)
+#### [10. Logging](./tutorials/10.log)
 
 Using logging middleware.
 
-#### [11. Control](./11.control)
+#### [11. Control](./tutorials/11.control)
 
 Using (optional) proactive/non-reactive store interface.
 

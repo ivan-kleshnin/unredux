@@ -90,7 +90,7 @@ export let makeStore = (options) => {
 
     let get = () => _val // can't just access store._val because we don't use prototype(-like) chains
 
-    let self = {options, get}
+    let self = {_options: options, get}
 
     self.$ = action$
       .scan((prevState, fn) => {
@@ -154,7 +154,7 @@ export let withLog = R.curry((options, Store) => {
     let store = Store(action$)
     let self = R.merge(store, {
       log: {
-        options,
+        _options: options,
       }
     })
 
@@ -189,7 +189,7 @@ export let withControl = R.curry((options, Store) => {
     let store = Store(chan)
     let self = R.merge(store, {
       control: {
-        options,
+        _options: options,
       }
     })
 
@@ -271,7 +271,12 @@ export let withMemoryPersistence = R.curry((options, Store) => {
         .startWith(initFn)
     }
 
-    let self = Store(action$)
+    let store = Store(action$)
+    let self = R.merge(store, {
+      memory: {
+        _options: options,
+      }
+    })
 
     if (options.key) {
       self.$ = self.$.do(s => {
@@ -310,7 +315,12 @@ export let withLocalStoragePersistence = R.curry((options, Store) => {
         .startWith(initFn)
     }
 
-    let self = Store(action$)
+    let store = Store(action$)
+    let self = R.merge(store, {
+      storage: {
+        _options: options,
+      }
+    })
 
     if (options.key) {
       self.$ = self.$.merge(
@@ -338,3 +348,85 @@ export let withLocalStoragePersistence = R.curry((options, Store) => {
 withLocalStoragePersistence.options = {
   key: "",
 }
+
+// History mixin ===================================================================================
+export let canUndo = (historyState) =>
+  historyState.i > Math.max(0, R.findIndex(R.id, historyState.log))
+
+export let canRedo = (historyState) =>
+  historyState.i < historyState.log.length - 1
+
+// Actions -----------------------------------------------------------------------------------------
+export function undo(hs) {
+  return canUndo(hs) ? R.over("i", R.dec, hs) : hs
+}
+
+export function redo(hs) {
+  return canRedo(hs) ? R.over("i", R.inc, hs) : hs
+}
+//--------------------------------------------------------------------------------------------------
+
+export let withHistory = R.curry((options, Store) => {
+  function HistoryStore(action$) {
+    options = R.merge(withHistory.options, options)
+
+    let normalizeLog = (log) =>
+      R.takeLast(options.length, [...R.repeat(null, options.length), ...log])
+
+    let seed$ = action$
+      .take(1)
+      .map(init => function initHistory(_) {
+        let seed = init(null)
+        return {
+          log: normalizeLog([seed]), // [null, null, <state>]
+          i: options.length - 1,     //  0     1     2!
+        }
+      })
+
+    action$ = action$
+      .skip(1)
+      .map(fn => {
+        if (fn == undo || fn == redo) {
+          return fn
+        } else {
+          return R.fn(fn.name + "_InHistoryContext", (hs) => {
+            if (hs.i < options.length - 1) {
+              hs = {
+                log: normalizeLog(R.slice(0, hs.i + 1, hs.log)),
+                i: options.length - 1,
+              }
+            }
+            let state = fn(hs.log[hs.i])
+            return R.set("log", tailAppend(state, hs.log), hs)
+          })
+        }
+      })
+
+    action$ = seed$.merge(action$)
+
+    let store = Store(action$)
+    let self = R.merge(store, {
+      history: {
+        _options: options,
+      }
+    })
+
+    self.$ = self.$
+      .map(state => state.log[state.i])
+      .distinctUntilChanged(R.identical)
+      .publishReplay(1)
+      .refCount()
+
+    return self
+  }
+
+  return HistoryStore
+})
+
+withHistory.options = {
+  length: 3,
+}
+
+let tailAppend = R.curry((x, xs) => {
+  return R.append(x, R.tail(xs))
+})

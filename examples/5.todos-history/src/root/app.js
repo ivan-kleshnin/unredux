@@ -21,10 +21,10 @@ export default (sources, key) => {
 
   let state$ = D.run(
     () => D.makeStore({}),
-    D.withLog({key}),                     // 1) this logger is aware of history
+    // D.withLog({key}),                     // 1) this logger is aware of history
     D.withLocalStoragePersistence({key}), // 3) this storage is aware of history (clear localStorage before switching between 3) and 4)!)
     D.withHistory({}),
-    // D.withLog({key}),                     // 2) this logger is unaware of history
+    D.withLog({key}),                     // 2) this logger is unaware of history
     // D.withLocalStoragePersistence({key}), // 4) this storage is unaware of history (clear localStorage before switching between 3) and 4)!)
   )(O.merge(
     D.init(M.makeRoot()),

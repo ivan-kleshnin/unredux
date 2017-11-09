@@ -1,4 +1,7 @@
+import * as R from "ramda"
 import routes from "./routes"
+
+let inspect = (d) => R.is(String, d) ? `'${d}'` : d
 
 // type Routes = Array (String, Payload)
 

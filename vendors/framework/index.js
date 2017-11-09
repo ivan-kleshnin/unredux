@@ -183,6 +183,6 @@ export let isolate = (app, appKey=null) => {
 //   }
 // }
 
-export let liftSinks = (sinks) => {
+/*export let liftSinks = (sinks) => {
   return R.merge(defaultSinks(), sinks)
-}
+}*/

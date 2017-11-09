@@ -1,4 +1,4 @@
-# Content
+# 3.1. Pages
 
 ```
 $ npm install

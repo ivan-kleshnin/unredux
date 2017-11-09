@@ -1,4 +1,4 @@
-# Content
+# 5. Todos History
 
 ```
 $ npm install
@@ -12,7 +12,7 @@ $ npm start
 ## Remarks
 
 Why we keep saying object-oriented design is a pale copy of function design? One of the reasons is
-that you can reorder middlewares getting new and predictable semantics:
+that you can reorder middlewares, getting new and predictable semantics:
 
 ```js
 D.run(
@@ -34,5 +34,5 @@ the immutable fashion:
 * `R.merge(obj, {newKey: newValue})` – :thumbsup:
 * `R.merge(instance, {newKey: newValue})` – :thumbsdown:
 
-Which counts as another *killing* counter-point... The list goes much longer but (the point is) even
+Which counts as another *killing* counter-argument... The list goes much longer but (the point is) even
 these two are completely enough to forever ditch OOP.

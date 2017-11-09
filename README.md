@@ -46,15 +46,15 @@ Getting started with reactive states.
 
 #### [2. Store](./tutorials/2.store)
 
-Making a better store abstraction step by step.
+Let's make a better store abstraction.
 
 #### [10. Logging](./tutorials/10.log)
 
-Using logging middleware.
+Learn how to use logging middleware.
 
 #### [11. Control](./tutorials/11.control)
 
-Using (optional) proactive/non-reactive store interface.
+Learn how to use control middleware.
 
 **...wip**
 

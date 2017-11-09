@@ -1,4 +1,4 @@
-# Content
+# 2. Counters
 
 ```
 $ npm install

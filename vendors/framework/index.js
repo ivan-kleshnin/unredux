@@ -1,5 +1,5 @@
 import React from "react"
-import {Observable as O, ReplaySubject} from "../rxjs"
+import {Observable as O, Subject} from "../rxjs"
 import {combineLatestObj} from "rx-utils"
 import * as R from "../ramda"
 import uid from "uid-safe"
@@ -21,8 +21,8 @@ export let fromDOMEvent = (appSelector) => {
       fromKey: (key) => {
         return collectFn([...selectors, `[data-key="${key}"]`])
       },
-      listen: (eventName) => {
-        return O.fromEvent(document.querySelector(appSelector), eventName)
+      listen: (eventName, options={}) => {
+        return O.fromEvent(document.querySelector(appSelector), eventName, options)
           .throttleTime(10, undefined, {leading: true, trailing: true})
           .filter(event => {
             return event.target.matches(R.join(" ", selectors))

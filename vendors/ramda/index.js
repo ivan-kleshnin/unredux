@@ -82,32 +82,28 @@ export function curryN(N, fn) {
   })
   return collectFn
 }
-export function curry(fn) {
-  return curryN(fn.length, fn)
-}
-export function curryAs(name, fn) {
-  return curry(withName(name, fn))
-}
+export let curry = (fn) => curryN(fn.length, fn)
+export let curryAs = (name, fn) => curry(withName(name, fn))
 
 export let always = curryAs("always", (x, y) => x)
-export function id(x) { return x }
+export let id = (x) => x
 export let complement = (fn) => (...args) => !fn(...args)
-export function flip(fn) {
+export let flip = (fn) => {
   return curryN(fn.length, withName(fn.name + "_flipped", (...args) => {
     return fn(...[...args].reverse())
   }))
 }
-export function F() { return false }
-export function T() { return true }
+export let F = () => false
+export let T = () => true
 
 export let add = curryAs("add", (x, y) => x + y)
 export let containsFlipped = flip(contains)
-export function dec(x) { return x - 1 }
+export let dec = (x) => x - 1
 export let divide = curryAs("divide", (x, y) => x / y)
 export let filter2 = addIndex(filter)
-export function fst(xs) { return xs[0] }
-export function inc(x) { return x + 1 }
-export function isPlainObj(o) { return Boolean(o && o.constructor && o.constructor.prototype && o.constructor.prototype.hasOwnProperty("isPrototypeOf")) }
+export let fst = (xs) => xs[0]
+export let inc = (x) => x + 1
+export let isPlainObj = (o) => Boolean(o && o.constructor && o.constructor.prototype && o.constructor.prototype.hasOwnProperty("isPrototypeOf"))
 export let flattenObj = (obj, keys=[]) => {
   return Object.keys(obj).reduce((acc, key) => {
     return merge(acc, isPlainObj(obj[key])
@@ -116,11 +112,11 @@ export let flattenObj = (obj, keys=[]) => {
     )
   }, {})
 }
-export function head(xs) { return xs[0] }
+export let head = nth(0)
 export let join = curryAs("join", (sep, xs) => xs.join(sep))
 export let keys = Object.keys
-export function length(x) { return x.length }
-export function lensify(lens) {
+export let length = (x) => x.length
+export let lensify = (lens) => {
   if (is(Array, lens)) {
     return reduce(
       (z, s) => compose(z, is(Number, s) ? lensIndex(s) : lensProp(s)),
@@ -139,6 +135,7 @@ export function lensify(lens) {
 }
 export let multiply = curryAs("multiply", (x, y) => x * y)
 export let over = curryAs("over", (lens, fn, obj) => _over(lensify(lens), fn, obj))
+export let passThrough = (...args) => args
 export let mapObjIndexed = curryAs("mapObjIndexed", (fn, obj) => {
   return reduce((z, k) => {
     z[k] = fn(obj[k], k, obj)
@@ -150,15 +147,15 @@ export let merge = curryAs("merge", (xs, ys) => Object.assign({}, xs, ys))
 export let mergeFlipped = flip(merge)
 export let mergeDeep = mergeDeepRight
 export let mergeDeepFlipped = flip(mergeDeep)
-export function not(x) { return !x }
+export let not = (x) => !x
 // TODO nth
 export let reduce2 = addIndex(reduce)
 export let set = curryAs("set", (lens, val, obj) => _set(lensify(lens), val, obj))
-export function snd(xs) { return xs[1] }
+export let snd = (xs) => xs[1]
 export let split = curryAs("split", (sep, xs) => xs.split(sep))
 export let subtract = curryAs("subtract", (x, y) => x - y)
 export let startsWith = curryAs("startsWith", (x, y) => y.startsWith(x))
-export function tail(xs) { return xs.slice(1) }
+export let tail = (xs) => xs.slice(1)
 export let unset = curryAs("unset", (lens, obj) => is(Array, lens) ? dissocPath(lens, obj) : dissocPath([lens], obj)) // @_@
 export let values = Object.values
 export let view = curryAs("view", (lens, obj) => _view(lensify(lens), obj))

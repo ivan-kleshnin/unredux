@@ -62,10 +62,9 @@ function handleAdd(v) {
 
 * Angular
 * CalmmJS
-* Cycle-React
 * MobX (default approach)
-* Flux
-* Redux
+* Flux (default approach)
+* Redux (default approach)
 * VueJS
 * (... thousands of them)
 
@@ -81,8 +80,8 @@ onClick = {() => state.over("counter", R.add(2))}
 
 `Action <- State <- View => Action`
 
+* Cycle-React
 * Earlier versions of this project
-* *(Not aware of other examples)*
 
 ```js
 // View => Action
@@ -131,7 +130,7 @@ let state = State(0, O.merge(
 
 Cycle-React = vanilla React + some streaming facilities.
 
-* Pros: ?
+* Pros: no extra concepts, interoperability with vanilla React ecosystem
 * Cons: [imperative](https://github.com/pH200/cycle-react/blob/master/examples/web/todomvc/todo-model.js#L22) state updates,
 [imperative](https://github.com/pH200/cycle-react/blob/master/examples/web/todomvc/todo-view.js#L57-L64) actions/intents.
 

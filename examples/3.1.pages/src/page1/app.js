@@ -4,12 +4,20 @@ import React from "react"
 import * as D from "selfdb"
 import * as F from "framework"
 
-export default (sources, key) => {
+export default F.component((sources, key) => {
   let intents = {
     // unsubscribed on state unsubscribe which happens on willUnmount
     inc$: sources.DOM.fromKey("inc").listen("click").mapTo(true),
     dec$: sources.DOM.fromKey("dec").listen("click").mapTo(true),
   }
+
+  // No need to unsubscribe here
+  sources.Component.willMount$.subscribe(() => {
+    console.log("Page1.app: Component.willMount$")
+  })
+  sources.Component.willUnmount$.subscribe(() => {
+    console.log("Page1.app: Component.willUnmount$")
+  })
 
   let state$ = D.run(
     () => D.makeStore({}),
@@ -27,16 +35,8 @@ export default (sources, key) => {
       <div>
         Page 1: {counter} <button data-key="inc">+1</button> <button data-key="dec">-1</button>
         <p><i>Memory persistence</i></p>
-      </div>,
-    {
-      componentWillMount(...args) {
-        console.log("Page1 will mount!")
-      },
-      componentWillUnmount(...args) {
-        console.log("Page1 will unmount!")
-      }
-    }
+      </div>
   )
 
   return {Component}
-}
+})

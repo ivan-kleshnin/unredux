@@ -43,29 +43,30 @@ export let fromDOMEvent = (appSelector) => {
   return collectFn([appSelector])
 }
 
-export let connect = (streamsToProps, ComponentToWrap, hooks={}) => {
+export let connect = (streamsToProps, ComponentToWrap) => {
   class Container extends React.Component {
     constructor(props) {
       super(props)
       this.state = {} // will be replaced with seed on componentWillMount
+      Container.constructor$.next()
+      Container.constructor$.complete()
     }
 
     componentWillMount(...args) {
       let props = combineLatestObj(streamsToProps)
         .throttleTime(10, undefined, {leading: true, trailing: true}) // RxJS throttle is half-broken (https://github.com/ReactiveX/rxjs/search?q=throttle&type=Issues)
+      // TODO add .take(1) if called on server (because of no componentWillUnmount there)
       this.sb = props.subscribe((data) => {
         this.setState(data)
       })
-      if (R.is(Function, hooks.componentWillMount)) {
-        hooks.componentWillMount(...args)
-      }
+      Container.willMount$.next(args)
+      Container.willMount$.complete()
     }
 
     componentWillUnmount(...args) {
       this.sb.unsubscribe()
-      if (R.is(Function, hooks.componentWillUnmount)) {
-        hooks.componentWillUnmount(...args)
-      }
+      Container.willUnmount$.next(args)
+      Container.willUnmount$.complete()
     }
 
     render() {
@@ -73,6 +74,10 @@ export let connect = (streamsToProps, ComponentToWrap, hooks={}) => {
       return React.createElement(ComponentToWrap, R.merge(this.props, this.state), this.props.children)
     }
   }
+
+  Container.constructor$ = new Subject()
+  Container.willMount$ = new Subject()
+  Container.willUnmount$ = new Subject()
 
   return Container
 }
@@ -186,3 +191,27 @@ export let isolate = (app, appKey=null) => {
 /*export let liftSinks = (sinks) => {
   return R.merge(defaultSinks(), sinks)
 }*/
+
+export let component = (fn) => {
+  return R.withName(fn.name, (sources, key) => {
+    sources = R.merge(sources, {
+      Component: {
+        willMount$: new Subject(),
+        willUnmount$: new Subject(),
+      }
+    })
+    let sinks = fn(sources, key)
+    if (sinks.Component) {
+      if (sinks.Component.willMount$) {
+        // Should unsubscribed automatically, reinforce with take(1)
+        sinks.Component.willMount$.take(1).subscribe(sources.Component.willMount$)
+      }
+      if (sinks.Component.willUnmount$) {
+        // Should unsubscribed automatically, reinforce with take(1)
+        sinks.Component.willUnmount$.take(1).subscribe(sources.Component.willUnmount$)
+      }
+    }
+    return sinks
+  })
+}
+

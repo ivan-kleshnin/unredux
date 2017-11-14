@@ -15,18 +15,22 @@ export default (sources, key) => {
       .mapTo(true),
   }
 
+  let seed = {
+    text: "",
+  }
+
   let state$ = D.run(
     () => D.makeStore({}),
     D.withLog({key}),
-  )(O.merge(
-    D.init(M.makeAdd()),
+  )(
+    D.init(seed),
 
     // Updates
     intents.inputText$.map(text => R.set("text", text)),
 
     // Resets
-    intents.submitForm$.delay(1).map(_ => R.always(M.makeAdd())),
-  )).$
+    intents.submitForm$.delay(1).map(_ => R.always(seed)),
+  ).$
 
   let action$ = O.merge(
     state$.sample(intents.submitForm$).map(form => {

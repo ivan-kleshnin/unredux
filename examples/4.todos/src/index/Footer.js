@@ -11,9 +11,6 @@ export default function Footer(props) {
       {", "}
       <a href="#completed" data-key="filter" data-val="completed">Completed</a>
     </p>
-    <p>
-      <a href="#reset" data-key="reset">Reset</a>
-    </p>
   </div>
 }
 

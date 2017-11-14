@@ -31,7 +31,7 @@ export default (sources, key) => {
   let state$ = D.run(
     () => D.makeStore({}),
     D.withLog({key}),
-  )(O.merge(
+  )(
     D.init({
       url: document.location.pathname,
       // page1, page2 use their own states (for the sake of demonstration)
@@ -44,7 +44,7 @@ export default (sources, key) => {
 
     // content
     contentSinks$.pluck("action$").switch(),
-  )).$
+  ).$
 
   let Component = F.connect(
     {

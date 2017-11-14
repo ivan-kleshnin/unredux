@@ -13,17 +13,16 @@ export default (sources, key) => {
     setFilter$: sources.DOM.fromKey("filter").listen("click")
       .do(event => event.preventDefault())
       .map(event => event.target.dataset.val),
-
-    reset$: sources.DOM.fromKey("reset").listen("click")
-      .do(event => event.preventDefault())
-      .mapTo(true),
   }
 
   let state$ = D.run(
     () => D.makeStore({assertFn: R.id}),
     D.withLog({key}),
-  )(O.merge(
-    D.init(M.makeIndex()),
+  )(
+    D.init({
+      filterFn: R.id,
+      sortFn: R.fn("sortByAddedAt", R.ascend(R.prop("addedAt"))),
+    }),
 
     // Updates
     intents.setFilter$.map(filter => {
@@ -35,7 +34,7 @@ export default (sources, key) => {
       }
       return R.set("filterFn", filterFn)
     }),
-  )).$
+  ).$
 
   let todos$ = F.derive(
     {index: state$, todos: sources.state$.pluck("todos")},
@@ -50,7 +49,6 @@ export default (sources, key) => {
 
   let action$ = O.merge(
     intents.toggleTodo$.map(id => R.over(["todos", id, "completed"], R.not)),
-    intents.reset$.map(_ => R.fn("reset", () => M.makeRoot())),
   )
 
   let Component = F.connect(

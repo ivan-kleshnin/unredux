@@ -18,7 +18,9 @@ export let isBrowser = new Function("try { return this === window } catch(e) { r
 export let isNode = new Function("try { return this === global } catch(e) { return false }")
 
 export let run = (...fns) => {
-  return R.pipe(...fns)()
+  let Store = R.pipe(...fns)()
+  return (...action$s) =>
+    Store(O.merge(...action$s))
 }
 
 // TODO rx-utils candidate

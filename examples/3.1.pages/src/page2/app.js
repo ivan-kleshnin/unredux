@@ -23,11 +23,11 @@ export default F.component((sources, key) => {
     () => D.makeStore({}),
     D.withLog({key}),
     D.withLocalStoragePersistence({key}),
-  )(O.merge(
+  )(
     D.init(0),
     intents.inc$.map(_ => R.inc),
     intents.dec$.map(_ => R.dec),
-  )).$
+  ).$
 
   let Component = F.connect(
     {counter: state$},

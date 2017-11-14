@@ -26,13 +26,13 @@ export default (sources, key) => {
     D.withHistory({}),
     D.withLog({key}),                     // 2) this logger is unaware of history
     // D.withLocalStoragePersistence({key}), // 4) this storage is unaware of history (clear localStorage before switching between 3) and 4)!)
-  )(O.merge(
+  )(
     D.init(M.makeRoot()),
 
     addSinks.action$,
     indexSinks.action$,
     historySinks.action$,
-  )).$
+  ).$
 
   let Component = (props) =>
     <div>

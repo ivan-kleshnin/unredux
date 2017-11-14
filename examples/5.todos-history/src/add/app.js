@@ -18,7 +18,7 @@ export default (sources, key) => {
   let state$ = D.run(
     () => D.makeStore({}),
     D.withLog({key}),
-  )(O.merge(
+  )(
     D.init(M.makeAdd()),
 
     // Updates
@@ -26,7 +26,7 @@ export default (sources, key) => {
 
     // Resets
     intents.submitForm$.delay(1).map(_ => R.always(M.makeAdd())),
-  )).$
+  ).$
 
   let action$ = O.merge(
     state$.sample(intents.submitForm$).map(form => {

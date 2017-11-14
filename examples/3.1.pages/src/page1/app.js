@@ -4,6 +4,7 @@ import React from "react"
 import * as D from "selfdb"
 import * as F from "framework"
 
+// Decorate app with `F.component` to handle lifecycle events declaratively (`sources.Component`)
 export default F.component((sources, key) => {
   let intents = {
     // unsubscribed on state unsubscribe which happens on willUnmount
@@ -23,11 +24,11 @@ export default F.component((sources, key) => {
     () => D.makeStore({}),
     D.withLog({key}),
     D.withMemoryPersistence({key}),
-  )(O.merge(
+  )(
     D.init(0),
     intents.inc$.map(_ => R.inc),
     intents.dec$.map(_ => R.dec),
-  )).$
+  ).$
 
   let Component = F.connect(
     {counter: state$},

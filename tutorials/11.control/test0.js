@@ -8,10 +8,10 @@ let state = D.run(
   () => D.makeStore({}),
   D.withLog({key: "db"}),
   D.withControl({}),
-)(O.merge(
+)(
   O.of(() => seed),
   O.of(R.id),
-))
+)
 
 state.$.subscribe()
 

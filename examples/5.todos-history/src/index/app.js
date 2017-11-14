@@ -22,7 +22,7 @@ export default (sources, key) => {
   let state$ = D.run(
     () => D.makeStore({assertFn: R.id}),
     D.withLog({key}),
-  )(O.merge(
+  )(
     D.init(M.makeIndex()),
 
     // Updates
@@ -35,7 +35,7 @@ export default (sources, key) => {
       }
       return R.set("filterFn", filterFn)
     }),
-  )).$
+  ).$
 
   let todos$ = F.derive(
     {index: state$, todos: sources.state$.pluck("todos")},

@@ -5,6 +5,10 @@ import * as F from "framework"
 import * as M from "../models"
 import Form from "./form"
 
+export let seed = {
+  text: "",
+}
+
 export default (sources, key) => {
   let intents = {
     inputText$: sources.DOM.from("input[name=text]").listen("input")
@@ -13,10 +17,6 @@ export default (sources, key) => {
     submitForm$: sources.DOM.from("form").listen("submit")
       .do(event => event.preventDefault())
       .mapTo(true),
-  }
-
-  let seed = {
-    text: "",
   }
 
   let state$ = D.run(

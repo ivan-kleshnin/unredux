@@ -5,6 +5,11 @@ import * as F from "framework"
 import * as M from "../models"
 import Index from "./Index"
 
+export let seed = {
+  filterFn: R.id,
+  sortFn: R.fn("sortByAddedAt", R.ascend(R.prop("addedAt"))),
+}
+
 export default (sources, key) => {
   let intents = {
     toggleTodo$: sources.DOM.fromKey("item").listen("click")
@@ -19,10 +24,7 @@ export default (sources, key) => {
     () => D.makeStore({assertFn: R.id}),
     D.withLog({key}),
   )(
-    D.init({
-      filterFn: R.id,
-      sortFn: R.fn("sortByAddedAt", R.ascend(R.prop("addedAt"))),
-    }),
+    D.init(seed),
 
     // Updates
     intents.setFilter$.map(filter => {

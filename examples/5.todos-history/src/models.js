@@ -10,25 +10,6 @@ export let makeTodo = (data) => {
   }, data)
 }
 
-export let makeAdd = () => {
-  return {
-    text: "",
-  }
-}
-
-export let makeIndex = () => {
-  return {
-    filterFn: R.id,
-    sortFn: R.fn("sortByAddedAt", R.ascend(R.prop("addedAt"))),
-  }
-}
-
-export let makeRoot = () => {
-  return {
-    todos: {}
-  }
-}
-
 export let isCompleted = (t) => t.completed
 
 export let isActive = (t) => !t.completed

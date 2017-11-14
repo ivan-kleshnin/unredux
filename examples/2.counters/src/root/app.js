@@ -8,6 +8,15 @@ import bApp from "../counter-b/app"
 import cApp from "../counter-c/app"
 import dApp from "../counter-d/app"
 
+export let seed = {
+  b1: 1,
+  b2: 1,
+  c1: 2,
+  c2: 2,
+  d1: 3,
+  d2: 3,
+}
+
 /*
  This example demonstrates 4 possible patterns
  of connection between parent and child apps.
@@ -34,15 +43,6 @@ export default (sources, key) => {
   let d1Sinks = F.isolate(dApp, "d1")({...sources, props: {title: "CounterD1"}})
   let d2Sinks = F.isolate(dApp, "d2")({...sources, props: {title: "CounterD2"}})
   // d*Sinks :: {Component, intents}
-
-  let seed = {
-    b1: 1,
-    b2: 1,
-    c1: 2,
-    c2: 2,
-    d1: 3,
-    d2: 3,
-  }
 
   let state$ = D.run(
     () => D.makeStore({}),

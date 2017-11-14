@@ -1,9 +1,12 @@
 import {Observable as O} from "rxjs"
 import React from "react"
 import * as D from "selfdb"
-import * as M from "../models"
 import addApp from "../add/app"
 import indexApp from "../index/app"
+
+export let seed = {
+  todos: {}
+}
 
 export default (sources, key) => {
   let intents = {
@@ -23,10 +26,6 @@ export default (sources, key) => {
   let addSinks = addApp(sources, key + ".add")
   let indexSinks = indexApp(sources, key + ".index")
 
-  let seed = {
-    todos: {}
-  }
-
   let state$ = D.run(
     () => D.makeStore({}),
     D.withLog({key}),
@@ -34,9 +33,10 @@ export default (sources, key) => {
   )(
     D.init(seed),
 
+    intents.reset$.map(_ => R.always(seed)),
+
     addSinks.action$,
     indexSinks.action$,
-    intents.reset$.map(_ => R.always(seed)),
   ).$
 
   let Component = (props) =>

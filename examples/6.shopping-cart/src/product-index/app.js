@@ -6,6 +6,11 @@ import React from "react"
 import * as F from "framework"
 import ProductIndex from "./ProductIndex"
 
+export let seed = {
+  filterFn: R.id,
+  sortFn: R.ascend(R.prop("id")),
+}
+
 export default (sources, key) => {
   let intents = {
     buy$: sources.DOM.fromKey("productIndex").fromKey("buy").listen("click")
@@ -21,11 +26,6 @@ export default (sources, key) => {
       }
     })
   )
-
-  let seed = {
-    filterFn: R.id,
-    sortFn: R.ascend(R.prop("id")),
-  }
 
   let index$ = D.run(
     () => D.makeStore({assertFn: R.id}),

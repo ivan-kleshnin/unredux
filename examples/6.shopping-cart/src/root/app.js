@@ -7,6 +7,16 @@ import RR from "r2"
 import productIndexApp from "../product-index/app"
 import CartIndex from "./CartIndex"
 
+export let seed = {
+  // DB
+  products: {}, // products,
+
+  // Cart
+  cartPicks: {},
+  cartFilterFn: R.id,
+  cartSortFn: R.ascend(R.prop("title")),
+}
+
 export default (sources, key) => {
   let intents = {
     cartInc$: sources.DOM.fromKey("cart").fromKey("inc").listen("click")
@@ -95,12 +105,3 @@ export default (sources, key) => {
 
 // import products from "../products.json"
 
-export let seed = {
-  // DB
-  products: {}, // products,
-
-  // Cart
-  cartPicks: {},
-  cartFilterFn: R.id,
-  cartSortFn: R.ascend(R.prop("title")),
-}

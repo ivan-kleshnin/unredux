@@ -5,6 +5,10 @@ import * as F from "framework"
 import * as M from "../models"
 import Form from "./form"
 
+export let seed = {
+  text: "",
+}
+
 export default (sources, key) => {
   let intents = {
     inputText$: sources.DOM.from("input[name=text]").listen("input")
@@ -19,13 +23,13 @@ export default (sources, key) => {
     () => D.makeStore({}),
     D.withLog({key}),
   )(
-    D.init(M.makeAdd()),
+    D.init(seed),
 
     // Updates
     intents.inputText$.map(text => R.set("text", text)),
 
     // Resets
-    intents.submitForm$.delay(1).map(_ => R.always(M.makeAdd())),
+    intents.submitForm$.delay(1).map(_ => R.always(seed)),
   ).$
 
   let action$ = O.merge(

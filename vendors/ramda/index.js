@@ -16,6 +16,7 @@ import find from "ramda/src/find"
 import findIndex from "ramda/src/findIndex"
 import findLast from "ramda/src/findLast"
 import forEach from "ramda/src/forEach"
+import fromPairs from "ramda/src/fromPairs"
 import identical from "ramda/src/identical"
 import is from "ramda/src/is"
 import isEmpty from "ramda/src/isEmpty"
@@ -41,6 +42,7 @@ import _set from "ramda/src/set"
 import slice from "ramda/src/slice"
 import sort from "ramda/src/sort"
 import take from "ramda/src/take"
+import toPairs from "ramda/src/toPairs"
 import takeLast from "ramda/src/takeLast"
 import unnest from "ramda/src/unnest"
 import _view from "ramda/src/view"
@@ -171,7 +173,7 @@ export {
   chain, comparator, compose, concat, contains,
   descend, difference, dropLast,
   equals,
-  filter, find, findIndex, findLast, forEach,
+  filter, find, findIndex, findLast, forEach, fromPairs,
   identical, is, isEmpty,
   lens, lensIndex, lensProp,
   map,
@@ -180,7 +182,7 @@ export {
   pick, pipe, pluck, prepend, prop, propEq,
   range, reject, repeat, reduce,
   slice, sort,
-  take, takeLast,
+  take, takeLast, toPairs,
   unnest,
   without,
   zip,

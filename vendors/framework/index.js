@@ -47,16 +47,19 @@ export let connect = (streamsToProps, ComponentToWrap) => {
   class Container extends React.Component {
     constructor(props) {
       super(props)
-      this.state = {} // will be replaced with seed on componentWillMount
+      this.state = {}
       Container.constructor$.next()
       Container.constructor$.complete()
     }
 
     componentWillMount(...args) {
-      let props = combineLatestObj(streamsToProps)
-        .throttleTime(10, undefined, {leading: true, trailing: true}) // RxJS throttle is half-broken (https://github.com/ReactiveX/rxjs/search?q=throttle&type=Issues)
+      let props$ = combineLatestObj(streamsToProps)
+        // .throttleTime(10, undefined, {leading: true, trailing: true})
+        .auditTime(10)
+
       // TODO add .take(1) if called on server (because of no componentWillUnmount there)
-      this.sb = props.subscribe((data) => {
+
+      this.sb = props$.subscribe((data) => {
         this.setState(data)
       })
       Container.willMount$.next(args)
@@ -70,8 +73,12 @@ export let connect = (streamsToProps, ComponentToWrap) => {
     }
 
     render() {
-      // TODO if this.state == {} return <div/> or Loading???
-      return React.createElement(ComponentToWrap, R.merge(this.props, this.state), this.props.children)
+      // TODO async component (React-walk, etc.)
+      if (R.isEmpty(this.state)) {
+        return <div>Loading...</div>
+      } else {
+        return React.createElement(ComponentToWrap, R.merge(this.props, this.state), this.props.children)
+      }
     }
   }
 
@@ -121,9 +128,9 @@ export let isolateSinks = {
     })
   },
 
-  state$: (sink, key) => {
-    return sink // has to be isolated on consumer part
-  },
+  state$: R.id, // has to be isolated manually
+
+  intents: R.id, // has to be isolated manually
 
   Component: (sink, key) => {
     return (props) => <div data-key={lastKey(key)}>

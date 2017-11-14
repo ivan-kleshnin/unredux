@@ -40,7 +40,7 @@ Todos with a flexible history management.
 
 #### [6. Shopping-Cart](./examples/6.shopping-cart)
 
-Shopping Cart demonstrating the interaction between parent .
+Shopping Cart with interactions between "parent" and "child" apps.
 
 ### Tutorials
 

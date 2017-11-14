@@ -38,7 +38,7 @@ Classic "TodoMVC" app.
 
 Todos with a flexible history management.
 
-#### [6. Shopping-Cart](./examples/5.todos-history)
+#### [6. Shopping-Cart](./examples/6.shopping-cart)
 
 Shopping Cart demonstrating the interaction between parent .
 

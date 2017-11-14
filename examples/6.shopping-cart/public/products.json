@@ -1,0 +1,20 @@
+{
+  "1": {
+    "id": "1",
+    "title": "Apple",
+    "price": 10,
+    "inventory": 12
+  },
+  "2": {
+    "id": "2",
+    "title": "Orange",
+    "price": 8,
+    "inventory": 20
+  },
+  "3": {
+    "id": "3",
+    "title": "Melon",
+    "price": 20,
+    "inventory": 5
+  }
+}

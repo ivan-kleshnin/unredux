@@ -32,11 +32,15 @@ Advanced routing (**wip**).
 
 #### [4. Todos](./examples/4.todos)
 
-Classic "TodoMVC" example.
+Classic "TodoMVC" app.
 
 #### [5. Todos-History](./examples/5.todos-history)
 
 Todos with a flexible history management.
+
+#### [6. Shopping-Cart](./examples/5.todos-history)
+
+Shopping Cart demonstrating the interaction between parent .
 
 ### Tutorials
 

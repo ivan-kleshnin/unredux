@@ -10,9 +10,9 @@ import page2App from "../page2/app"
 import page3App from "../page3/app"
 
 export default (sources, key) => {
-  let contentSinks$ = F.derive(
-    {url: sources.state$.pluck("url")},
-    ({url}) => {
+  let contentSinks$ = F.deriveOne(
+    sources.state$.pluck("url"),
+    (url) => {
       let sinks
       if (url == "/") {
         sinks = {Component: Home}

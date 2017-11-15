@@ -1,15 +1,27 @@
 import React from "react"
+import Route from "route-parser"
 import {Observable as O, Subject} from "../rxjs"
 import {combineLatestObj} from "rx-utils"
 import * as R from "../ramda"
 import uid from "uid-safe"
 
-export let derive = (streamsToProps, mapFn) =>
-  combineLatestObj(streamsToProps)
+export let derive = (streamsToProps, mapFn) => {
+  streamsToProps = R.map($ => $.distinctUntilChanged(R.identical), streamsToProps)
+  return combineLatestObj(streamsToProps)
     .map(mapFn)
     .distinctUntilChanged(R.identical)
     .publishReplay(1)
     .refCount()
+}
+
+export let deriveOne = (stream, mapFn) => {
+  stream = stream.distinctUntilChanged(R.identical)
+  return stream
+    .map(mapFn)
+    .distinctUntilChanged(R.identical)
+    .publishReplay(1)
+    .refCount()
+}
 
 export let fromDOMEvent = (appSelector) => {
   function collectFn(selectors) {
@@ -54,8 +66,7 @@ export let connect = (streamsToProps, ComponentToWrap) => {
 
     componentWillMount(...args) {
       let props$ = combineLatestObj(streamsToProps)
-        // .throttleTime(10, undefined, {leading: true, trailing: true})
-        .auditTime(10)
+        .throttleTime(10, undefined, {leading: true, trailing: true})
 
       // TODO add .take(1) if called on server (because of no componentWillUnmount there)
 

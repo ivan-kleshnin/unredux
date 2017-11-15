@@ -6,9 +6,9 @@ import * as F from "framework"
 import router from "../router"
 
 export default (sources, key) => {
-  let contentSinks$ = F.derive(
-    {url: sources.state$.pluck("url")},
-    ({url}) => {
+  let contentSinks$ = F.deriveOne(
+    sources.state$.pluck("url"),
+    (url) => {
       let {mask, payload: app} = router.doroute(url)
       let sinks = F.isolate(app, key + mask.replace(/^\//, "."))({...sources, props: {router}})
       return R.merge({action$: O.of()}, sinks)

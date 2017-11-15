@@ -39,7 +39,10 @@ export default (sources, key) => {
   ).$
 
   let todos$ = F.derive(
-    {index: state$, todos: sources.state$.pluck("todos")},
+    {
+      todos: sources.state$.pluck("todos"),
+      index: state$,
+    },
     ({index, todos}) => {
       return R.pipe(
         R.values,

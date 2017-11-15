@@ -1,16 +1,23 @@
-import * as R from "ramda"
-import {Observable as O} from "rxjs"
-import React from "react"
 import * as D from "selfdb"
+import * as R from "ramda"
+import React from "react"
+import {Observable as O} from "rxjs"
 import * as F from "framework"
 import router from "../router"
+
+export let seed = {
+  url: document.location.pathname,
+  // page1, page2 use their own states (for the sake of demonstration)
+  page3: 0,
+}
 
 export default (sources, key) => {
   let contentSinks$ = F.deriveOne(
     sources.state$.pluck("url"),
     (url) => {
       let {mask, payload: app} = router.doroute(url)
-      let sinks = F.isolate(app, key + mask.replace(/^\//, "."))({...sources, props: {router}})
+      app = F.isolate(app, key + mask.replace(/^\//, "."))
+      let sinks = app({...sources, props: {router}})
       return R.merge({action$: O.of()}, sinks)
     }
   )
@@ -32,17 +39,13 @@ export default (sources, key) => {
     () => D.makeStore({}),
     D.withLog({key}),
   )(
-    D.init({
-      url: document.location.pathname,
-      // page1, page2 use their own states (for the sake of demonstration)
-      page3: 0,
-    }),
+    D.init(seed),
 
-    // navigation
+    // Navigation
     intents.navigateTo$.map(url => R.fn("navigateTo", R.set("url", url))),
     intents.navigateHistory$.map(url => R.fn("navigateHistory", R.set("url", url))),
 
-    // content
+    // Content
     contentSinks$.pluck("action$").switch(),
   ).$
 
@@ -57,15 +60,15 @@ export default (sources, key) => {
           Current URL: {url}
         </p>
         <p>
-        <a href="/" className="link">Home</a>
-        {" "}
-        <a href="/page1" className="link">Page 1</a>
-        {" "}
-        <a href="/page2" className="link">Page 2</a>
-        {" "}
-        <a href="/page3" className="link">Page 3</a>
-        {" "}
-        <a href="/not-found" className="link">Not Found</a>
+          <a href="/">Home</a>
+          {" "}
+          <a href="/page1">Page 1</a>
+          {" "}
+          <a href="/page2">Page 2</a>
+          {" "}
+          <a href="/page3">Page 3</a>
+          {" "}
+          <a href="/not-found">Not Found</a>
         </p>
         <hr/>
         <Content/>

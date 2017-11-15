@@ -6,8 +6,8 @@ import * as F from "framework"
 export default (sources, key) => {
   let intents = {
     // unsubscribed on state unsubscribe which happens on willUnmount
-    inc$: sources.DOM.fromKey("inc").listen("click"),
-    dec$: sources.DOM.fromKey("dec").listen("click"),
+    inc$: sources.DOM.fromKey("inc").listen("click").mapTo(true),
+    dec$: sources.DOM.fromKey("dec").listen("click").mapTo(true),
   }
 
   let action$ = O.merge(

@@ -9,7 +9,7 @@ import CartIndex from "./CartIndex"
 
 export let seed = {
   // DB
-  products: {}, // products,
+  products: {},
 
   // Cart
   cartPicks: {},
@@ -102,6 +102,3 @@ export default (sources, key) => {
 
   return {state$, Component}
 }
-
-// import products from "../products.json"
-

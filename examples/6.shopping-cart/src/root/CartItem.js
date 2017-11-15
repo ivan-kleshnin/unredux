@@ -2,8 +2,7 @@ import * as R from "ramda"
 import React from "react"
 import PT from "prop-types"
 
-export default function CartItem(props) {
-  let {product, quantity} = props
+export default function CartItem({product, quantity}) {
   let left = product.inventory - quantity
   return <p>
     <span style={{textDecoration: quantity ? "none" : "line-through"}}>

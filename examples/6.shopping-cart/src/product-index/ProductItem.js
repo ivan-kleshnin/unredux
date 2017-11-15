@@ -2,8 +2,7 @@ import * as R from "ramda"
 import React from "react"
 import PT from "prop-types"
 
-export default function ProductItem(props) {
-  let {product, cartQuantity} = props
+export default function ProductItem({product, cartQuantity}) {
   let left = product.inventory - cartQuantity
   return <p>
     {product.title} - &#36;{product.price}

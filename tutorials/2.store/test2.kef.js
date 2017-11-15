@@ -1,6 +1,6 @@
 import * as R from "ramda"
 import {inspect} from "util"
-import {Observable as O} from "rxjs"
+import K from "kefir"
 
 // Lib ===========================================================================================
 // We can inject `seed` via `options` or `action$`. The second one is preferable because the "later"
@@ -18,10 +18,8 @@ function makeStore(options) {
         } else {
           throw Error(`dispatched value must be a function, got ${inspect(fn)}`)
         }
-      }, null)
-      .distinctUntilChanged()
-      .publishReplay(1)
-      .refCount()
+      })
+      .skipDuplicates()
 
     return self
   }
@@ -34,19 +32,18 @@ makeStore.options = {
 }
 
 // App =============================================================================================
-let action$ = O.of(R.inc, R.inc, R.inc, R.inc, R.inc)
-  .concatMap(x => O.of(x).delay(200))
+let makeAction$ = () => K.sequentially(200, [R.inc, R.inc, R.inc, R.inc, R.inc])
 
-let state1 = makeStore({})(action$.startWith(() => 1))
+let state1 = makeStore({})(makeAction$().merge(K.constant(1)))
 
-state1.$.subscribe(s => {
+state1.$.observe(s => {
   console.log("state1:", s)
 })
 
 setTimeout(() => {
-  let state10 = makeStore({})(action$.startWith(() => 10))
+  let state10 = makeStore({})(makeAction$().merge(K.constant(10)))
 
-  state10.$.subscribe(s => {
+  state10.$.observe(s => {
     console.log("state10:", s)
   })
 }, 1200)

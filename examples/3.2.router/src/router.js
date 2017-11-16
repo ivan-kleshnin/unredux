@@ -1,34 +1,23 @@
-import * as R from "ramda"
-import routes from "./routes"
+import * as F from "framework"
 
-let inspect = (d) => R.is(String, d) ? `'${d}'` : d
+// Apps
+import page1App from "./page1/app"
+import page2App from "./page2/app"
+import page3App from "./page3/app" // TODO rename `app.js` to `index.js` for cleaner imports?
 
-// type Routes = Array (String, Payload)
+// Static pages
+import Home from "./root/Home"
+import NotFound from "./root/NotFound"
 
-// makeRouter :: Routes -> {doroute :: Function, unroute :: Function}
-let makeRouter = (routes) => {
-  // doroute :: String -> {mask :: String, params :: Object, payload :: any)
-  let doroute = (url) => {
-    for (let [route, payload] of routes) {
-      let match = route.match(url)
-      if (match) {
-        return {mask: route.spec, params: match, payload}
-      }
-    }
-    throw Error(`${inspect(url)} does not match any known route`)
-  }
+let routes = [
+  // Apps
+  ["/page1", page1App],
+  ["/page2", page2App],
+  ["/page3", page3App],
 
-  // unroute :: (String, Params) -> String
-  let unroute = (mask, params) => {
-    for (let [route, payload] of routes) {
-      if (route.spec == mask) {
-        return route.reverse(params)
-      }
-    }
-    throw Error(`${inspect(mask)} does not match any known route`)
-  }
+  // Static pages
+  ["/",      F.lift(Home)],
+  ["/*path", F.lift(NotFound)],
+]
 
-  return {doroute, unroute}
-}
-
-export default makeRouter(routes)
+export default F.makeRouter(routes)

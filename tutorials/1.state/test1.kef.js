@@ -6,7 +6,7 @@ let action$ = K.sequentially(200, [R.inc, R.inc, R.inc, R.inc, R.dec, R.dec, R.d
 let seed = 0
 let state = action$
   .merge(K.constant(seed))
-  .diff((state, fn) => fn(state))
+  .scan((state, fn) => fn(state))
 
 state.log()
 

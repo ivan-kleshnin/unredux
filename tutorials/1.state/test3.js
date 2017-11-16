@@ -8,7 +8,7 @@ let seed = 0
 let state = action$
   .startWith(seed)
   .scan((state, fn) => fn(state))
-  .distinctUntilChanged((x, y) => x === y) //  // without this line we'll see the same state repeatedly (uses === by default)
+  .distinctUntilChanged((x, y) => x === y) // without this line we'll see the same state repeatedly (uses === by default)
   .publishReplay(1)
   .refCount()
 

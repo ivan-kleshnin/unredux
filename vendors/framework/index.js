@@ -227,11 +227,11 @@ export let withLifecycle = (fn) => {
     let sinks = fn(sources, key)
     if (sinks.Component) {
       if (sinks.Component.willMount$) {
-        // Should unsubscribed automatically, reinforce with take(1)
+        // Should unsubscribe automatically, reinforce with take(1)
         sinks.Component.willMount$.take(1).subscribe(sources.Component.willMount$)
       }
       if (sinks.Component.willUnmount$) {
-        // Should unsubscribed automatically, reinforce with take(1)
+        // Should unsubscribe automatically, reinforce with take(1)
         sinks.Component.willUnmount$.take(1).subscribe(sources.Component.willUnmount$)
       }
     }

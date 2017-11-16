@@ -12,6 +12,7 @@ import "rxjs/add/observable/of"
 
 // Observable methods
 import "rxjs/add/operator/auditTime"
+import "rxjs/add/operator/catch"
 import "rxjs/add/operator/combineLatest"
 import "rxjs/add/operator/concat"
 import "rxjs/add/operator/concatMap"

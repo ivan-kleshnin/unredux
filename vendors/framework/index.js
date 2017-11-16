@@ -216,7 +216,7 @@ export let lift = (Component) => {
   })
 }
 
-export let component = (fn) => {
+export let withLifecycle = (fn) => {
   return R.withName(fn.name, (sources, key) => {
     sources = R.merge(sources, {
       Component: {

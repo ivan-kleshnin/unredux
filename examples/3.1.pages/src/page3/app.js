@@ -3,7 +3,7 @@ import {Observable as O} from "rxjs"
 import React from "react"
 import * as F from "framework"
 
-export default F.component((sources, key) => {
+export default F.withLifecycle((sources, key) => {
   let intents = {
     // unsubscribed on state unsubscribe which happens on willUnmount
     inc$: sources.DOM.fromKey("inc").listen("click").mapTo(true),

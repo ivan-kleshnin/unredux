@@ -150,12 +150,14 @@ export let isolateSinks = {
   },
 }
 
-export let isolate = (app, appKey=null) => {
+export let isolate = (app, appKey=null, types=null) => {
   appKey = appKey || uid.sync(4)
   return function App(sources) {
     // Prepare sources
     let isolatedSources = R.mapObjIndexed(
-      (source, sourceKey) => isolateSources[sourceKey](source, appKey),
+      (source, type) => !types || R.contains(type, types)
+        ? isolateSources[type](source, appKey)
+        : source,
       sources
     )
     let properSources = R.merge({} /*defaultSources()*/, isolatedSources)
@@ -165,7 +167,9 @@ export let isolate = (app, appKey=null) => {
 
     // Prepare sinks
     let isolatedSinks = R.mapObjIndexed(
-      (sink, sinkKey) => isolateSinks[sinkKey](sink, appKey),
+      (sink, type) => !types || R.contains(type, types)
+        ? isolateSinks[type](sink, appKey)
+        : sink,
       sinks
     )
     let properSinks = R.merge({} /*defaultSinks()*/, isolatedSinks)

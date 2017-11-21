@@ -6,7 +6,7 @@ module.exports = {
   devtool: "eval",
 
   entry: {
-    app: `./src/index.js`,
+    app: `./client/index.js`,
   },
   output: {
     pathinfo: true,
@@ -21,6 +21,7 @@ module.exports = {
   },
   resolve: {
     modules: [
+      // Path.resolve(__dirname),
       Path.resolve(__dirname, "node_modules"),
       Path.resolve(Path.resolve(__dirname, "../../vendors")),
       Path.resolve(Path.resolve(__dirname, "../../node_modules")),

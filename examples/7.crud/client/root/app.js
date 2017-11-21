@@ -8,6 +8,7 @@ import router from "../router"
 
 export let seed = {
   url: document.location.pathname,
+  posts: {},
   users: {},
 }
 

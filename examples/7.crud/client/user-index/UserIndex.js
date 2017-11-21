@@ -4,7 +4,7 @@ import UserItem from "./UserItem"
 
 export default function UserIndex({users}) {
   return <div data-key="userIndex">
-    <h1>User Index</h1>
+    <h1>Users</h1>
     <div>
       {users.length
         ? users.map(user =>

@@ -53,7 +53,8 @@ let assertFn = (v) => {
   return v
 }
 
-let actionToFunction = ({fn, args}) => {
+let actionToFunction = (action) => {
+  let {fn, args} = action
   if (args) {
     args = R.map(arg => {
       return arg.fn

@@ -33,6 +33,7 @@ import pipe from "ramda/src/pipe"
 import pluck from "ramda/src/pluck"
 import prepend from "ramda/src/prepend"
 import prop from "ramda/src/prop"
+import props from "ramda/src/props"
 import propEq from "ramda/src/propEq"
 import reduce from "ramda/src/reduce"
 import range from "ramda/src/range"
@@ -105,6 +106,7 @@ export let divide = curryAs("divide", (x, y) => x / y)
 export let filter2 = addIndex(filter)
 export let fst = (xs) => xs[0]
 export let inc = (x) => x + 1
+export let isNil = (x) => x == null
 export let isPlainObj = (o) => Boolean(o && o.constructor && o.constructor.prototype && o.constructor.prototype.hasOwnProperty("isPrototypeOf"))
 export let flattenObj = (obj, keys=[]) => {
   return Object.keys(obj).reduce((acc, key) => {
@@ -179,7 +181,7 @@ export {
   map,
   nth,
   omit,
-  pick, pipe, pluck, prepend, prop, propEq,
+  pick, pipe, pluck, prepend, prop, props, propEq,
   range, reject, repeat, reduce,
   slice, sort,
   take, takeLast, toPairs,

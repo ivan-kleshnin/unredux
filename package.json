@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@std/esm": "^0.16.0",
     "babel-core": "^6.26.0",
     "babel-loader": "^7.1.2",
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
@@ -30,5 +31,17 @@
       "es2015",
       "react"
     ]
-  }
+  },
+  "devDependencies": {
+    "ava": "^0.23.0"
+  },
+  "scripts": {
+    "test": "ava tests"
+  },
+  "ava": {
+    "require": [
+      "@std/esm"
+    ]
+  },
+  "@std/esm": "cjs"
 }

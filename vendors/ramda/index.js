@@ -170,6 +170,11 @@ export let zipObj = curryAs("zipObj", (keys, values) => {
   }, {}, range(0, keys.length))
 })
 
+///
+export let notNil = complement(isNil)
+export let firstOk = find(notNil)
+///
+
 export {
   addIndex, append, ascend,
   chain, comparator, compose, concat, contains,

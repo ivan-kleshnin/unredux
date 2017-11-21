@@ -17,7 +17,7 @@ export default (sources, key) => {
   let intents = {
     fetch$: sources.state$
       .filter(s => !R.view(baseLens, s))
-      .concatMap(_ => RR.get(`http://localhost:3000/users/${params.id}`))
+      .concatMap(_ => RR.get(`http://localhost:3000/api/users/${params.id}`))
       .catch(err => {
         console.warn(err) // TODO
       })

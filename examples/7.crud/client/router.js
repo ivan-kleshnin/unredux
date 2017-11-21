@@ -1,9 +1,9 @@
 import * as F from "framework"
 
 // Apps
-import home from "./home/app"
-import userIndex from "./user-index/app"
-import userDetail from "./user-detail/app" // TODO rename `app.js` to `index.js` for cleaner imports?
+import home from "./home"
+import userIndex from "./user-index"
+import userDetail from "./user-detail"
 
 // Static pages
 import About from "./root/About"

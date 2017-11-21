@@ -1,0 +1,13 @@
+{
+  "users": {
+    "1": {"id": "1", "fullname": "Jacinto", "email": "jac@gmail.com", "role": "admin"},
+    "2": {"id": "2", "fullname": "Jabberworker", "email": "jab@gmail.com", "role": "admin"},
+    "3": {"id": "3", "fullname": "Gizmo", "email": "giz@gmail.com", "role": "manager"},
+    "4": {"id": "4", "fullname": "Jezhik", "email": "jez@gmail.com", "role": "pet"}
+  },
+  "posts": {
+    "1": {"id": "1", "title": "Foo"},
+    "2": {"id": "2", "title": "Bar"},
+    "3": {"id": "3", "title": "Baz"}
+  }
+}

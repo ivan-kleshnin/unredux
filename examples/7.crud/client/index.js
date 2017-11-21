@@ -3,7 +3,7 @@ import React from "react"
 import ReactDOM from "react-dom"
 import {APP_KEY} from "./meta"
 import * as F from "framework"
-import app from "./root/app"
+import app from "./root"
 
 let sources = {
   state$: new ReplaySubject(1),

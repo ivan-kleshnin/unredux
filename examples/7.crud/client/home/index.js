@@ -18,7 +18,7 @@ export default (sources, key) => {
   let baseLens = ["posts"]
 
   let intents = {
-    fetch$: O.fromPromise(RR.get("http://localhost:3000/posts/~/id").json)
+    fetch$: O.fromPromise(RR.get("http://localhost:3000/api/posts/~/id").json)
       .catch(err => {
         console.warn(err) // TODO
       })
@@ -27,7 +27,7 @@ export default (sources, key) => {
         let missingIds = R.difference(requiredIds, presentIds)
         return missingIds
       })
-      .concatMap(ids => RR.get(`http://localhost:3000/posts/${R.join(",", ids)}`).json)
+      .concatMap(ids => RR.get(`http://localhost:3000/api/posts/${R.join(",", ids)}`).json)
       .catch(err => {
         console.warn(err) // TODO
       })

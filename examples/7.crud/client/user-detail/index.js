@@ -1,6 +1,6 @@
+import A from "axios"
 import * as F from "framework"
 import * as D from "selfdb"
-import RR from "r2"
 import * as R from "ramda"
 import React from "react"
 import {Observable as O} from "rxjs"
@@ -17,9 +17,12 @@ export default (sources, key) => {
   let intents = {
     fetch$: sources.state$
       .filter(s => !R.view(baseLens, s))
-      .concatMap(_ => RR.get(`http://localhost:3000/api/users/${params.id}`))
+      .concatMap(_ => A.get(`http://localhost:3000/api/users/${params.id}`))
       .catch(err => {
         console.warn(err) // TODO
+      })
+      .map(resp => {
+        return resp.data.data[params.id]
       })
       .share()
   }

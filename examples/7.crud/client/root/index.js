@@ -1,5 +1,5 @@
+import A from "axios"
 import * as D from "selfdb"
-import RR from "r2"
 import * as R from "ramda"
 import React from "react"
 import {Observable as O} from "rxjs"

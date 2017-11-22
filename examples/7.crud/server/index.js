@@ -23,6 +23,14 @@ app.use(BodyParser.json({
 	limit: null, // config.bodyLimit
 }))
 
+// app.get("/404", (req, res) => {
+//   res.status(404).send({}).end()
+// })
+//
+// app.get("/500", (req, res) => {
+//   res.status(500).send({}).end()
+// })
+
 app.use("/api/posts", postsAPI)
 app.use("/api/users", usersAPI)
 

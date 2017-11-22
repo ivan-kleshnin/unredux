@@ -42,6 +42,10 @@ Todos with a flexible history management.
 
 Shopping Cart with interactions between "parent" and "child" apps.
 
+#### [7. CRUD](./examples/7.crud)
+
+CRUD client-server apps showing async data load, caching, SSR, etc (**wip**).
+
 ### Tutorials
 
 #### [1. State](./tutorials/1.state)

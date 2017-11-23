@@ -1,5 +1,5 @@
 import {Router} from "../express"
-import * as R from "../../../../vendors/ramda"
+import * as R from "ramda"
 import db from "../db.json"
 
 let router = Router()

@@ -5,25 +5,24 @@ import * as R from "ramda"
 import React from "react"
 import {Observable as O} from "rxjs"
 
-import * as M from "../../common/models"
+import * as M from "common/models"
 import PostIndex from "./PostIndex"
 
-export let makeSeed = () => ({
+export let seed = {
   filterFn: R.id,
   sortFn: R.ascend(R.prop("id")),
-})
+}
 
 export default (sources, key) => {
   let {params} = sources.props
   let baseLens = ["posts"]
 
   let intents = {
-    fetch$: O.fromPromise(A.get("http://localhost:3000/api/posts/~/id"))
+    fetch$: O.fromPromise(A.get("/api/posts/~/id"))
+      .map(resp => R.pluck("id", resp.data.data))
       .catch(err => {
         console.warn(err) // TODO
-      })
-      .map(resp => {
-        return R.pluck("id", resp.data.data)
+        return O.of()
       })
       .withLatestFrom(sources.state$, (requiredIds, state) => {
         let presentIds = R.keys(R.view(baseLens, state))
@@ -31,12 +30,11 @@ export default (sources, key) => {
         return missingIds
       })
       .filter(R.length)
-      .concatMap(ids => A.get(`http://localhost:3000/api/posts/${R.join(",", ids)}`))
+      .concatMap(ids => A.get(`/api/posts/${R.join(",", ids)}`))
+      .map(resp => resp.data.data)
       .catch(err => {
         console.warn(err) // TODO
-      })
-      .map(resp => {
-        return resp.data.data
+        return O.of()
       })
       .share()
   }
@@ -53,7 +51,7 @@ export default (sources, key) => {
     () => D.makeStore({assertFn: R.id}),
     // D.withLog({key}),
   )(
-    D.init(makeSeed()),
+    D.init(seed),
   ).$
 
   let posts$ = F.derive(

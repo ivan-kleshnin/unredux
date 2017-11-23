@@ -6,10 +6,6 @@ import React from "react"
 import {Observable as O} from "rxjs"
 import UserDetail from "./UserDetail"
 
-export let makeSeed = (id) => ({
-  id,
-})
-
 export default (sources, key) => {
   let {params} = sources.props
   let baseLens = ["users", params.id]
@@ -17,12 +13,13 @@ export default (sources, key) => {
   let intents = {
     fetch$: sources.state$
       .filter(s => !R.view(baseLens, s))
-      .concatMap(_ => A.get(`http://localhost:3000/api/users/${params.id}`))
-      .catch(err => {
-        console.warn(err) // TODO
-      })
+      .concatMap(_ => A.get(`/api/users/${params.id}`))
       .map(resp => {
         return resp.data.data[params.id]
+      })
+      .catch(err => {
+        console.warn(err) // TODO
+        return O.of()
       })
       .share()
   }
@@ -39,7 +36,7 @@ export default (sources, key) => {
     () => D.makeStore({}),
     // D.withLog({key}),
   )(
-    D.init(makeSeed(params.id)),
+    D.init({id: params.id}),
   ).$
 
   let user$ = F.derive(

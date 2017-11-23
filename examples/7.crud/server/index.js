@@ -1,39 +1,45 @@
-// import http from "http"
-import * as R from "../../../vendors/ramda"
-import Express from "express"
+import A from "axios"
 import BodyParser from "body-parser"
-import cors from "cors"
-// import morgan from 'morgan'
-// import middleware from './middleware'
-// import api from './api'
-// import config from './config.json'
-import postsAPI from "./api/posts"
-import usersAPI from "./api/users"
+import Cors from "cors"
+import Path from "path"
+import * as R from "ramda"
+import Express, {unless} from "./express"
+import apiPostsRoutes from "./api/posts"
+import apiUsersRoutes from "./api/users"
+import ssrRoutes from "./ssr"
 
 let app = Express()
-// app.server = http.createServer(app)
 
-// logger
-// app.use(morgan('dev'));
+app.set("port", process.env.PORT || 8080)
 
-// 3rd party middleware
-app.use(cors())
+A.defaults.baseURL = "http://localhost:" + app.get("port")
+
+app.use(Cors())
 
 app.use(BodyParser.json({
-	limit: null, // config.bodyLimit
+	limit: null, // TODO
 }))
 
-// app.get("/404", (req, res) => {
-//   res.status(404).send({}).end()
-// })
-//
-// app.get("/500", (req, res) => {
-//   res.status(500).send({}).end()
-// })
+// STATIC
+app.use("/public", Express.static(Path.resolve(__dirname, "../public")))
 
-app.use("/api/posts", postsAPI)
-app.use("/api/users", usersAPI)
+// API
+app.use("/api/posts", apiPostsRoutes)
+app.use("/api/users", apiUsersRoutes)
 
-app.listen(process.env.PORT || 3000, () => {
-  console.log(`Started on port ${process.env.PORT || 3000}`)
+// SSR
+app.use(unless("/public", ssrRoutes))
+
+// ERROR HANDLERS
+app.use((req, res, next) => {
+  res.status(404).send("404")
+})
+
+app.use((err, req, res, next) => {
+  console.error(err.stack)
+  res.status(500).send("500")
+})
+
+let server = app.listen(app.get("port"), () => {
+  console.log(`Listening on port ${app.get("port")}`)
 })

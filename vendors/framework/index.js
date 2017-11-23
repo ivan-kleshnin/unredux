@@ -3,6 +3,7 @@ import Route from "route-parser"
 import {Observable as O, Subject} from "../rxjs"
 import {combineLatestObj} from "rx-utils"
 import * as R from "../ramda"
+import {isBrowser, isNode} from "../selfdb"
 import uid from "uid-safe"
 
 export let derive = (streamsToProps, mapFn) => {
@@ -34,21 +35,16 @@ export let fromDOMEvent = (appSelector) => {
         return collectFn([...selectors, `[data-key="${key}"]`])
       },
       listen: (eventName, options={}) => {
-        return O.fromEvent(document.querySelector(appSelector), eventName, options)
+        if (isBrowser()) {
+          return O.fromEvent(document.querySelector(appSelector), eventName, options)
           .throttleTime(10, undefined, {leading: true, trailing: true})
           .filter(event => {
             return event.target.matches(R.join(" ", selectors))
           })
-          // .map(event => {
-          //   if (event.target.dataset && event.target.dataset.val) {
-          //     return event.target.dataset.val
-          //   } else if (event.target.value) {
-          //     return event.target.value
-          //   } else {
-          //     return event.target
-          //   }
-          // })
           .share()
+        } else {
+          return O.of()
+        }
       }
     }
   }
@@ -68,7 +64,8 @@ export let connect = (streamsToProps, ComponentToWrap) => {
       let props$ = combineLatestObj(streamsToProps)
         .throttleTime(10, undefined, {leading: true, trailing: true})
 
-      // TODO add .take(1) if called on server (because of no componentWillUnmount there)
+      if (isNode())
+        props$ = props$.take(1)
 
       this.sb = props$.subscribe((data) => {
         this.setState(data)

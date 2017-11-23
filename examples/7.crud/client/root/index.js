@@ -1,4 +1,3 @@
-import A from "axios"
 import * as D from "selfdb"
 import * as R from "ramda"
 import React from "react"
@@ -7,7 +6,7 @@ import * as F from "framework"
 import router from "../router"
 
 export let seed = {
-  url: document.location.pathname,
+  url: "",
   posts: {},
   users: {},
 }
@@ -31,8 +30,10 @@ export default (sources, key) => {
       })
       .share(),
 
-    navigateHistory$: O.fromEvent(window, "popstate")
-      .map(data => document.location.pathname)
+    navigateHistory$: D.isBrowser()
+      ? O.fromEvent(window, "popstate")
+          .map(data => document.location.pathname)
+      : O.of()
   }
 
   let state$ = D.run(
@@ -40,7 +41,8 @@ export default (sources, key) => {
     // D.withLog({key, input: true, output: false}),
   )(
     // Init
-    D.init(seed),
+    // D.init(seed),
+    sources.state$.take(1).map(x => R.always(x)),
 
     // Navigation
     intents.navigateTo$.map(url => R.fn("navigateTo", R.set("url", url))),

@@ -10,7 +10,7 @@ import page2App from "../page2/app"
 import page3App from "../page3/app"
 
 export default (sources, key) => {
-  let contentSinks$ = F.deriveOne(
+  let contentSinks$ = D.deriveOne(
     sources.state$.pluck("url"),
     (url) => {
       let sinks

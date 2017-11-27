@@ -12,7 +12,7 @@ export let seed = {
 }
 
 export default (sources, key) => {
-  let contentSinks$ = F.deriveOne(sources.state$.pluck("url"),
+  let contentSinks$ = D.deriveOne(sources.state$.pluck("url"),
     (url) => {
       let {mask, params, payload: app} = router.doroute(url)
       app = F.isolate(app, key + mask.replace(/^\//, "."), ["DOM", "Component"])

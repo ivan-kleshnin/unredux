@@ -4,7 +4,6 @@ import * as D from "selfdb"
 import * as R from "ramda"
 import React from "react"
 import {Observable as O} from "rxjs"
-
 import * as M from "common/models"
 import UserIndex from "./UserIndex"
 
@@ -54,7 +53,7 @@ export default (sources, key) => {
     D.init(seed),
   ).$
 
-  let users$ = F.derive(
+  let users$ = D.derive(
     {
       table: sources.state$.pluck("users"),
       index: index$,

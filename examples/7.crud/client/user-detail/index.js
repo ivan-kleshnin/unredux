@@ -39,7 +39,7 @@ export default (sources, key) => {
     D.init({id: params.id}),
   ).$
 
-  let user$ = F.derive(
+  let user$ = D.derive(
     {
       table: sources.state$.pluck("users"),
       detail: detail$,

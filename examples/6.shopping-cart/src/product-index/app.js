@@ -33,7 +33,7 @@ export default (sources, key) => {
     D.init(seed),
   ).$
 
-  let products$ = F.derive(
+  let products$ = D.derive(
     {
       table: sources.state$.pluck("products"),
       index: index$,

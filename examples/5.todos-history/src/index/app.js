@@ -38,7 +38,7 @@ export default (sources, key) => {
     }),
   ).$
 
-  let todos$ = F.derive(
+  let todos$ = D.derive(
     {
       todos: sources.state$.pluck("todos"),
       index: state$,

@@ -440,3 +440,22 @@ withHistory.options = {
 let tailAppend = R.curry((x, xs) => {
   return R.append(x, R.tail(xs))
 })
+
+// Derive ==========================================================================================
+export let derive = (streamsToProps, mapFn) => {
+  streamsToProps = R.map($ => $.distinctUntilChanged(R.identical), streamsToProps)
+  return combineLatestObj(streamsToProps)
+    .map(mapFn)
+    .distinctUntilChanged(R.identical)
+    .publishReplay(1)
+    .refCount()
+}
+
+export let deriveOne = (stream, mapFn) => {
+  stream = stream.distinctUntilChanged(R.identical)
+  return stream
+    .map(mapFn)
+    .distinctUntilChanged(R.identical)
+    .publishReplay(1)
+    .refCount()
+}

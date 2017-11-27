@@ -6,8 +6,9 @@
     "4": {"id": "4", "fullname": "Jezhik", "email": "jez@gmail.com", "role": "pet"}
   },
   "posts": {
-    "1": {"id": "1", "title": "Foo"},
-    "2": {"id": "2", "title": "Bar"},
-    "3": {"id": "3", "title": "Baz"}
+    "1": {"id": "1", "title": "Foo", "new": false},
+    "2": {"id": "2", "title": "Bar", "new": false, "hit": true},
+    "3": {"id": "3", "title": "Baz", "new": true},
+    "4": {"id": "4", "title": "Qux", "new": true, "hit": true}
   }
 }

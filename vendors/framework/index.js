@@ -16,6 +16,15 @@ export let fromDOMEvent = (appSelector) => {
       fromKey: (key) => {
         return collectFn([...selectors, `[data-key="${key}"]`])
       },
+      fromName: (name) => {
+        if (R.startsWith("^", name)) {
+          return collectFn([...selectors, `[name^="${R.drop(1, name)}"]`])
+        } else if (R.endsWith("$", name)) {
+          return collectFn([...selectors, `[name$="${R.dropLast(1, name)}"]`])
+        } else {
+          return collectFn([...selectors, `[name="${name}"]`])
+        }
+      },
       listen: (eventName, options={}) => {
         if (isBrowser()) {
           return O.fromEvent(document.querySelector(appSelector), eventName, options)

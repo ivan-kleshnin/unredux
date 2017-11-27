@@ -9,6 +9,7 @@ import contains from "ramda/src/contains"
 import descend from "ramda/src/descend"
 import difference from "ramda/src/difference"
 import dissocPath from "ramda/src/dissocPath"
+import drop from "ramda/src/drop"
 import dropLast from "ramda/src/dropLast"
 import equals from "ramda/src/equals"
 import filter from "ramda/src/filter"
@@ -18,6 +19,7 @@ import findLast from "ramda/src/findLast"
 import forEach from "ramda/src/forEach"
 import fromPairs from "ramda/src/fromPairs"
 import identical from "ramda/src/identical"
+import intersection from "ramda/src/intersection"
 import is from "ramda/src/is"
 import isEmpty from "ramda/src/isEmpty"
 import lens from "ramda/src/lens"
@@ -103,11 +105,9 @@ export let add = curryAs("add", (x, y) => x + y)
 export let containsFlipped = flip(contains)
 export let dec = (x) => x - 1
 export let divide = curryAs("divide", (x, y) => x / y)
+export let endsWith = curryAs("endsWith", (x, y) => y.endsWith(x))
 export let filter2 = addIndex(filter)
 export let fst = (xs) => xs[0]
-export let inc = (x) => x + 1
-export let isNil = (x) => x == null
-export let isPlainObj = (o) => Boolean(o && o.constructor && o.constructor.prototype && o.constructor.prototype.hasOwnProperty("isPrototypeOf"))
 export let flattenObj = (obj, keys=[]) => {
   return Object.keys(obj).reduce((acc, key) => {
     return merge(acc, isPlainObj(obj[key])
@@ -117,6 +117,9 @@ export let flattenObj = (obj, keys=[]) => {
   }, {})
 }
 export let head = nth(0)
+export let inc = (x) => x + 1
+export let isNil = (x) => x == null
+export let isPlainObj = (o) => Boolean(o && o.constructor && o.constructor.prototype && o.constructor.prototype.hasOwnProperty("isPrototypeOf"))
 export let join = curryAs("join", (sep, xs) => xs.join(sep))
 export let keys = Object.keys
 export let length = (x) => x.length
@@ -178,10 +181,10 @@ export let firstOk = find(notNil)
 export {
   addIndex, append, ascend,
   chain, comparator, compose, concat, contains,
-  descend, difference, dropLast,
+  descend, difference, drop, dropLast,
   equals,
   filter, find, findIndex, findLast, forEach, fromPairs,
-  identical, is, isEmpty,
+  identical, intersection, is, isEmpty,
   lens, lensIndex, lensProp,
   map,
   nth,

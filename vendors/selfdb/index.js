@@ -1,7 +1,7 @@
 import {inspect} from "util"
 import deepFreeze from "deep-freeze"
 import {Observable as O} from "../rxjs"
-import {mergeObj, mergeObjTracking, chan as Chan} from "rx-utils"
+import {combineLatestObj, mergeObj, mergeObjTracking, chan as Chan} from "rx-utils"
 import * as R from "../ramda"
 
 // Different Helpers ===============================================================================

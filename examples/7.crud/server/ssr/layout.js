@@ -7,9 +7,7 @@ export default ({appHTML, state}) => {
         <title>7. CRUD</title>
       </head>
       <body>
-          <div id="root">
-            ${appHTML}
-          </div>
+          <div id="root">${appHTML}</div>
           <script id="rootState">
             window.state = ${JSON.stringify(state, null, 2)}
           </script>

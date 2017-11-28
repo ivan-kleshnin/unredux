@@ -37,22 +37,6 @@ let freezeFn = (v) => {
     : v
 }
 
-let assertFn = (v) => {
-  if (process.env.NODE_ENV != "production") {
-    let v2
-    try {
-      v2 = JSON.parse(JSON.stringify(v))
-      if (R.equals(v, v2)) {
-        return v
-      }
-    } catch (err) {
-      // break
-    }
-    throw Error(`state must be JSON-serializable, got ${inspect(v)}`)
-  }
-  return v
-}
-
 let actionToFunction = (action) => {
   let {fn, args} = action
   if (args) {
@@ -105,7 +89,7 @@ export let makeStore = (options) => {
         } else {
           throw Error(`dispatched value must be a function, got ${inspect(fn)}`)
         }
-        return options.freezeFn(options.assertFn(nextState))
+        return options.freezeFn(nextState)
       }, null)
       .distinctUntilChanged(options.cmpFn)
       .do(val => { _val = val })
@@ -121,7 +105,6 @@ export let makeStore = (options) => {
 makeStore.options = {
   cmpFn,
   freezeFn,
-  assertFn,
 }
 
 // Logging mixins ==================================================================================
@@ -268,7 +251,9 @@ export let withMemoryPersistence = R.curry((options, Store) => {
     options = R.merge(withMemoryPersistence.options, options)
 
     if (options.key && options.key in _memCache) {
-      let initFn = R.fn("initFromMemory", R.always(_memCache[options.key]))
+      let initFn = function initFromMemory() {
+        return _memCache[options.key]
+      }
       action$ = action$
         .skip(1)
         .startWith(initFn)
@@ -308,10 +293,14 @@ export let withLocalStoragePersistence = R.curry((options, Store) => {
     if (options.key && localStorage.getItem(options.key) !== null) {
       let initFn
       try {
-        initFn = R.fn("initFromLocalStorage", R.always(JSON.parse(localStorage.getItem(options.key))))
+        initFn = function initFromLocalStorage() {
+          return options.parseFn(localStorage.getItem(options.key))
+        }
       } catch (err) {
         console.warn("error at read from localStorage")
-        initFn = R.fn("initWithNull", R.always(null))
+        initFn = function initWithNull() {
+          return null
+        }
       }
       action$ = action$
         .skip(1)
@@ -331,7 +320,7 @@ export let withLocalStoragePersistence = R.curry((options, Store) => {
           .throttleTime(1000, undefined, {leading: true, trailing: true})
           .do(state => {
             try {
-              localStorage.setItem(options.key, JSON.stringify(state))
+              localStorage.setItem(options.key, options.serializeFn(state))
             } catch (err) {
               console.warn("error at write to localStorage")
             }
@@ -350,6 +339,8 @@ export let withLocalStoragePersistence = R.curry((options, Store) => {
 
 withLocalStoragePersistence.options = {
   key: "",
+  parseFn: JSON.parse,
+  serializeFn: JSON.stringify,
 }
 
 // History mixin ===================================================================================

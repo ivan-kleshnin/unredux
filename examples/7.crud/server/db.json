@@ -1,14 +1,54 @@
 {
   "users": {
-    "1": {"id": "1", "fullname": "Jacinto", "email": "jac@gmail.com", "role": "admin"},
-    "2": {"id": "2", "fullname": "Jabberworker", "email": "jab@gmail.com", "role": "admin"},
-    "3": {"id": "3", "fullname": "Gizmo", "email": "giz@gmail.com", "role": "manager"},
-    "4": {"id": "4", "fullname": "Jezhik", "email": "jez@gmail.com", "role": "pet"}
+    "1": {
+      "id": "1", "fullname": "Jacinto", "email": "jac@gmail.com", "role": "admin"
+    },
+    "2": {
+      "id": "2", "fullname": "Jabberworker", "email": "jab@gmail.com", "role": "admin"
+    },
+    "3": {
+      "id": "3", "fullname": "Gizmo", "email": "giz@gmail.com", "role": "manager"
+    },
+    "4": {
+      "id": "4", "fullname": "Jezhik", "email": "jez@gmail.com", "role": "pet"
+    }
   },
   "posts": {
-    "1": {"id": "1", "title": "Foo", "new": false},
-    "2": {"id": "2", "title": "Bar", "new": false, "hit": true},
-    "3": {"id": "3", "title": "Baz", "new": true},
-    "4": {"id": "4", "title": "Qux", "new": true, "hit": true}
+    "1": {
+      "id": "1",
+      "title": "Fluent API debunked",
+      "tags": ["api", "oop", "fp"],
+      "isPublished": true
+    },
+    "2": {
+      "id": "2",
+      "title": "RxJS Error and Completed events demystified",
+      "tags": ["reactivity", "rxjs"],
+      "isPublished": true
+    },
+    "3": {
+      "id": "3",
+      "title": "Models or Types",
+      "tags": ["fp", "oop", "typing", "tcomb"],
+      "isPublished": true
+    },
+    "4": {
+      "id": "4",
+      "title": "Practical Lensing I",
+      "tags": ["fp", "partial.lenses"],
+      "isPublished": true
+    },
+    "5": {
+      "id": "5",
+      "title": "Learning platforms I: Problems",
+      "tags": ["industry"],
+      "isPublished": true
+    },
+    "6": {
+      "id": "6",
+      "title": "Learning platforms II: Reasons",
+      "tags": ["industry"],
+      "isPublished": false
+    }
   }
 }

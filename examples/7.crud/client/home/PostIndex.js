@@ -7,19 +7,28 @@ export default function PostIndex({posts, index}) {
   return <div data-key="postIndex">
     <h1>Blog</h1>
     <div style={{marginBottom: "10px"}}>
-      Filter by:
-      {" "}
+      Fields: <code>id</code> (sort){" "}
+              <code>title</code> (sort + filter){" "}
+              <code>tags</code> (filter){" "}
+              <code>isPublished</code> (filter)
+    </div>
+    <div style={{marginBottom: "10px"}}>
+      Filter by:{" "}
       <label>
-        <input type="checkbox" name="filter.new" checked={index.filter.new} onChange={R.id}/> New
+        Title{" "}
+        <input type="text" name="filter.title" value={index.filter.title} onChange={R.id}/>
       </label>
       {" "}
       <label>
-        <input type="checkbox" name="filter.hit" checked={index.filter.hit} onChange={R.id}/> Hit
+        Tags <small>separated by ,</small>{" "}
+        <input type="text" name="filter.tags" value={index.filter.tags} onChange={R.id}/>
       </label>
       {" "}
       <label>
-        <input type="text" name="filter.title" value={index.filter.title} onChange={R.id}/> Title
+        Published{" "}
+        <input type="checkbox" name="filter.isPublished" checked={index.filter.isPublished}/>
       </label>
+      {" "}
     </div>
     <div style={{marginBottom: "10px"}}>
       Sort by:

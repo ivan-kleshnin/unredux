@@ -4,38 +4,16 @@ import * as D from "selfdb"
 import * as R from "ramda"
 import React from "react"
 import {Observable as O} from "rxjs"
-import * as M from "common/models"
+import {makeFilterFn, makeSortFn} from "common/home"
 import PostIndex from "./PostIndex"
 
 export let seed = {
   filter: {
-    new: false,
-    hit: false,
     title: "",
+    tags: "",
+    isPublished: false,
   },
   sort: "+id",
-}
-
-let makeFilterFn = (filter) => {
-  return (post) => {
-    if (filter.new && !post.new) {
-      return false
-    }
-    if (filter.hit && !post.hit) {
-      return false
-    }
-    if (filter.title && !R.startsWith(filter.title, post.title)) {
-      return false
-    }
-    return true
-  }
-}
-
-let makeSortFn = (sort) => {
-  let [ascDesc, propName] = [sort[0], R.drop(1, sort)]
-  let dirFn = ascDesc == "+" ? R.ascend : R.descend
-  let propFn = R.prop(propName)
-  return dirFn(propFn)
 }
 
 export default (sources, key) => {
@@ -65,13 +43,13 @@ export default (sources, key) => {
       .share(),
 
     // DOM
-    changeNewFilter$: sources.DOM.fromName("filter.new").listen("click")
+    changeFilterTitle$: sources.DOM.fromName("filter.title").listen("input")
       .map(event => event.target.value),
 
-    changeHitFilter$: sources.DOM.fromName("filter.hit").listen("click")
+    changeFilterTags$: sources.DOM.fromName("filter.tags").listen("input")
       .map(event => event.target.value),
 
-    changeTitleFilter$: sources.DOM.fromName("filter.title").listen("input")
+    changeFilterIsPublished$: sources.DOM.fromName("filter.isPublished").listen("click")
       .map(event => event.target.value),
 
     changeSort$: sources.DOM.fromName("sort").listen("click")
@@ -84,9 +62,9 @@ export default (sources, key) => {
   )(
     D.init(seed),
 
-    intents.changeNewFilter$.map(_ => R.over(["filter", "new"], R.not)),
-    intents.changeHitFilter$.map(_ => R.over(["filter", "hit"], R.not)),
-    intents.changeTitleFilter$.map(x => R.set(["filter", "title"], x)),
+    intents.changeFilterTitle$.map(x => R.set(["filter", "title"], x)),
+    intents.changeFilterTags$.map(x => R.set(["filter", "tags"], x)),
+    intents.changeFilterIsPublished$.map(_ => R.over(["filter", "isPublished"], R.not)),
 
     intents.changeSort$.map(x => R.set("sort", x)),
   ).$
@@ -94,7 +72,7 @@ export default (sources, key) => {
   let posts$ = D.derive(
     {
       table: sources.state$.pluck("posts"),
-      index: index$,
+      index: index$.debounceTime(200),
     },
     ({table, index}) => {
       let sortFn = makeSortFn(index.sort)

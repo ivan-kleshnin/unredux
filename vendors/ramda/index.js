@@ -163,6 +163,9 @@ export let split = curryAs("split", (sep, xs) => xs.split(sep))
 export let subtract = curryAs("subtract", (x, y) => x - y)
 export let startsWith = curryAs("startsWith", (x, y) => y.startsWith(x))
 export let tail = (xs) => xs.slice(1)
+export let toLower = (x) => x.toLowerCase()
+export let toUpper = (x) => x.toUpperCase()
+export let trim = (x) => x.trim()
 export let unset = curryAs("unset", (lens, obj) => is(Array, lens) ? dissocPath(lens, obj) : dissocPath([lens], obj)) // @_@
 export let values = Object.values
 export let view = curryAs("view", (lens, obj) => _view(lensify(lens), obj))

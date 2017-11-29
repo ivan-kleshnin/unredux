@@ -60,10 +60,6 @@ export default (sources, key) => {
       .map(R.view(["element", "value"])),
   }
 
-  intents.changeSort$.subscribe(x => {
-    console.log(x)
-  })
-
   let index$ = D.run(
     () => D.makeStore({}),
     // D.withLog({key}),

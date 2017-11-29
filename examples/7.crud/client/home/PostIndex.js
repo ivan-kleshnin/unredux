@@ -60,7 +60,6 @@ export default function PostIndex({posts, index}) {
         : <p><i>No posts available.</i></p>
       }
     </div>
-    <a href="test">test</a>
   </div>
 }
 

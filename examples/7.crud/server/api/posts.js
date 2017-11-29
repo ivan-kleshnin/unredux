@@ -1,5 +1,6 @@
-import {Router} from "../express"
 import * as R from "ramda"
+import {Router} from "../express"
+import {makeFilterFn, makeSortFn} from "common/home"
 import db from "../db.json"
 
 let router = Router()
@@ -19,23 +20,29 @@ router.get(
     let {params, query} = req
 
     // TODO filterFn, sortFn
-    let filterFn = R.id
-    let sortFn = R.ascend(R.prop("id"))
+    let filterFn = makeFilterFn(R.firstOk([query.filter && JSON.parse(query.filter), {}]))
+    let sortFn = makeSortFn(R.firstOk([query.sort, "+id"]))
     let offset = R.firstOk([params.offset, query.offset, 0])
-    let limit = R.firstOk([params.limit, query.limit, 20])
+    let limit = Math.min(R.firstOk([params.limit, query.limit, 20]), 100)
     let fields = R.firstOk([params.fields, query.fields, null])
 
     let models = R.pipe(
       R.values,
       R.filter(filterFn),
       R.sort(sortFn),
+    )(db.posts)
+
+    let paginatedModels = R.pipe(
       R.slice(offset, offset + limit),
       fields
         ? R.map(R.pick(fields))
         : R.id,
-    )(db.posts)
+    )(models)
 
-    res.json({data: models})
+    res.json({
+      models: paginatedModels,
+      total: models.length,
+    })
   }
 )
 
@@ -56,6 +63,6 @@ router.get(
         : R.id,
     )(db.posts)
 
-    res.json({data: models})
+    res.json({models})
   }
 )

@@ -14,9 +14,7 @@ export default (sources, key) => {
     fetch$: sources.state$
       .filter(s => !R.view(baseLens, s))
       .concatMap(_ => A.get(`/api/users/${params.id}`))
-      .map(resp => {
-        return resp.data.data[params.id]
-      })
+      .map(resp => resp.data.models[params.id])
       .catch(err => {
         console.warn(err) // TODO
         return O.of()

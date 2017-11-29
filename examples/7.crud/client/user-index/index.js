@@ -18,7 +18,7 @@ export default (sources, key) => {
 
   let intents = {
     fetch$: O.fromPromise(A.get("/api/users/~/id"))
-      .map(resp => R.pluck("id", resp.data.data))
+      .map(resp => R.pluck("id", resp.data.models))
       .catch(err => {
         console.warn(err) // TODO
         return O.of()
@@ -30,7 +30,7 @@ export default (sources, key) => {
       })
       .filter(R.length)
       .concatMap(ids => A.get(`/api/users/${R.join(",", ids)}`))
-      .map(resp => resp.data.data)
+      .map(resp => resp.data.models)
       .catch(err => {
         console.warn(err) // TODO
         return O.of()

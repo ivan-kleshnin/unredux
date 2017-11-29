@@ -29,7 +29,7 @@ export let makeFilterFn = (filter) => {
 
 export let makeSortFn = (sort) => {
   let [ascDesc, propName] = [sort[0], R.drop(1, sort)]
-  let dirFn = ascDesc == "+" ? R.ascend : R.descend
+  let dirFn = ascDesc == "-" ? R.descend : R.ascend
   let propFn = R.prop(propName)
   return dirFn(propFn)
 }

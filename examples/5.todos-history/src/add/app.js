@@ -12,10 +12,10 @@ export let seed = {
 export default (sources, key) => {
   let intents = {
     inputText$: sources.DOM.from("input[name=text]").listen("input")
-      .map(event => event.target.value),
+      .map(R.view(["element", "value"])),
 
     submitForm$: sources.DOM.from("form").listen("submit")
-      .do(event => event.preventDefault())
+      .do(({event}) => event.preventDefault())
       .mapTo(true),
   }
 

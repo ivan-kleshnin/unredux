@@ -1,8 +1,8 @@
+import * as F from "framework"
 import * as D from "selfdb"
 import * as R from "ramda"
 import React from "react"
 import {Observable as O} from "rxjs"
-import * as F from "framework"
 import router from "../router"
 
 export let seed = {
@@ -24,8 +24,8 @@ export default (sources, key) => {
 
   let intents = {
     navigateTo$: sources.DOM.from("a").listen("click")
-      .do(event => event.preventDefault())
-      .map(event => event.target.attributes.href.value)
+      .do(({event}) => event.preventDefault())
+      .map(R.view(["element", "href"]))
       .do(url => {
         window.history.pushState({}, "", url)
       })

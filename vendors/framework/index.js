@@ -1,5 +1,6 @@
 import React from "react"
 import Route from "route-parser"
+import Url from "url"
 import {Observable as O, Subject} from "../rxjs"
 import {combineLatestObj} from "rx-utils"
 import * as R from "../ramda"
@@ -29,8 +30,16 @@ export let fromDOMEvent = (appSelector) => {
         if (isBrowser()) {
           return O.fromEvent(document.querySelector(appSelector), eventName, options)
           .throttleTime(10, undefined, {leading: true, trailing: true})
-          .filter(event => {
-            return event.target.matches(R.join(" ", selectors))
+          .concatMap(event => {
+            let element = event.target
+            let selector = R.join(" ", selectors)
+            while (element && element.matches) {
+              if (element.matches(selector)) {
+                return O.of({event, element})
+              }
+              element = element.parentNode
+            }
+            return O.of()
           })
           .share()
         } else {
@@ -72,7 +81,6 @@ export let connect = (streamsToProps, ComponentToWrap) => {
     }
 
     render() {
-      // TODO async component (React-walk, etc.)
       if (R.isEmpty(this.state)) {
         return <div>Loading...</div>
       } else {
@@ -90,17 +98,6 @@ export let connect = (streamsToProps, ComponentToWrap) => {
 
 export let lastKey = R.pipe(R.split("."), R.nth(-1))
 
-// export let defaultSources = () => {
-//   let state$ = new ReplaySubject(1)
-//   let props = {}
-//   let DOM = {
-//     fromKey: () => DOM,
-//     from: () => DOM,
-//     listen: () => O.of(),
-//   }
-//   return {state$, props, DOM}
-// }
-
 export let isolateSources = {
   state$: (source, key) => source
     .pluck(lastKey(key))
@@ -112,13 +109,6 @@ export let isolateSources = {
 
   DOM: (source, key) => source.fromKey(lastKey(key))
 }
-
-// export let defaultSinks = () => {
-//   let action$ = O.of()
-//   let state$ = O.of()
-//   let DOM = (props) => null
-//   return {action$, state$, DOM}
-// }
 
 export let isolateSinks = {
   action$: (sink, key) => {
@@ -148,7 +138,7 @@ export let isolate = (app, appKey=null, types=null) => {
         : source,
       sources
     )
-    let properSources = R.merge({} /*defaultSources()*/, isolatedSources)
+    let properSources = R.merge({}, isolatedSources)
 
     // Run app (unredux component)
     let sinks = app(properSources, appKey)
@@ -160,47 +150,11 @@ export let isolate = (app, appKey=null, types=null) => {
         : sink,
       sinks
     )
-    let properSinks = R.merge({} /*defaultSinks()*/, isolatedSinks)
+    let properSinks = R.merge({}, isolatedSinks)
 
     return properSinks
   }
 }
-
-// function isolateSingle(busKey, app, appKey=null) {
-//   appKey = appKey || uid.sync(4)
-//   return function App(sources) {
-//     // Prepare sources
-//     let isolatedSources = R.mapObjIndexed(
-//       (source, sourceKey) => {
-//         return sourceKey == busKey
-//           ? templates[busKey].isolateSource(source, appKey)
-//           : source
-//       },
-//       sources
-//     )
-//     let properSources = R.merge(defaultSources(), isolatedSources)
-//
-//     // Run app (unredux component)
-//     let sinks = app(properSources, appKey)
-//
-//     // Prepare sinks
-//     let isolatedSinks = R.mapObjIndexed(
-//       (sink, sinkKey) => {
-//         return sinkKey == busKey
-//           ? templates[sinkKey].isolateSink(sink, appKey)
-//           : sink
-//       },
-//       sinks
-//     )
-//     let properSinks = R.merge(defaultSinks(), isolatedSinks)
-//
-//     return properSinks
-//   }
-// }
-
-/*export let liftSinks = (sinks) => {
-  return R.merge(defaultSinks(), sinks)
-}*/
 
 export let lift = (Component) => {
   return (sources) => ({
@@ -244,6 +198,7 @@ export let makeRouter = (routes) => {
 
   // doroute :: String -> {mask :: String, params :: Object, payload :: any)
   let doroute = (url) => {
+    url = Url.parse(url).pathname
     for (let [route, payload] of routes) {
       let match = route.match(url)
       if (match) {

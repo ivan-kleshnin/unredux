@@ -1,8 +1,8 @@
+import * as F from "framework"
 import * as R from "ramda"
 import {Observable as O} from "rxjs"
 import React from "react"
 import * as D from "selfdb"
-import * as F from "framework"
 import Home from "./Home"
 import NotFound from "./NotFound"
 import page1App from "../page1/app"
@@ -31,8 +31,8 @@ export default (sources, key) => {
 
   let intents = {
     navigateTo$: sources.DOM.from("a").listen("click")
-      .do(event => event.preventDefault())
-      .map(event => event.target.attributes.href.value)
+      .do(({event}) => event.preventDefault())
+      .map(R.view(["element", "href"]))
       .do(url => {
         window.history.pushState({}, "", url)
       })

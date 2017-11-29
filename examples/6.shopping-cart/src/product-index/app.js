@@ -13,7 +13,7 @@ export let seed = {
 export default (sources, key) => {
   let intents = {
     buy$: sources.DOM.fromKey("productIndex").fromKey("buy").listen("click")
-      .map(event => event.target.dataset.val),
+      .map(R.view(["element", "dataset", "val"])),
   }
 
   let action$ = O.merge(

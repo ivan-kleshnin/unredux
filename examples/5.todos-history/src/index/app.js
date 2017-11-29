@@ -13,11 +13,11 @@ export let seed = {
 export default (sources, key) => {
   let intents = {
     toggleTodo$: sources.DOM.fromKey("item").listen("click")
-      .map(event => event.target.dataset.val),
+      .map(R.view(["element", "dataset", "val"])),
 
     setFilter$: sources.DOM.fromKey("filter").listen("click")
-      .do(event => event.preventDefault())
-      .map(event => event.target.dataset.val),
+      .do(({event}) => event.preventDefault())
+      .map(R.view(["element", "dataset", "val"])),
   }
 
   let state$ = D.run(

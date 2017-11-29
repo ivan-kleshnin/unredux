@@ -12,7 +12,7 @@ export let seed = {
 export default (sources, key) => {
   let intents = {
     reset$: sources.DOM.fromKey("reset").listen("click")
-      .do(event => event.preventDefault())
+      .do(({event}) => event.preventDefault())
       .mapTo(true),
   }
 

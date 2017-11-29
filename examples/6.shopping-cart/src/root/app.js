@@ -20,10 +20,10 @@ export let seed = {
 export default (sources, key) => {
   let intents = {
     cartInc$: sources.DOM.fromKey("cart").fromKey("inc").listen("click")
-      .map(event => event.target.dataset.val),
+      .map(R.view(["element", "dataset", "val"])),
 
     cartDec$: sources.DOM.fromKey("cart").fromKey("dec").listen("click")
-      .map(event => event.target.dataset.val),
+      .map(R.view(["element", "dataset", "val"])),
 
     cartCheckout$: sources.DOM.fromKey("cart").fromKey("checkout").listen("click")
       .mapTo(true),

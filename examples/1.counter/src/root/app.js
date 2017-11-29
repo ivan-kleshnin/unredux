@@ -8,8 +8,8 @@ export default (sources, key) => {
   let intents = {
     inc$: sources.DOM.fromKey("inc").listen("click").mapTo(true),
     dec$: sources.DOM.fromKey("dec").listen("click").mapTo(true),
-    add$: sources.DOM.fromKey("add").listen("click").map(event => Number(event.target.dataset.val)),
-    sub$: sources.DOM.fromKey("sub").listen("click").map(event => Number(event.target.dataset.val)),
+    add$: sources.DOM.fromKey("add").listen("click").map(({element}) => Number(element.dataset.val)),
+    sub$: sources.DOM.fromKey("sub").listen("click").map(({element}) => Number(element.dataset.val)),
   }
 
   let state$ = D.run(

@@ -82,7 +82,6 @@ export default (sources, key) => {
     ({table, index}) => {
       let sortFn = makeSortFn(index.sort)
       let filterFn = makeFilterFn(index.filter)
-
       return R.pipe(
         R.values,
         R.filter(filterFn),
@@ -107,5 +106,5 @@ export default (sources, key) => {
     }),
   )
 
-  return {action$, Component}
+  return {Component, action$}
 }

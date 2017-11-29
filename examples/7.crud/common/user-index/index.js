@@ -1,22 +1,22 @@
 import * as R from "ramda"
 
 export let makeFilterFn = (filter) => {
-  return (post) => {
+  return (user) => {
     if (filter.id) {
-      if (!R.contains(filter.id, post.id))
+      if (!R.contains(filter.id, user.id))
         return false
     }
-    if (filter.title) {
-      if (!R.contains(filter.title, post.title))
+    if (filter.fullname) {
+      if (!R.contains(filter.fullname, user.fullname))
         return false
     }
-    if (filter.tags) {
-      let filterTags = R.map(R.trim, R.split(",", R.toLower(filter.tags)))
-      if (!R.intersection(filterTags, post.tags).length)
+    // TODO improve, from/to
+    if (filter.dob) {
+      if (filter.dob != user.dob)
         return false
     }
-    if (filter.isPublished) {
-      if (!post.isPublished)
+    if (filter.role) {
+      if (filter.role != user.role)
         return false
     }
     return true

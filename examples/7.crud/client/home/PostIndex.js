@@ -33,7 +33,6 @@ export default function PostIndex({posts, index}) {
         Published{" "}
         <input type="checkbox" name="filter.isPublished" checked={index.filter.isPublished}/>
       </label>
-      {" "}
     </div>
     <div style={{marginBottom: "10px"}}>
       Sort by:

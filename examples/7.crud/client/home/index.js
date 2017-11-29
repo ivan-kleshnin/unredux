@@ -9,6 +9,7 @@ import PostIndex from "./PostIndex"
 
 export let seed = {
   filter: {
+    id: "",
     title: "",
     tags: "",
     isPublished: false,
@@ -43,18 +44,25 @@ export default (sources, key) => {
       .share(),
 
     // DOM
+    changeFilterId$: sources.DOM.fromName("filter.id").listen("input")
+      .map(R.view(["element", "value"])),
+
     changeFilterTitle$: sources.DOM.fromName("filter.title").listen("input")
-      .map(event => event.target.value),
+      .map(R.view(["element", "value"])),
 
     changeFilterTags$: sources.DOM.fromName("filter.tags").listen("input")
-      .map(event => event.target.value),
+      .map(R.view(["element", "value"])),
 
     changeFilterIsPublished$: sources.DOM.fromName("filter.isPublished").listen("click")
-      .map(event => event.target.value),
+      .map(R.view(["element", "value"])),
 
     changeSort$: sources.DOM.fromName("sort").listen("click")
-      .map(event => event.target.value),
+      .map(R.view(["element", "value"])),
   }
+
+  intents.changeSort$.subscribe(x => {
+    console.log(x)
+  })
 
   let index$ = D.run(
     () => D.makeStore({}),
@@ -62,6 +70,7 @@ export default (sources, key) => {
   )(
     D.init(seed),
 
+    intents.changeFilterId$.map(x => R.set(["filter", "id"], x)),
     intents.changeFilterTitle$.map(x => R.set(["filter", "title"], x)),
     intents.changeFilterTags$.map(x => R.set(["filter", "tags"], x)),
     intents.changeFilterIsPublished$.map(_ => R.over(["filter", "isPublished"], R.not)),

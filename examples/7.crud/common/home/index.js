@@ -2,8 +2,16 @@ import * as R from "ramda"
 
 export let makeFilterFn = (filter) => {
   return (post) => {
+    if (filter.id) {
+      if (!R.contains(filter.id, post.id))
+        return false
+    }
+    if (filter.search) {
+      if (!R.contains(filter.search, post.title) && !R.contains())
+        return false
+    }
     if (filter.title) {
-      if (!R.startsWith(filter.title, post.title))
+      if (!R.contains(filter.title, post.title))
         return false
     }
     if (filter.tags) {

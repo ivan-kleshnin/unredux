@@ -4,7 +4,6 @@ import * as R from "ramda"
 import React from "react"
 import ReactDOMServer from "react-dom/server"
 import {ReplaySubject} from "rxjs"
-
 import app, {seed} from "client/root"
 import {APP_KEY} from "client/meta"
 import layout from "./layout"
@@ -35,7 +34,10 @@ router.get("/*", (req, res) => {
   //   })
 
   // Without SSR
-  res.send(layout({appHTML: "", state: R.merge(seed, {url: req.originalUrl})}))
+  res.send(layout({
+    appHTML: "",
+    state: R.merge(seed, {url: req.originalUrl})
+  }))
 })
 
 export default router

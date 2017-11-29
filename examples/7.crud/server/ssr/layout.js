@@ -5,6 +5,7 @@ export default ({appHTML, state}) => {
       <head>
         <meta charSet="utf-8"/>
         <title>7. CRUD</title>
+        <link rel="stylesheet" href="/public/css/app.css"/>
       </head>
       <body>
           <div id="root">${appHTML}</div>

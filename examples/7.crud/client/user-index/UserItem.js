@@ -3,7 +3,7 @@ import React from "react"
 
 export default function UserItem({user}) {
   return <pre>
-    {user.id}: {JSON.stringify(user)}
+    <strong>{user.id}</strong>: {JSON.stringify(user)}
   </pre>
 }
 

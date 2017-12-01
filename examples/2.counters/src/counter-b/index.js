@@ -1,20 +1,21 @@
+import * as F from "framework"
 import * as R from "ramda"
-import {Observable as O} from "rxjs"
 import React from "react"
 import * as D from "selfdb"
-import * as F from "framework"
 
 export default (sources, key) => {
   let intents = {
-    inc$: sources.DOM.fromKey("inc").listen("click").mapTo(true),
-    dec$: sources.DOM.fromKey("dec").listen("click").mapTo(true),
+    inc$: sources.DOM.fromKey("inc").listen("click").map(R.always(true)),
+    dec$: sources.DOM.fromKey("dec").listen("click").map(R.always(true)),
   }
 
   let state$ = D.run(
     () => D.makeStore({}),
     D.withLog({key}),
   )(
-    D.init(0),
+    sources.state$
+      ? sources.state$.map(R.always).take(1)
+      : D.init(0),
     intents.inc$.map(_ => R.inc),
     intents.dec$.map(_ => R.dec),
   ).$
@@ -31,5 +32,5 @@ export default (sources, key) => {
       </p>
     )
 
-  return {Component}
+  return {state$, Component}
 }

@@ -18,7 +18,7 @@ function makeStore(options) {
         } else {
           throw Error(`dispatched value must be a function, got ${inspect(fn)}`)
         }
-      })
+      }, null)
       .skipDuplicates()
 
     return self

@@ -1,13 +1,13 @@
 import * as R from "ramda"
-import {Observable as O} from "rxjs"
+import K from "kefir"
 import React from "react"
 import * as D from "selfdb"
 import * as F from "framework"
 
 export default (sources, key) => {
   let intents = {
-    inc$: sources.DOM.fromKey("inc").listen("click").mapTo(true),
-    dec$: sources.DOM.fromKey("dec").listen("click").mapTo(true),
+    inc$: sources.DOM.fromKey("inc").listen("click").map(R.always(true)),
+    dec$: sources.DOM.fromKey("dec").listen("click").map(R.always(true)),
     add$: sources.DOM.fromKey("add").listen("click").map(({element}) => Number(element.dataset.val)),
     sub$: sources.DOM.fromKey("sub").listen("click").map(({element}) => Number(element.dataset.val)),
   }

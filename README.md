@@ -16,7 +16,7 @@ notable differences.
 
 #### [1. Counter](./examples/1.counter)
 
-The basic example.
+A basic example.
 
 #### [2. Counters](./examples/2.counters)
 

@@ -20,5 +20,5 @@ sources.state$.next(window.state)
 delete window.state
 document.querySelector("#rootState").outerHTML = ""
 
-// ReactDOM.render(<sinks.Component/>, document.getElementById(APP_KEY))
-ReactDOM.hydrate(<sinks.Component/>, document.getElementById(APP_KEY))
+ReactDOM.render(<sinks.Component/>, document.getElementById(APP_KEY))
+// ReactDOM.hydrate(<sinks.Component/>, document.getElementById(APP_KEY))

@@ -1,8 +1,10 @@
-import {Observable as O} from "rxjs"
+import * as F from "framework"
+import K from "kefir"
+import * as R from "ramda"
 import React from "react"
 import * as D from "selfdb"
-import addApp from "../add/app"
-import indexApp from "../index/app"
+import addApp from "../todo-add"
+import indexApp from "../todo-index"
 
 export let seed = {
   todos: {}
@@ -11,8 +13,8 @@ export let seed = {
 export default (sources, key) => {
   let intents = {
     reset$: sources.DOM.fromKey("reset").listen("click")
-      .do(({event}) => event.preventDefault())
-      .mapTo(true),
+      .map(ee => (ee.event.preventDefault(), ee))
+      .map(R.always(true)),
   }
 
   /*
@@ -29,7 +31,7 @@ export default (sources, key) => {
   let state$ = D.run(
     () => D.makeStore({}),
     D.withLog({key}),
-    D.withLocalStoragePersistence({key}),
+    D.withLocalStoragePersistence({key: "4.todos." + key}),
   )(
     D.init(seed),
 

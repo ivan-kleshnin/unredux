@@ -30,11 +30,11 @@ export default (sources, key) => {
 
   let state$ = D.run(
     () => D.makeStore({}),
-    // D.withLog({key}),                    // 1) this logger is aware of history
-    D.withLocalStoragePersistence({key}),   // 3) this storage is aware of history (clear localStorage before switching between 3) and 4)!)
+    // D.withLog({key}),                                              // 1) this logger is aware of history
+    D.withLocalStoragePersistence({key: "5.todos-history_1." + key}), // 3) this storage is aware of history
     D.withHistory({}),
     D.withLog({key}),                        // 2) this logger is unaware of history
-    // D.withLocalStoragePersistence({key}), // 4) this storage is unaware of history (clear localStorage before switching between 3) and 4)!)
+    // D.withLocalStoragePersistence({key: "5.todos-history_2." + key}), // 4) this storage is unaware of history
   )(
     D.init(seed),
 

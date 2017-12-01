@@ -242,106 +242,105 @@ withLog.options = {
 // Persistence mixins ==============================================================================
 
 // TODO timeout option?!
-// let _memCache = {}
-//
-// export let withMemoryPersistence = R.curry((options, Store) => {
-//   function MemoryPersistentStore(action$) {
-//     options = R.merge(withMemoryPersistence.options, options)
-//
-//     if (options.key && options.key in _memCache) {
-//       let initFn = function initFromMemory() {
-//         return _memCache[options.key]
-//       }
-//       action$ = action$
-//         .skip(1)
-//         .startWith(initFn)
-//     }
-//
-//     let store = Store(action$)
-//     let self = R.merge(store, {
-//       memory: {
-//         _options: options,
-//       }
-//     })
-//
-//     if (options.key) {
-//       self.$ = self.$.map(s => {
-//         _memCache[options.key] = s
-//         return s
-//       })
-//     }
-//
-//     return self
-//   }
-//
-//   return MemoryPersistentStore
-// })
-//
-// withMemoryPersistence.options = {
-//   key: "",
-// }
-//
-// export let withLocalStoragePersistence = R.curry((options, Store) => {
-//   if (!isBrowser()) {
-//     throw Error("withLocalStoragePersistence can be used only in Browser")
-//   }
-//
-//   function LocalStoragePersistentStore(action$) {
-//     options = R.merge(withLocalStoragePersistence.options, options)
-//
-//     if (options.key && localStorage.getItem(options.key) !== null) {
-//       let initFn
-//       try {
-//         initFn = function initFromLocalStorage() {
-//           return options.parseFn(localStorage.getItem(options.key))
-//         }
-//       } catch (err) {
-//         console.warn("error at read from localStorage")
-//         initFn = function initWithNull() {
-//           return null
-//         }
-//       }
-//       action$ = action$
-//         .skip(1)
-//         .startWith(initFn)
-//     }
-//
-//     let store = Store(action$)
-//     let self = R.merge(store, {
-//       storage: {
-//         _options: options,
-//       }
-//     })
-//
-//     if (options.key) {
-//       self.$ = self.$.merge(
-//         self.$
-//           .throttleTime(1000, undefined, {leading: true, trailing: true})
-//           .map(state => {
-//             try {
-//               localStorage.setItem(options.key, options.serializeFn(state))
-//             } catch (err) {
-//               console.warn("error at write to localStorage")
-//             }
-//             return state
-//           })
-//           .filter(R.F)
-//         )
-//         .publishReplay(1)
-//         .refCount()
-//     }
-//
-//     return self
-//   }
-//
-//   return LocalStoragePersistentStore
-// })
-//
-// withLocalStoragePersistence.options = {
-//   key: "",
-//   parseFn: JSON.parse,
-//   serializeFn: JSON.stringify,
-// }
+let _memCache = {}
+
+export let withMemoryPersistence = R.curry((options, Store) => {
+  function MemoryPersistentStore(action$) {
+    options = R.merge(withMemoryPersistence.options, options)
+
+    if (options.key && options.key in _memCache) {
+      let initFn = function initFromMemory() {
+        return _memCache[options.key]
+      }
+      action$ = action$
+        .skip(1)
+        .merge(K.constant(initFn))
+    }
+
+    let store = Store(action$)
+    let self = R.merge(store, {
+      memory: {
+        _options: options,
+      }
+    })
+
+    if (options.key) {
+      self.$ = self.$.map(s => {
+        _memCache[options.key] = s
+        return s
+      })
+    }
+
+    return self
+  }
+
+  return MemoryPersistentStore
+})
+
+withMemoryPersistence.options = {
+  key: "",
+}
+
+export let withLocalStoragePersistence = R.curry((options, Store) => {
+  if (!isBrowser()) {
+    throw Error("withLocalStoragePersistence can be used only in Browser")
+  }
+
+  function LocalStoragePersistentStore(action$) {
+    options = R.merge(withLocalStoragePersistence.options, options)
+
+    if (options.key && localStorage.getItem(options.key) !== null) {
+      let initFn
+      try {
+        initFn = function initFromLocalStorage() {
+          return options.parseFn(localStorage.getItem(options.key))
+        }
+      } catch (err) {
+        console.warn("error at read from localStorage")
+        initFn = function initWithNull() {
+          return null
+        }
+      }
+      action$ = action$
+        .skip(1)
+        .merge(K.constant(initFn))
+    }
+
+    let store = Store(action$)
+    let self = R.merge(store, {
+      storage: {
+        _options: options,
+      }
+    })
+
+    if (options.key) {
+      self.$ = self.$.merge(
+        self.$
+          .throttle(1000)
+          .map(state => {
+            try {
+              localStorage.setItem(options.key, options.serializeFn(state))
+            } catch (err) {
+              console.warn("error at write to localStorage")
+            }
+            return state
+          })
+          .filter(R.F)
+        )
+        .toProperty()
+    }
+
+    return self
+  }
+
+  return LocalStoragePersistentStore
+})
+
+withLocalStoragePersistence.options = {
+  key: "",
+  parseFn: JSON.parse,
+  serializeFn: JSON.stringify,
+}
 
 // History mixin ===================================================================================
 // export let canUndo = (historyState) =>
@@ -431,20 +430,19 @@ withLog.options = {
 // })
 
 // Derive ==========================================================================================
-// export let derive = (streamsToProps, mapFn) => {
-//   streamsToProps = R.map($ => $.distinctUntilChanged(R.identical), streamsToProps)
-//   return K.combine(streamsToProps)
-//     .map(mapFn)
-//     .distinctUntilChanged(R.identical)
-//     .publishReplay(1)
-//     .refCount()
-// }
-//
-// export let deriveOne = (stream, mapFn) => {
-//   stream = stream.distinctUntilChanged(R.identical)
-//   return stream
-//     .map(mapFn)
-//     .distinctUntilChanged(R.identical)
-//     .publishReplay(1)
-//     .refCount()
-// }
+export let derive = (streamsToProps, mapFn) => {
+  return K.combine(
+      R.map($ => $.skipDuplicates(), streamsToProps)
+    )
+    .map(mapFn)
+    .skipDuplicates()
+    .toProperty()
+}
+
+export let deriveOne = (stream, mapFn) => {
+  return stream
+    .skipDuplicates()
+    .map(mapFn)
+    .skipDuplicates()
+    .toProperty()
+}

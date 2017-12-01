@@ -14,19 +14,6 @@ export default (sources, key) => {
     intents.dec$.map(_ => R.dec),
   ])
 
-  sources.state$.observe(s => {
-    console.log("s:", s, "from some CounterC instance")
-  })
-
-  console.log(sources.state$)
-
-  setTimeout(() => {
-    console.log("timeout passed")
-    sources.state$.observe(s => {
-      console.log("s:", s, "from some CounterC instance 2")
-    })
-  }, 1000)
-
   let Component = F.connect(
     {counter: sources.state$},
     ({counter}) =>

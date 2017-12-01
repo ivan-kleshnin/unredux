@@ -1,4 +1,5 @@
 import * as F from "framework"
+import K from "kefir"
 import * as R from "ramda"
 import React from "react"
 import * as D from "selfdb"
@@ -14,7 +15,7 @@ export default (sources, key) => {
     D.withLog({key}),
   )(
     sources.state$
-      ? sources.state$.map(R.always).take(1)
+      ? sources.state$.take(1).map(R.always)
       : D.init(0),
     intents.inc$.map(_ => R.inc),
     intents.dec$.map(_ => R.dec),

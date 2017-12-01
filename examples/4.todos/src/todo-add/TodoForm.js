@@ -1,14 +1,14 @@
 import React from "react"
 import PT from "prop-types"
 
-export default function Form(props) {
+export default function TodoForm({todo}) {
   return <form>
-    <input name="text" value={props.text}/>
+    <input name="text" value={todo.text}/>
     {" "}
     <button type="submit">Add Todo</button>
   </form>
 }
 
-Form.propTypes = {
-  text: PT.string.isRequired,
+TodoForm.propTypes = {
+  todo: PT.object.isRequired,
 }

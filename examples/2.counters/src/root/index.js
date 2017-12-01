@@ -24,13 +24,13 @@ export let seed = {
 */
 export default (sources, key) => {
   // Counters A* aren't connected to the root state
-  // let a1Sinks = F.isolate(aApp, "a1")({...sources, props: {title: "CounterA1"}})
-  // let a2Sinks = F.isolate(aApp, "a2")({...sources, props: {title: "CounterA2"}})
+  let a1Sinks = F.isolate(aApp, "a1")({...sources, props: {title: "CounterA1"}})
+  let a2Sinks = F.isolate(aApp, "a2")({...sources, props: {title: "CounterA2"}})
   // a*Sinks :: {Component}
 
   // Counters B* are connected to the root state via `state$` sinks
-  // let b1Sinks = F.isolate(bApp, "b1")({...sources, props: {title: "CounterB1"}})
-  // let b2Sinks = F.isolate(bApp, "b2")({...sources, props: {title: "CounterB2"}})
+  let b1Sinks = F.isolate(bApp, "b1")({...sources, props: {title: "CounterB1"}})
+  let b2Sinks = F.isolate(bApp, "b2")({...sources, props: {title: "CounterB2"}})
   // b*Sinks :: {Component, state$}
 
   // Counters C* are connected to the root state via `action$` sinks
@@ -39,41 +39,41 @@ export default (sources, key) => {
   // c*Sinks :: {Component, action$}
 
   // Counters D* are connected to the root state via `intents` sinks
-  // let d1Sinks = F.isolate(dApp, "d1")({...sources, props: {title: "CounterD1"}})
-  // let d2Sinks = F.isolate(dApp, "d2")({...sources, props: {title: "CounterD2"}})
+  let d1Sinks = F.isolate(dApp, "d1")({...sources, props: {title: "CounterD1"}})
+  let d2Sinks = F.isolate(dApp, "d2")({...sources, props: {title: "CounterD2"}})
   // d*Sinks :: {Component, intents}
 
   let state$ = D.run(
     () => D.makeStore({}),
-    // D.withLog({key}),
+    D.withLog({key}),
   )(
     D.init(seed),
 
     // Counters B* can work without root state
-    // b1Sinks.state$.map(R.set("b1")),
-    // b2Sinks.state$.map(R.set("b2")),
+    b1Sinks.state$.skip(1).map(R.set("b1")),
+    b2Sinks.state$.skip(1).map(R.set("b2")),
 
     // Counters C* can't work without root state
     c1Sinks.action$,
     c2Sinks.action$,
 
     // Counters D* can't work without root state
-    // d1Sinks.intents.inc$.map(_ => R.over("d1", R.inc)),
-    // d1Sinks.intents.dec$.map(_ => R.over("d1", R.dec)),
-    // d2Sinks.intents.inc$.map(_ => R.over("d2", R.inc)),
-    // d2Sinks.intents.dec$.map(_ => R.over("d2", R.dec)),
+    d1Sinks.intents.inc$.map(_ => R.over("d1", R.inc)),
+    d1Sinks.intents.dec$.map(_ => R.over("d1", R.dec)),
+    d2Sinks.intents.inc$.map(_ => R.over("d2", R.inc)),
+    d2Sinks.intents.dec$.map(_ => R.over("d2", R.dec)),
   ).$
 
   let Component = (props) => {
     return <div>
-      {/*<a1Sinks.Component/>*/}
-      {/*<a2Sinks.Component/>*/}
-      {/*<b1Sinks.Component/>*/}
-      {/*<b2Sinks.Component/>*/}
+      <a1Sinks.Component/>
+      <a2Sinks.Component/>
+      <b1Sinks.Component/>
+      <b2Sinks.Component/>
       <c1Sinks.Component/>
       <c2Sinks.Component/>
-      {/*<d1Sinks.Component/>*/}
-      {/*<d2Sinks.Component/>*/}
+      <d1Sinks.Component/>
+      <d2Sinks.Component/>
     </div>
   }
 

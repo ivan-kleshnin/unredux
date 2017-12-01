@@ -7,6 +7,11 @@ import {Observable as O} from "rxjs"
 import {makeFilterFn, makeSortFn} from "common/home"
 import PostIndex from "./PostIndex"
 
+///
+let smartDebounce = (time) => ($) =>
+  O.merge($.take(1), $.skip(1).debounceTime(time))
+///
+
 export let seed = {
   filter: {
     id: "",
@@ -77,7 +82,7 @@ export default (sources, key) => {
   let posts$ = D.derive(
     {
       table: sources.state$.pluck("posts"),
-      index: index$.debounceTime(200),
+      index: index$.let(smartDebounce(200)),
     },
     ({table, index}) => {
       let sortFn = makeSortFn(index.sort)

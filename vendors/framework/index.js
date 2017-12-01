@@ -3,7 +3,7 @@ import React from "react"
 import Route from "route-parser"
 import Url from "url"
 import * as R from "../ramda"
-import {isBrowser, isNode} from "../selfdb/"
+import {isBrowser, isNode} from "../selfdb"
 import nanoid from "nanoid"
 
 export let fromDOMEvent = (appSelector) => {
@@ -28,7 +28,7 @@ export let fromDOMEvent = (appSelector) => {
       listen: (eventName, options={}) => {
         if (isBrowser()) {
           return K.fromEvents(document.querySelector(appSelector), eventName) // , options TODO
-          // .throttle(10, {leading: true, trailing: true})
+          .throttle(10)
           .flatten(event => {
             let element = event.target
             let selector = R.join(" ", selectors)
@@ -54,31 +54,25 @@ export let connect = (streamsToProps, ComponentToWrap) => {
     constructor(props) {
       super(props)
       this.state = {}
-      // Container.constructor$.plug(K.constant(props))
+      Container.constructor$.plug(K.constant(props))
     }
 
     componentWillMount(...args) {
-      console.log("!!!")
-      streamsToProps.counter.observe(c => {
-        console.log("?!??!?", c)
-      })
-
       let props$ = K.combine(streamsToProps)
-        // .throttle(10, {leading: false, trailing: true})
+        .throttle(10, {leading: false, trailing: true})
 
-      // if (isNode())
-      //   props$ = props$.take(1)
+      if (isNode())
+        props$ = props$.take(1)
 
       this.sb = props$.observe((data) => {
-        console.log("???")
         this.setState(data)
       })
-      // Container.willMount$.plug(K.constant(args))
+      Container.willMount$.plug(K.constant(args))
     }
 
     componentWillUnmount(...args) {
       this.sb.unsubscribe()
-      // Container.willUnmount$.plug(K.constant(args))
+      Container.willUnmount$.plug(K.constant(args))
     }
 
     render() {
@@ -90,9 +84,9 @@ export let connect = (streamsToProps, ComponentToWrap) => {
     }
   }
 
-  // Container.constructor$ = K.pool()
-  // Container.willMount$ = K.pool()
-  // Container.willUnmount$ = K.pool()
+  Container.constructor$ = K.pool()
+  Container.willMount$ = K.pool()
+  Container.willUnmount$ = K.pool()
 
   return Container
 }
@@ -106,7 +100,7 @@ export let isolateSources = {
 
   props: R.always,
 
-  DOM: (source, key) => source.fromKey(lastKey(key))
+  DOM: (source, key) => source // source.fromKey(lastKey(key))
 }
 
 export let isolateSinks = {

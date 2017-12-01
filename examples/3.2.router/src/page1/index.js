@@ -1,15 +1,24 @@
+import * as F from "framework"
 import * as R from "ramda"
-import {Observable as O} from "rxjs"
+import K from "kefir"
 import React from "react"
 import * as D from "selfdb"
-import * as F from "framework"
 
-export default (sources, key) => {
+// Decorate app with `F.withLifecycle` to handle lifecycle events declaratively (`sources.Component`)
+export default F.withLifecycle((sources, key) => {
   let intents = {
     // unsubscribed on state unsubscribe which happens on willUnmount
-    inc$: sources.DOM.fromKey("inc").listen("click").mapTo(true),
-    dec$: sources.DOM.fromKey("dec").listen("click").mapTo(true),
+    inc$: sources.DOM.fromKey("inc").listen("click").map(R.always(true)),
+    dec$: sources.DOM.fromKey("dec").listen("click").map(R.always(true)),
   }
+
+  // No need to unsubscribe here
+  sources.Component.willMount$.observe(() => {
+    console.log("Page1.app: Component.willMount$")
+  })
+  sources.Component.willUnmount$.observe(() => {
+    console.log("Page1.app: Component.willUnmount$")
+  })
 
   let state$ = D.run(
     () => D.makeStore({}),
@@ -31,4 +40,4 @@ export default (sources, key) => {
   )
 
   return {Component}
-}
+})

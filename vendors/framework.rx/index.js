@@ -5,7 +5,7 @@ import {Observable as O, Subject} from "../rxjs"
 import {combineLatestObj} from "rx-utils"
 import * as R from "../ramda"
 import {isBrowser, isNode} from "../selfdb"
-import uid from "uid-safe"
+import nanoid from "nanoid"
 
 export let fromDOMEvent = (appSelector) => {
   function collectFn(selectors) {

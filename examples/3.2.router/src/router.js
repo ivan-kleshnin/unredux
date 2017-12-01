@@ -1,9 +1,9 @@
 import * as F from "framework"
 
 // Apps
-import page1App from "./page1/app"
-import page2App from "./page2/app"
-import page3App from "./page3/app" // TODO rename `app.js` to `index.js` for cleaner imports?
+import page1 from "./page1"
+import page2 from "./page2"
+import page3 from "./page3"
 
 // Static pages
 import Home from "./root/Home"
@@ -11,9 +11,9 @@ import NotFound from "./root/NotFound"
 
 let routes = [
   // Apps
-  ["/page1", page1App],
-  ["/page2", page2App],
-  ["/page3", page3App],
+  ["/page1", page1],
+  ["/page2", page2],
+  ["/page3", page3],
 
   // Static pages
   ["/",      F.lift(Home)],

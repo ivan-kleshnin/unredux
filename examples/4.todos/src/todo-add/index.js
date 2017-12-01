@@ -1,9 +1,9 @@
-import * as R from "ramda"
-import {Observable as O} from "rxjs"
-import * as D from "selfdb"
 import * as F from "framework"
+import K from "kefir"
+import * as R from "ramda"
+import * as D from "selfdb"
 import * as M from "../models"
-import Form from "./form"
+import TodoForm from "./TodoForm"
 
 export let seed = {
   text: "",
@@ -15,11 +15,11 @@ export default (sources, key) => {
       .map(R.view(["element", "value"])),
 
     submitForm$: sources.DOM.from("form").listen("submit")
-      .do(({event}) => event.preventDefault())
-      .mapTo(true),
+      .map(ee => (ee.event.preventDefault(), ee))
+      .map(R.always(true)),
   }
 
-  let state$ = D.run(
+  let form$ = D.run(
     () => D.makeStore({}),
     D.withLog({key}),
   )(
@@ -32,16 +32,14 @@ export default (sources, key) => {
     intents.submitForm$.delay(1).map(_ => R.always(seed)),
   ).$
 
-  let action$ = O.merge(
-    state$.sample(intents.submitForm$).map(form => {
-      let todo = M.makeTodo({text: form.text})
-      return R.set(["todos", todo.id], todo)
-    }),
-  )
+  let action$ = form$.sampledBy(intents.submitForm$).map(form => {
+    let todo = M.makeTodo({text: form.text})
+    return R.set(["todos", todo.id], todo)
+  })
 
   let Component = F.connect(
-    {text: state$.pluck("text")},
-    Form,
+    {todo: form$},
+    TodoForm,
   )
 
   return {action$, Component}

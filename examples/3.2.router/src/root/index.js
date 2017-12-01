@@ -1,8 +1,9 @@
 import * as F from "framework"
-import * as D from "selfdb"
+import K from "kefir"
 import * as R from "ramda"
 import React from "react"
-import {Observable as O} from "rxjs"
+import * as D from "selfdb"
+import Url from "url"
 import router from "../router"
 
 export let seed = {
@@ -13,25 +14,26 @@ export let seed = {
 
 export default (sources, key) => {
   let contentSinks$ = D.deriveOne(
-    sources.state$.pluck("url"),
+    sources.state$.map(x => x.url),
     (url) => {
       let {mask, payload: app} = router.doroute(url)
-      app = F.isolate(app, key + mask.replace(/^\//, "."))
+      app = F.isolate(app, key + mask.replace(/^\//, "."), ["DOM", "Component"])
       let sinks = app({...sources, props: {router}})
-      return R.merge({action$: O.of()}, sinks)
+      return R.merge({action$: K.never()}, sinks)
     }
   )
 
   let intents = {
     navigateTo$: sources.DOM.from("a").listen("click")
-      .do(({event}) => event.preventDefault())
+      .map(ee => (ee.event.preventDefault(), ee))
       .map(R.view(["element", "href"]))
-      .do(url => {
+      .map(url => {
+        url = Url.parse(url).pathname
         window.history.pushState({}, "", url)
-      })
-      .share(),
+        return url
+      }),
 
-    navigateHistory$: O.fromEvent(window, "popstate")
+    navigateHistory$: K.fromEvents(window, "popstate")
       .map(data => document.location.pathname)
   }
 
@@ -46,13 +48,13 @@ export default (sources, key) => {
     intents.navigateHistory$.map(url => R.fn("navigateHistory", R.set("url", url))),
 
     // Content
-    contentSinks$.pluck("action$").switch(),
+    contentSinks$.map(x => x.action$).flatMapLatest(),
   ).$
 
   let Component = F.connect(
     {
-      url: state$.pluck("url"),
-      Content: contentSinks$.pluck("Component"),
+      url: state$.map(x => x.url),
+      Content: contentSinks$.map(x => x.Component),
     },
     ({url, Content}) => {
       return <div>

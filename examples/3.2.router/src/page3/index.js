@@ -1,30 +1,31 @@
-import * as R from "ramda"
-import {Observable as O} from "rxjs"
-import React from "react"
 import * as F from "framework"
+import * as R from "ramda"
+import K from "kefir"
+import React from "react"
 
+// Decorate app with `F.withLifecycle` to handle lifecycle events declaratively (`sources.Component`)
 export default F.withLifecycle((sources, key) => {
   let intents = {
     // unsubscribed on state unsubscribe which happens on willUnmount
-    inc$: sources.DOM.fromKey("inc").listen("click").mapTo(true),
-    dec$: sources.DOM.fromKey("dec").listen("click").mapTo(true),
+    inc$: sources.DOM.fromKey("inc").listen("click").map(R.always(true)),
+    dec$: sources.DOM.fromKey("dec").listen("click").map(R.always(true)),
   }
 
   // No need to unsubscribe here
-  sources.Component.willMount$.subscribe(() => {
+  sources.Component.willMount$.observe(() => {
     console.log("Page3.app: Component.willMount$")
   })
-  sources.Component.willUnmount$.subscribe(() => {
+  sources.Component.willUnmount$.observe(() => {
     console.log("Page3.app: Component.willUnmount$")
   })
 
-  let action$ = O.merge(
-    intents.inc$.map(_ => R.inc),
-    intents.dec$.map(_ => R.dec),
-  )
+  let action$ = K.merge([
+    intents.inc$.map(_ => R.over("page3", R.inc)),
+    intents.dec$.map(_ => R.over("page3", R.dec)),
+  ])
 
   let Component = F.connect(
-    {counter: sources.state$},
+    {counter: sources.state$.map(s => s.page3)},
     ({counter}) =>
       <div>
         Page 3: {counter} <button data-key="inc">+1</button> <button data-key="dec">-1</button>

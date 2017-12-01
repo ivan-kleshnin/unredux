@@ -12,7 +12,7 @@ let configs = {
   },
   output: {
     pathinfo: true,
-    filename: "js/[name].js",
+    filename: "[name].js",
     path: Path.resolve("public"),
     publicPath: "/",
   },
@@ -29,12 +29,20 @@ let configs = {
           use: ["css-loader", "less-loader"]
         }),
       },
+      {
+        test: /\.(jpg|jpeg|png|gif|svg)(\?v=\d+\.\d+\.\d+)?$/,
+        use: [{
+          loader: "file-loader",
+          options: {
+            name: "[path][name].[ext]",
+            publicPath: Path.resolve("public"),
+            context: Path.resolve("client"),
+          }
+        }]
+      },
     ],
   },
   target: "web",
-  node: {
-    fs: "empty" // TODO: think how can it be avoided (if it should be)
-  },
   resolve: {
     modules: [
       Path.resolve(__dirname, "node_modules"),
@@ -43,7 +51,7 @@ let configs = {
     ],
   },
   plugins: [
-    new ExtractTextPlugin("css/[name].css"),
+    new ExtractTextPlugin("[name].css"),
   ],
 }
 

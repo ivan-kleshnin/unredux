@@ -1,4 +1,4 @@
-import "./index.less"
+import "./styles/index.less"
 
 import {ReplaySubject} from "rxjs"
 import React from "react"

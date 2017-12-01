@@ -3,9 +3,13 @@ import * as R from "ramda"
 import React from "react"
 import PostItem from "./PostItem"
 
+// in order to Webpack move this file to `public` folder
+import "./styles/index.less"
+import "./images/logo.gif"
+
 export default function PostIndex({posts, index}) {
   return <div data-key="postIndex">
-    <h1>Blog</h1>
+    <h1 className="title">Blog <img src="/public/home/images/logo.gif"/></h1>
     <details className="margin-bottom-sm">
       <summary>Fields</summary>
       <code>id</code> – sort & filter<br/>

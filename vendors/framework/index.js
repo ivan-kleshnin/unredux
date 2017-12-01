@@ -5,7 +5,7 @@ import {Observable as O, Subject} from "../rxjs"
 import {combineLatestObj} from "rx-utils"
 import * as R from "../ramda"
 import {isBrowser, isNode} from "../selfdb"
-import uid from "uid-safe"
+import nanoid from "nanoid"
 
 export let fromDOMEvent = (appSelector) => {
   function collectFn(selectors) {
@@ -129,7 +129,7 @@ export let isolateSinks = {
 }
 
 export let isolate = (app, appKey=null, types=null) => {
-  appKey = appKey || uid.sync(4)
+  appKey = appKey || nanoid(4)
   return function App(sources) {
     // Prepare sources
     let isolatedSources = R.mapObjIndexed(

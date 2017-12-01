@@ -4,4 +4,4 @@
 node_modules
 npm-debug.log*
 */*/public/js
-*/*/public/css
+examples/7.crud/public

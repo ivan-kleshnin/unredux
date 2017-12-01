@@ -1,7 +1,7 @@
 import {inspect} from "util"
 import deepFreeze from "deep-freeze"
-import {Observable as O} from "../rxjs"
-import {combineLatestObj, mergeObj, mergeObjTracking, chan as Chan} from "rx-utils"
+import K from "kefir"
+// import {chan as Chan} from "rx-utils"
 import * as R from "../ramda"
 
 // Different Helpers ===============================================================================
@@ -20,12 +20,11 @@ export let isNode = new Function("try { return this === global } catch(e) { retu
 export let run = (...fns) => {
   let Store = R.pipe(...fns)()
   return (...action$s) =>
-    Store(O.merge(...action$s))
+    Store(K.merge(action$s))
 }
 
-// TODO rx-utils candidate
 export let init = (seed) =>
-  O.of(R.fn("init", R.always(seed)))
+  K.constant(function init() { return seed })
 
 // Store ===========================================================================================
 
@@ -91,10 +90,7 @@ export let makeStore = (options) => {
         }
         return options.freezeFn(nextState)
       }, null)
-      .distinctUntilChanged(options.cmpFn)
-      .do(val => { _val = val })
-      .publishReplay(1)
-      .refCount()
+      .skipDuplicates(options.cmpFn)
 
     return self
   }
@@ -132,8 +128,9 @@ export let withLog = R.curry((options, Store) => {
     options.key = options.key || "store" + (++storeCount) // Anonymous stores will be "store1", "store2", etc.
 
     if (options.input) {
-      action$ = action$.do(action => {
+      action$ = action$.map(action => {
         options.logActionFn(options.key, action)
+        return action
       })
     }
 
@@ -145,9 +142,10 @@ export let withLog = R.curry((options, Store) => {
     })
 
     if (options.output) {
-      self.$ = self.$.do(state => {
+      self.$ = self.$.map(state => {
         options.logStateFn(options.key, state)
-      }).publishReplay(1).refCount()
+        return state
+      })
     }
 
     return self
@@ -165,288 +163,288 @@ withLog.options = {
 }
 
 // Control mixins ==================================================================================
-
-export let withControl = R.curry((options, Store) => {
-  function ControlledStore(action$) {
-    options = R.merge(withControl.options, options)
-
-    let chan = Chan($ => O.merge(action$, $))
-
-    let store = Store(chan)
-    let self = R.merge(store, {
-      control: {
-        _options: options,
-      }
-    })
-
-    let helpers = {
-      // over :: (a -> b) -> ()
-      over: (fn) => {
-        chan(fn)
-      },
-
-      // set :: a -> ()
-      set: (val) => {
-        chan({
-          fn: R.always,
-          args: [val]
-        })
-      },
-
-      // setLensed :: (String, a) -> ()
-      setLensed: (lens, val) => {
-        chan({
-          fn: R.over,
-          args: [lens, {fn: R.set, args: [val]}]
-        })
-      },
-
-      // merge :: a -> ()
-      merge: (val) => {
-        chan({
-          fn: R.mergeFlipped,
-          args: [val]
-        })
-      },
-
-      // mergeLensed :: (String, a) -> ()
-      mergeLensed: (lens, val) => {
-        chan({
-          fn: R.over,
-          args: [lens, {fn: R.mergeFlipped, args: [val]}]
-        })
-      },
-
-      // mergeDeep :: a -> ()
-      mergeDeep: (val) => {
-        chan({
-          fn: R.mergeDeepFlipped,
-          args: [val]
-        })
-      },
-
-      // mergeDeepLensed :: a -> ()
-      mergeDeepLensed: (lens, val) => {
-        chan({
-          fn: R.over, args: [lens, {fn: R.mergeDeepFlipped, args: [val]}]
-        })
-      }
-    }
-
-    return R.merge(self, helpers)
-  }
-
-  return ControlledStore
-})
-
-withControl.options = {}
+//
+// export let withControl = R.curry((options, Store) => {
+//   function ControlledStore(action$) {
+//     options = R.merge(withControl.options, options)
+//
+//     let chan = Chan($ => K.merge([action$, $]))
+//
+//     let store = Store(chan)
+//     let self = R.merge(store, {
+//       control: {
+//         _options: options,
+//       }
+//     })
+//
+//     let helpers = {
+//       // over :: (a -> b) -> ()
+//       over: (fn) => {
+//         chan(fn)
+//       },
+//
+//       // set :: a -> ()
+//       set: (val) => {
+//         chan({
+//           fn: R.always,
+//           args: [val]
+//         })
+//       },
+//
+//       // setLensed :: (String, a) -> ()
+//       setLensed: (lens, val) => {
+//         chan({
+//           fn: R.over,
+//           args: [lens, {fn: R.set, args: [val]}]
+//         })
+//       },
+//
+//       // merge :: a -> ()
+//       merge: (val) => {
+//         chan({
+//           fn: R.mergeFlipped,
+//           args: [val]
+//         })
+//       },
+//
+//       // mergeLensed :: (String, a) -> ()
+//       mergeLensed: (lens, val) => {
+//         chan({
+//           fn: R.over,
+//           args: [lens, {fn: R.mergeFlipped, args: [val]}]
+//         })
+//       },
+//
+//       // mergeDeep :: a -> ()
+//       mergeDeep: (val) => {
+//         chan({
+//           fn: R.mergeDeepFlipped,
+//           args: [val]
+//         })
+//       },
+//
+//       // mergeDeepLensed :: a -> ()
+//       mergeDeepLensed: (lens, val) => {
+//         chan({
+//           fn: R.over, args: [lens, {fn: R.mergeDeepFlipped, args: [val]}]
+//         })
+//       }
+//     }
+//
+//     return R.merge(self, helpers)
+//   }
+//
+//   return ControlledStore
+// })
+//
+// withControl.options = {}
 
 // Persistence mixins ==============================================================================
 
 // TODO timeout option?!
-let _memCache = {}
-
-export let withMemoryPersistence = R.curry((options, Store) => {
-  function MemoryPersistentStore(action$) {
-    options = R.merge(withMemoryPersistence.options, options)
-
-    if (options.key && options.key in _memCache) {
-      let initFn = function initFromMemory() {
-        return _memCache[options.key]
-      }
-      action$ = action$
-        .skip(1)
-        .startWith(initFn)
-    }
-
-    let store = Store(action$)
-    let self = R.merge(store, {
-      memory: {
-        _options: options,
-      }
-    })
-
-    if (options.key) {
-      self.$ = self.$.do(s => {
-        _memCache[options.key] = s
-      })
-    }
-
-    return self
-  }
-
-  return MemoryPersistentStore
-})
-
-withMemoryPersistence.options = {
-  key: "",
-}
-
-export let withLocalStoragePersistence = R.curry((options, Store) => {
-  if (!isBrowser()) {
-    throw Error("withLocalStoragePersistence can be used only in Browser")
-  }
-
-  function LocalStoragePersistentStore(action$) {
-    options = R.merge(withLocalStoragePersistence.options, options)
-
-    if (options.key && localStorage.getItem(options.key) !== null) {
-      let initFn
-      try {
-        initFn = function initFromLocalStorage() {
-          return options.parseFn(localStorage.getItem(options.key))
-        }
-      } catch (err) {
-        console.warn("error at read from localStorage")
-        initFn = function initWithNull() {
-          return null
-        }
-      }
-      action$ = action$
-        .skip(1)
-        .startWith(initFn)
-    }
-
-    let store = Store(action$)
-    let self = R.merge(store, {
-      storage: {
-        _options: options,
-      }
-    })
-
-    if (options.key) {
-      self.$ = self.$.merge(
-        self.$
-          .throttleTime(1000, undefined, {leading: true, trailing: true})
-          .do(state => {
-            try {
-              localStorage.setItem(options.key, options.serializeFn(state))
-            } catch (err) {
-              console.warn("error at write to localStorage")
-            }
-          })
-          .filter(R.F)
-        )
-        .publishReplay(1)
-        .refCount()
-    }
-
-    return self
-  }
-
-  return LocalStoragePersistentStore
-})
-
-withLocalStoragePersistence.options = {
-  key: "",
-  parseFn: JSON.parse,
-  serializeFn: JSON.stringify,
-}
+// let _memCache = {}
+//
+// export let withMemoryPersistence = R.curry((options, Store) => {
+//   function MemoryPersistentStore(action$) {
+//     options = R.merge(withMemoryPersistence.options, options)
+//
+//     if (options.key && options.key in _memCache) {
+//       let initFn = function initFromMemory() {
+//         return _memCache[options.key]
+//       }
+//       action$ = action$
+//         .skip(1)
+//         .startWith(initFn)
+//     }
+//
+//     let store = Store(action$)
+//     let self = R.merge(store, {
+//       memory: {
+//         _options: options,
+//       }
+//     })
+//
+//     if (options.key) {
+//       self.$ = self.$.map(s => {
+//         _memCache[options.key] = s
+//         return s
+//       })
+//     }
+//
+//     return self
+//   }
+//
+//   return MemoryPersistentStore
+// })
+//
+// withMemoryPersistence.options = {
+//   key: "",
+// }
+//
+// export let withLocalStoragePersistence = R.curry((options, Store) => {
+//   if (!isBrowser()) {
+//     throw Error("withLocalStoragePersistence can be used only in Browser")
+//   }
+//
+//   function LocalStoragePersistentStore(action$) {
+//     options = R.merge(withLocalStoragePersistence.options, options)
+//
+//     if (options.key && localStorage.getItem(options.key) !== null) {
+//       let initFn
+//       try {
+//         initFn = function initFromLocalStorage() {
+//           return options.parseFn(localStorage.getItem(options.key))
+//         }
+//       } catch (err) {
+//         console.warn("error at read from localStorage")
+//         initFn = function initWithNull() {
+//           return null
+//         }
+//       }
+//       action$ = action$
+//         .skip(1)
+//         .startWith(initFn)
+//     }
+//
+//     let store = Store(action$)
+//     let self = R.merge(store, {
+//       storage: {
+//         _options: options,
+//       }
+//     })
+//
+//     if (options.key) {
+//       self.$ = self.$.merge(
+//         self.$
+//           .throttleTime(1000, undefined, {leading: true, trailing: true})
+//           .map(state => {
+//             try {
+//               localStorage.setItem(options.key, options.serializeFn(state))
+//             } catch (err) {
+//               console.warn("error at write to localStorage")
+//             }
+//             return state
+//           })
+//           .filter(R.F)
+//         )
+//         .publishReplay(1)
+//         .refCount()
+//     }
+//
+//     return self
+//   }
+//
+//   return LocalStoragePersistentStore
+// })
+//
+// withLocalStoragePersistence.options = {
+//   key: "",
+//   parseFn: JSON.parse,
+//   serializeFn: JSON.stringify,
+// }
 
 // History mixin ===================================================================================
-export let canUndo = (historyState) =>
-  historyState.i > Math.max(0, R.findIndex(R.id, historyState.log))
+// export let canUndo = (historyState) =>
+//   historyState.i > Math.max(0, R.findIndex(R.id, historyState.log))
+//
+// export let canRedo = (historyState) =>
+//   historyState.i < historyState.log.length - 1
+//
+// export function undo(hs) {
+//   return canUndo(hs) ? R.over("i", R.dec, hs) : hs
+// }
+//
+// export function redo(hs) {
+//   return canRedo(hs) ? R.over("i", R.inc, hs) : hs
+// }
 
-export let canRedo = (historyState) =>
-  historyState.i < historyState.log.length - 1
-
-// Actions -----------------------------------------------------------------------------------------
-export function undo(hs) {
-  return canUndo(hs) ? R.over("i", R.dec, hs) : hs
-}
-
-export function redo(hs) {
-  return canRedo(hs) ? R.over("i", R.inc, hs) : hs
-}
-//--------------------------------------------------------------------------------------------------
-
-export let withHistory = R.curry((options, Store) => {
-  function HistoryStore(action$) {
-    options = R.merge(withHistory.options, options)
-
-    let normalizeLog = (log) =>
-      R.takeLast(options.length, [...R.repeat(null, options.length), ...log])
-
-    let seed$ = action$
-      .take(1)
-      .map(init => function initHistory(_) {
-        let seed = init(null)
-        return {
-          log: normalizeLog([seed]), // [null, null, <state>]
-          i: options.length - 1,     //  0     1     2!
-        }
-      })
-
-    action$ = action$
-      .skip(1)
-      .map(fn => {
-        if (fn == undo || fn == redo) {
-          return fn
-        } else {
-          return R.fn(fn.name + "_InHistoryContext", (hs) => {
-            if (hs.i < options.length - 1) {
-              hs = {
-                log: normalizeLog(R.slice(0, hs.i + 1, hs.log)),
-                i: options.length - 1,
-              }
-            }
-            let state = fn(hs.log[hs.i])
-            return R.set("log", tailAppend(state, hs.log), hs)
-          })
-        }
-      })
-
-    action$ = seed$.merge(action$)
-
-    let store = Store(action$)
-    let self = R.merge(store, {
-      history: {
-        _options: options,
-      }
-    })
-
-    self.$ = self.$
-      .map(hs => {
-        return R.merge(hs.log[hs.i], {
-          _flags: {
-            canUndo: canUndo(hs),
-            canRedo: canRedo(hs),
-          }
-        })
-      })
-      .distinctUntilChanged(R.identical)
-      .publishReplay(1)
-      .refCount()
-
-    return self
-  }
-
-  return HistoryStore
-})
-
-withHistory.options = {
-  length: 3,
-}
-
-let tailAppend = R.curry((x, xs) => {
-  return R.append(x, R.tail(xs))
-})
+// export let withHistory = R.curry((options, Store) => {
+//   function HistoryStore(action$) {
+//     options = R.merge(withHistory.options, options)
+//
+//     let normalizeLog = (log) =>
+//       R.takeLast(options.length, [...R.repeat(null, options.length), ...log])
+//
+//     let seed$ = action$
+//       .take(1)
+//       .map(init => function initHistory(_) {
+//         let seed = init(null)
+//         return {
+//           log: normalizeLog([seed]), // [null, null, <state>]
+//           i: options.length - 1,     //  0     1     2!
+//         }
+//       })
+//
+//     action$ = action$
+//       .skip(1)
+//       .map(fn => {
+//         if (fn == undo || fn == redo) {
+//           return fn
+//         } else {
+//           return R.fn(fn.name + "_InHistoryContext", (hs) => {
+//             if (hs.i < options.length - 1) {
+//               hs = {
+//                 log: normalizeLog(R.slice(0, hs.i + 1, hs.log)),
+//                 i: options.length - 1,
+//               }
+//             }
+//             let state = fn(hs.log[hs.i])
+//             return R.set("log", tailAppend(state, hs.log), hs)
+//           })
+//         }
+//       })
+//
+//     action$ = seed$.merge(action$)
+//
+//     let store = Store(action$)
+//     let self = R.merge(store, {
+//       history: {
+//         _options: options,
+//       }
+//     })
+//
+//     self.$ = self.$
+//       .map(hs => {
+//         return R.merge(hs.log[hs.i], {
+//           _flags: {
+//             canUndo: canUndo(hs),
+//             canRedo: canRedo(hs),
+//           }
+//         })
+//       })
+//       .distinctUntilChanged(R.identical)
+//       .publishReplay(1)
+//       .refCount()
+//
+//     return self
+//   }
+//
+//   return HistoryStore
+// })
+//
+// withHistory.options = {
+//   length: 3,
+// }
+//
+// let tailAppend = R.curry((x, xs) => {
+//   return R.append(x, R.tail(xs))
+// })
 
 // Derive ==========================================================================================
-export let derive = (streamsToProps, mapFn) => {
-  streamsToProps = R.map($ => $.distinctUntilChanged(R.identical), streamsToProps)
-  return combineLatestObj(streamsToProps)
-    .map(mapFn)
-    .distinctUntilChanged(R.identical)
-    .publishReplay(1)
-    .refCount()
-}
-
-export let deriveOne = (stream, mapFn) => {
-  stream = stream.distinctUntilChanged(R.identical)
-  return stream
-    .map(mapFn)
-    .distinctUntilChanged(R.identical)
-    .publishReplay(1)
-    .refCount()
-}
+// export let derive = (streamsToProps, mapFn) => {
+//   streamsToProps = R.map($ => $.distinctUntilChanged(R.identical), streamsToProps)
+//   return K.combine(streamsToProps)
+//     .map(mapFn)
+//     .distinctUntilChanged(R.identical)
+//     .publishReplay(1)
+//     .refCount()
+// }
+//
+// export let deriveOne = (stream, mapFn) => {
+//   stream = stream.distinctUntilChanged(R.identical)
+//   return stream
+//     .map(mapFn)
+//     .distinctUntilChanged(R.identical)
+//     .publishReplay(1)
+//     .refCount()
+// }

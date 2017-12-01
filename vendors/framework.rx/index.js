@@ -1,10 +1,11 @@
-import K from "kefir"
 import React from "react"
 import Route from "route-parser"
 import Url from "url"
+import {Observable as O, Subject} from "../rxjs"
+import {combineLatestObj} from "rx-utils"
 import * as R from "../ramda"
-import {isBrowser, isNode} from "../selfdb/"
-import nanoid from "nanoid"
+import {isBrowser, isNode} from "../selfdb"
+import uid from "uid-safe"
 
 export let fromDOMEvent = (appSelector) => {
   function collectFn(selectors) {
@@ -27,21 +28,22 @@ export let fromDOMEvent = (appSelector) => {
       },
       listen: (eventName, options={}) => {
         if (isBrowser()) {
-          return K.fromEvents(document.querySelector(appSelector), eventName) // , options TODO
-          // .throttle(10, {leading: true, trailing: true})
-          .flatten(event => {
+          return O.fromEvent(document.querySelector(appSelector), eventName, options)
+          .throttleTime(10, undefined, {leading: true, trailing: true})
+          .concatMap(event => {
             let element = event.target
             let selector = R.join(" ", selectors)
             while (element && element.matches) {
               if (element.matches(selector)) {
-                return [{event, element}]
+                return O.of({event, element})
               }
               element = element.parentNode
             }
-            return []
+            return O.of()
           })
+          .share()
         } else {
-          return []
+          return O.of()
         }
       }
     }
@@ -54,31 +56,28 @@ export let connect = (streamsToProps, ComponentToWrap) => {
     constructor(props) {
       super(props)
       this.state = {}
-      // Container.constructor$.plug(K.constant(props))
+      Container.constructor$.next()
+      Container.constructor$.complete()
     }
 
     componentWillMount(...args) {
-      console.log("!!!")
-      streamsToProps.counter.observe(c => {
-        console.log("?!??!?", c)
-      })
+      let props$ = combineLatestObj(streamsToProps)
+        .throttleTime(10, undefined, {leading: true, trailing: true})
 
-      let props$ = K.combine(streamsToProps)
-        // .throttle(10, {leading: false, trailing: true})
+      if (isNode())
+        props$ = props$.take(1)
 
-      // if (isNode())
-      //   props$ = props$.take(1)
-
-      this.sb = props$.observe((data) => {
-        console.log("???")
+      this.sb = props$.subscribe((data) => {
         this.setState(data)
       })
-      // Container.willMount$.plug(K.constant(args))
+      Container.willMount$.next(args)
+      Container.willMount$.complete()
     }
 
     componentWillUnmount(...args) {
       this.sb.unsubscribe()
-      // Container.willUnmount$.plug(K.constant(args))
+      Container.willUnmount$.next(args)
+      Container.willUnmount$.complete()
     }
 
     render() {
@@ -90,9 +89,9 @@ export let connect = (streamsToProps, ComponentToWrap) => {
     }
   }
 
-  // Container.constructor$ = K.pool()
-  // Container.willMount$ = K.pool()
-  // Container.willUnmount$ = K.pool()
+  Container.constructor$ = new Subject()
+  Container.willMount$ = new Subject()
+  Container.willUnmount$ = new Subject()
 
   return Container
 }
@@ -101,8 +100,10 @@ export let lastKey = R.pipe(R.split("."), R.nth(-1))
 
 export let isolateSources = {
   state$: (source, key) => source
-    .map(x => x[lastKey(key)])
-    .skipDuplicates(R.identical),
+    .pluck(lastKey(key))
+    .distinctUntilChanged(R.identical),
+    // .publishReplay(1)
+    // .refCount(),
 
   props: R.always,
 
@@ -128,7 +129,7 @@ export let isolateSinks = {
 }
 
 export let isolate = (app, appKey=null, types=null) => {
-  appKey = appKey || nanoid()
+  appKey = appKey || uid.sync(4)
   return function App(sources) {
     // Prepare sources
     let isolatedSources = R.mapObjIndexed(
@@ -165,21 +166,19 @@ export let withLifecycle = (fn) => {
   return R.withName(fn.name, (sources, key) => {
     sources = R.merge(sources, {
       Component: {
-        willMount$: K.pool(),
-        willUnmount$: K.pool(),
+        willMount$: new Subject(),
+        willUnmount$: new Subject(),
       }
     })
     let sinks = fn(sources, key)
     if (sinks.Component) {
       if (sinks.Component.willMount$) {
-        sinks.Component.willMount$.take(1).observe(x => {
-          sources.Component.willMount$.plug(K.constant(x))
-        })
+        // Should unsubscribe automatically, reinforce with take(1)
+        sinks.Component.willMount$.take(1).subscribe(sources.Component.willMount$)
       }
       if (sinks.Component.willUnmount$) {
-        sinks.Component.willUnmount$.take(1).observe(x => {
-          sources.Component.willUnmount$.plug(K.constant(x))
-        })
+        // Should unsubscribe automatically, reinforce with take(1)
+        sinks.Component.willUnmount$.take(1).subscribe(sources.Component.willUnmount$)
       }
     }
     return sinks

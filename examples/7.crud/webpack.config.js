@@ -8,7 +8,7 @@ let Webpack = require("webpack")
 let configs = {
   devtool: "eval",
   entry: {
-    app: "./client/index.js",
+    bundle: "./client/index.js",
   },
   output: {
     pathinfo: true,

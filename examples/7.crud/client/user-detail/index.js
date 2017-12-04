@@ -1,9 +1,9 @@
 import A from "axios"
 import * as F from "framework"
+import K from "kefir"
 import * as D from "selfdb"
 import * as R from "ramda"
 import React from "react"
-import {Observable as O} from "rxjs"
 import UserDetail from "./UserDetail"
 
 export default (sources, key) => {
@@ -13,22 +13,21 @@ export default (sources, key) => {
   let intents = {
     fetch$: sources.state$
       .filter(s => !R.view(baseLens, s))
-      .concatMap(_ => A.get(`/api/users/${params.id}`))
+      .flatMapLatest(_ => K.fromPromise(A.get(`/api/users/${params.id}`)))
       .map(resp => resp.data.models[params.id])
-      .catch(err => {
+      .mapErrors(err => {
         console.warn(err) // TODO
-        return O.of()
-      })
-      .share()
+        return K.never()
+      }),
   }
 
-  let action$ = O.merge(
+  let action$ = K.merge([
     intents.fetch$.map(user => {
       return function afterFetch(state) {
         return R.set(baseLens, user, state)
       }
     }),
-  )
+  ])
 
   let detail$ = D.run(
     () => D.makeStore({}),
@@ -39,7 +38,7 @@ export default (sources, key) => {
 
   let user$ = D.derive(
     {
-      table: sources.state$.pluck("users"),
+      table: sources.state$.map(s => s.users),
       detail: detail$,
     },
     ({table, detail}) => {

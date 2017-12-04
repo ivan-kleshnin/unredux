@@ -12,7 +12,7 @@ export let seed = {
 export default (sources, key) => {
   let intents = {
     inputText$: sources.DOM.from("input[name=text]").listen("input")
-      .map(R.view(["element", "value"])),
+      .map(ee => ee.element.value),
 
     submitForm$: sources.DOM.from("form").listen("submit")
       .map(ee => (ee.event.preventDefault(), ee))

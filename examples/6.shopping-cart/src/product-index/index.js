@@ -1,8 +1,7 @@
-import * as R from "ramda"
-import {Observable as O} from "rxjs"
-import * as D from "selfdb"
-import React from "react"
 import * as F from "framework"
+import K from "kefir"
+import * as R from "ramda"
+import * as D from "selfdb"
 import ProductIndex from "./ProductIndex"
 
 export let seed = {
@@ -13,18 +12,8 @@ export let seed = {
 export default (sources, key) => {
   let intents = {
     buy$: sources.DOM.fromKey("productIndex").fromKey("buy").listen("click")
-      .map(R.view(["element", "dataset", "val"])),
+      .map(ee => ee.element.dataset.val),
   }
-
-  let action$ = O.merge(
-    intents.buy$.map(id => function buy(state) {
-      if (id in state.cartPicks) {
-        return R.over(["cartPicks", id], R.inc, state)
-      } else {
-        return R.set(["cartPicks", id], 1, state)
-      }
-    })
-  )
 
   let index$ = D.run(
     () => D.makeStore({assertFn: R.id}),
@@ -35,24 +24,34 @@ export default (sources, key) => {
 
   let products$ = D.derive(
     {
-      table: sources.state$.pluck("products"),
+      products: sources.state$.map(s => s.products),
       index: index$,
     },
-    ({table, index}) => {
+    ({products, index}) => {
       // Implies the case when all products are preloaded or loaded at once,
       // or when the customer can tolerate reordering of upcoming items.
       return R.pipe(
         R.values,
         R.filter(index.filterFn),
         R.sort(index.sortFn),
-      )(table)
+      )(products)
     }
   )
+
+  let action$ = K.merge([
+    intents.buy$.map(id => function buy(state) {
+      if (id in state.cartPicks) {
+        return R.over(["cartPicks", id], R.inc, state)
+      } else {
+        return R.set(["cartPicks", id], 1, state)
+      }
+    })
+  ])
 
   let Component = F.connect(
     {
       products: products$,
-      cartPicks: sources.state$.pluck("cartPicks"),
+      cartPicks: sources.state$.map(s => s.cartPicks),
     },
     ProductIndex,
   )

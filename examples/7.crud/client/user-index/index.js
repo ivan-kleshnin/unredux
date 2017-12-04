@@ -50,19 +50,19 @@ export default (sources, key) => {
 
     // DOM
     changeFilterId$: sources.DOM.fromName("filter.id").listen("input")
-      .map(R.view(["element", "value"])),
+      .map(ee => ee.element.value),
 
     changeFilterFullname$: sources.DOM.fromName("filter.fullname").listen("input")
-      .map(R.view(["element", "value"])),
+      .map(ee => ee.element.value),
 
     changeFilterDob$: sources.DOM.fromName("filter.dob").listen("input")
-      .map(R.view(["element", "value"])),
+      .map(ee => ee.element.value),
 
     changeFilterRole$: sources.DOM.fromName("filter.role").listen("input")
-      .map(R.view(["element", "value"])),
+      .map(ee => ee.element.value),
 
     changeSort$: sources.DOM.fromName("sort").listen("click")
-      .map(R.view(["element", "value"])),
+      .map(ee => ee.element.value),
   }
 
   let index$ = D.run(

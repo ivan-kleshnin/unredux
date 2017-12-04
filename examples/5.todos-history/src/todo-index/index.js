@@ -7,17 +7,17 @@ import TodoIndex from "./TodoIndex"
 
 export let seed = {
   filterFn: R.id,
-  sortFn: R.fn("sortByAddedAt", R.ascend(R.prop("addedAt"))),
+  sortFn: R.ascend(R.prop("addedAt")),
 }
 
 export default (sources, key) => {
   let intents = {
     toggleTodo$: sources.DOM.fromKey("item").listen("click")
-      .map(R.view(["element", "dataset", "val"])),
+      .map(ee => ee.element.dataset.val),
 
     setFilter$: sources.DOM.fromKey("filter").listen("click")
       .map(ee => (ee.event.preventDefault(), ee))
-      .map(R.view(["element", "dataset", "val"])),
+      .map(ee => ee.element.dataset.val),
   }
 
   let state$ = D.run(
@@ -43,7 +43,7 @@ export default (sources, key) => {
       todos: sources.state$.map(s => s.todos),
       index: state$,
     },
-    ({index, todos}) => {
+    ({todos, index}) => {
       return R.pipe(
         R.values,
         R.filter(index.filterFn),

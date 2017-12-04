@@ -24,7 +24,7 @@ export default (sources, key) => {
   let intents = {
     navigateTo$: sources.DOM.from("a").listen("click")
       .do(({event}) => event.preventDefault())
-      .map(R.view(["element", "href"]))
+      .map(ee => ee.element.href)
       .do(url => {
         window.history.pushState({}, "", url)
       })

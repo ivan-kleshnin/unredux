@@ -45,19 +45,19 @@ export default (sources, key) => {
 
     // DOM
     changeFilterId$: sources.DOM.fromName("filter.id").listen("input")
-      .map(R.view(["element", "value"])),
+      .map(ee => ee.element.value),
 
     changeFilterTitle$: sources.DOM.fromName("filter.title").listen("input")
-      .map(R.view(["element", "value"])),
+      .map(ee => ee.element.value),
 
     changeFilterTags$: sources.DOM.fromName("filter.tags").listen("input")
-      .map(R.view(["element", "value"])),
+      .map(ee => ee.element.value),
 
     changeFilterIsPublished$: sources.DOM.fromName("filter.isPublished").listen("click")
-      .map(R.view(["element", "value"])),
+      .map(ee => ee.element.value),
 
     changeSort$: sources.DOM.fromName("sort").listen("click")
-      .map(R.view(["element", "value"])),
+      .map(ee => ee.element.value),
   }
 
   let index$ = D.run(

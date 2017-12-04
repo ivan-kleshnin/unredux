@@ -3,7 +3,7 @@ import React from "react"
 
 export default function PostItem({post}) {
   return <pre>
-    {post.id}: {JSON.stringify(post)}
+    <strong>{post.id}</strong>: {JSON.stringify(post)}
   </pre>
 }
 

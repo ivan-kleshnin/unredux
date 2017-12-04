@@ -59,24 +59,22 @@ export default (sources, key) => {
     },
     ({url, Content}) => {
       return <div>
-        <p>
-          Current URL: {url}
-        </p>
-        <p>
-          <a href="/">Home</a>
-          {" "}
-          <a href="/about">About</a>
-          {" "}
-          <a href="/users">Users</a>
-          {" "}
-          <a href="/users/1">User #1</a>
-          {" "}
-          <a href="/users/2">User #2</a>
-          {" "}
-          <a href="/contacts">Contacts</a>
-        </p>
-        <hr/>
-        <Content/>
+        <div className="page-header">
+          <p>
+            Current URL: {url}
+          </p>
+          <nav>
+            <a href="/">Home</a>
+            <a href="/about">About</a>
+            <a href="/users">Users</a>
+            <a href="/users/1">User #1</a>
+            <a href="/users/2">User #2</a>
+            <a href="/contacts">Contacts</a>
+          </nav>
+        </div>
+        <div className="page-content">
+          <Content/>
+        </div>
       </div>
     }
   )

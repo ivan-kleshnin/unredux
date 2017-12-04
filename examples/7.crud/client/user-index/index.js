@@ -1,9 +1,9 @@
 import A from "axios"
 import * as F from "framework"
+import K from "kefir"
 import * as D from "selfdb"
 import * as R from "ramda"
 import React from "react"
-import {Observable as O} from "rxjs"
 import {makeFilterFn, makeSortFn} from "common/user-index"
 import UserIndex from "./UserIndex"
 
@@ -28,25 +28,25 @@ export default (sources, key) => {
 
   let intents = {
     // HTTP
-    fetch$: O.fromPromise(A.get("/api/users/~/id"))
+    fetch$: sources.state$.sampledBy(K
+      .fromPromise(A.get("/api/users/~/id"))
       .map(resp => R.pluck("id", resp.data.models))
-      .catch(err => {
+      .mapErrors(err => {
         console.warn(err) // TODO
-        return O.of()
-      })
-      .withLatestFrom(sources.state$, (requiredIds, state) => {
+        return K.never()
+      }),
+      (state, requiredIds) => {
         let presentIds = R.keys(R.view(baseLens, state))
         let missingIds = R.difference(requiredIds, presentIds)
         return missingIds
       })
       .filter(R.length)
-      .concatMap(ids => A.get(`/api/users/${R.join(",", ids)}`))
+      .flatMapLatest(ids => K.fromPromise(A.get(`/api/users/${R.join(",", ids)}`)))
       .map(resp => resp.data.models)
-      .catch(err => {
+      .mapErrors(err => {
         console.warn(err) // TODO
-        return O.of()
-      })
-      .share(),
+        return K.never()
+      }),
 
     // DOM
     changeFilterId$: sources.DOM.fromName("filter.id").listen("input")
@@ -77,12 +77,12 @@ export default (sources, key) => {
     intents.changeFilterRole$.map(x => R.set(["filter", "role"], x)),
 
     intents.changeSort$.map(x => R.set("sort", x)),
-  ).$
+  ).$.debounce(200)
 
   let users$ = D.derive(
     {
-      table: sources.state$.pluck("users"),
-      index: index$.let(smartDebounce(200)),
+      table: sources.state$.map(s => s.users),
+      index: index$,
     },
     ({table, index}) => {
       let sortFn = makeSortFn(index.sort)
@@ -103,13 +103,13 @@ export default (sources, key) => {
     UserIndex,
   )
 
-  let action$ = O.merge(
+  let action$ = K.merge([
     intents.fetch$.map(users => {
       return function afterFetch(state) {
         return R.over(baseLens, R.mergeFlipped(users), state)
       }
     }),
-  )
+  ])
 
   return {Component, action$}
 }

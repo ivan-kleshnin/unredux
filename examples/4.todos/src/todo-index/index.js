@@ -1,7 +1,6 @@
 import * as F from "framework"
 import K from "kefir"
 import * as R from "ramda"
-import {Observable as O} from "rxjs"
 import * as D from "selfdb"
 import * as M from "../models"
 import TodoIndex from "./TodoIndex"

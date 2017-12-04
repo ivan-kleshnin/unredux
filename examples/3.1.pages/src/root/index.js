@@ -18,7 +18,7 @@ export let seed = {
 
 export default (sources, key) => {
   let contentSinks$ = D.deriveOne(
-    sources.state$.map(x => x.url),
+    sources.state$.map(s => s.url),
     (url) => {
       let sinks
       if (url == "/") {
@@ -28,7 +28,7 @@ export default (sources, key) => {
       } else if (url == "/page2") {
         sinks = F.isolate(page2App, key + ".page2", ["DOM", "Component"])(sources)
       } else if (url == "/page3") {
-        sinks = F.isolate(page2App, key + ".page2", ["DOM", "Component"])(sources)
+        sinks = F.isolate(page3App, key + ".page3", ["DOM", "Component"])(sources)
       } else {
         sinks = {Component: NotFound}
       }
@@ -66,7 +66,7 @@ export default (sources, key) => {
 
   let Component = F.connect(
     {
-      url: state$.map(x => x.url),
+      url: state$.map(s => s.url),
       Content: contentSinks$.map(x => x.Component),
     },
     ({url, Content}) => {

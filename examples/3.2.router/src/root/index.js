@@ -14,11 +14,11 @@ export let seed = {
 
 export default (sources, key) => {
   let contentSinks$ = D.deriveOne(
-    sources.state$.map(x => x.url),
+    sources.state$.map(s => s.url),
     (url) => {
-      let {mask, payload: app} = router.doroute(url)
+      let {mask, params, payload: app} = router.doroute(url)
       app = F.isolate(app, key + mask.replace(/^\//, "."), ["DOM", "Component"])
-      let sinks = app({...sources, props: {router}})
+      let sinks = app({...sources, props: {mask, params, router}})
       return R.merge({action$: K.never()}, sinks)
     }
   )
@@ -53,7 +53,7 @@ export default (sources, key) => {
 
   let Component = F.connect(
     {
-      url: state$.map(x => x.url),
+      url: state$.map(s => s.url),
       Content: contentSinks$.map(x => x.Component),
     },
     ({url, Content}) => {

@@ -1,27 +1,26 @@
-import {Observable as O} from "rxjs"
-import React from "react"
-import * as D from "selfdb"
 import * as F from "framework"
+import K from "kefir"
+import * as R from "ramda"
+import * as D from "selfdb"
 import UndoRedo from "./UndoRedo"
 
 export default (sources, key) => {
   let intents = {
-    undo$: sources.DOM.fromKey("undo").listen("click").mapTo(true),
-    redo$: sources.DOM.fromKey("redo").listen("click").mapTo(true),
+    undo$: sources.DOM.fromKey("undo").listen("click").map(R.always(true)),
+    redo$: sources.DOM.fromKey("redo").listen("click").map(R.always(true)),
   }
 
-  let action$ = O.merge(
+  let action$ = K.merge([
     intents.undo$.map(_ => D.undo),
     intents.redo$.map(_ => D.redo),
-  )
+  ])
 
   let Component = F.connect(
     {
       canUndo: sources.state$.map(s => s._flags.canUndo),
       canRedo: sources.state$.map(s => s._flags.canRedo),
     },
-    (props) =>
-      <UndoRedo {...props}/>
+    UndoRedo
   )
 
   return {action$, Component}

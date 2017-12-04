@@ -1,9 +1,9 @@
 import * as R from "ramda"
-import uid from "uid-safe"
+import nanoid from "nanoid"
 
 export let makeTodo = (data) => {
   return R.merge({
-    id: data.id ? data.id : uid.sync(4),
+    id: data.id ? data.id : nanoid(4),
     text: data.text,
     completed: false,
     addedAt: new Date().toISOString(),

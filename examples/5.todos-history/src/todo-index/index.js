@@ -1,9 +1,9 @@
-import * as R from "ramda"
-import {Observable as O} from "rxjs"
-import * as D from "selfdb"
 import * as F from "framework"
+import K from "kefir"
+import * as R from "ramda"
+import * as D from "selfdb"
 import * as M from "../models"
-import Index from "./Index"
+import TodoIndex from "./TodoIndex"
 
 export let seed = {
   filterFn: R.id,
@@ -16,7 +16,7 @@ export default (sources, key) => {
       .map(R.view(["element", "dataset", "val"])),
 
     setFilter$: sources.DOM.fromKey("filter").listen("click")
-      .do(({event}) => event.preventDefault())
+      .map(ee => (ee.event.preventDefault(), ee))
       .map(R.view(["element", "dataset", "val"])),
   }
 
@@ -40,7 +40,7 @@ export default (sources, key) => {
 
   let todos$ = D.derive(
     {
-      todos: sources.state$.pluck("todos"),
+      todos: sources.state$.map(s => s.todos),
       index: state$,
     },
     ({index, todos}) => {
@@ -52,13 +52,13 @@ export default (sources, key) => {
     }
   )
 
-  let action$ = O.merge(
+  let action$ = K.merge([
     intents.toggleTodo$.map(id => R.over(["todos", id, "completed"], R.not)),
-  )
+  ])
 
   let Component = F.connect(
     {todos: todos$},
-    Index,
+    TodoIndex,
   )
 
   return {action$, Component}

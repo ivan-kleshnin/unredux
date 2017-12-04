@@ -343,91 +343,89 @@ withLocalStoragePersistence.options = {
 }
 
 // History mixin ===================================================================================
-// export let canUndo = (historyState) =>
-//   historyState.i > Math.max(0, R.findIndex(R.id, historyState.log))
-//
-// export let canRedo = (historyState) =>
-//   historyState.i < historyState.log.length - 1
-//
-// export function undo(hs) {
-//   return canUndo(hs) ? R.over("i", R.dec, hs) : hs
-// }
-//
-// export function redo(hs) {
-//   return canRedo(hs) ? R.over("i", R.inc, hs) : hs
-// }
+export let canUndo = (historyState) =>
+  historyState.i > Math.max(0, R.findIndex(R.id, historyState.log))
 
-// export let withHistory = R.curry((options, Store) => {
-//   function HistoryStore(action$) {
-//     options = R.merge(withHistory.options, options)
-//
-//     let normalizeLog = (log) =>
-//       R.takeLast(options.length, [...R.repeat(null, options.length), ...log])
-//
-//     let seed$ = action$
-//       .take(1)
-//       .map(init => function initHistory(_) {
-//         let seed = init(null)
-//         return {
-//           log: normalizeLog([seed]), // [null, null, <state>]
-//           i: options.length - 1,     //  0     1     2!
-//         }
-//       })
-//
-//     action$ = action$
-//       .skip(1)
-//       .map(fn => {
-//         if (fn == undo || fn == redo) {
-//           return fn
-//         } else {
-//           return R.fn(fn.name + "_InHistoryContext", (hs) => {
-//             if (hs.i < options.length - 1) {
-//               hs = {
-//                 log: normalizeLog(R.slice(0, hs.i + 1, hs.log)),
-//                 i: options.length - 1,
-//               }
-//             }
-//             let state = fn(hs.log[hs.i])
-//             return R.set("log", tailAppend(state, hs.log), hs)
-//           })
-//         }
-//       })
-//
-//     action$ = seed$.merge(action$)
-//
-//     let store = Store(action$)
-//     let self = R.merge(store, {
-//       history: {
-//         _options: options,
-//       }
-//     })
-//
-//     self.$ = self.$
-//       .map(hs => {
-//         return R.merge(hs.log[hs.i], {
-//           _flags: {
-//             canUndo: canUndo(hs),
-//             canRedo: canRedo(hs),
-//           }
-//         })
-//       })
-//       .distinctUntilChanged(R.identical)
-//       .publishReplay(1)
-//       .refCount()
-//
-//     return self
-//   }
-//
-//   return HistoryStore
-// })
-//
-// withHistory.options = {
-//   length: 3,
-// }
-//
-// let tailAppend = R.curry((x, xs) => {
-//   return R.append(x, R.tail(xs))
-// })
+export let canRedo = (historyState) =>
+  historyState.i < historyState.log.length - 1
+
+export function undo(hs) {
+  return canUndo(hs) ? R.over("i", R.dec, hs) : hs
+}
+
+export function redo(hs) {
+  return canRedo(hs) ? R.over("i", R.inc, hs) : hs
+}
+
+export let withHistory = R.curry((options, Store) => {
+  function HistoryStore(action$) {
+    options = R.merge(withHistory.options, options)
+
+    let normalizeLog = (log) =>
+      R.takeLast(options.length, [...R.repeat(null, options.length), ...log])
+
+    let seed$ = action$
+      .take(1)
+      .map(init => function initHistory(_) {
+        let seed = init(null)
+        return {
+          log: normalizeLog([seed]), // [null, null, <state>]
+          i: options.length - 1,     //  0     1     2!
+        }
+      })
+
+    action$ = action$
+      .skip(1)
+      .map(fn => {
+        if (fn == undo || fn == redo) {
+          return fn
+        } else {
+          return R.fn(fn.name + "_InHistoryContext", (hs) => {
+            if (hs.i < options.length - 1) {
+              hs = {
+                log: normalizeLog(R.slice(0, hs.i + 1, hs.log)),
+                i: options.length - 1,
+              }
+            }
+            let state = fn(hs.log[hs.i])
+            return R.set("log", tailAppend(state, hs.log), hs)
+          })
+        }
+      })
+
+    action$ = seed$.merge(action$)
+
+    let store = Store(action$)
+    let self = R.merge(store, {
+      history: {
+        _options: options,
+      }
+    })
+
+    self.$ = self.$
+      .map(hs => {
+        return R.merge(hs.log[hs.i], {
+          _flags: {
+            canUndo: canUndo(hs),
+            canRedo: canRedo(hs),
+          }
+        })
+      })
+      .skipDuplicates()
+
+    return self
+  }
+
+  return HistoryStore
+})
+
+withHistory.options = {
+  length: 3,
+}
+
+let tailAppend = R.curry((x, xs) => {
+  return R.append(x, R.tail(xs))
+})
 
 // Derive ==========================================================================================
 export let derive = (streamsToProps, mapFn) => {

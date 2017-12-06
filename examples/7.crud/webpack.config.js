@@ -52,6 +52,11 @@ let configs = {
   },
   plugins: [
     new ExtractTextPlugin("[name].css"),
+    new Webpack.DefinePlugin({
+      // Disable "React DevTools Download" console log
+      // https://github.com/facebook/react/issues/3877
+      "__REACT_DEVTOOLS_GLOBAL_HOOK__": "({ isDisabled: true })"
+    }),
   ],
 }
 

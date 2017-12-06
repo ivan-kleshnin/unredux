@@ -27,10 +27,11 @@ module.exports = {
       Path.resolve(Path.resolve(__dirname, "../../node_modules")),
     ],
   },
-  // Should suppress DevTool warning since React 16.1.0
-  // plugins: [
-  //   new Webpack.DefinePlugin({
-  //     "__REACT_DEVTOOLS_GLOBAL_HOOK__": "({ isDisabled: true })"
-  //   }),
-  // ]
+  plugins: [
+    new Webpack.DefinePlugin({
+      // Disable "React DevTools Download" console log
+      // https://github.com/facebook/react/issues/3877
+      "__REACT_DEVTOOLS_GLOBAL_HOOK__": "({ isDisabled: true })"
+    }),
+  ],
 }

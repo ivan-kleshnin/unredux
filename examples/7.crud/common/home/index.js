@@ -19,6 +19,14 @@ export let makeFilterFn = (filter) => {
       if (!post.isPublished)
         return false
     }
+    if (filter.publishDateFrom) {
+      if (!post.publishDate || post.publishDate < filter.publishDateFrom)
+        return false
+    }
+    if (filter.publishedDateTo) {
+      if (!post.publishDate || post.publishDate > filter.publishDateTo)
+        return false
+    }
     return true
   }
 }

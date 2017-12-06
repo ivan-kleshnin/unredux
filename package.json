@@ -10,6 +10,7 @@
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "babel-preset-es2015": "^6.24.1",
     "babel-preset-react": "^6.24.1",
+    "date-fns": "^1.29.0",
     "deep-diff": "^0.3.8",
     "deep-freeze": "0.0.1",
     "kefir": "^3.8.0",

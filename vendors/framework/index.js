@@ -41,7 +41,7 @@ export let fromDOMEvent = (appSelector) => {
             return []
           })
         } else {
-          return []
+          return K.never()
         }
       }
     }

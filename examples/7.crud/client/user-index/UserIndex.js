@@ -7,10 +7,10 @@ export default function UserIndex({users, index}) {
   return <div data-key="userIndex">
     <h1>Users</h1>
     <div style={{marginBottom: "10px"}}>
-      Fields: <code>id</code> (sort + filter){" "}
-              <code>fullname</code> (sort + filter){" "}
-              <code>dob</code> (sort + filter){" "}
-              <code>role</code> (sort + filter){" "}
+      Used Fields: <code>id</code> (sort + filter){" "}
+        <code>fullname</code> (sort + filter){" "}
+        <code>role</code> (filter){" "}
+        <code>birthDate</code> (sort + filter)
     </div>
     <div style={{marginBottom: "10px"}}>
       Filter by:{" "}
@@ -25,43 +25,41 @@ export default function UserIndex({users, index}) {
       </label>
       {" "}
       <label>
-        Dob{" "}
-        <input type="text" name="filter.dob" value={index.filter.dob} onChange={R.id}/>
+        Role{" "}
+        <input type="text" name="filter.role" value={index.filter.role} onChange={R.id}/>
       </label>
       {" "}
       <label>
-        Role{" "}
-        <input type="text" name="filter.role" value={index.filter.role} onChange={R.id}/>
+        Age From{" "}
+        <input type="text" name="filter.ageFrom" value={index.filter.ageFrom} onChange={R.id}/>
+      </label>
+      {" "}
+      <label>
+        Age To{" "}
+        <input type="text" name="filter.ageTo" value={index.filter.ageTo} onChange={R.id}/>
       </label>
     </div>
     <div style={{marginBottom: "10px"}}>
       Sort by:
       {" "}
       <button name="sort" value={index.sort == "+id" ? "-id" : "+id"}>
-        {index.sort == "+id" ? <span><b>&uarr; id</b></span> :
-         index.sort == "-id" ? <span><b>&darr; id</b></span> :
-                               <span>&uarr; id</span>
+        {index.sort == "+id" ? <span><b>&uarr; Id</b></span> :
+         index.sort == "-id" ? <span><b>&darr; Id</b></span> :
+                               <span>&uarr; Id</span>
         }
       </button>
       {" "}
       <button name="sort" value={index.sort == "+fullname" ? "-fullname" : "+fullname"}>
-        {index.sort == "+fullname" ? <span><b>&uarr; fullname</b></span> :
-         index.sort == "-fullname" ? <span><b>&darr; fullname</b></span> :
-                                     <span>&uarr; fullname</span>
+        {index.sort == "+fullname" ? <span><b>&uarr; Fullname</b></span> :
+         index.sort == "-fullname" ? <span><b>&darr; Fullname</b></span> :
+                                     <span>&uarr; Fullname</span>
         }
       </button>
       {" "}
-      <button name="sort" value={index.sort == "+dob" ? "-dob" : "+dob"}>
-        {index.sort == "+dob" ? <span><b>&uarr; dob</b></span> :
-         index.sort == "-dob" ? <span><b>&darr; dob</b></span> :
-                                <span>&uarr; dob</span>
-        }
-      </button>
-      {" "}
-      <button name="sort" value={index.sort == "+role" ? "-role" : "+role"}>
-        {index.sort == "+role" ? <span><b>&uarr; role</b></span> :
-         index.sort == "-role" ? <span><b>&darr; role</b></span> :
-                                 <span>&uarr; role</span>
+      <button name="sort" value={index.sort == "+birthDate" ? "-birthDate" : "+birthDate"}>
+        {index.sort == "+birthDate" ? <span><b>&darr; Age</b></span> :
+         index.sort == "-birthDate" ? <span><b>&uarr; Age</b></span> :
+                                      <span>&darr; Age</span>
         }
       </button>
     </div>

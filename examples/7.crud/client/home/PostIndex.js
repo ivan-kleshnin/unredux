@@ -7,10 +7,11 @@ export default function PostIndex({posts, index}) {
   return <div data-key="postIndex">
     <h1>Blog</h1>
     <div style={{marginBottom: "10px"}}>
-      Fields: <code>id</code> (sort + filter){" "}
-              <code>title</code> (sort + filter){" "}
-              <code>tags</code> (filter){" "}
-              <code>isPublished</code> (filter)
+      Used Fields: <code>id</code> (sort + filter){" "}
+        <code>title</code> (sort + filter){" "}
+        <code>tags</code> (filter){" "}
+        <code>isPublished</code> (filter){" "}
+        <code>publishDate</code> (sort + filter)
     </div>
     <div style={{marginBottom: "10px"}}>
       Filter by:{" "}
@@ -33,21 +34,38 @@ export default function PostIndex({posts, index}) {
         Published{" "}
         <input type="checkbox" name="filter.isPublished" checked={index.filter.isPublished}/>
       </label>
+      {" "}
+      <label>
+        Publish Date From{" "}
+        <input type="date" name="filter.publishDateFrom" value={index.filter.publishDateFrom} onChange={R.id}/>
+      </label>
+      {" "}
+      <label>
+        Publish Date To{" "}
+        <input type="date" name="filter.publishDateTo" value={index.filter.publishDateTo} onChange={R.id}/>
+      </label>
     </div>
     <div style={{marginBottom: "10px"}}>
       Sort by:
       {" "}
       <button name="sort" value={index.sort == "+id" ? "-id" : "+id"}>
-        {index.sort == "+id" ? <span><b>&uarr; id</b></span> :
-         index.sort == "-id" ? <span><b>&darr; id</b></span> :
-                               <span>&uarr; id</span>
+        {index.sort == "+id" ? <span><b>&uarr; Id</b></span> :
+         index.sort == "-id" ? <span><b>&darr; Id</b></span> :
+                               <span>&uarr; Id</span>
         }
       </button>
       {" "}
       <button name="sort" value={index.sort == "+title" ? "-title" : "+title"}>
-        {index.sort == "+title" ? <span><b>&uarr; title</b></span> :
-         index.sort == "-title" ? <span><b>&darr; title</b></span> :
-                                  <span>&uarr; title</span>
+        {index.sort == "+title" ? <span><b>&uarr; Title</b></span> :
+         index.sort == "-title" ? <span><b>&darr; Title</b></span> :
+                                  <span>&uarr; Title</span>
+        }
+      </button>
+      {" "}
+      <button name="sort" value={index.sort == "+publishDate" ? "-publishDate" : "+publishDate"}>
+        {index.sort == "+publishDate" ? <span><b>&uarr; Publish Date</b></span> :
+         index.sort == "-publishDate" ? <span><b>&darr; Publish Date</b></span> :
+                                        <span>&uarr; Publish date</span>
         }
       </button>
     </div>

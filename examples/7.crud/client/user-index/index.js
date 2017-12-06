@@ -10,9 +10,10 @@ import UserIndex from "./UserIndex"
 export let seed = {
   filter: {
     id: "",
-    fullname: "",
-    dob: "",
     role: "",
+    fullname: "",
+    ageFrom: "",
+    ageTo: "",
   },
   sort: "+id",
 }
@@ -47,13 +48,16 @@ export default (sources, key) => {
     changeFilterId$: sources.DOM.fromName("filter.id").listen("input")
       .map(ee => ee.element.value),
 
+    changeFilterRole$: sources.DOM.fromName("filter.role").listen("input")
+      .map(ee => ee.element.value),
+
     changeFilterFullname$: sources.DOM.fromName("filter.fullname").listen("input")
       .map(ee => ee.element.value),
 
-    changeFilterDob$: sources.DOM.fromName("filter.dob").listen("input")
+    changeFilterAgeFrom$: sources.DOM.fromName("filter.ageFrom").listen("input")
       .map(ee => ee.element.value),
 
-    changeFilterRole$: sources.DOM.fromName("filter.role").listen("input")
+    changeFilterAgeTo$: sources.DOM.fromName("filter.ageTo").listen("input")
       .map(ee => ee.element.value),
 
     changeSort$: sources.DOM.fromName("sort").listen("click")
@@ -67,17 +71,18 @@ export default (sources, key) => {
     D.init(seed),
 
     intents.changeFilterId$.map(x => R.set(["filter", "id"], x)),
-    intents.changeFilterFullname$.map(x => R.set(["filter", "fullname"], x)),
-    intents.changeFilterDob$.map(x => R.set(["filter", "dob"], x)),
     intents.changeFilterRole$.map(x => R.set(["filter", "role"], x)),
+    intents.changeFilterFullname$.map(x => R.set(["filter", "fullname"], x)),
+    intents.changeFilterAgeFrom$.map(x => R.set(["filter", "ageFrom"], x)),
+    intents.changeFilterAgeTo$.map(x => R.set(["filter", "ageTo"], x)),
 
     intents.changeSort$.map(x => R.set("sort", x)),
-  ).$.debounce(200)
+  ).$
 
   let users$ = D.derive(
     {
       table: sources.state$.map(s => s.users),
-      index: index$,
+      index: index$.debounce(200),
     },
     ({table, index}) => {
       let sortFn = makeSortFn(index.sort)

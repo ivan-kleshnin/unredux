@@ -13,6 +13,8 @@ export let seed = {
     title: "",
     tags: "",
     isPublished: false,
+    publishDateFrom: "",
+    publishDateTo: "",
   },
   sort: "+id",
 }
@@ -56,6 +58,12 @@ export default (sources, key) => {
     changeFilterIsPublished$: sources.DOM.fromName("filter.isPublished").listen("click")
       .map(ee => ee.element.checked),
 
+    changeFilterPublishDateFrom$: sources.DOM.fromName("filter.publishDateFrom").listen("input")
+      .map(ee => ee.element.value),
+
+    changeFilterPublishDateTo$: sources.DOM.fromName("filter.publishDateTo").listen("input")
+      .map(ee => ee.element.value),
+
     changeSort$: sources.DOM.fromName("sort").listen("click")
       .map(ee => ee.element.value),
   }
@@ -70,14 +78,16 @@ export default (sources, key) => {
     intents.changeFilterTitle$.map(x => R.set(["filter", "title"], x)),
     intents.changeFilterTags$.map(x => R.set(["filter", "tags"], x)),
     intents.changeFilterIsPublished$.map(x => R.set(["filter", "isPublished"], x)),
+    intents.changeFilterPublishDateFrom$.map(x => R.set(["filter", "publishDateFrom"], x)),
+    intents.changeFilterPublishDateTo$.map(x => R.set(["filter", "publishDateTo"], x)),
 
     intents.changeSort$.map(x => R.set("sort", x)),
-  ).$.debounce(200)
+  ).$
 
   let posts$ = D.derive(
     {
       table: sources.state$.map(s => s.posts),
-      index: index$,
+      index: index$.debounce(200),
     },
     ({table, index}) => {
       let sortFn = makeSortFn(index.sort)

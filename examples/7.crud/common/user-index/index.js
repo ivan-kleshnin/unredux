@@ -1,4 +1,5 @@
 import * as R from "ramda"
+import * as M from "common/models"
 
 export let makeFilterFn = (filter) => {
   return (user) => {
@@ -6,17 +7,20 @@ export let makeFilterFn = (filter) => {
       if (!R.contains(filter.id, user.id))
         return false
     }
+    if (filter.role) {
+      if (!R.contains(filter.role, user.role))
+        return false
+    }
     if (filter.fullname) {
       if (!R.contains(filter.fullname, user.fullname))
         return false
     }
-    // TODO improve, from/to
-    if (filter.dob) {
-      if (filter.dob != user.dob)
+    if (filter.ageFrom) {
+      if (!user.birthDate || M.age(user) < filter.ageFrom)
         return false
     }
-    if (filter.role) {
-      if (filter.role != user.role)
+    if (filter.ageTo) {
+      if (!user.birthDate || M.age(user) > filter.ageTo)
         return false
     }
     return true

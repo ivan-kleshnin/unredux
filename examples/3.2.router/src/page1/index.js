@@ -12,11 +12,10 @@ export default F.withLifecycle((sources, key) => {
     dec$: sources.DOM.fromKey("dec").listen("click").map(R.always(true)),
   }
 
-  // No need to unsubscribe here
-  sources.Component.willMount$.observe(() => {
+  sources.Component.willMount$.take(1).observe(() => {
     console.log("Page1.app: Component.willMount$")
   })
-  sources.Component.willUnmount$.observe(() => {
+  sources.Component.willUnmount$.take(1).observe(() => {
     console.log("Page1.app: Component.willUnmount$")
   })
 

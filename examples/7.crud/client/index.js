@@ -27,5 +27,5 @@ sinks.state$.observe(state => {
   sources.state$.plug(K.constant(state))
 })
 
-ReactDOM.render(<sinks.Component/>, document.getElementById(APP_KEY))
-// ReactDOM.hydrate(<sinks.Component/>, document.getElementById(APP_KEY))
+// ReactDOM.render(<sinks.Component/>, document.getElementById(APP_KEY))
+ReactDOM.hydrate(<sinks.Component/>, document.getElementById(APP_KEY))

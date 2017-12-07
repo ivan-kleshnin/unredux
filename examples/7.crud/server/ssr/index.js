@@ -29,9 +29,9 @@ router.get("/*", (req, res) => {
   })
 
   sinks.state$
-    .skip(1)                                   // skip initial update
-    .merge(sinks.state$.changes().delay(1000)) // timeout 500
-    .take(1)                                   // ...
+    .skip(1)                                     // skip initial update
+    .merge(K.later(500, sinks.state$).flatMap()) // timeout 500
+    .take(1)                                     // a state to render
     .observe(state => {
       let appHTML = ReactDOMServer.renderToString(<sinks.Component/>)
       res.send(layout({appHTML, state}))

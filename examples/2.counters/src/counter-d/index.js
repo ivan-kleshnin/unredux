@@ -1,0 +1,24 @@
+import * as F from "framework"
+import * as R from "ramda"
+import React from "react"
+
+export default (sources, key) => {
+  let intents = {
+    inc$: sources.DOM.fromKey("inc").listen("click").map(R.always(true)),
+    dec$: sources.DOM.fromKey("dec").listen("click").map(R.always(true)),
+  }
+
+  let Component = F.connect(
+    {counter: sources.state$},
+    ({counter}) =>
+      <p>
+        {sources.props.title}: <span>{counter}</span>
+        {" "}
+        <button data-key="inc">+1</button>
+        {" "}
+        <button data-key="dec">-1</button>
+      </p>
+    )
+
+  return {intents, Component}
+}

@@ -1,8 +1,9 @@
 import * as F from "framework"
-import * as D from "selfdb"
+import K from "kefir"
 import * as R from "ramda"
 import React from "react"
-import {Observable as O} from "rxjs"
+import * as D from "selfdb"
+import Url from "url"
 import router from "../router"
 
 export let seed = {
@@ -12,28 +13,30 @@ export let seed = {
 }
 
 export default (sources, key) => {
-  let contentSinks$ = D.deriveOne(sources.state$.pluck("url"),
+  let contentSinks$ = D.deriveOne(
+    sources.state$.map(s => s.url),
     (url) => {
       let {mask, params, payload: app} = router.doroute(url)
       app = F.isolate(app, key + mask.replace(/^\//, "."), ["DOM", "Component"])
       let sinks = app({...sources, props: {mask, params, router}})
-      return R.merge({action$: O.of()}, sinks)
+      return R.merge({action$: K.never()}, sinks)
     }
   )
 
   let intents = {
     navigateTo$: sources.DOM.from("a").listen("click")
-      .do(({event}) => event.preventDefault())
-      .map(R.view(["element", "href"]))
-      .do(url => {
+      .map(ee => (ee.event.preventDefault(), ee))
+      .map(ee => ee.element.href)
+      .map(url => {
+        url = Url.parse(url).pathname
         window.history.pushState({}, "", url)
-      })
-      .share(),
+        return url
+      }),
 
     navigateHistory$: D.isBrowser()
-      ? O.fromEvent(window, "popstate")
+      ? K.fromEvents(window, "popstate")
           .map(data => document.location.pathname)
-      : O.of()
+      : K.never()
   }
 
   let state$ = D.run(
@@ -41,21 +44,21 @@ export default (sources, key) => {
     // D.withLog({key, input: true, output: false}),
   )(
     // Init
-    // D.init(seed),
-    sources.state$.take(1).map(x => R.always(x)),
+    D.init(seed),
+    sources.state$.take(1).map(R.always),
 
     // Navigation
     intents.navigateTo$.map(url => R.fn("navigateTo", R.set("url", url))),
     intents.navigateHistory$.map(url => R.fn("navigateHistory", R.set("url", url))),
 
     // Content
-    contentSinks$.pluck("action$").switch(),
+    contentSinks$.flatMapLatest(x => x.action$),
   ).$
 
   let Component = F.connect(
     {
-      url: state$.pluck("url"),
-      Content: contentSinks$.pluck("Component"),
+      url: state$.map(s => s && s.url || "/"),
+      Content: contentSinks$.map(x => x.Component),
     },
     ({url, Content}) => {
       return <div>

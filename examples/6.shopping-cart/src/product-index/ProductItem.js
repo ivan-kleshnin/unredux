@@ -1,4 +1,3 @@
-import * as R from "ramda"
 import React from "react"
 import PT from "prop-types"
 

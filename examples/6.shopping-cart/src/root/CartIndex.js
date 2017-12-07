@@ -4,7 +4,6 @@ import PT from "prop-types"
 import CartItem from "./CartItem"
 
 export default function CartIndex({cart}) {
-  console.log("CartIndex.render")
   return <div data-key="cart">
     <h3>Your Cart</h3>
     <div>

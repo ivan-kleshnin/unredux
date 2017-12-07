@@ -1,10 +1,8 @@
-import * as R from "ramda"
 import React from "react"
 import PT from "prop-types"
 import ProductItem from "./ProductItem"
 
 export default function ProductIndex({products, cartPicks}) {
-  console.log("ProductIndex.render")
   return <div data-key="productIndex">
     <h3>Products</h3>
     <div>

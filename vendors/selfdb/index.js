@@ -1,7 +1,7 @@
 import {inspect} from "util"
 import deepFreeze from "deep-freeze"
-import {Observable as O} from "../rxjs"
-import {combineLatestObj, mergeObj, mergeObjTracking, chan as Chan} from "rx-utils"
+import K from "kefir"
+// import {chan as Chan} from "rx-utils"
 import * as R from "../ramda"
 
 // Different Helpers ===============================================================================
@@ -20,12 +20,11 @@ export let isNode = new Function("try { return this === global } catch(e) { retu
 export let run = (...fns) => {
   let Store = R.pipe(...fns)()
   return (...action$s) =>
-    Store(O.merge(...action$s))
+    Store(K.merge(action$s))
 }
 
-// TODO rx-utils candidate
 export let init = (seed) =>
-  O.of(R.fn("init", R.always(seed)))
+  K.constant(function init() { return seed })
 
 // Store ===========================================================================================
 
@@ -91,10 +90,7 @@ export let makeStore = (options) => {
         }
         return options.freezeFn(nextState)
       }, null)
-      .distinctUntilChanged(options.cmpFn)
-      .do(val => { _val = val })
-      .publishReplay(1)
-      .refCount()
+      .skipDuplicates(options.cmpFn)
 
     return self
   }
@@ -132,8 +128,9 @@ export let withLog = R.curry((options, Store) => {
     options.key = options.key || "store" + (++storeCount) // Anonymous stores will be "store1", "store2", etc.
 
     if (options.input) {
-      action$ = action$.do(action => {
+      action$ = action$.map(action => {
         options.logActionFn(options.key, action)
+        return action
       })
     }
 
@@ -145,9 +142,10 @@ export let withLog = R.curry((options, Store) => {
     })
 
     if (options.output) {
-      self.$ = self.$.do(state => {
+      self.$ = self.$.map(state => {
         options.logStateFn(options.key, state)
-      }).publishReplay(1).refCount()
+        return state
+      })
     }
 
     return self
@@ -165,81 +163,81 @@ withLog.options = {
 }
 
 // Control mixins ==================================================================================
-
-export let withControl = R.curry((options, Store) => {
-  function ControlledStore(action$) {
-    options = R.merge(withControl.options, options)
-
-    let chan = Chan($ => O.merge(action$, $))
-
-    let store = Store(chan)
-    let self = R.merge(store, {
-      control: {
-        _options: options,
-      }
-    })
-
-    let helpers = {
-      // over :: (a -> b) -> ()
-      over: (fn) => {
-        chan(fn)
-      },
-
-      // set :: a -> ()
-      set: (val) => {
-        chan({
-          fn: R.always,
-          args: [val]
-        })
-      },
-
-      // setLensed :: (String, a) -> ()
-      setLensed: (lens, val) => {
-        chan({
-          fn: R.over,
-          args: [lens, {fn: R.set, args: [val]}]
-        })
-      },
-
-      // merge :: a -> ()
-      merge: (val) => {
-        chan({
-          fn: R.mergeFlipped,
-          args: [val]
-        })
-      },
-
-      // mergeLensed :: (String, a) -> ()
-      mergeLensed: (lens, val) => {
-        chan({
-          fn: R.over,
-          args: [lens, {fn: R.mergeFlipped, args: [val]}]
-        })
-      },
-
-      // mergeDeep :: a -> ()
-      mergeDeep: (val) => {
-        chan({
-          fn: R.mergeDeepFlipped,
-          args: [val]
-        })
-      },
-
-      // mergeDeepLensed :: a -> ()
-      mergeDeepLensed: (lens, val) => {
-        chan({
-          fn: R.over, args: [lens, {fn: R.mergeDeepFlipped, args: [val]}]
-        })
-      }
-    }
-
-    return R.merge(self, helpers)
-  }
-
-  return ControlledStore
-})
-
-withControl.options = {}
+//
+// export let withControl = R.curry((options, Store) => {
+//   function ControlledStore(action$) {
+//     options = R.merge(withControl.options, options)
+//
+//     let chan = Chan($ => K.merge([action$, $]))
+//
+//     let store = Store(chan)
+//     let self = R.merge(store, {
+//       control: {
+//         _options: options,
+//       }
+//     })
+//
+//     let helpers = {
+//       // over :: (a -> b) -> ()
+//       over: (fn) => {
+//         chan(fn)
+//       },
+//
+//       // set :: a -> ()
+//       set: (val) => {
+//         chan({
+//           fn: R.always,
+//           args: [val]
+//         })
+//       },
+//
+//       // setLensed :: (String, a) -> ()
+//       setLensed: (lens, val) => {
+//         chan({
+//           fn: R.over,
+//           args: [lens, {fn: R.set, args: [val]}]
+//         })
+//       },
+//
+//       // merge :: a -> ()
+//       merge: (val) => {
+//         chan({
+//           fn: R.mergeFlipped,
+//           args: [val]
+//         })
+//       },
+//
+//       // mergeLensed :: (String, a) -> ()
+//       mergeLensed: (lens, val) => {
+//         chan({
+//           fn: R.over,
+//           args: [lens, {fn: R.mergeFlipped, args: [val]}]
+//         })
+//       },
+//
+//       // mergeDeep :: a -> ()
+//       mergeDeep: (val) => {
+//         chan({
+//           fn: R.mergeDeepFlipped,
+//           args: [val]
+//         })
+//       },
+//
+//       // mergeDeepLensed :: a -> ()
+//       mergeDeepLensed: (lens, val) => {
+//         chan({
+//           fn: R.over, args: [lens, {fn: R.mergeDeepFlipped, args: [val]}]
+//         })
+//       }
+//     }
+//
+//     return R.merge(self, helpers)
+//   }
+//
+//   return ControlledStore
+// })
+//
+// withControl.options = {}
 
 // Persistence mixins ==============================================================================
 
@@ -256,7 +254,7 @@ export let withMemoryPersistence = R.curry((options, Store) => {
       }
       action$ = action$
         .skip(1)
-        .startWith(initFn)
+        .merge(K.constant(initFn))
     }
 
     let store = Store(action$)
@@ -267,8 +265,9 @@ export let withMemoryPersistence = R.curry((options, Store) => {
     })
 
     if (options.key) {
-      self.$ = self.$.do(s => {
+      self.$ = self.$.map(s => {
         _memCache[options.key] = s
+        return s
       })
     }
 
@@ -304,7 +303,7 @@ export let withLocalStoragePersistence = R.curry((options, Store) => {
       }
       action$ = action$
         .skip(1)
-        .startWith(initFn)
+        .merge(K.constant(initFn))
     }
 
     let store = Store(action$)
@@ -317,18 +316,18 @@ export let withLocalStoragePersistence = R.curry((options, Store) => {
     if (options.key) {
       self.$ = self.$.merge(
         self.$
-          .throttleTime(1000, undefined, {leading: true, trailing: true})
-          .do(state => {
+          .throttle(1000)
+          .map(state => {
             try {
               localStorage.setItem(options.key, options.serializeFn(state))
             } catch (err) {
               console.warn("error at write to localStorage")
             }
+            return state
           })
           .filter(R.F)
         )
-        .publishReplay(1)
-        .refCount()
+        .toProperty()
     }
 
     return self
@@ -350,7 +349,6 @@ export let canUndo = (historyState) =>
 export let canRedo = (historyState) =>
   historyState.i < historyState.log.length - 1
 
-// Actions -----------------------------------------------------------------------------------------
 export function undo(hs) {
   return canUndo(hs) ? R.over("i", R.dec, hs) : hs
 }
@@ -358,7 +356,6 @@ export function undo(hs) {
 export function redo(hs) {
   return canRedo(hs) ? R.over("i", R.inc, hs) : hs
 }
-//--------------------------------------------------------------------------------------------------
 
 export let withHistory = R.curry((options, Store) => {
   function HistoryStore(action$) {
@@ -414,9 +411,7 @@ export let withHistory = R.curry((options, Store) => {
           }
         })
       })
-      .distinctUntilChanged(R.identical)
-      .publishReplay(1)
-      .refCount()
+      .skipDuplicates()
 
     return self
   }
@@ -434,19 +429,18 @@ let tailAppend = R.curry((x, xs) => {
 
 // Derive ==========================================================================================
 export let derive = (streamsToProps, mapFn) => {
-  streamsToProps = R.map($ => $.distinctUntilChanged(R.identical), streamsToProps)
-  return combineLatestObj(streamsToProps)
+  return K.combine(
+      R.map($ => $.skipDuplicates(), streamsToProps)
+    )
     .map(mapFn)
-    .distinctUntilChanged(R.identical)
-    .publishReplay(1)
-    .refCount()
+    .skipDuplicates()
+    .toProperty()
 }
 
 export let deriveOne = (stream, mapFn) => {
-  stream = stream.distinctUntilChanged(R.identical)
   return stream
+    .skipDuplicates()
     .map(mapFn)
-    .distinctUntilChanged(R.identical)
-    .publishReplay(1)
-    .refCount()
+    .skipDuplicates()
+    .toProperty()
 }

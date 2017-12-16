@@ -6,43 +6,46 @@ import PostItem from "./PostItem"
 export default function PostIndex({posts, index}) {
   return <div data-key="postIndex">
     <h1>Blog</h1>
+    <p>
+      <a href="/posts/create">New Post</a>
+    </p>
     <div style={{marginBottom: "10px"}}>
-      Used Fields: <code>id</code> (sort + filter){" "}
-        <code>title</code> (sort + filter){" "}
-        <code>tags</code> (filter){" "}
-        <code>isPublished</code> (filter){" "}
-        <code>publishDate</code> (sort + filter)
+      Used Fields: <code>id</code> (sort + filters){" "}
+        <code>title</code> (sort + filters){" "}
+        <code>tags</code> (filters){" "}
+        <code>isPublished</code> (filters){" "}
+        <code>publishDate</code> (sort + filters)
     </div>
     <div style={{marginBottom: "10px"}}>
       Filter by:{" "}
       <label>
         Id{" "}
-        <input type="text" name="filter.id" value={index.filter.id} onChange={R.id}/>
+        <input type="text" name="filters.id" value={index.filters.id} onChange={R.id}/>
       </label>
       {" "}
       <label>
         Title{" "}
-        <input type="text" name="filter.title" value={index.filter.title} onChange={R.id}/>
+        <input type="text" name="filters.title" value={index.filters.title} onChange={R.id}/>
       </label>
       {" "}
       <label>
         Tags <small>separated by ,</small>{" "}
-        <input type="text" name="filter.tags" value={index.filter.tags} onChange={R.id}/>
+        <input type="text" name="filters.tags" value={index.filters.tags} onChange={R.id}/>
       </label>
       {" "}
       <label>
         Published{" "}
-        <input type="checkbox" name="filter.isPublished" checked={index.filter.isPublished}/>
+        <input type="checkbox" name="filters.isPublished" checked={index.filters.isPublished}/>
       </label>
       {" "}
       <label>
         Publish Date From{" "}
-        <input type="date" name="filter.publishDateFrom" value={index.filter.publishDateFrom} onChange={R.id}/>
+        <input type="date" name="filters.publishDateFrom" value={index.filters.publishDateFrom} onChange={R.id}/>
       </label>
       {" "}
       <label>
         Publish Date To{" "}
-        <input type="date" name="filter.publishDateTo" value={index.filter.publishDateTo} onChange={R.id}/>
+        <input type="date" name="filters.publishDateTo" value={index.filters.publishDateTo} onChange={R.id}/>
       </label>
     </div>
     <div style={{marginBottom: "10px"}}>

@@ -8,7 +8,7 @@ import {makeFilterFn, makeSortFn} from "common/user-index"
 import UserIndex from "./UserIndex"
 
 export let seed = {
-  filter: {
+  filters: {
     id: "",
     role: "",
     fullname: "",
@@ -45,23 +45,23 @@ export default (sources, key) => {
       }),
 
     // DOM
-    changeFilterId$: sources.DOM.fromName("filter.id").listen("input")
-      .map(ee => ee.element.value),
-
-    changeFilterRole$: sources.DOM.fromName("filter.role").listen("input")
-      .map(ee => ee.element.value),
-
-    changeFilterFullname$: sources.DOM.fromName("filter.fullname").listen("input")
-      .map(ee => ee.element.value),
-
-    changeFilterAgeFrom$: sources.DOM.fromName("filter.ageFrom").listen("input")
-      .map(ee => ee.element.value),
-
-    changeFilterAgeTo$: sources.DOM.fromName("filter.ageTo").listen("input")
-      .map(ee => ee.element.value),
-
-    changeSort$: sources.DOM.fromName("sort").listen("click")
-      .map(ee => ee.element.value),
+    // changeFilterId$: sources.DOM.fromName("filters.id").listen("input")
+    //   .map(ee => ee.element.value),
+    //
+    // changeFilterRole$: sources.DOM.fromName("filters.role").listen("input")
+    //   .map(ee => ee.element.value),
+    //
+    // changeFilterFullname$: sources.DOM.fromName("filters.fullname").listen("input")
+    //   .map(ee => ee.element.value),
+    //
+    // changeFilterAgeFrom$: sources.DOM.fromName("filters.ageFrom").listen("input")
+    //   .map(ee => ee.element.value),
+    //
+    // changeFilterAgeTo$: sources.DOM.fromName("filters.ageTo").listen("input")
+    //   .map(ee => ee.element.value),
+    //
+    // changeSort$: sources.DOM.fromName("sort").listen("click")
+    //   .map(ee => ee.element.value),
   }
 
   let index$ = D.run(
@@ -70,13 +70,13 @@ export default (sources, key) => {
   )(
     D.init(seed),
 
-    intents.changeFilterId$.map(x => R.set(["filter", "id"], x)),
-    intents.changeFilterRole$.map(x => R.set(["filter", "role"], x)),
-    intents.changeFilterFullname$.map(x => R.set(["filter", "fullname"], x)),
-    intents.changeFilterAgeFrom$.map(x => R.set(["filter", "ageFrom"], x)),
-    intents.changeFilterAgeTo$.map(x => R.set(["filter", "ageTo"], x)),
-
-    intents.changeSort$.map(x => R.set("sort", x)),
+    // intents.changeFilterId$.map(x => R.set(["filters", "id"], x)),
+    // intents.changeFilterRole$.map(x => R.set(["filters", "role"], x)),
+    // intents.changeFilterFullname$.map(x => R.set(["filters", "fullname"], x)),
+    // intents.changeFilterAgeFrom$.map(x => R.set(["filters", "ageFrom"], x)),
+    // intents.changeFilterAgeTo$.map(x => R.set(["filters", "ageTo"], x)),
+    //
+    // intents.changeSort$.map(x => R.set("sort", x)),
   ).$
 
   let users$ = D.derive(
@@ -85,8 +85,8 @@ export default (sources, key) => {
       index: index$.debounce(200),
     },
     ({table, index}) => {
+      let filterFn = makeFilterFn(index.filters)
       let sortFn = makeSortFn(index.sort)
-      let filterFn = makeFilterFn(index.filter)
       return R.pipe(
         R.values,
         R.filter(filterFn),

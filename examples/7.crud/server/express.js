@@ -4,9 +4,9 @@ import * as R from "ramda"
 
 export default Express
 
-export let unless = (path, middleware) => {
+export let unless = (paths, middleware) => {
   return (req, res, next) => {
-    if (req.path.startsWith(path)) {
+    if (R.find(path => R.startsWith(path, req.path), paths)) {
       return next()
     } else {
       return middleware(req, res, next)

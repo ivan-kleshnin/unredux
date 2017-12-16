@@ -7,36 +7,36 @@ export default function UserIndex({users, index}) {
   return <div data-key="userIndex">
     <h1>Users</h1>
     <div style={{marginBottom: "10px"}}>
-      Used Fields: <code>id</code> (sort + filter){" "}
-        <code>fullname</code> (sort + filter){" "}
-        <code>role</code> (filter){" "}
-        <code>birthDate</code> (sort + filter)
+      Used Fields: <code>id</code> (sort + filters){" "}
+        <code>fullname</code> (sort + filters){" "}
+        <code>role</code> (filters){" "}
+        <code>birthDate</code> (sort + filters)
     </div>
     <div style={{marginBottom: "10px"}}>
       Filter by:{" "}
       <label>
         Id{" "}
-        <input type="text" name="filter.id" value={index.filter.id} onChange={R.id}/>
+        <input type="text" name="filters.id" value={index.filters.id} onChange={R.id}/>
       </label>
       {" "}
       <label>
         Fullname{" "}
-        <input type="text" name="filter.fullname" value={index.filter.fullname} onChange={R.id}/>
+        <input type="text" name="filters.fullname" value={index.filters.fullname} onChange={R.id}/>
       </label>
       {" "}
       <label>
         Role{" "}
-        <input type="text" name="filter.role" value={index.filter.role} onChange={R.id}/>
+        <input type="text" name="filters.role" value={index.filters.role} onChange={R.id}/>
       </label>
       {" "}
       <label>
         Age From{" "}
-        <input type="text" name="filter.ageFrom" value={index.filter.ageFrom} onChange={R.id}/>
+        <input type="text" name="filters.ageFrom" value={index.filters.ageFrom} onChange={R.id}/>
       </label>
       {" "}
       <label>
         Age To{" "}
-        <input type="text" name="filter.ageTo" value={index.filter.ageTo} onChange={R.id}/>
+        <input type="text" name="filters.ageTo" value={index.filters.ageTo} onChange={R.id}/>
       </label>
     </div>
     <div style={{marginBottom: "10px"}}>

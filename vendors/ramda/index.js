@@ -102,6 +102,7 @@ export let F = () => false
 export let T = () => true
 
 export let add = curryAs("add", (x, y) => x + y)
+export let concatFlipped = flip(concat)
 export let containsFlipped = flip(contains)
 export let dec = (x) => x - 1
 export let divide = curryAs("divide", (x, y) => x / y)

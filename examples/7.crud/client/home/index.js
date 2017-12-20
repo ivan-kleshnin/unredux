@@ -26,7 +26,8 @@ export default (sources, key) => {
   let intents = {
     // HTTP
     fetch$: sources.state$.sampledBy(K
-      .fromPromise(A.get("/api/posts/~/id").then(resp => resp.data.models))
+      .fromPromise(A.get("/api/posts/~/id"))
+      .map(resp => resp.data.models)
       .map(models => R.pluck("id", models)),
       (state, requiredIds) => {
         let presentIds = R.keys(R.view(baseLens, state))

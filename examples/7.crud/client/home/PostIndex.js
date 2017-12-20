@@ -12,11 +12,11 @@ export default function PostIndex({posts, index}) {
     <h1 className="title">Blog <img src="/public/home/logo.gif"/></h1>
     <details className="margin-bottom-sm">
       <summary>Fields</summary>
-      <code>id</code> – sort & filter<br/>
-      <code>title</code> – sort & filter<br/>
-      <code>tags</code> – filter<br/>
-      <code>isPublished</code> – filter<br/>
-      <code>publishDate</code> – sort + filter
+      <code>id: filters, sort</code><br/>
+      <code>title: filters, sort</code><br/>
+      <code>tags: filters</code><br/>
+      <code>isPublished: filters</code><br/>
+      <code>publishDate: filters, sort</code><br/>
     </details>
     <div className="clearfix margin-bottom-sm">
       <div className="pull-left">
@@ -46,13 +46,13 @@ export default function PostIndex({posts, index}) {
       <div className="pull-left">
         <label>
           Publish Date From<br/>
-          <input type="checkbox" name="filters.publishDateFrom" checked={index.filters.publishDateFrom} onChange={R.id}/>
+          <input type="date" name="filters.publishDateFrom" checked={index.filters.publishDateFrom} onChange={R.id}/>
         </label>
       </div>
       <div className="pull-left">
         <label>
           Publish Date To<br/>
-          <input type="checkbox" name="filters.publishDateTo" checked={index.filters.publishDateTo} onChange={R.id}/>
+          <input type="date" name="filters.publishDateTo" checked={index.filters.publishDateTo} onChange={R.id}/>
         </label>
       </div>
     </div>
@@ -81,15 +81,6 @@ export default function PostIndex({posts, index}) {
         </button>
       </div>
     </div>
-    <div className="margin-top">
-      {posts.length
-        ? posts.map(post =>
-            <PostItem key={post.id} post={post}/>
-          )
-        : <p><i>No posts available.</i></p>
-      }
-    </div>
-  </div>
     <div className="margin-top">
       {posts.length
         ? posts.map(post =>

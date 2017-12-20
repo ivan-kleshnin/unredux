@@ -26,42 +26,37 @@ export default (sources, key) => {
     // HTTP
     fetch$: sources.state$.sampledBy(K
       .fromPromise(A.get("/api/users/~/id"))
-      .map(resp => R.pluck("id", resp.data.models))
-      .mapErrors(err => {
-        console.warn(err) // TODO
-        return K.never()
-      }),
+      .map(resp => resp.data.models)
+      .map(models => R.pluck("id", models)),
       (state, requiredIds) => {
         let presentIds = R.keys(R.view(baseLens, state))
         let missingIds = R.difference(requiredIds, presentIds)
         return missingIds
       })
       .filter(R.length)
-      .flatMapLatest(ids => K.fromPromise(A.get(`/api/users/${R.join(",", ids)}`)))
-      .map(resp => resp.data.models)
-      .mapErrors(err => {
-        console.warn(err) // TODO
-        return K.never()
-      }),
+      .flatMapConcat(ids => K
+        .fromPromise(A.get(`/api/users/${R.join(",", ids)}`))
+        .map(resp => resp.data.models)
+      ),
 
     // DOM
-    // changeFilterId$: sources.DOM.fromName("filters.id").listen("input")
-    //   .map(ee => ee.element.value),
-    //
-    // changeFilterRole$: sources.DOM.fromName("filters.role").listen("input")
-    //   .map(ee => ee.element.value),
-    //
-    // changeFilterFullname$: sources.DOM.fromName("filters.fullname").listen("input")
-    //   .map(ee => ee.element.value),
-    //
-    // changeFilterAgeFrom$: sources.DOM.fromName("filters.ageFrom").listen("input")
-    //   .map(ee => ee.element.value),
-    //
-    // changeFilterAgeTo$: sources.DOM.fromName("filters.ageTo").listen("input")
-    //   .map(ee => ee.element.value),
-    //
-    // changeSort$: sources.DOM.fromName("sort").listen("click")
-    //   .map(ee => ee.element.value),
+    changeFilterId$: sources.DOM.fromName("filters.id").listen("input")
+      .map(ee => ee.element.value),
+
+    changeFilterRole$: sources.DOM.fromName("filters.role").listen("input")
+      .map(ee => ee.element.value),
+
+    changeFilterFullname$: sources.DOM.fromName("filters.fullname").listen("input")
+      .map(ee => ee.element.value),
+
+    changeFilterAgeFrom$: sources.DOM.fromName("filters.ageFrom").listen("input")
+      .map(ee => ee.element.value),
+
+    changeFilterAgeTo$: sources.DOM.fromName("filters.ageTo").listen("input")
+      .map(ee => ee.element.value),
+
+    changeSort$: sources.DOM.fromName("sort").listen("click")
+      .map(ee => ee.element.value),
   }
 
   let index$ = D.run(
@@ -70,13 +65,13 @@ export default (sources, key) => {
   )(
     D.init(seed),
 
-    // intents.changeFilterId$.map(x => R.set(["filters", "id"], x)),
-    // intents.changeFilterRole$.map(x => R.set(["filters", "role"], x)),
-    // intents.changeFilterFullname$.map(x => R.set(["filters", "fullname"], x)),
-    // intents.changeFilterAgeFrom$.map(x => R.set(["filters", "ageFrom"], x)),
-    // intents.changeFilterAgeTo$.map(x => R.set(["filters", "ageTo"], x)),
-    //
-    // intents.changeSort$.map(x => R.set("sort", x)),
+    intents.changeFilterId$.map(x => R.set(["filters", "id"], x)),
+    intents.changeFilterRole$.map(x => R.set(["filters", "role"], x)),
+    intents.changeFilterFullname$.map(x => R.set(["filters", "fullname"], x)),
+    intents.changeFilterAgeFrom$.map(x => R.set(["filters", "ageFrom"], x)),
+    intents.changeFilterAgeTo$.map(x => R.set(["filters", "ageTo"], x)),
+
+    intents.changeSort$.map(x => R.set("sort", x)),
   ).$
 
   let users$ = D.derive(
@@ -108,6 +103,9 @@ export default (sources, key) => {
       return function afterFetch(state) {
         return R.over(baseLens, R.mergeFlipped(users), state)
       }
+    }).flatMapErrors(err => {
+      console.warn(`Request to "${err.response.config.url}" failed with message "${err.response.status} ${err.response.statusText}"`)
+      return K.never() // TODO add alert box
     }),
   ])
 

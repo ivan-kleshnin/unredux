@@ -5,13 +5,13 @@ import UserItem from "./UserItem"
 
 export default function UserIndex({users, index}) {
   return <div data-key="userIndex">
-    <h1>Users</h1>
+    <h1 className="title">Users</h1>
     <details className="margin-bottom-sm">
       <summary>Fields</summary>
-      <code>id</code> (sort + filters)<br/>
-      <code>fullname</code> (filters)<br/>
-      <code>role</code> (filters)<br/>
-      <code>birthDate</code> (sort + filters)
+      <code>id: filters, sort</code><br/>
+      <code>fullname: filters, sort</code><br/>
+      <code>role: filters</code><br/>
+      <code>birthDate: filters, sort</code><br/>
     </details>
     <div className="clearfix margin-bottom-sm">
       <div className="pull-left">
@@ -47,8 +47,7 @@ export default function UserIndex({users, index}) {
     </div>
     <div className="clearfix">
       <div className="pull-left">
-      Sort by:
-      <br/>
+      Sort by:<br/>
       <button name="sort" value={index.sort == "+id" ? "-id" : "+id"}>
         {index.sort == "+id" ? <span><b>&uarr; Id</b></span> :
          index.sort == "-id" ? <span><b>&darr; Id</b></span> :
@@ -65,8 +64,8 @@ export default function UserIndex({users, index}) {
       {" "}
       <button name="sort" value={index.sort == "+birthDate" ? "-birthDate" : "+birthDate"}>
         {index.sort == "+birthDate" ? <span><b>&darr; Age</b></span> :
-                                index.sort == "-birthDate" ? <span><b>&uarr; Age</b></span> :
-          <span>&darr; Age</span>
+         index.sort == "-birthDate" ? <span><b>&uarr; Age</b></span> :
+                                      <span>&darr; Age</span>
         }
       </button></div>
     </div>

@@ -2,6 +2,7 @@ import * as F from "framework"
 
 // Apps
 import home from "./home"
+import postCreate from "./post-create"
 import userIndex from "./user-index"
 import userDetail from "./user-detail"
 
@@ -12,9 +13,10 @@ import NotFound from "./root/NotFound"
 
 let routes = [
   // Apps
-  ["/",          home],
-  ["/users",     userIndex],
-  ["/users/:id", userDetail],
+  ["/",             home],
+  ["/posts/create", postCreate],
+  ["/users",        userIndex],
+  ["/users/:id",    userDetail],
 
   // Static pages
   ["/about",    F.lift(About)],

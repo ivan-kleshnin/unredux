@@ -1,12 +1,14 @@
 import * as R from "ramda"
 import {Router} from "../express"
+import {makeId} from "common/helpers"
 import {makeFilterFn, makeSortFn} from "common/home"
+import * as T from "common/types"
 import db from "../db.json"
 
 let router = Router()
 export default router
 
-// GET posts by filter, sort and pagination ========================================================
+// GET posts by filters, sort and pagination =======================================================
 router.get(
   [
     "/",
@@ -19,8 +21,7 @@ router.get(
   (req, res) => {
     let {params, query} = req
 
-    // TODO filterFn, sortFn
-    let filterFn = makeFilterFn(R.firstOk([query.filter && JSON.parse(query.filter), {}]))
+    let filterFn = makeFilterFn(R.firstOk([query.filters && JSON.parse(query.filters), {}]))
     let sortFn = makeSortFn(R.firstOk([query.sort, "+id"]))
     let offset = R.firstOk([params.offset, query.offset, 0])
     let limit = Math.min(R.firstOk([params.limit, query.limit, 20]), 100)
@@ -64,5 +65,19 @@ router.get(
     )(db.posts)
 
     res.json({models})
+  }
+)
+
+// CREATE post =====================================================================================
+router.post(
+  "/",
+  (req, res) => {
+    let form = req.body
+    let post = T.Post(R.merge(form, {
+      id: makeId(),
+      // TODO other server-only fields
+    }))
+    db.posts[post.id] = post // TODO persistence
+    res.status(201).json({model: post})
   }
 )

@@ -13,7 +13,8 @@
     "date-fns": "^1.29.0",
     "deep-diff": "^0.3.8",
     "deep-freeze": "0.0.1",
-    "kefir": "^3.8.0",
+    "flat": "^4.0.0",
+    "kefir": "git+https://github.com/ivan-kleshnin/kefir.git",
     "nanoid": "^1.0.1",
     "prop-types": "^15.6.0",
     "ramda": "^0.25.0",
@@ -22,9 +23,12 @@
     "route-parser": "0.0.5",
     "rx-utils": "^2.0.0",
     "rxjs": "^5.5.2",
+    "setimmediate": "^1.0.5",
     "shallow-diff": "0.0.5",
     "source-map-support": "^0.5.0",
     "webpack": "^3.8.1"
+    "tcomb": "^3.2.24",
+    "tcomb-validation": "^3.4.1",
   },
   "babel": {
     "plugins": [

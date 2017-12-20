@@ -1,5 +1,5 @@
+import "setimmediate"
 import "./index.less"
-
 import K from "kefir"
 import * as R from "ramda"
 import React from "react"

@@ -1,26 +1,26 @@
 import * as R from "ramda"
-import * as M from "common/models"
+import {age} from "common/types/User"
 
-export let makeFilterFn = (filter) => {
+export let makeFilterFn = (filters) => {
   return (user) => {
-    if (filter.id) {
-      if (!R.contains(filter.id, user.id))
+    if (filters.id) {
+      if (!R.contains(filters.id, user.id))
         return false
     }
-    if (filter.role) {
-      if (!R.contains(filter.role, user.role))
+    if (filters.role) {
+      if (!R.contains(filters.role, user.role))
         return false
     }
-    if (filter.fullname) {
-      if (!R.contains(filter.fullname, user.fullname))
+    if (filters.fullname) {
+      if (!R.contains(filters.fullname, user.fullname))
         return false
     }
-    if (filter.ageFrom) {
-      if (!user.birthDate || M.age(user) < filter.ageFrom)
+    if (filters.ageFrom) {
+      if (!user.birthDate || age(user) < filters.ageFrom)
         return false
     }
-    if (filter.ageTo) {
-      if (!user.birthDate || M.age(user) > filter.ageTo)
+    if (filters.ageTo) {
+      if (!user.birthDate || age(user) > filters.ageTo)
         return false
     }
     return true

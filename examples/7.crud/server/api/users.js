@@ -19,8 +19,7 @@ router.get(
   (req, res) => {
     let {params, query} = req
 
-    // TODO filterFn, sortFn
-    let filterFn = makeFilterFn(R.firstOk([query.filter && JSON.parse(query.filter), {}]))
+    let filterFn = makeFilterFn(R.firstOk([query.filters && JSON.parse(query.filters), {}]))
     let sortFn = makeSortFn(R.firstOk([query.sort, "+id"]))
     let offset = R.firstOk([params.offset, query.offset, 0])
     let limit = Math.min(R.firstOk([params.limit, query.limit, 20]), 100)
@@ -64,5 +63,19 @@ router.get(
     )(db.users)
 
     res.json({models})
+  }
+)
+
+// CREATE user =====================================================================================
+router.post(
+  "/",
+  (req, res) => {
+    let form = req.body
+    let post = T.User(R.merge(form, {
+      id: makeId(),
+      // TODO other server-only fields
+    }))
+    db.users[user.id] = user // TODO persistence
+    res.status(201).json({model: user})
   }
 )

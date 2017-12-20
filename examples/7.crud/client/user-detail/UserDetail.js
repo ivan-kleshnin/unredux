@@ -11,5 +11,5 @@ export default function UserDetail({user}) {
 }
 
 UserDetail.propTypes = {
-  user: PT.object,
+  user: PT.object.isRequired,
 }

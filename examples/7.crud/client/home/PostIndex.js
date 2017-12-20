@@ -3,7 +3,7 @@ import * as R from "ramda"
 import React from "react"
 import PostItem from "./PostItem"
 
-// in order to Webpack move this file to `public` folder
+// In order to Webpack move this file to `public` folder
 import "./index.less"
 import "./logo.gif"
 
@@ -15,44 +15,44 @@ export default function PostIndex({posts, index}) {
       <code>id</code> – sort & filter<br/>
       <code>title</code> – sort & filter<br/>
       <code>tags</code> – filter<br/>
-      <code>isPublished</code> – filter
+      <code>isPublished</code> – filter<br/>
       <code>publishDate</code> – sort + filter
     </details>
     <div className="clearfix margin-bottom-sm">
       <div className="pull-left">
         <label>
           Id<br/>
-        <input type="text" name="filter.id" value={index.filter.id} onChange={R.id}/>
-      </label>
+          <input type="text" name="filters.id" value={index.filters.id} onChange={R.id}/>
+        </label>
       </div>
       <div className="pull-left">
         <label>
-        Title<br/>
-        <input type="text" name="filter.title" value={index.filter.title} onChange={R.id}/>
-      </label>
+          Title<br/>
+          <input type="text" name="filters.title" value={index.filters.title} onChange={R.id}/>
+        </label>
       </div>
       <div className="pull-left">
         <label>
-        Tags <small className="gray text">separated by ","</small><br/>
-        <input type="text" name="filter.tags" value={index.filter.tags} onChange={R.id}/>
-      </label>
+          Tags <small className="gray text">separated by ","</small><br/>
+          <input type="text" name="filters.tags" value={index.filters.tags} onChange={R.id}/>
+        </label>
       </div>
       <div className="pull-left">
         <label>
-        Published<br/>
-        <input type="checkbox" name="filter.isPublished" checked={index.filter.isPublished}/>
-      </label>
+          Published<br/>
+          <input type="checkbox" name="filters.isPublished" checked={index.filters.isPublished} onChange={R.id}/>
+        </label>
       </div>
       <div className="pull-left">
         <label>
           Publish Date From<br/>
-          <input type="date" name="filter.publishDateFrom" value={index.filter.publishDateFrom} onChange={R.id}/>
+          <input type="checkbox" name="filters.publishDateFrom" checked={index.filters.publishDateFrom} onChange={R.id}/>
         </label>
       </div>
       <div className="pull-left">
         <label>
           Publish Date To<br/>
-          <input type="date" name="filter.publishDateTo" value={index.filter.publishDateTo} onChange={R.id}/>
+          <input type="checkbox" name="filters.publishDateTo" checked={index.filters.publishDateTo} onChange={R.id}/>
         </label>
       </div>
     </div>
@@ -81,6 +81,15 @@ export default function PostIndex({posts, index}) {
         </button>
       </div>
     </div>
+    <div className="margin-top">
+      {posts.length
+        ? posts.map(post =>
+            <PostItem key={post.id} post={post}/>
+          )
+        : <p><i>No posts available.</i></p>
+      }
+    </div>
+  </div>
     <div className="margin-top">
       {posts.length
         ? posts.map(post =>

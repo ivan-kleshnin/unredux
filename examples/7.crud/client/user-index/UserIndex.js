@@ -8,40 +8,40 @@ export default function UserIndex({users, index}) {
     <h1>Users</h1>
     <details className="margin-bottom-sm">
       <summary>Fields</summary>
-      <code>id</code> – sort & filter<br/>
-      <code>fullname</code> – sort & filter<br/>
-      <code>role</code> – sort & filter<br/>
-      <code>birthDate</code> – sort & filter
+      <code>id</code> (sort + filters)<br/>
+      <code>fullname</code> (filters)<br/>
+      <code>role</code> (filters)<br/>
+      <code>birthDate</code> (sort + filters)
     </details>
     <div className="clearfix margin-bottom-sm">
       <div className="pull-left">
         <label>
           Id<br/>
-          <input type="text" name="filter.id" value={index.filter.id} onChange={R.id}/>
+          <input type="text" name="filters.id" value={index.filters.id} onChange={R.id}/>
         </label>
       </div>
       <div className="pull-left">
         <label>
           Fullname<br/>
-          <input type="text" name="filter.fullname" value={index.filter.fullname} onChange={R.id}/>
+          <input type="text" name="filters.fullname" value={index.filters.fullname} onChange={R.id}/>
         </label>
       </div>
       <div className="pull-left">
         <label>
           Role<br/>
-          <input type="text" name="filter.role" value={index.filter.role} onChange={R.id}/>
+          <input type="text" name="filters.role" value={index.filters.role} onChange={R.id}/>
         </label>
       </div>
       <div className="pull-left">
         <label>
           Age From<br/>
-          <input type="text" name="filter.ageFrom" value={index.filter.ageFrom} onChange={R.id}/>
+          <input type="text" name="filters.ageFrom" value={index.filters.ageFrom} onChange={R.id}/>
         </label>
       </div>
       <div className="pull-left">
         <label>
           Age To<br/>
-          <input type="text" name="filter.ageTo" value={index.filter.ageTo} onChange={R.id}/>
+          <input type="text" name="filters.ageTo" value={index.filters.ageTo} onChange={R.id}/>
         </label>
       </div>
     </div>

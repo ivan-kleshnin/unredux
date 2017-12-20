@@ -1,30 +1,31 @@
 import * as R from "ramda"
+import {strToTags} from "../types/Post"
 
-export let makeFilterFn = (filter) => {
+export let makeFilterFn = (filters) => {
   return (post) => {
-    if (filter.id) {
-      if (!R.contains(filter.id, post.id))
+    if (filters.id) {
+      if (!R.contains(filters.id, post.id))
         return false
     }
-    if (filter.title) {
-      if (!R.contains(filter.title, post.title))
+    if (filters.title) {
+      if (!R.contains(filters.title, post.title))
         return false
     }
-    if (filter.tags) {
-      let filterTags = R.map(R.trim, R.split(",", R.toLower(filter.tags)))
+    if (filters.tags) {
+      let filterTags = strToTags(filters.tags)
       if (!R.intersection(filterTags, post.tags).length)
         return false
     }
-    if (filter.isPublished) {
+    if (filters.isPublished) {
       if (!post.isPublished)
         return false
     }
-    if (filter.publishDateFrom) {
-      if (!post.publishDate || post.publishDate < filter.publishDateFrom)
+    if (filters.publishDateFrom) {
+      if (!post.publishDate || post.publishDate < filters.publishDateFrom)
         return false
     }
-    if (filter.publishedDateTo) {
-      if (!post.publishDate || post.publishDate > filter.publishDateTo)
+    if (filters.publishedDateTo) {
+      if (!post.publishDate || post.publishDate > filters.publishDateTo)
         return false
     }
     return true

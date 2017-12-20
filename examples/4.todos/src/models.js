@@ -6,7 +6,7 @@ export let makeTodo = (data) => {
     id: data.id ? data.id : nanoid(4),
     text: data.text,
     completed: false,
-    addedAt: new Date().toISOString(),
+    addedAt: new Date().toJSON(),
   }, data)
 }
 

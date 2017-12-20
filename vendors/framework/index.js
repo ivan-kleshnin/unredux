@@ -49,6 +49,9 @@ export let fromDOMEvent = (appSelector) => {
   return collectFn([appSelector])
 }
 
+let handleError = e => console.warn(e)
+let handleEnd = R.id
+
 export let connect = (streamsToProps, ComponentToWrap) => {
   class Container extends React.Component {
     constructor(props) {
@@ -66,7 +69,7 @@ export let connect = (streamsToProps, ComponentToWrap) => {
 
       this.sb = props$.observe((data) => {
         this.setState(data)
-      })
+      }, handleError, handleEnd)
       Container.willMount$.plug(K.constant(args))
     }
 
@@ -168,12 +171,12 @@ export let withLifecycle = (fn) => {
       if (sinks.Component.willMount$) {
         sinks.Component.willMount$.take(1).observe(x => {
           sources.Component.willMount$.plug(K.constant(x))
-        })
+        }, handleError, handleEnd)
       }
       if (sinks.Component.willUnmount$) {
         sinks.Component.willUnmount$.take(1).observe(x => {
           sources.Component.willUnmount$.plug(K.constant(x))
-        })
+        }, handleError, handleEnd)
       }
     }
     return sinks

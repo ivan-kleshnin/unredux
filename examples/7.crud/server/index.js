@@ -2,8 +2,8 @@ import A from "axios"
 import BodyParser from "body-parser"
 import Cors from "cors"
 import Path from "path"
-import * as R from "ramda"
 import Express, {unless} from "./express"
+import mocksRoutes from "./mocks"
 import apiPostsRoutes from "./api/posts"
 import apiUsersRoutes from "./api/users"
 import ssrRoutes from "./ssr"
@@ -16,6 +16,11 @@ A.defaults.baseURL = "http://localhost:" + app.get("port")
 
 app.use(Cors())
 
+// Permit the app to parse application/x-www-form-urlencoded
+app.use(BodyParser.urlencoded({
+  extended: false
+}))
+
 app.use(BodyParser.json({
 	limit: null, // TODO
 }))
@@ -23,12 +28,15 @@ app.use(BodyParser.json({
 // STATIC
 app.use("/public", Express.static(Path.resolve(__dirname, "../public")))
 
+// MOCKS
+app.use("/mocks", mocksRoutes)
+
 // API
 app.use("/api/posts", apiPostsRoutes)
 app.use("/api/users", apiUsersRoutes)
 
 // SSR
-app.use(unless("/public", ssrRoutes))
+app.use(unless(["/public", "/mocks"], ssrRoutes))
 
 // ERROR HANDLERS
 app.use((req, res, next) => {

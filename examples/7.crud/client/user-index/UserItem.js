@@ -1,10 +1,10 @@
 import PT from "prop-types"
 import React from "react"
-import * as M from "common/models"
+import {age} from "common/types/User"
 
 export default function UserItem({user}) {
   return <pre>
-    <strong>{user.id}</strong>: {JSON.stringify(user)} age: {M.age(user)}
+    {user.id}: {JSON.stringify(user)} age: {age(user)}
   </pre>
 }
 

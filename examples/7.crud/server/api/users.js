@@ -1,12 +1,14 @@
 import * as R from "ramda"
-import {Router} from "../express"
+import {makeId} from "common/helpers"
 import {makeFilterFn, makeSortFn} from "common/home"
+import * as T from "common/types"
+import {Router} from "../express"
 import db from "../db.json"
 
 let router = Router()
 export default router
 
-// GET users by filter, sort and pagination ========================================================
+// Get users by filter, sort and pagination ========================================================
 router.get(
   [
     "/",
@@ -45,7 +47,7 @@ router.get(
   }
 )
 
-// GET user(s) by id(s) ============================================================================
+// Get user(s) by id(s) ============================================================================
 router.get(
   [
     "/:ids",
@@ -66,16 +68,25 @@ router.get(
   }
 )
 
-// CREATE user =====================================================================================
+// Create user =====================================================================================
 router.post(
   "/",
   (req, res) => {
     let form = req.body
-    let post = T.User(R.merge(form, {
-      id: makeId(),
-      // TODO other server-only fields
-    }))
+    let user
+    try {
+      user = T.User({
+        id: makeId(),
+        fullname: form.fullname,
+        // TODO ...
+      })
+    } catch (err) {
+      return res.status(400).json({error: err.message})
+    }
     db.users[user.id] = user // TODO persistence
     res.status(201).json({model: user})
   }
 )
+
+// Edit user =======================================================================================
+// TODO

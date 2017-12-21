@@ -26,6 +26,9 @@ export let run = (...fns) => {
 export let init = (seed) =>
   K.constant(function init() { return seed })
 
+export let initAsync = ($) =>
+  $.take(1).map(s => function initAsync() { return s })
+
 // Store ===========================================================================================
 
 let cmpFn = R.identical

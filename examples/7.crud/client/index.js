@@ -23,7 +23,7 @@ sources.state$.plug(K.constant(window.state))
 delete window.state
 document.querySelector("#rootState").outerHTML = ""
 
-sinks.state$.observe(state => {
+sinks.state$.skipDuplicates(R.equals).observe(state => {
   sources.state$.plug(K.constant(state))
 })
 

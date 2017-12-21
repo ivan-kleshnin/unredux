@@ -10,6 +10,9 @@ import "./logo.gif"
 export default function PostIndex({posts, index}) {
   return <div data-key="postIndex">
     <h1 className="title">Blog <img src="/public/home/logo.gif"/></h1>
+    <p>
+      <a href="/posts/create">New Post</a>
+    </p>
     <details className="margin-bottom-sm">
       <summary>Fields</summary>
       <code>id: filters, sort</code><br/>
@@ -39,7 +42,7 @@ export default function PostIndex({posts, index}) {
       </div>
       <div className="pull-left">
         <label>
-          Published<br/>
+          Is Published<br/>
           <input type="checkbox" name="filters.isPublished" checked={index.filters.isPublished} onChange={R.id}/>
         </label>
       </div>
@@ -70,13 +73,13 @@ export default function PostIndex({posts, index}) {
           {index.sort == "+title" ? <span><b>&uarr; Title</b></span> :
            index.sort == "-title" ? <span><b>&darr; Title</b></span> :
                                     <span>&uarr; Title</span>
-        }
-      </button>
-      {" "}
-      <button name="sort" value={index.sort == "+publishDate" ? "-publishDate" : "+publishDate"}>
-        {index.sort == "+publishDate" ? <span><b>&uarr; Publish Date</b></span> :
-         index.sort == "-publishDate" ? <span><b>&darr; Publish Date</b></span> :
-                                        <span>&uarr; Publish date</span>
+          }
+        </button>
+        {" "}
+        <button name="sort" value={index.sort == "+publishDate" ? "-publishDate" : "+publishDate"}>
+          {index.sort == "+publishDate" ? <span><b>&uarr; Publish Date</b></span> :
+           index.sort == "-publishDate" ? <span><b>&darr; Publish Date</b></span> :
+                                          <span>&uarr; Publish date</span>
           }
         </button>
       </div>

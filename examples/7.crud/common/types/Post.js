@@ -2,21 +2,26 @@ import DF from "date-fns"
 import * as R from "ramda"
 import T from "tcomb"
 import {makeId} from "common/helpers"
-import {formattedString, limitedString} from "./common"
+import {dateTime, formattedString, limitedString, tagString, tagsString} from "./common"
 
+// Model describes and validates DB state so
+// it shouldn't contain types non-representable in DB (DBs, if 2+ are used)
 export let Post = T.struct({
-  id: T.String, // formattedString(/\w{10}/),
+  id: formattedString(/^\w{10}$/),
   title: limitedString(1, 200),
   text: limitedString(1, 2000),
-  // isPublished: T.Boolean,
-  // publishDate: T.String, // TODO format
+  tags: T.list(tagString()),
+  isPublished: T.Boolean,
+  publishDate: dateTime(),
 }, "Post")
 
+// Form describes and validates user input state so
+// it may significantly differ from Model in both types and numbers of fields
 export let PostForm = T.struct({
   title: limitedString(1, 200),
   text: limitedString(1, 2000),
-  // isPublished: T.Boolean,
-  // publishDate: T.String, // TODO format
+  tags: tagsString(),
+  isPublished: T.Boolean,
 }, "PostForm")
 
 export let makePost = (data) => {
@@ -29,4 +34,9 @@ export let makePost = (data) => {
   }, data))
 }
 
-export let strToTags = (str) => R.map(R.trim, R.split(",", R.toLower(str)))
+export let strToTags = (str) => R.pipe(
+  R.toLower,
+  R.split(","),
+  R.map(R.trim),
+  R.filter(Boolean),
+)(str || "")

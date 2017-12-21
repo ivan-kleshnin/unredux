@@ -4,7 +4,7 @@ import React from "react"
 
 export default function PostForm({input, errors}) {
   return <form>
-    <h1>Create Post</h1>
+    <h1>Edit Post</h1>
     <div>
       <div>{errors.title}</div>
       <label>

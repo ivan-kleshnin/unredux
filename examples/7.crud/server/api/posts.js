@@ -1,14 +1,14 @@
 import * as R from "ramda"
-import {Router} from "../express"
 import {makeId} from "common/helpers"
 import {makeFilterFn, makeSortFn} from "common/home"
 import * as T from "common/types"
+import {Router} from "../express"
 import db from "../db.json"
 
 let router = Router()
 export default router
 
-// GET posts by filters, sort and pagination =======================================================
+// Get posts by filters, sort and pagination =======================================================
 router.get(
   [
     "/",
@@ -47,7 +47,7 @@ router.get(
   }
 )
 
-// GET post(s) by id(s) ============================================================================
+// Get post(s) by id(s) ============================================================================
 router.get(
   [
     "/:ids",
@@ -68,16 +68,48 @@ router.get(
   }
 )
 
-// CREATE post =====================================================================================
+// Create post =====================================================================================
 router.post(
   "/",
   (req, res) => {
     let form = req.body
-    let post = T.Post(R.merge(form, {
-      id: makeId(),
-      // TODO other server-only fields
-    }))
+    let post
+    try {
+      post = T.Post({
+        id: makeId(),
+        title: form.title,
+        text: form.text,
+        tags: T.strToTags(form.tags),
+        isPublished: form.isPublished,
+        publishDate: new Date().toJSON(),
+      })
+    } catch (err) {
+      return res.status(400).json({error: err.message})
+    }
     db.posts[post.id] = post // TODO persistence
     res.status(201).json({model: post})
+  }
+)
+
+// Edit post =======================================================================================
+router.put(
+  "/:id",
+  (req, res) => {
+    let form = req.body
+    let post
+    try {
+      post = T.Post({
+        id: req.params.id,
+        title: form.title,
+        text: form.text,
+        tags: T.strToTags(form.tags),
+        isPublished: form.isPublished,
+        publishDate: new Date().toJSON(),
+      })
+    } catch (err) {
+      return res.status(400).json({error: err.message})
+    }
+    db.posts[post.id] = post // TODO persistence
+    res.status(200).json({model: post})
   }
 )

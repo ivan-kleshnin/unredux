@@ -41,18 +41,18 @@ export default (sources, key) => {
 
   let state$ = D.run(
     () => D.makeStore({}),
-    // D.withLog({key, input: true, output: false}),
+    // D.withLog({key}),
   )(
     // Init
     D.init(seed),
-    sources.state$.take(1).map(R.always),
+    D.initAsync(sources.state$),
 
     // Navigation
     intents.navigateTo$.map(url => R.fn("navigateTo", R.set("url", url))),
     intents.navigateHistory$.map(url => R.fn("navigateHistory", R.set("url", url))),
 
     // Content
-    contentSinks$.flatMapLatest(x => x.action$),
+    contentSinks$.flatMapConcat(x => x.action$),
   ).$
 
   let Component = F.connect(
@@ -70,8 +70,6 @@ export default (sources, key) => {
             <a href="/">Home</a>
             <a href="/about">About</a>
             <a href="/users">Users</a>
-            <a href="/users/1">User #1</a>
-            <a href="/users/2">User #2</a>
             <a href="/contacts">Contacts</a>
           </nav>
         </div>

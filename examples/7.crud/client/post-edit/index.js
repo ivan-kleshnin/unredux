@@ -14,12 +14,21 @@ export let seed = {
     text: "",
     tags: "",
     isPublished: false,
+    publishDate: "",
   },
   errors: {},
 }
 
 export default (sources, key) => {
+  let {params} = sources.props
+  let baseLens = ["posts", params.id]
+
   let intents = {
+    fetch$: sources.state$
+      .filter(s => !R.view(baseLens, s))
+      .flatMapConcat(_ => K.fromPromise(A.get(`/api/posts/${params.id}`)))
+      .map(resp => resp.data.models[params.id]),
+
     changeTitle$: sources.DOM.fromName("title").listen("input")
       .map(ee => ee.element.value),
 
@@ -31,6 +40,9 @@ export default (sources, key) => {
 
     changeIsPublished$: sources.DOM.fromName("isPublished").listen("click")
       .map(ee => ee.element.checked),
+
+    changePublishDate$: sources.DOM.fromName("publishDate").listen("input")
+      .map(ee => ee.element.value),
 
     submit$: sources.DOM.from("form").listen("submit")
       .map(ee => (ee.event.preventDefault(), ee))
@@ -75,22 +87,51 @@ export default (sources, key) => {
         : R.set(["errors", "isPublished"], res.firstError().message)
     }),
 
+    intents.changePublishDate$.map(x => R.set(["input", "publishDate"], x)),
+    intents.changePublishDate$.debounce(200).map(x => {
+      let res = validate(x, T.PostForm.meta.props.publishDate)
+      return res.isValid()
+        ? R.unset(["errors", "publishDate"])
+        : R.set(["errors", "publishDate"], res.firstError().message)
+    }),
+
     // Resets
-    intents.submit$.delay(1).map(_ => (form) => {
-      let res = validate(form.input, T.PostForm)
+    sources.state$.map(R.view(["posts", params.id])).filter(Boolean).map(post => function initFromRoot() {
+      let input = {
+        title: post.title,
+        text: post.text,
+        tags: R.join(", ", post.tags),
+        isPublished: post.isPublished,
+        publishDate: post.publishDate,
+      }
+      let res = validate(input, T.PostForm)
       if (res.isValid()) {
-        return seed
+        let errors = {}
+        return {input, errors}
       } else {
         let errors = R.reduce((z, key) => {
           let e = R.find(e => R.equals(e.path, [key]), res.errors)
           return e ? R.set(key, e.message, z) : z
-        }, {}, R.keys(form.input))
-        return R.set("errors", errors, form)
+        }, {}, R.keys(input))
+        return {input, errors}
       }
     }),
   ).$
 
   let action$ = K.merge([
+    intents.fetch$.map(post => {
+      if (post) {
+        return function afterFetch(state) {
+          return R.set(baseLens, post, state)
+        }
+      } else {
+        return R.id // TODO add alert box
+      }
+    }).flatMapErrors(err => {
+      console.warn(`Request to "${err.response.config.url}" failed with message "${err.response.status} ${err.response.statusText}"`)
+      return K.never() // TODO add alert box
+    }),
+
     form$.sampledBy(intents.submit$).flatMapConcat(form => {
       let postForm
       try {
@@ -100,11 +141,11 @@ export default (sources, key) => {
       }
       return K.constant(postForm)
     }).flatMapConcat(form => {
-      return K.fromPromise(A.post(`/api/posts/`, form))
+      return K.fromPromise(A.put(`/api/posts/${params.id}`, form))
     })
     .map(resp => resp.data.model)
     .map(post => {
-      return function afterPOST(state) {
+      return function afterPUT(state) {
         return R.set(["posts", post.id], post, state)
       }
     }).flatMapErrors(err => {

@@ -47,27 +47,28 @@ export default function UserIndex({users, index}) {
     </div>
     <div className="clearfix">
       <div className="pull-left">
-      Sort by:<br/>
-      <button name="sort" value={index.sort == "+id" ? "-id" : "+id"}>
-        {index.sort == "+id" ? <span><b>&uarr; Id</b></span> :
-         index.sort == "-id" ? <span><b>&darr; Id</b></span> :
-                               <span>&uarr; Id</span>
-        }
-      </button>
-      {" "}
-      <button name="sort" value={index.sort == "+fullname" ? "-fullname" : "+fullname"}>
-        {index.sort == "+fullname" ? <span><b>&uarr; Fullname</b></span> :
-         index.sort == "-fullname" ? <span><b>&darr; Fullname</b></span> :
-                                     <span>&uarr; Fullname</span>
-        }
-      </button>
-      {" "}
-      <button name="sort" value={index.sort == "+birthDate" ? "-birthDate" : "+birthDate"}>
-        {index.sort == "+birthDate" ? <span><b>&darr; Age</b></span> :
-         index.sort == "-birthDate" ? <span><b>&uarr; Age</b></span> :
-                                      <span>&darr; Age</span>
-        }
-      </button></div>
+        Sort by:<br/>
+        <button name="sort" value={index.sort == "+id" ? "-id" : "+id"}>
+          {index.sort == "+id" ? <span><b>&uarr; Id</b></span> :
+           index.sort == "-id" ? <span><b>&darr; Id</b></span> :
+                                 <span>&uarr; Id</span>
+          }
+        </button>
+        {" "}
+        <button name="sort" value={index.sort == "+fullname" ? "-fullname" : "+fullname"}>
+          {index.sort == "+fullname" ? <span><b>&uarr; Fullname</b></span> :
+           index.sort == "-fullname" ? <span><b>&darr; Fullname</b></span> :
+                                       <span>&uarr; Fullname</span>
+          }
+        </button>
+        {" "}
+        <button name="sort" value={index.sort == "+birthDate" ? "-birthDate" : "+birthDate"}>
+          {index.sort == "+birthDate" ? <span><b>&darr; Age</b></span> :
+           index.sort == "-birthDate" ? <span><b>&uarr; Age</b></span> :
+                                        <span>&darr; Age</span>
+          }
+        </button>
+      </div>
     </div>
     <div className="margin-top">
       {users.length

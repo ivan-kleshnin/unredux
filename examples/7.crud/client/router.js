@@ -1,8 +1,11 @@
 import * as F from "framework"
 
 // Apps
-import home from "./home"
+import home from "./home" // post-index
+import postDetail from "./post-detail"
 import postCreate from "./post-create"
+import postEdit from "./post-edit"
+
 import userIndex from "./user-index"
 import userDetail from "./user-detail"
 
@@ -13,10 +16,12 @@ import NotFound from "./root/NotFound"
 
 let routes = [
   // Apps
-  ["/",             home],
-  ["/posts/create", postCreate],
-  ["/users",        userIndex],
-  ["/users/:id",    userDetail],
+  ["/",               home],
+  ["/posts/create",   postCreate],
+  ["/posts/edit/:id", postEdit],
+  ["/posts/:id",      postDetail],
+  ["/users",          userIndex],
+  ["/users/:id",      userDetail],
 
   // Static pages
   ["/about",    F.lift(About)],

@@ -429,7 +429,7 @@ let tailAppend = R.curry((x, xs) => {
   return R.append(x, R.tail(xs))
 })
 
-// Derive ==========================================================================================
+// Deriving ========================================================================================
 export let derive = (streamsToProps, mapFn) => {
   streamsToProps = R.map($ => $.distinctUntilChanged(R.identical), streamsToProps)
   return combineLatestObj(streamsToProps)
@@ -440,9 +440,9 @@ export let derive = (streamsToProps, mapFn) => {
 }
 
 export let deriveOne = (stream, mapFn) => {
-  stream = stream.distinctUntilChanged(R.identical)
   return stream
-    .map(mapFn)
+    .distinctUntilChanged(R.identical)
+    .map(R.is(Array, mapFn) ? R.view(mapFn) : mapFn)
     .distinctUntilChanged(R.identical)
     .publishReplay(1)
     .refCount()

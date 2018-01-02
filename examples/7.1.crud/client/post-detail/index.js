@@ -19,22 +19,7 @@ export default (sources, key) => {
       ),
   }
 
-  let detail$ = D.run(
-    () => D.makeStore({}),
-    // D.withLog({key}),
-  )(
-    D.init({id: params.id}),
-  ).$
-
-  let post$ = D.derive(
-    {
-      table: sources.state$,
-      detail: detail$,
-    },
-    ({table, detail}) => {
-      return table[detail.id]
-    }
-  )
+  let post$ = D.deriveOne(sources.state$, baseLens)
 
   let Component = F.connect(
     {

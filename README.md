@@ -1,18 +1,21 @@
 # Unredux
 
-**WIP**
+This repo features a number of realistic apps built without (frontend) frameworks. We use a dataflow
+similar to CycleJS built on [React](https://facebook.github.io/react/) and [Kefir](https://kefirjs.github.io).
 
-I strongly prefer **libraries** over **frameworks**. In this repo I experiment with different React
-examples implemented:
+We weren't happy with architectures Redux, VueJS, MobX, GrapQL end up with, so we decided to
+codify our own approach. Like CycleJS it's 100% reactive. Unlike CycleJS it doesn't attempt to
+isolate side-effects in drivers (see our docs for more information).
 
-1. Without frameworks
-2. Without an expected boilerplate
+We propose to start with Examples. If you like what you see – continue with Tutorials or Docs.
 
-We will write our own set of helpers from scratch step by step. So I encourage you to
-elaborate examples sequentially. The end results will resemble CycleJS framework/app with a few
-notable differences.
+### Docs
 
-### Examples
+* [Framework design comparison](./docs/frameworks.md)
+* [Reactive or what](./docs/reactive-or-what.md)
+* [RxJS &rarr; Kefir](./docs/) (Why and How -- TODO)
+
+## Examples
 
 #### [1. Counter](./examples/1.counter)
 
@@ -50,7 +53,7 @@ CRUD client-server apps showing async data load, caching, SSR, and more.
 
 Refactored version of the previous. Less boilerplate, more helpers.
 
-### Tutorials
+## Tutorials
 
 #### [1. State](./tutorials/1.state)
 
@@ -66,17 +69,11 @@ Learn how to use logging middleware.
 
 #### [11. Control](./tutorials/11.control)
 
-Learn how to use control middleware.
-
-**...wip**
-
-### Docs
-
-#### [Framework design comparison](./docs/frameworks.md)
+*wip*
 
 ---
 
-### Usage
+## Usage
 
 Examples are expected to work in Browser and NodeJS environments. The latter will require `babel-node`
 (because of ES6 modules).
@@ -100,7 +97,12 @@ $ npm install http-server -g
 2. In that file import from `./vendors/ramda`, `./vendors/rxjs` to get the same code as in Browser.
 3. Run you file with `$ babel-node <scriptName.js>` instead of `$ node <scriptName.js>`.
 
----
+### Prerequisites
+
+* Functional Programming (basics)
+* Lensing (basics)
+* React (advanced)
+* Kefir (advanced)
 
 All code examples rely on `./vendors/ramda` and `./vendors/rxjs` custom tree-shaking bundles.
 Webpack tree-shaking is [half-broken](https://github.com/scabbiaza/ramda-webpack-tree-shaking-examples)
@@ -110,33 +112,17 @@ result in much smaller bundles and faster dev. rebuilds.
 I modify the `R` namespace there to simplify the reasoning (things become messy with 2+ helper sources).
 This is a normal practice for applications (never do that in public libraries!).
 
-### Prerequisites
+## Remarks
 
-* Basics of Functional Programming
-* Basics of Lensing
-* React (100% of official docs level)
-* Basics of RxJS
+### Conventions
 
-## Conventions
-
-All code snippets (in README.md files) imply the following imports:
-
-```js
-import * as R from "ramda"
-// CJS: let R = require("ramda")
-import {Observable as O, ReplaySubject as RS, Subject as S} from "rxjs"
-// CJS: let {Observable: O, ReplaySubject: RS, Subject: S} = require("rxjs")
-```
-
-which are omitted for brevity. We'll also use ASCII [marble diagrams](http://rxmarbles.com/):
+We use ASCII [marble diagrams](http://rxmarbles.com/):
 
 ```
 observable: ---v1---v2---> (time)
 ```
 
 where `v1` may denote a string `"v1"` or something else, which should be clear from a context.
-
-## Random remarks
 
 ### Signal-to-noise ratio
 

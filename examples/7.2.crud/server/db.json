@@ -1,0 +1,82 @@
+{
+  "users": {
+    "604ca3a476": {
+      "id": "604ca3a476",
+      "fullname": "Jacinto",
+      "email": "jac@gmail.com",
+      "role": "admin",
+      "birthDate": "1985-08-17T12:00:00.000Z"
+    },
+    "94243b11b1": {
+      "id": "94243b11b1",
+      "fullname": "Jabberworker",
+      "email": "jab@gmail.com",
+      "role": "admin",
+      "birthDate": "1985-01-29T17:00:00.000Z"
+    },
+    "9433f42fd4": {
+      "id": "9433f42fd4",
+      "fullname": "Gizmo",
+      "email": "giz@gmail.com",
+      "role": "manager",
+      "birthDate": "2000-01-01T12:00:00.000Z"
+    },
+    "75c207679c": {
+      "id": "75c207679c",
+      "fullname": "Jezhik",
+      "email": "jez@gmail.com",
+      "role": "pet",
+      "birthDate": "2017-08-17T10:00:00.000Z"
+    }
+  },
+  "posts": {
+    "f7f169a537": {
+      "id": "f7f169a537",
+      "title": "Fluent API debunked",
+      "text": "...",
+      "tags": ["api", "oop", "fp"],
+      "isPublished": true,
+      "publishDate": "2015-12-29T00:00:00.000Z"
+    },
+    "514dec473e": {
+      "id": "514dec473e",
+      "title": "RxJS Error and Completed events demystified",
+      "text": "...",
+      "tags": ["reactivity", "rxjs"],
+      "isPublished": true,
+      "publishDate": "2016-01-20T00:00:00.000Z"
+    },
+    "c4f3ce683d": {
+      "id": "c4f3ce683d",
+      "title": "Models or Types",
+      "text": "...",
+      "tags": ["fp", "oop", "typing", "tcomb"],
+      "isPublished": true,
+      "publishDate": "2016-10-03T00:00:00.000Z"
+    },
+    "29f75db034": {
+      "id": "29f75db034",
+      "title": "Practical Lensing I",
+      "text": "...",
+      "tags": ["fp", "partial.lenses"],
+      "isPublished": true,
+      "publishDate": "2017-03-23T00:00:00.000Z"
+    },
+    "93524ebe5b": {
+      "id": "93524ebe5b",
+      "title": "Learning platforms I: Problems",
+      "text": "...",
+      "tags": ["industry"],
+      "isPublished": true,
+      "publishDate": "2017-09-25T00:00:00.000Z"
+    },
+    "cd1e3b11cb": {
+      "id": "cd1e3b11cb",
+      "title": "Learning platforms II: Reasons",
+      "text": "...",
+      "tags": ["industry"],
+      "isPublished": false,
+      "publishDate": null
+    }
+  }
+}

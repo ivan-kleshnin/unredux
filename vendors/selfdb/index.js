@@ -430,12 +430,14 @@ let tailAppend = R.curry((x, xs) => {
   return R.append(x, R.tail(xs))
 })
 
-// Derive ==========================================================================================
+// Deriving ========================================================================================
 export let derive = (streamsToProps, mapFn) => {
   return K.combine(
       R.map($ => $.skipDuplicates(), streamsToProps)
     )
+    .throttle(10)
     .map(mapFn)
+    .filter(Boolean)
     .skipDuplicates()
     .toProperty()
 }
@@ -443,7 +445,8 @@ export let derive = (streamsToProps, mapFn) => {
 export let deriveOne = (stream, mapFn) => {
   return stream
     .skipDuplicates()
-    .map(mapFn)
+    .map(R.is(Array, mapFn) ? R.view(mapFn) : mapFn)
+    .filter(Boolean)
     .skipDuplicates()
     .toProperty()
 }

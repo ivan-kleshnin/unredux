@@ -79,7 +79,7 @@ export let connect = (streamsToProps, ComponentToWrap) => {
     }
 
     render() {
-      if (R.isEmpty(this.state)) {
+      if (R.isEmpty(this.state)) { // TODO || R.filter(x => x === undefined, this.state) -- breaks React.hydrate
         return <div>Loading...</div>
       } else {
         return React.createElement(ComponentToWrap, R.merge(this.props, this.state), this.props.children)

@@ -13,8 +13,10 @@ export default (sources, key) => {
   let intents = {
     fetch$: sources.state$
       .filter(s => !R.view(baseLens, s))
-      .flatMapConcat(_ => K.fromPromise(A.get(`/api/users/${params.id}`)))
-      .map(resp => resp.data.models[params.id]),
+      .flatMapConcat(_ => K
+        .fromPromise(A.get(`/api/users/${params.id}`))
+        .map(resp => resp.data.models[params.id])
+      ),
   }
 
   let action$ = K.merge([

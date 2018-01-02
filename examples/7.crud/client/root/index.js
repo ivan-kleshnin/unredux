@@ -52,7 +52,7 @@ export default (sources, key) => {
     intents.navigateHistory$.map(url => R.fn("navigateHistory", R.set("url", url))),
 
     // Content
-    contentSinks$.flatMapConcat(x => x.action$),
+    contentSinks$.flatMapLatest(x => x.action$),
   ).$
 
   let Component = F.connect(
@@ -70,6 +70,8 @@ export default (sources, key) => {
             <a href="/">Home</a>
             <a href="/about">About</a>
             <a href="/users">Users</a>
+            <a href="/users/604ca3a476">User 604ca3a476</a>
+            <a href="/users/94243b11b1">User 94243b11b1</a>
             <a href="/contacts">Contacts</a>
           </nav>
         </div>

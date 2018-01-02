@@ -99,10 +99,10 @@ export default (sources, key) => {
         return K.never()
       }
       return K.constant(postForm)
-    }).flatMapConcat(form => {
-      return K.fromPromise(A.post(`/api/posts/`, form))
-    })
-    .map(resp => resp.data.model)
+    }).flatMapConcat(form => K
+      .fromPromise(A.post(`/api/posts/`, form))
+      .map(resp => resp.data.model)
+    )
     .map(post => {
       return function afterPOST(state) {
         return R.set(["posts", post.id], post, state)

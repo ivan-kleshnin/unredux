@@ -26,8 +26,10 @@ export default (sources, key) => {
   let intents = {
     fetch$: sources.state$
       .filter(s => !R.view(baseLens, s))
-      .flatMapConcat(_ => K.fromPromise(A.get(`/api/posts/${params.id}`)))
-      .map(resp => resp.data.models[params.id]),
+      .flatMapConcat(_ => K
+        .fromPromise(A.get(`/api/posts/${params.id}`))
+        .map(resp => resp.data.models[params.id])
+      ),
 
     changeTitle$: sources.DOM.fromName("title").listen("input")
       .map(ee => ee.element.value),
@@ -140,10 +142,10 @@ export default (sources, key) => {
         return K.never()
       }
       return K.constant(postForm)
-    }).flatMapConcat(form => {
-      return K.fromPromise(A.put(`/api/posts/${params.id}`, form))
-    })
-    .map(resp => resp.data.model)
+    }).flatMapConcat(form => K
+      .fromPromise(A.put(`/api/posts/${params.id}`, form))
+      .map(resp => resp.data.model)
+    )
     .map(post => {
       return function afterPUT(state) {
         return R.set(["posts", post.id], post, state)

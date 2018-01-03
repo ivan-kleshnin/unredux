@@ -14,13 +14,13 @@ import {layout200} from "./layout"
 let router = Express.Router()
 
 router.get("/*", (req, res, next) => {
+  // With SSR --------------------------------------------------------------------------------------
   try {
     // Dynamic imports
     let app = require("client/root").default
     let {seed} = require("client/root")
     let {APP_KEY} = require("client/meta")
 
-    // With SSR
     let sources = {
       state$: K.pool(),
       DOM: F.fromDOMEvent("#" + APP_KEY),
@@ -55,13 +55,19 @@ router.get("/*", (req, res, next) => {
     return next(error)
   }
 
-  // Without SSR
-  // res.send(layout({
-  //   appHTML: "",
-  //   state: R.merge(seed, {url: req.originalUrl})
-  // }))
-  // for (let moduleName of ["client/root/index.js", "client/meta.js"]) {
-  //   cleanCache(makeMatchFn(moduleName))
+  // Without SSR -----------------------------------------------------------------------------------
+  // try {
+  //   let {seed} = require("client/root")
+  //
+  //   res.send(layout200({
+  //     appHTML: "",
+  //     state: R.merge(seed, {url: req.originalUrl})
+  //   }))
+  //   for (let moduleName of ["client/root/index.js", "client/meta.js"]) {
+  //     cleanCache(makeMatchFn(moduleName))
+  //   }
+  // } catch (error) {
+  //   return next(error)
   // }
 })
 

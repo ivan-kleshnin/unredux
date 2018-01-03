@@ -8,6 +8,7 @@ import mocksFoosRoutes from "./mocks/foos"
 import apiPostsRoutes from "./api/posts"
 import apiUsersRoutes from "./api/users"
 import ssrRoutes from "./ssr"
+import {layout404, layout500} from "./ssr/layout"
 
 let app = Express()
 
@@ -45,12 +46,12 @@ app.use(unless(["/public", "/mocks"], ssrRoutes))
 
 // ERROR HANDLERS
 app.use((req, res, next) => {
-  res.status(404).send("404")
+  res.status(404).send(layout404())
 })
 
 app.use((err, req, res, next) => {
   console.error(err.stack)
-  res.status(500).send("500")
+  res.status(500).send(layout500())
 })
 
 let server = app.listen(app.get("port"), () => {

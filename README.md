@@ -9,7 +9,7 @@ isolate side-effects in drivers (see our docs for more information).
 
 We propose to start with Examples. If you like what you see – continue with Tutorials or Docs.
 
-### Docs
+## Docs
 
 * [Framework design comparison](./docs/frameworks.md)
 * [Reactive or what](./docs/reactive-or-what.md)
@@ -70,8 +70,6 @@ Learn how to use logging middleware.
 #### [11. Control](./tutorials/11.control)
 
 *wip*
-
----
 
 ## Usage
 

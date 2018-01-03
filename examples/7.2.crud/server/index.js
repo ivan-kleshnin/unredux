@@ -42,7 +42,7 @@ app.use("/api/posts", apiPostsRoutes)
 app.use("/api/users", apiUsersRoutes)
 
 // SSR
-app.use(unless(["/public", "/mocks"], ssrRoutes))
+app.use(unless(["/public", "/mocks", "/favicon"], ssrRoutes))
 
 // ERROR HANDLERS
 app.use((req, res, next) => {

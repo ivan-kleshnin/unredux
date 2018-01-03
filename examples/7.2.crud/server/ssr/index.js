@@ -45,13 +45,11 @@ router.get("/*", (req, res, next) => {
       .observe(state => {
         let appHTML = ReactDOMServer.renderToString(<sinks.Component/>)
         res.send(layout200({appHTML, state}))
-      }, error => {
-        next(error)
-      }, () => {
-        cleanCache(filename => filename.match(P.join("examples", "7.crud", "client")))
-      })
+      }, next)
   } catch (error) {
     next(error)
+  } finally {
+    cleanCache(filename => filename.match(P.join("examples", "7.crud", "client")))
   }
 
   // Without SSR -----------------------------------------------------------------------------------

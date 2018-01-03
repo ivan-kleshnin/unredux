@@ -437,7 +437,6 @@ export let derive = (streamsToProps, mapFn) => {
     )
     .throttle(10)
     .map(mapFn)
-    .filter(Boolean)
     .skipDuplicates()
     .toProperty()
 }
@@ -446,7 +445,6 @@ export let deriveOne = (stream, mapFn) => {
   return stream
     .skipDuplicates()
     .map(R.is(Array, mapFn) ? R.view(mapFn) : mapFn)
-    .filter(Boolean)
     .skipDuplicates()
     .toProperty()
 }

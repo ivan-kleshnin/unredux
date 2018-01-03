@@ -1,5 +1,7 @@
 import addIndex from "ramda/src/addIndex"
 import append from "ramda/src/append"
+import all from "ramda/src/all"
+import any from "ramda/src/any"
 import ascend from "ramda/src/ascend"
 import chain from "ramda/src/chain"
 import comparator from "ramda/src/comparator"
@@ -183,6 +185,7 @@ export let firstOk = find(notNil)
 ///
 
 export {
+  all, any,
   addIndex, append, ascend,
   chain, comparator, compose, concat, contains,
   descend, difference, drop, dropLast,

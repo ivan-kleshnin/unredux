@@ -39,15 +39,16 @@ export let postFetchModels = (baseLens) => $ => {
 }
 
 export let postFetchModel = (baseLens) => $ => {
-  return $.map(model =>
-    function afterGET(state) {
-      return R.set(baseLens, model, state)
-    }
-  )
-  .flatMapErrors(err => {
-    console.warn(`Request to "${err.response.config.url}" failed with message "${err.response.status} ${err.response.statusText}"`)
-    return K.never() // TODO add alert box
-  })
+  return $
+    .map(model =>
+      function afterGET(state) {
+        return R.set(baseLens, model, state)
+      }
+    )
+    .flatMapErrors(err => {
+      console.warn(`Request to "${err.response.config.url}" failed with message "${err.response.status} ${err.response.statusText}"`)
+      return K.never() // TODO add alert box
+    })
 }
 
 export let createModel = (baseLens) => $ => {

@@ -3,5 +3,4 @@
 /dev/
 node_modules
 npm-debug.log*
-*/*/public/js
-examples/7.crud/public
+*/*/public/*

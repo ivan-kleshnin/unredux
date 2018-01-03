@@ -49,10 +49,9 @@ router.get("/*", (req, res, next) => {
         next(error)
       }, () => {
         cleanCache(filename => filename.match(P.join("examples", "7.crud", "client")))
-        next()
       })
   } catch (error) {
-    return next(error)
+    next(error)
   }
 
   // Without SSR -----------------------------------------------------------------------------------
@@ -67,7 +66,7 @@ router.get("/*", (req, res, next) => {
   //     cleanCache(makeMatchFn(moduleName))
   //   }
   // } catch (error) {
-  //   return next(error)
+  //   next(error)
   // }
 })
 

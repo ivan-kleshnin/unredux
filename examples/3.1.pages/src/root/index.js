@@ -66,7 +66,7 @@ export default (sources, key) => {
 
   let Component = F.connect(
     {
-      url: state$.map(s => s.url),
+      url: D.deriveOne(state$, ["url"]),
       Content: contentSinks$.map(x => x.Component),
     },
     ({url, Content}) => {

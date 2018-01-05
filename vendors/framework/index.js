@@ -170,12 +170,12 @@ export let withLifecycle = (fn) => {
       if (sinks.Component.willMount$) {
         sinks.Component.willMount$.take(1).observe(x => {
           sources.Component.willMount$.plug(K.constant(x))
-        }, handleError, handleEnd)
+        }, handleError)
       }
       if (sinks.Component.willUnmount$) {
         sinks.Component.willUnmount$.take(1).observe(x => {
           sources.Component.willUnmount$.plug(K.constant(x))
-        }, handleError, handleEnd)
+        }, handleError)
       }
     }
     return sinks

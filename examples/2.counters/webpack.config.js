@@ -1,3 +1,4 @@
+let Webpack = require("webpack")
 let Path = require("path")
 
 let folder = JSON.parse(process.env.npm_config_argv).original[1]

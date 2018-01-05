@@ -6,8 +6,10 @@ import * as R from "ramda"
 import React from "react"
 import {validate} from "tcomb-validation"
 import * as T from "common/types"
+import Loading from "../common/Loading"
 import PostForm from "./PostForm"
 
+// SEED
 export let seed = {
   input: {
     title: "",
@@ -17,20 +19,15 @@ export let seed = {
     publishDate: "",
   },
   errors: {},
+  loading: false,
 }
 
 export default (sources, key) => {
   let {params} = sources.props
   let baseLens = ["posts", params.id]
 
+  // INTENTS
   let intents = {
-    fetch$: sources.state$
-      .filter(s => !R.view(baseLens, s))
-      .flatMapConcat(_ => K
-        .fromPromise(A.get(`/api/posts/${params.id}`))
-        .map(resp => resp.data.models[params.id])
-      ),
-
     changeTitle$: sources.DOM.fromName("title").listen("input")
       .map(ee => ee.element.value),
 
@@ -51,6 +48,17 @@ export default (sources, key) => {
       .map(R.always(true)),
   }
 
+  // HTTP
+  let fetchStart$ = sources.state$
+    .filter(s => !R.view(baseLens, s))
+
+  let fetchEnd$ = fetchStart$
+    .flatMapConcat(_ => K
+      .fromPromise(A.get(`/api/posts/${params.id}/`))
+      .map(resp => resp.data.models[params.id])
+    )
+
+  // STATE
   let form$ = D.run(
     () => D.makeStore({}),
     // D.withLog({key}),
@@ -118,18 +126,26 @@ export default (sources, key) => {
         return {input, errors}
       }
     }),
+
+    D.ifBrowser(
+      fetchStart$.merge(fetchEnd$.delay(1)).map(_ => R.over(["loading"], R.not))
+    ),
   ).$
 
+  // COMPONENT
   let Component = F.connect(
     {
+      loading: D.deriveOne(form$, ["loading"]),
       form: form$,
     },
-    ({form}) =>
-      <PostForm input={form.input} errors={form.errors}/>
+    ({loading, form}) => loading
+      ? <Loading/>
+      : <PostForm input={form.input} errors={form.errors}/>
   )
 
+  // ACTION (external)
   let action$ = K.merge([
-    intents.fetch$.map(post => {
+    fetchEnd$.map(post => {
       if (post) {
         return function afterFetch(state) {
           return R.set(baseLens, post, state)
@@ -151,7 +167,7 @@ export default (sources, key) => {
       }
       return K.constant(postForm)
     }).flatMapConcat(form => K
-      .fromPromise(A.put(`/api/posts/${params.id}`, form))
+      .fromPromise(A.put(`/api/posts/${params.id}/`, form))
       .map(resp => resp.data.model)
     )
     .map(post => {

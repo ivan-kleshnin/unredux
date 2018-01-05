@@ -5,8 +5,10 @@ import * as D from "selfdb"
 import * as R from "ramda"
 import React from "react"
 import {makeFilterFn, makeSortFn} from "common/user-index"
+import Loading from "../common/Loading"
 import UserIndex from "./UserIndex"
 
+// SEED
 export let seed = {
   filters: {
     id: "",
@@ -16,29 +18,15 @@ export let seed = {
     ageTo: "",
   },
   sort: "+id",
+  loading: false,
 }
 
 export default (sources, key) => {
   let {params} = sources.props
   let baseLens = ["users"]
 
+  // INTENTS
   let intents = {
-    // HTTP
-    fetch$: sources.state$.sampledBy(K
-      .fromPromise(A.get("/api/users/~/id"))
-      .map(resp => resp.data.models)
-      .map(models => R.pluck("id", models)),
-      (state, requiredIds) => {
-        let presentIds = R.keys(R.view(baseLens, state))
-        let missingIds = R.difference(requiredIds, presentIds)
-        return missingIds
-      })
-      .filter(R.length)
-      .flatMapConcat(ids => K
-        .fromPromise(A.get(`/api/users/${R.join(",", ids)}`))
-        .map(resp => resp.data.models)
-      ),
-
     // DOM
     changeFilterId$: sources.DOM.fromName("filters.id").listen("input")
       .map(ee => ee.element.value),
@@ -59,6 +47,30 @@ export default (sources, key) => {
       .map(ee => ee.element.value),
   }
 
+  // HTTP
+  let prefetchStart$ = K.constant(true).toProperty()
+
+  let prefetchEnd$ = prefetchStart$
+    .flatMapConcat(_ => K
+      .fromPromise(A.get("/api/users/~/id/"))
+      .map(resp => R.pluck("id", resp.data.models))
+    )
+
+  let fetchStart$ = sources.state$
+    .sampledBy(prefetchEnd$, (state, requiredIds) => {
+      let presentIds = R.keys(R.view(baseLens, state))
+      let missingIds = R.difference(requiredIds, presentIds)
+      return missingIds
+    })
+    .filter(R.length)
+
+  let fetchEnd$ = fetchStart$
+    .flatMapConcat(ids => K
+      .fromPromise(A.get(`/api/users/${R.join(",", ids)}/`))
+      .map(resp => resp.data.models)
+    )
+
+  // STATE
   let index$ = D.run(
     () => D.makeStore({}),
     // D.withLog({key}),
@@ -72,6 +84,13 @@ export default (sources, key) => {
     intents.changeFilterAgeTo$.map(x => R.set(["filters", "ageTo"], x)),
 
     intents.changeSort$.map(x => R.set("sort", x)),
+
+    D.ifBrowser(
+      K.merge([
+        prefetchStart$.skip(1), prefetchEnd$.skip(1).delay(1),
+        fetchStart$, fetchEnd$.delay(1)
+       ]).map(_ => R.over(["loading"], R.not))
+    ),
   ).$
 
   let users$ = D.derive(
@@ -90,16 +109,20 @@ export default (sources, key) => {
     }
   )
 
+  // COMPONENT
   let Component = F.connect(
     {
       index: index$,
       users: users$,
     },
-    UserIndex,
+    ({index, users}) => index.loading
+      ? <Loading/>
+      : <UserIndex index={index} users={users}/>
   )
 
+  // ACTION (external)
   let action$ = K.merge([
-    intents.fetch$.map(users => {
+    fetchEnd$.map(users => {
       return function afterFetch(state) {
         return R.over(baseLens, R.mergeFlipped(users), state)
       }

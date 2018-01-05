@@ -14,18 +14,26 @@ let sources = {
 }
 
 let sinks = app(
-  R.over("state$", x => x.toProperty(), sources),
+  R.over("state$", x => x.toProperty().skipDuplicates(), sources),
   APP_KEY
 )
 
-// Use window.state and cleanup after SSR
+// With SSR ----------------------------------------------------------------------------------------
 sources.state$.plug(K.constant(window.state))
 delete window.state
 document.querySelector("#rootState").outerHTML = ""
 
-sinks.state$.skipDuplicates(R.equals).observe(state => {
+sinks.state$.observe(state => {
   sources.state$.plug(K.constant(state))
 })
 
-// ReactDOM.render(<sinks.Component/>, document.getElementById(APP_KEY))
 ReactDOM.hydrate(<sinks.Component/>, document.getElementById(APP_KEY))
+
+// Without SSR -------------------------------------------------------------------------------------
+// sources.state$.plug(K.constant(window.state))
+//
+// sinks.state$.skipDuplicates(R.equals).observe(state => {
+//   sources.state$.plug(K.constant(state))
+// })
+//
+// ReactDOM.render(<sinks.Component/>, document.getElementById(APP_KEY))

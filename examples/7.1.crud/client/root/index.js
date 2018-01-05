@@ -4,8 +4,10 @@ import * as R from "ramda"
 import React from "react"
 import * as D from "selfdb"
 import Url from "url"
+import MainMenu from "../common/MainMenu"
 import router from "../router"
 
+// SEED
 export let seed = {
   url: "",
   posts: {},
@@ -13,6 +15,7 @@ export let seed = {
 }
 
 export default (sources, key) => {
+  // ROUTING
   let contentSinks$ = D
     .deriveOne(sources.state$, ["url"])
     .map(url => {
@@ -22,6 +25,7 @@ export default (sources, key) => {
       return R.merge({action$: K.never()}, sinks)
     })
 
+  // INTENTS
   let intents = {
     navigateTo$: sources.DOM.from("a").listen("click")
       .map(ee => (ee.event.preventDefault(), ee))
@@ -32,12 +36,13 @@ export default (sources, key) => {
         return url
       }),
 
-    navigateHistory$: D.isBrowser()
+    navigateHistory$: D.isBrowser
       ? K.fromEvents(window, "popstate")
           .map(data => document.location.pathname)
       : K.never()
   }
 
+  // STATE
   let state$ = D.run(
     () => D.makeStore({}),
     // D.withLog({key}),
@@ -54,9 +59,10 @@ export default (sources, key) => {
     contentSinks$.flatMapLatest(x => x.action$),
   ).$
 
+  // COMPONENT
   let Component = F.connect(
     {
-      url: state$.map(s => s && s.url || "/"),
+      url: D.deriveOne(state$, ["url"]),
       Content: contentSinks$.map(x => x.Component),
     },
     ({url, Content}) => {
@@ -65,14 +71,7 @@ export default (sources, key) => {
           <p>
             Current URL: {url}
           </p>
-          <nav>
-            <a href="/">Home</a>
-            <a href="/about">About</a>
-            <a href="/users">Users</a>
-            <a href="/users/604ca3a476">User 604ca3a476</a>
-            <a href="/users/94243b11b1">User 94243b11b1</a>
-            <a href="/contacts">Contacts</a>
-          </nav>
+          <MainMenu/>
         </div>
         <div className="page-content">
           <Content/>

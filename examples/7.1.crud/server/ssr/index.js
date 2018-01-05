@@ -9,54 +9,65 @@ import P from "path"
 import * as R from "ramda"
 import React from "react"
 import ReactDOMServer from "react-dom/server"
-import layout from "./layout"
+import {layout200} from "./layout"
 
 let router = Express.Router()
 
-router.get("/*", (req, res) => {
-  // Dynamic imports
-  let app = require("client/root").default
-  let {seed} = require("client/root")
-  let {APP_KEY} = require("client/meta")
+let timeout = (delayMs) =>
+  K.later(delayMs, K.constantError(new Error("timeout"))).flatMap()
 
-  // With SSR
-  let sources = {
-    state$: K.pool(),
-    DOM: F.fromDOMEvent("#" + APP_KEY),
-  }
+router.get("/*", (req, res, next) => {
+  // With SSR --------------------------------------------------------------------------------------
+  try {
+    // Dynamic imports
+    let app = require("client/root").default
+    let {seed} = require("client/root")
+    let {APP_KEY} = require("client/meta")
 
-  let sinks = app(
-    R.over("state$", x => x.toProperty(), sources),
-    APP_KEY
-  )
+    let sources = {
+      state$: K.pool(),
+      DOM: F.fromDOMEvent("#" + APP_KEY),
+    }
 
-  sources.state$.plug(K.constant(R.merge(seed, {url: req.originalUrl})))
+    let sinks = app(
+      R.over("state$", x => x.toProperty().skipDuplicates(R.equals), sources),
+      APP_KEY
+    )
 
-  sinks.state$.observe(state => {
-    sources.state$.plug(K.constant(state))
-  })
+    sources.state$.plug(K.constant(R.merge(seed, {url: req.originalUrl})))
 
-  sinks.state$
-    .skip(1)                                     // skip initial state
-    .merge(K.later(500, sinks.state$).flatMap()) // timeout 500
-    .take(1)                                     // a state to render
-    .takeErrors(1)
-    .observe(state => {
-      let appHTML = ReactDOMServer.renderToString(<sinks.Component/>)
-      res.send(layout({appHTML, state}))
-    }, error => {
-      res.status(500).send("500")
-    }, () => {
-      cleanCache(filename => filename.match(P.join("examples", "7.crud", "client")))
+    sinks.state$.observe(state => {
+      sources.state$.plug(K.constant(state))
     })
 
-  // Without SSR
-  // res.send(layout({
-  //   appHTML: "",
-  //   state: R.merge(seed, {url: req.originalUrl})
-  // }))
-  // for (let moduleName of ["client/root/index.js", "client/meta.js"]) {
-  //   cleanCache(makeMatchFn(moduleName))
+    sinks.state$
+      .skip(1) // skip initial state
+      .merge(timeout(250)) // TODO experiment with delays
+      .take(1) // take a single state snapshot
+      .takeErrors(1)
+      .observe(state => {
+        let appHTML = ReactDOMServer.renderToString(<sinks.Component/>)
+        res.send(layout200({appHTML, state}))
+      }, next)
+  } catch (error) {
+    next(error)
+  } finally {
+    cleanCache(filename => filename.match(P.join("examples", "7.crud", "client")))
+  }
+
+  // Without SSR -----------------------------------------------------------------------------------
+  // try {
+  //   let {seed} = require("client/root")
+  //
+  //   res.send(layout200({
+  //     appHTML: "",
+  //     state: R.merge(seed, {url: req.originalUrl})
+  //   }))
+  //   for (let moduleName of ["client/root/index.js", "client/meta.js"]) {
+  //     cleanCache(makeMatchFn(moduleName))
+  //   }
+  // } catch (error) {
+  //   next(error)
   // }
 })
 

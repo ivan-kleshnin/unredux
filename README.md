@@ -1,7 +1,7 @@
 # Unredux
 
 This repo features a number of realistic apps built without (frontend) frameworks. We use a dataflow
-similar to [CycleJS](https://github.com/cyclejs/cyclejs) built on [Kefir](https://kefirjs.github.io) and [React](https://facebook.github.io/react/).
+similar to [CycleJS](https://cycle.js.org/) built on [Kefir](https://kefirjs.github.io) and [React](https://facebook.github.io/react/).
 
 We weren't happy with clunky imperative architectures Redux, VueJS, MobX, and GrapQL apps end up with,
 so we decided to codify our own approach. Like CycleJS, it's 100% reactive (declarative in time!).
@@ -24,7 +24,7 @@ It's not limited to frontend by no means. We hope to add corresponding examples 
 ## Docs
 
 * [Framework design comparison](./docs/frameworks.md)
-* [Reactive or what](./docs/reactive-or-what.md)
+* [Reactive or what?](./docs/reactive-or-what.md)
 * [RxJS &rarr; Kefir](./docs/) (Why and How -- TODO)
 
 ## Examples

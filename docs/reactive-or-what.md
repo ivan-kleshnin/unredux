@@ -1,4 +1,4 @@
-# Reactive or... what?
+# Reactive or what?
 
 What it the opposite of being **reactive**? Should we always say "non-reactive" like it's something bad?
 Let's take a step back and accept, at first, that there are two types of programs:

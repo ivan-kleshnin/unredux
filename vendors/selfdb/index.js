@@ -15,7 +15,7 @@ export let delay = (time) => {
 
 export let isBrowser = typeof window !== "undefined"
 
-export let isNode = typeof window === "undefined"
+export let isNode = !isBrowser && typeof process !== "undefined"
 
 export let ifBrowser = (...streams) =>
   isBrowser ? streams : []

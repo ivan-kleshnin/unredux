@@ -1,10 +1,11 @@
 let head = () => `
-  <meta charSet="utf-8"/>
-  <title>7.1 CRUD</title>
-  <link rel="icon" type="image/gif" href="/public/favicon.gif"/>
-  <link rel="stylesheet" href="/public/bundle.css"/>
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"/>
-`
+  <head>
+    <meta charSet="utf-8"/>
+    <title>7.1 CRUD</title>
+    <link rel="icon" type="image/gif" href="/public/favicon.gif"/>
+    <link rel="stylesheet" href="/public/bundle.css"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"/>
+  </head>`
 
 export let layout200 = ({appHTML, state}) => {
   return `

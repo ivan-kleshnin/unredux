@@ -26,7 +26,7 @@ export let fromDOMEvent = (appSelector) => {
         }
       },
       listen: (eventName, options={}) => {
-        if (isBrowser()) {
+        if (isBrowser) {
           return K.fromEvents(document.querySelector(appSelector), eventName) // , options TODO
           .throttle(10)
           .flatten(event => {
@@ -50,13 +50,14 @@ export let fromDOMEvent = (appSelector) => {
 }
 
 let handleError = e => console.warn(e)
-let handleEnd = R.id
 
 export let connect = (streamsToProps, ComponentToWrap) => {
   class Container extends React.Component {
     constructor(props) {
       super(props)
+
       this.state = {}
+
       Container.constructor$.plug(K.constant(props))
     }
 
@@ -64,26 +65,24 @@ export let connect = (streamsToProps, ComponentToWrap) => {
       let props$ = K.combine(streamsToProps)
         .throttle(10, {leading: false, trailing: true})
 
-      if (isNode())
+      if (isNode)
         props$ = props$.take(1)
 
-      this.sb = props$.observe((data) => {
+      this.sb = props$.observe(data => {
         this.setState(data)
-      }, handleError, handleEnd)
+      }, handleError)
+
       Container.willMount$.plug(K.constant(args))
     }
 
     componentWillUnmount(...args) {
       this.sb.unsubscribe()
+
       Container.willUnmount$.plug(K.constant(args))
     }
 
     render() {
-      if (R.isEmpty(this.state) || R.any(R.equals(undefined), R.values(this.state))) {
-        return <div>Loading...</div>
-      } else {
-        return React.createElement(ComponentToWrap, R.merge(this.props, this.state), this.props.children)
-      }
+      return React.createElement(ComponentToWrap, R.merge(this.props, this.state), this.props.children)
     }
   }
 

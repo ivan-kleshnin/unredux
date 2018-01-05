@@ -27,7 +27,7 @@ export let fromDOMEvent = (appSelector) => {
         }
       },
       listen: (eventName, options={}) => {
-        if (isBrowser()) {
+        if (isBrowser) {
           return O.fromEvent(document.querySelector(appSelector), eventName, options)
           .throttleTime(10, undefined, {leading: true, trailing: true})
           .concatMap(event => {
@@ -64,7 +64,7 @@ export let connect = (streamsToProps, ComponentToWrap) => {
       let props$ = combineLatestObj(streamsToProps)
         .throttleTime(10, undefined, {leading: true, trailing: true})
 
-      if (isNode())
+      if (isNode)
         props$ = props$.take(1)
 
       this.sb = props$.subscribe((data) => {

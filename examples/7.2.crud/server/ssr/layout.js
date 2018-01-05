@@ -29,11 +29,12 @@ export let layout404 = () => {
       </head>
       <body>
         <h1>Not Found</h1>
+        <div>Page not found</div>
       </body>
     </html>`
 }
 
-export let layout500 = () => {
+export let layout500 = (err) => {
   return `
     <!DOCTYPE html>
     <html lang="en">
@@ -43,6 +44,7 @@ export let layout500 = () => {
       </head>
       <body>
         <h1>Server Error</h1>
+        <div>${err.message}</div>
       </body>
     </html>`
 }

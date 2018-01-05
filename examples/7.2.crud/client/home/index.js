@@ -5,8 +5,10 @@ import * as R from "ramda"
 import React from "react"
 import {makeFilterFn, makeSortFn} from "common/home"
 import * as B from "../blueprints"
+import Loading from "../common/Loading"
 import PostIndex from "./PostIndex"
 
+// SEED
 export let seed = {
   filters: {
     id: "",
@@ -17,24 +19,15 @@ export let seed = {
     publishDateTo: "",
   },
   sort: "+id",
+  loading: false,
 }
 
 export default (sources, key) => {
   let {params} = sources.props
   let baseLens = ["posts"]
 
+  // INTENTS
   let intents = {
-    // HTTP
-    fetch$: sources.state$.sampledBy(
-      B.prefetchIds(baseLens),
-      (state, requiredIds) => {
-        let presentIds = R.keys(R.view(baseLens, state))
-        let missingIds = R.difference(requiredIds, presentIds)
-        return missingIds
-      })
-      .filter(R.length)
-      .thru(B.fetchModels(baseLens)),
-
     // DOM
     changeFilterId$: sources.DOM.fromName("filters.id").listen("input")
       .map(ee => ee.element.value),
@@ -58,6 +51,24 @@ export default (sources, key) => {
       .map(ee => ee.element.value),
   }
 
+  // HTTP
+  let prefetchStart$ = K.constant(true).toProperty()
+
+  let prefetchEnd$ = prefetchStart$
+    .thru(B.fetchIds(baseLens))
+
+  let fetchStart$ = sources.state$
+    .sampledBy(prefetchEnd$, (state, requiredIds) => {
+      let presentIds = R.keys(R.view(baseLens, state))
+      let missingIds = R.difference(requiredIds, presentIds)
+      return missingIds
+    })
+    .filter(R.length)
+
+  let fetchEnd$ = fetchStart$
+    .thru(B.fetchModels(baseLens))
+
+  // STATE
   let index$ = D.run(
     () => D.makeStore({}),
     // D.withLog({key}),
@@ -72,6 +83,13 @@ export default (sources, key) => {
     intents.changeFilterPublishDateTo$.map(x => R.set(["filters", "publishDateTo"], x)),
 
     intents.changeSort$.map(x => R.set("sort", x)),
+
+    D.ifBrowser(
+      K.merge([
+        prefetchStart$.skip(1), prefetchEnd$.skip(1).delay(1),
+        fetchStart$, fetchEnd$.delay(1)
+       ]).map(_ => R.over(["loading"], R.not))
+    ),
   ).$
 
   let posts$ = D.derive(
@@ -90,16 +108,21 @@ export default (sources, key) => {
     }
   )
 
+  // COMPONENT
   let Component = F.connect(
     {
       index: index$,
       posts: posts$,
     },
-    PostIndex,
+    ({index, posts}) => index.loading
+      ? <Loading/>
+      : <PostIndex index={index} posts={posts}/>
   )
 
+  // ACTION (external)
   let action$ = K.merge([
-    intents.fetch$.thru(B.postFetchModels(baseLens)),
+    fetchEnd$
+      .thru(B.postFetchModels(baseLens)),
   ])
 
   return {Component, action$}

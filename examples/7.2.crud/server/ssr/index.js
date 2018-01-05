@@ -13,6 +13,9 @@ import {layout200} from "./layout"
 
 let router = Express.Router()
 
+let timeout = (delayMs) =>
+  K.later(delayMs, K.constantError(new Error("timeout"))).flatMap()
+
 router.get("/*", (req, res, next) => {
   // With SSR --------------------------------------------------------------------------------------
   try {
@@ -27,7 +30,7 @@ router.get("/*", (req, res, next) => {
     }
 
     let sinks = app(
-      R.over("state$", x => x.toProperty(), sources),
+      R.over("state$", x => x.toProperty().skipDuplicates(R.equals), sources),
       APP_KEY
     )
 
@@ -38,9 +41,9 @@ router.get("/*", (req, res, next) => {
     })
 
     sinks.state$
-      .skip(1)                                     // skip initial state
-      .merge(K.later(500, sinks.state$).flatMap()) // timeout 500
-      .take(1)                                     // a state to render
+      .skip(1) // skip initial state
+      .merge(timeout(250)) // TODO experiment with delays
+      .take(1) // take a single state snapshot
       .takeErrors(1)
       .observe(state => {
         let appHTML = ReactDOMServer.renderToString(<sinks.Component/>)

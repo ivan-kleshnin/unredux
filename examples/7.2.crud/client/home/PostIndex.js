@@ -11,7 +11,7 @@ export default function PostIndex({posts, index}) {
   return <div data-key="postIndex">
     <h1 className="title">Blog <img src="/public/home/logo.gif"/></h1>
     <p>
-      <a href="/posts/create">New Post</a>
+      <a href="/posts/create/">New Post</a>
     </p>
     <details className="margin-bottom-sm">
       <summary>Fields</summary>

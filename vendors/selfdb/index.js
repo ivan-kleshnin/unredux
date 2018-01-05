@@ -13,14 +13,24 @@ export let delay = (time) => {
   })
 }
 
-export let isBrowser = new Function("try { return this === window } catch(e) { return false }")
+export let isBrowser = typeof window !== "undefined"
 
-export let isNode = new Function("try { return this === global } catch(e) { return false }")
+export let isNode = typeof window === "undefined"
+
+export let ifBrowser = (...streams) =>
+  isBrowser ? streams : []
+
+export let ifNode = (...streams) =>
+  isNode ? streams : []
 
 export let run = (...fns) => {
   let Store = R.pipe(...fns)()
   return (...action$s) =>
-    Store(K.merge(action$s))
+    Store(K.merge(R.chain(maybeAction$ => {
+      return R.is(Array, maybeAction$)
+        ? maybeAction$
+        : [maybeAction$]
+    }, action$s)))
 }
 
 export let init = (seed) =>
@@ -110,7 +120,7 @@ makeStore.options = {
 let storeCount = 0
 
 let logActionFn = (storeName, action) => {
-  if (isBrowser()) {
+  if (isBrowser) {
     console.log(`%c@ ${storeName} λ ${actionToString(action)}`, `color: green`)
   } else {
     console.log(`@ ${storeName} λ ${actionToString(action)}`)
@@ -118,7 +128,7 @@ let logActionFn = (storeName, action) => {
 }
 
 let logStateFn = (storeName, state) => {
-  if (isBrowser()) {
+  if (isBrowser) {
     console.log(`%c# ${storeName} = ${inspect(state)}`, `color: brown`)
   } else {
     console.log(`# ${storeName} = ${inspect(state)}`)
@@ -285,7 +295,7 @@ withMemoryPersistence.options = {
 }
 
 export let withLocalStoragePersistence = R.curry((options, Store) => {
-  if (!isBrowser()) {
+  if (!isBrowser) {
     throw Error("withLocalStoragePersistence can be used only in Browser")
   }
 

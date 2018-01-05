@@ -4,7 +4,6 @@ import Cors from "cors"
 import Path from "path"
 import Express, {unless} from "./express"
 import mocksRoutes from "./mocks"
-import mocksFoosRoutes from "./mocks/foos"
 import apiPostsRoutes from "./api/posts"
 import apiUsersRoutes from "./api/users"
 import ssrRoutes from "./ssr"
@@ -35,14 +34,13 @@ app.use("/public", Express.static(Path.resolve(__dirname, "../public")))
 
 // MOCKS
 app.use("/mocks", mocksRoutes)
-app.use("/mocks", mocksFoosRoutes)
 
 // API
 app.use("/api/posts", apiPostsRoutes)
 app.use("/api/users", apiUsersRoutes)
 
 // SSR
-app.use(unless(["/public", "/mocks", "/favicon"], ssrRoutes))
+app.use(unless(["/public", "/favicon", "/api", "/mocks"], ssrRoutes))
 
 // ERROR HANDLERS
 app.use((req, res, next) => {
@@ -50,8 +48,8 @@ app.use((req, res, next) => {
 })
 
 app.use((err, req, res, next) => {
-  console.error(err.stack)
-  res.status(500).send(layout500())
+  console.error(err)
+  res.status(500).send(layout500(err))
 })
 
 let server = app.listen(app.get("port"), () => {

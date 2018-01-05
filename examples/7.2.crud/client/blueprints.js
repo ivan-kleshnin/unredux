@@ -4,34 +4,31 @@ import * as R from "ramda"
 
 // HTTP and stuff //////////////////////////////////////////////////////////////////////////////////
 
-export let prefetchIds = (baseLens) => {
-  return K
+export let fetchIds = (baseLens) => $ => {
+  return $.flatMapConcat(_ => K
     .fromPromise(A.get(`/api/${baseLens[0]}/~/id/`))
     .map(resp => R.pluck("id", resp.data.models))
+  )
 }
 
 export let fetchModels = (baseLens) => $ => {
-  return $
-    .flatMapConcat(ids => K
-      .fromPromise(A.get(`/api/${baseLens[0]}/${R.join(",", ids)}/`))
-      .map(resp => resp.data.models)
-    )
+  return $.flatMapConcat(ids => K
+    .fromPromise(A.get(`/api/${baseLens[0]}/${R.join(",", ids)}/`))
+    .map(resp => resp.data.models)
+  )
 }
 
 export let fetchModel = (baseLens) => $ => {
-  return $
-    .flatMapConcat(_ => K
-      .fromPromise(A.get(`/api/${baseLens[0]}/${baseLens[1]}/`))
-      .map(resp => resp.data.models[baseLens[1]])
-    )
+  return $.flatMapConcat(_ => K
+    .fromPromise(A.get(`/api/${baseLens[0]}/${baseLens[1]}/`))
+    .map(resp => resp.data.models[baseLens[1]])
+  )
 }
 
 export let postFetchModels = (baseLens) => $ => {
-  return $.map(models =>
-    function afterGET(state) {
-      return R.over(baseLens, R.mergeFlipped(models), state)
-    }
-  )
+  return $.map(models => function afterGET(state) {
+    return R.over(baseLens, R.mergeFlipped(models), state)
+  })
   .flatMapErrors(err => {
     console.warn(`Request to "${err.response.config.url}" failed with message "${err.response.status} ${err.response.statusText}"`)
     return K.never() // TODO add alert box
@@ -39,16 +36,13 @@ export let postFetchModels = (baseLens) => $ => {
 }
 
 export let postFetchModel = (baseLens) => $ => {
-  return $
-    .map(model =>
-      function afterGET(state) {
-        return R.set(baseLens, model, state)
-      }
-    )
-    .flatMapErrors(err => {
-      console.warn(`Request to "${err.response.config.url}" failed with message "${err.response.status} ${err.response.statusText}"`)
-      return K.never() // TODO add alert box
-    })
+  return $.map(model => function afterGET(state) {
+    return R.set(baseLens, model, state)
+  })
+  .flatMapErrors(err => {
+    console.warn(`Request to "${err.response.config.url}" failed with message "${err.response.status} ${err.response.statusText}"`)
+    return K.never() // TODO add alert box
+  })
 }
 
 export let createModel = (baseLens) => $ => {
@@ -59,10 +53,8 @@ export let createModel = (baseLens) => $ => {
 }
 
 export let postCreateModel = (baseLens) => $ => {
-  return $.map(model => {
-    return function afterPOST(state) {
-      return R.set([...baseLens, model.id], model, state)
-    }
+  return $.map(model => function afterPOST(state) {
+    return R.set([...baseLens, model.id], model, state)
   }).flatMapErrors(err => {
     console.warn(`Request to "${err.response.config.url}" failed with message "${err.response.status} ${err.response.statusText}"`)
     return K.never() // TODO add alert box
@@ -77,10 +69,8 @@ export let editModel = (baseLens) => $ => {
 }
 
 export let postEditModel = (baseLens) => $ => {
-  return $.map(model => {
-    return function afterPUT(state) {
-      return R.set(baseLens, model, state)
-    }
+  return $.map(model => function afterPUT(state) {
+    return R.set(baseLens, model, state)
   }).flatMapErrors(err => {
     console.warn(`Request to "${err.response.config.url}" failed with message "${err.response.status} ${err.response.statusText}"`)
     return K.never() // TODO add alert box

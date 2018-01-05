@@ -8,6 +8,7 @@ import * as T from "common/types"
 import * as B from "../blueprints"
 import PostForm from "./PostForm"
 
+// SEED
 export let seed = {
   input: {
     title: "",
@@ -21,6 +22,7 @@ export let seed = {
 export default (sources, key) => {
   let baseLens = ["posts"]
 
+  // INTENTS
   let intents = {
     changeTitle$: sources.DOM.fromName("title").listen("input")
       .map(ee => ee.element.value),
@@ -39,6 +41,7 @@ export default (sources, key) => {
       .map(R.always(true)),
   }
 
+  // STATE
   let form$ = D.run(
     () => D.makeStore({}),
     // D.withLog({key}),
@@ -92,6 +95,7 @@ export default (sources, key) => {
     }),
   ).$
 
+  // COMPONENT
   let Component = F.connect(
     {
       form: form$,
@@ -100,6 +104,7 @@ export default (sources, key) => {
       <PostForm input={form.input} errors={form.errors}/>
   )
 
+  // ACTION (external)
   let action$ = K.merge([
     form$.sampledBy(intents.submit$).flatMapConcat(form => {
       let postForm

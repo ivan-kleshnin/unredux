@@ -14,7 +14,7 @@ let sources = {
 }
 
 let sinks = app(
-  R.over("state$", x => x.toProperty(), sources),
+  R.over("state$", x => x.toProperty().skipDuplicates(), sources),
   APP_KEY
 )
 
@@ -23,7 +23,7 @@ sources.state$.plug(K.constant(window.state))
 delete window.state
 document.querySelector("#rootState").outerHTML = ""
 
-sinks.state$.skipDuplicates(R.equals).observe(state => {
+sinks.state$.observe(state => {
   sources.state$.plug(K.constant(state))
 })
 

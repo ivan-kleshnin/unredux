@@ -1,13 +1,25 @@
 # Unredux
 
 This repo features a number of realistic apps built without (frontend) frameworks. We use a dataflow
-similar to CycleJS built on [React](https://facebook.github.io/react/) and [Kefir](https://kefirjs.github.io).
+similar to CycleJS built on [Kefir](https://kefirjs.github.io) and [React](https://facebook.github.io/react/).
 
-We weren't happy with architectures Redux, VueJS, MobX, GrapQL end up with, so we decided to
-codify our own approach. Like CycleJS it's 100% reactive. Unlike CycleJS it doesn't attempt to
-isolate side-effects in drivers (see our docs for more information).
+We weren't happy with clunky imperative architectures Redux, VueJS, MobX, and GrapQL apps end up with,
+so we decided to codify our own approach. Like CycleJS, it's 100% reactive (declarative in time!).
+Unlike CycleJS, it doesn't hide effects in drivers. See docs for more details about our motivations
+and design decisions.
 
-We propose to start with Examples. If you like what you see – continue with Tutorials or Docs.
+We propose to start with shallow look at **Examples**. If you like what you see there (code layout,
+clarity, etc) – continue with **Tutorials** or **Docs** before you really start digging into how
+Examples work.
+
+Don't expect to understand everything from the first read. But, we ensure you, the end result is much
+simplier and scalable than everything you can hope to build with Redux, VueJS and even CycleJS.
+Our main goal is to keep code super tiny and super clean. We hate enterprise and we hope you'll understand
+why after seeing this project.
+
+One more thing. The proposed architecture fits perfectly for **all** interactive apps:
+including static site generator (with watch mode), browser games, console games, etc.
+It's not limited to frontend by no means. We hope to add corresponding examples with time.
 
 ## Docs
 

@@ -4,18 +4,18 @@ import * as R from "ramda"
 
 // HTTP and stuff //////////////////////////////////////////////////////////////////////////////////
 
-export let fetchIds = (baseLens) => $ => {
-  return $.flatMapConcat(_ => K
-    .fromPromise(A.get(`/api/${baseLens[0]}/~/id/`))
+export let prefetchIds = (baseLens) => {
+  return K.fromPromise(A.get(`/api/${baseLens[0]}/~/id/`))
     .map(resp => R.pluck("id", resp.data.models))
-  )
 }
 
 export let fetchModels = (baseLens) => $ => {
-  return $.flatMapConcat(ids => K
-    .fromPromise(A.get(`/api/${baseLens[0]}/${R.join(",", ids)}/`))
-    .map(resp => resp.data.models)
-  )
+  return $.flatMapConcat(ids => {
+    return ids.length
+      ? K.fromPromise(A.get(`/api/${baseLens[0]}/${R.join(",", ids)}/`))
+         .map(resp => resp.data.models)
+      : K.constant({})
+  })
 }
 
 export let fetchModel = (baseLens) => $ => {

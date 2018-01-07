@@ -1,13 +1,14 @@
 import PT from "prop-types"
 import * as R from "ramda"
 import React from "react"
+import Loading from "../common/Loading"
 import PostItem from "./PostItem"
 
 // In order to Webpack move this file to `public` folder
 import "./index.less"
 import "./logo.gif"
 
-export default function PostIndex({posts, index}) {
+export default function PostIndex({loading, index, posts}) {
   return <div data-key="postIndex">
     <h1 className="title">Blog <img src="/public/home/logo.gif"/></h1>
     <p>
@@ -84,18 +85,23 @@ export default function PostIndex({posts, index}) {
         </button>
       </div>
     </div>
-    <div className="margin-top">
-      {posts.length
-        ? posts.map(post =>
-            <PostItem key={post.id} post={post}/>
-          )
-        : <p><i>No posts available.</i></p>
-      }
-    </div>
+    {loading
+      ? <Loading/>
+      : <div className="margin-top">
+          {posts.length
+            ? posts.map(post =>
+                <PostItem key={post.id} post={post}/>
+              )
+            : <p><i>No posts available.</i></p>
+          }
+        </div>
+    }
   </div>
 }
 
 PostIndex.propTypes = {
+  loading: PT.bool,
+  index: PT.object.isRequired,
   posts: PT.arrayOf(PostItem.propTypes.post).isRequired,
 }
 

@@ -4,7 +4,7 @@ import Url from "url"
 import {Observable as O, Subject} from "../rxjs"
 import {combineLatestObj} from "rx-utils"
 import * as R from "../ramda"
-import {isBrowser, isNode} from "../selfdb"
+import {isBrowser, isServer} from "../selfdb"
 import nanoid from "nanoid"
 
 export let fromDOMEvent = (appSelector) => {
@@ -64,7 +64,7 @@ export let connect = (streamsToProps, ComponentToWrap) => {
       let props$ = combineLatestObj(streamsToProps)
         .throttleTime(10, undefined, {leading: true, trailing: true})
 
-      if (isNode)
+      if (isServer)
         props$ = props$.take(1)
 
       this.sb = props$.subscribe((data) => {

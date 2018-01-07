@@ -5,7 +5,6 @@ import * as R from "ramda"
 import React from "react"
 import {makeFilterFn, makeSortFn} from "common/home"
 import * as B from "../blueprints"
-import Loading from "../common/Loading"
 import PostIndex from "./PostIndex"
 
 // SEED
@@ -19,7 +18,7 @@ export let seed = {
     publishDateTo: "",
   },
   sort: "+id",
-  loading: false,
+  _loading: false,
 }
 
 export default (sources, key) => {
@@ -51,19 +50,14 @@ export default (sources, key) => {
       .map(ee => ee.element.value),
   }
 
-  // HTTP
-  let prefetchStart$ = K.constant(true).toProperty()
-
-  let prefetchEnd$ = prefetchStart$
-    .thru(B.fetchIds(baseLens))
-
-  let fetchStart$ = sources.state$
-    .sampledBy(prefetchEnd$, (state, requiredIds) => {
-      let presentIds = R.keys(R.view(baseLens, state))
-      let missingIds = R.difference(requiredIds, presentIds)
-      return missingIds
+  // FETCH
+  let fetchStart$ = B
+    .prefetchIds(baseLens)
+    .flatMapConcat(requiredIds => {
+      return sources.state$.take(1).map(R.view(baseLens)).map(presentIds => {
+        return R.difference(requiredIds, presentIds)
+      })
     })
-    .filter(R.length)
 
   let fetchEnd$ = fetchStart$
     .thru(B.fetchModels(baseLens))
@@ -84,12 +78,10 @@ export default (sources, key) => {
 
     intents.changeSort$.map(x => R.set("sort", x)),
 
-    D.ifBrowser(
-      K.merge([
-        prefetchStart$.skip(1), prefetchEnd$.skip(1).delay(1),
-        fetchStart$, fetchEnd$.delay(1)
-       ]).map(_ => R.over(["loading"], R.not))
-    ),
+    // D.ifBrowser(
+    //   fetchStart$.filter(R.isNotEmpty).map(_ => R.set(["_loading"], true)),
+    //   fetchEnd$.filter(R.isNotEmpty).delay(1).map(_ => R.set(["_loading"], false)),
+    // ),
   ).$
 
   let posts$ = D.derive(
@@ -111,18 +103,22 @@ export default (sources, key) => {
   // COMPONENT
   let Component = F.connect(
     {
+      loading: D.deriveOne(sources.state$, ["_loading", key]),
       index: index$,
       posts: posts$,
     },
-    ({index, posts}) => index.loading
-      ? <Loading/>
-      : <PostIndex index={index} posts={posts}/>
+    PostIndex
   )
 
   // ACTION (external)
   let action$ = K.merge([
     fetchEnd$
       .thru(B.postFetchModels(baseLens)),
+
+    // ...D.isServer ? [
+      fetchStart$.map(_ => R.set(["_loading", key], true)),
+      fetchEnd$.delay(1).map(_ => R.set(["_loading", key], false)),
+    // ] : []
   ])
 
   return {Component, action$}

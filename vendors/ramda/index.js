@@ -121,6 +121,7 @@ export let flattenObj = (obj, keys=[]) => {
 }
 export let head = nth(0)
 export let inc = (x) => x + 1
+export let isNotEmpty = complement(isEmpty)
 export let isNil = (x) => x == null
 export let isPlainObj = (o) => Boolean(o && o.constructor && o.constructor.prototype && o.constructor.prototype.hasOwnProperty("isPrototypeOf"))
 export let join = curryAs("join", (sep, xs) => xs.join(sep))

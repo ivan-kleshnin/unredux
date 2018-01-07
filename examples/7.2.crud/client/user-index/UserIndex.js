@@ -1,9 +1,10 @@
 import PT from "prop-types"
 import * as R from "ramda"
 import React from "react"
+import Loading from "../common/Loading"
 import UserItem from "./UserItem"
 
-export default function UserIndex({users, index}) {
+export default function UserIndex({loading, index, users}) {
   return <div data-key="userIndex">
     <h1 className="title">Users</h1>
     <details className="margin-bottom-sm">
@@ -70,18 +71,23 @@ export default function UserIndex({users, index}) {
         </button>
       </div>
     </div>
-    <div className="margin-top">
-      {users.length
-        ? users.map(user =>
-            <UserItem key={user.id} user={user}/>
-          )
-        : <p><i>No users available.</i></p>
-      }
-    </div>
+    {loading
+      ? <Loading/>
+      : <div className="margin-top">
+        {users.length
+          ? users.map(user =>
+              <UserItem key={user.id} user={user}/>
+            )
+          : <p><i>No users available.</i></p>
+        }
+      </div>
+    }
   </div>
 }
 
 UserIndex.propTypes = {
+  loading: PT.bool,
+  index: PT.object.isRequired,
   users: PT.arrayOf(UserItem.propTypes.user).isRequired,
 }
 

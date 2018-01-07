@@ -3,7 +3,7 @@ import React from "react"
 import Route from "route-parser"
 import Url from "url"
 import * as R from "../ramda"
-import {isBrowser, isNode} from "../selfdb"
+import {isBrowser, isServer} from "../selfdb"
 import nanoid from "nanoid"
 
 export let fromDOMEvent = (appSelector) => {
@@ -65,7 +65,7 @@ export let connect = (streamsToProps, ComponentToWrap) => {
       let props$ = K.combine(streamsToProps)
         .throttle(10, {leading: false, trailing: true})
 
-      if (isNode)
+      if (isServer)
         props$ = props$.take(1)
 
       this.sb = props$.observe(data => {

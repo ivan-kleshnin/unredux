@@ -9,9 +9,15 @@ import router from "../router"
 
 // SEED
 export let seed = {
+  // DOCUMENT
   url: "",
+
+  // TABLES
   posts: {},
   users: {},
+
+  // META
+  _loading: {},
 }
 
 export default (sources, key) => {

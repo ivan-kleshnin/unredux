@@ -15,13 +15,13 @@ export let delay = (time) => {
 
 export let isBrowser = typeof window !== "undefined"
 
-export let isNode = !isBrowser && typeof process !== "undefined"
+export let isServer = !isBrowser && typeof process !== "undefined"
 
 export let ifBrowser = (...streams) =>
   isBrowser ? streams : []
 
-export let ifNode = (...streams) =>
-  isNode ? streams : []
+export let ifServer = (...streams) =>
+  isServer ? streams : []
 
 export let run = (...fns) => {
   let Store = R.pipe(...fns)()

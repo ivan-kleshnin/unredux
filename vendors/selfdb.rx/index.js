@@ -15,7 +15,7 @@ export let delay = (time) => {
 
 export let isBrowser = new Function("try { return this === window } catch(e) { return false }")
 
-export let isNode = new Function("try { return this === global } catch(e) { return false }")
+export let isServer = new Function("try { return this === global } catch(e) { return false }")
 
 export let run = (...fns) => {
   let Store = R.pipe(...fns)()

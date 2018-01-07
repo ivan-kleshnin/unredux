@@ -6,7 +6,6 @@ import React from "react"
 import {validate} from "tcomb-validation"
 import * as T from "common/types"
 import * as B from "../blueprints"
-import Loading from "../common/Loading"
 import PostForm from "./PostForm"
 
 // SEED
@@ -19,7 +18,6 @@ export let seed = {
     publishDate: "",
   },
   errors: {},
-  loading: false,
 }
 
 export default (sources, key) => {
@@ -48,7 +46,7 @@ export default (sources, key) => {
       .map(R.always(true)),
   }
 
-  // HTTP
+  // FETCH
   let fetchStart$ = sources.state$
     .filter(s => !R.view(baseLens, s))
 
@@ -125,25 +123,29 @@ export default (sources, key) => {
     }),
 
     D.ifBrowser(
-      fetchStart$.merge(fetchEnd$.delay(1)).map(_ => R.over(["loading"], R.not))
+      fetchStart$.filter(R.isNotEmpty).map(_ => R.set(["_loading"], true)),
+      fetchEnd$.filter(R.isNotEmpty).delay(1).map(_ => R.set(["_loading"], false)),
     ),
   ).$
 
   // COMPONENT
   let Component = F.connect(
     {
-      loading: D.deriveOne(form$, ["loading"]),
+      loading: D.deriveOne(sources.state$, ["_loading", key]),
       form: form$,
     },
-    ({loading, form}) => loading
-      ? <Loading/>
-      : <PostForm input={form.input} errors={form.errors}/>
+    PostForm
   )
 
   // ACTION (external)
   let action$ = K.merge([
     fetchEnd$
       .thru(B.postFetchModel(baseLens)),
+
+    // ...D.isServer ? [
+      fetchStart$.map(_ => R.set(["_loading", key], true)),
+      fetchEnd$.delay(1).map(_ => R.set(["_loading", key], false)),
+    // ] : [],
 
     form$.sampledBy(intents.submit$).flatMapConcat(form => {
       let postForm

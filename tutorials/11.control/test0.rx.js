@@ -1,3 +1,5 @@
+// TODO port to Kefir
+
 import {Observable as O} from "rxjs"
 import * as R from "../../vendors/ramda"
 import * as D from "../../vendors/selfdb"

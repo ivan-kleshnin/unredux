@@ -104,8 +104,10 @@ $ npm install http-server -g
 #### NodeJS
 
 1. Create some `.js` file in the project root.
-2. In that file import from `./vendors/ramda`, `./vendors/rxjs` to get the same code as in Browser.
+2. In that file import from `./vendors/ramda`, `./vendors/kefir` to get the same code as in Browser.
 3. Run you file with `$ babel-node <scriptName.js>` instead of `$ node <scriptName.js>`.
+
+*Note: temporarilty complexity before we're able to publish `vendors/ramda` and `vendors/kefir` to NPM.*
 
 ### Prerequisites
 
@@ -113,14 +115,6 @@ $ npm install http-server -g
 * Lensing (basics)
 * React (advanced)
 * Kefir (advanced)
-
-All code examples rely on `./vendors/ramda` and `./vendors/rxjs` custom tree-shaking bundles.
-Webpack tree-shaking is [half-broken](https://github.com/scabbiaza/ramda-webpack-tree-shaking-examples)
-and can be used only for production builds. In any case, custom imports (as annoying as they are),
-result in much smaller bundles and faster dev. rebuilds.
-
-I modify the `R` namespace there to simplify the reasoning (things become messy with 2+ helper sources).
-This is a normal practice for applications (never do that in public libraries!).
 
 ## Remarks
 
@@ -133,22 +127,3 @@ observable: ---v1---v2---> (time)
 ```
 
 where `v1` may denote a string `"v1"` or something else, which should be clear from a context.
-
-### Signal-to-noise ratio
-
-I don't use linters. Having this:
-
-```
-"eslint": "^4.0.0",
-"eslint-config-react-app": "^1.0.4",
-"eslint-plugin-flowtype": "^2.29.2",
-"eslint-plugin-import": "^2.2.0",
-"eslint-plugin-jsx-a11y": "^5.0.3",
-"eslint-plugin-react": "^7.1.0",
-...
-```
-
-just to get "wrong indendation" events occasionally, is not what I live for. It's all about
-**signal-to-noise** ratio, so I consider linters almost worthless (Flow is a better linter btw.).
-For the same reason I don't use `const`, `===` and other "best practices" 2x year olds so like to
-copy from their corporate gurus.

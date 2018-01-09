@@ -1,11 +1,10 @@
 import * as R from "ramda"
-import {Observable as O} from "rxjs"
+import K from "kefir"
 
-let action$ = O.of(R.inc, R.inc, R.inc, R.inc, R.dec, R.dec, R.dec, R.dec)
-  .concatMap(x => O.of(x).delay(200))
+let action$ = K.sequentially(200, [R.inc, R.inc, R.inc, R.inc, R.dec, R.dec, R.dec, R.dec])
 
 let a = 0
-action$.subscribe(fn => {
+action$.observe(fn => {
   a = fn(a)
   console.log(a)
 })

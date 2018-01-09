@@ -1,20 +1,15 @@
 import * as R from "ramda"
-import {Observable as O} from "rxjs"
+import K from "kefir"
 
-let action$ = O.of(R.inc, R.identity, R.identity, R.identity, R.identity)
-  .concatMap(x => O.of(x).delay(200))
+let action$ = K.sequentially(200, [R.inc, R.identity, R.identity, R.identity, R.identity])
 
 let seed = 0
 let state = action$
-  .startWith(seed)
+  .merge(K.constant(seed))
   .scan((state, fn) => fn(state))
-  .distinctUntilChanged((x, y) => x === y) // without this line we'll see the same state repeatedly (uses === by default)
-  .publishReplay(1)
-  .refCount()
+  .skipDuplicates() // uses === by default
 
-state.subscribe(s => {
-  console.log(s)
-})
+state.log()
 
 /*
   Now you're probably thinking "`===` is only a shallow comparison"! – and you're only half correct.

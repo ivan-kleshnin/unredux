@@ -1,5 +1,5 @@
 import * as R from "ramda"
-import {Observable as O} from "rxjs"
+import K from "kefir"
 
 // Lib =============================================================================================
 // We name all functions to keep discoverability via `console.log`
@@ -10,11 +10,9 @@ function makeStore(options) {
     let self = {options} // no OOP
 
     self.$ = action$
-      .startWith(seed)
+      .merge(K.constant(seed))
       .scan((state, fn) => fn(state))
-      .distinctUntilChanged()
-      .publishReplay(1)
-      .refCount()
+      .skipDuplicates()
 
     return self
   }
@@ -27,19 +25,18 @@ makeStore.options = {
 }
 
 // App =============================================================================================
-let action$ = O.of(R.inc, R.inc, R.inc, R.inc, R.inc)
-  .concatMap(x => O.of(x).delay(200))
+let makeAction$ = () => K.sequentially(200, [R.inc, R.inc, R.inc, R.inc, R.inc])
 
-let state1 = makeStore({})(1, action$)
+let state1 = makeStore({})(1, makeAction$())
 
-state1.$.subscribe(s => {
+state1.$.observe(s => {
   console.log("state1:", s)
 })
 
 setTimeout(() => {
-  let state10 = makeStore({})(10, action$)
+  let state10 = makeStore({})(10, makeAction$())
 
-  state10.$.subscribe(s => {
+  state10.$.observe(s => {
     console.log("state10:", s)
   })
 }, 1200)

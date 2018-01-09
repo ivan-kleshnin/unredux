@@ -1,7 +1,6 @@
 import {inspect} from "util"
 import deepFreeze from "deep-freeze"
 import K from "kefir"
-// import {chan as Chan} from "rx-utils"
 import * as R from "../ramda"
 
 // Different Helpers ===============================================================================

@@ -1,33 +1,30 @@
 import * as R from "ramda"
-import {Observable as O} from "rxjs"
+import K from "kefir"
 
 // Lib =============================================================================================
 // Our current step is to separate app and library code
 function Store(seed, action$) {
   return action$
-    .startWith(seed)
+    .merge(K.constant(seed))
     .scan((state, fn) => fn(state))
-    .distinctUntilChanged(R.identical)
-    .publishReplay(1)
-    .refCount()
+    .skipDuplicates()
 }
 
 // App =============================================================================================
-let action$ = O.of(R.inc, R.inc, R.inc, R.inc, R.inc)
-  .concatMap(x => O.of(x).delay(200))
+let makeAction$ = () => K.sequentially(200, [R.inc, R.inc, R.inc, R.inc, R.inc])
 
-let state1 = Store(1, action$)
+let state1 = Store(1, makeAction$())
 
-state1.subscribe(s => {
+state1.observe(s => {
   console.log("state1:", s)
 })
 
 setTimeout(() => {
-  let state10 = Store(10, action$)
+  let state10 = Store(10, makeAction$())
 
-  state10.subscribe(s => {
+  state10.observe(s => {
     console.log("state10:", s)
   })
 }, 1200)
 
-// Next: we want to be able to pass options to Store
+// Next: we want to be able to name states and to override the defaults...

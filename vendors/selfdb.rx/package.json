@@ -1,8 +1,0 @@
-{
-  "dependencies": {
-    "rx-utils": "*"
-  },
-  "peerDependencies": {
-    "rxjs": "*"
-  }
-}

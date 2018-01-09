@@ -99,18 +99,16 @@ $ npm install http-server -g
 
 #### NodeJS
 
-1. Create some `.js` file in the project root.
-2. In that file import from `./vendors/ramda`, `./vendors/kefir` to get the same code as in Browser.
-3. Run you file with `$ babel-node <scriptName.js>` instead of `$ node <scriptName.js>`.
-
-*Note: temporarilty complexity before we're able to publish `vendors/ramda` and `vendors/kefir` to NPM.*
+1. Create `some.js` file in the project root.
+2. Run the file with `$ babel-node some.js`.
+3. Required babel plugins and presets will be applied automatically.
 
 ### Prerequisites
 
 * Functional Programming (basics)
 * Lensing (basics)
-* React (advanced)
-* Kefir (advanced)
+* React (basics)
+* Kefir (basics)
 
 ## Remarks
 

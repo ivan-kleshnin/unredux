@@ -3,7 +3,8 @@ import * as R from "ramda"
 import React from "react"
 import Loading from "../common/Loading"
 
-export default function PostForm({loading, input, errors}) {
+export default function PostForm({loading, form}) {
+  let {input = {}, errors = {}} = form
   return <form>
     <h1>Edit Post</h1>
     {do {if (loading) {
@@ -50,6 +51,5 @@ export default function PostForm({loading, input, errors}) {
 
 PostForm.propTypes = {
   loading: PT.bool,
-  input: PT.object.isRequired,
-  errors: PT.object.isRequired,
+  form: PT.object,
 }

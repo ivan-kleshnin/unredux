@@ -17,6 +17,10 @@ let timeoutError = (delayMs) =>
   K.later(delayMs, K.constantError(new Error("timeout"))).flatMap()
 
 router.get("/*", (req, res, next) => {
+  /**
+   * Note: simplified. Real-world SSR should happen in a separate Node process and never crash the main server.
+   */
+
   // With SSR --------------------------------------------------------------------------------------
   try {
     // Dynamic imports

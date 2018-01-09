@@ -1,9 +1,9 @@
 import K from "kefir"
+import {isBrowser, isServer} from "kefir.db"
 import React from "react"
 import Route from "route-parser"
 import Url from "url"
-import * as R from "../ramda"
-import {isBrowser, isServer} from "../selfdb"
+import * as R from "@paqmind/ramda"
 import nanoid from "nanoid"
 
 export let fromDOMEvent = (appSelector) => {

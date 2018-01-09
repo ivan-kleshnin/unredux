@@ -1,7 +1,7 @@
+import * as R from "@paqmind/ramda"
 import * as F from "framework"
-import * as R from "ramda"
+import * as D from "kefir.db"
 import React from "react"
-import * as D from "selfdb"
 import aApp from "../counter-a"
 import bApp from "../counter-b"
 import cApp from "../counter-c"
@@ -50,18 +50,18 @@ export default (sources, key) => {
     D.init(seed),
 
     // Counters B* can work without root state
-    b1Sinks.state$.skip(1).map(R.set("b1")),
-    b2Sinks.state$.skip(1).map(R.set("b2")),
+    b1Sinks.state$.skip(1).map(R.set2("b1")),
+    b2Sinks.state$.skip(1).map(R.set2("b2")),
 
     // Counters C* can't work without root state
     c1Sinks.action$,
     c2Sinks.action$,
 
     // Counters D* can't work without root state
-    d1Sinks.intents.inc$.map(_ => R.over("d1", R.inc)),
-    d1Sinks.intents.dec$.map(_ => R.over("d1", R.dec)),
-    d2Sinks.intents.inc$.map(_ => R.over("d2", R.inc)),
-    d2Sinks.intents.dec$.map(_ => R.over("d2", R.dec)),
+    d1Sinks.intents.inc$.map(_ => R.over2("d1", R.inc)),
+    d1Sinks.intents.dec$.map(_ => R.over2("d1", R.dec)),
+    d2Sinks.intents.inc$.map(_ => R.over2("d2", R.inc)),
+    d2Sinks.intents.dec$.map(_ => R.over2("d2", R.dec)),
   ).$
 
   let Component = (props) => {

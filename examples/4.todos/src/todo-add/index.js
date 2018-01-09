@@ -1,7 +1,7 @@
+import * as R from "@paqmind/ramda"
 import * as F from "framework"
 import K from "kefir"
-import * as R from "ramda"
-import * as D from "selfdb"
+import * as D from "kefir.db"
 import * as M from "../models"
 import TodoForm from "./TodoForm"
 
@@ -26,7 +26,7 @@ export default (sources, key) => {
     D.init(seed),
 
     // Updates
-    intents.inputText$.map(text => R.set("text", text)),
+    intents.inputText$.map(text => R.set2("text", text)),
 
     // Resets
     intents.submitForm$.delay(1).map(_ => R.always(seed)),
@@ -34,7 +34,7 @@ export default (sources, key) => {
 
   let action$ = form$.sampledBy(intents.submitForm$).map(form => {
     let todo = M.makeTodo({text: form.text})
-    return R.set(["todos", todo.id], todo)
+    return R.set2(["todos", todo.id], todo)
   })
 
   let Component = F.connect(

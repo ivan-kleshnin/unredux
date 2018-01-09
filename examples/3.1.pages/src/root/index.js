@@ -1,8 +1,8 @@
+import * as R from "@paqmind/ramda"
 import * as F from "framework"
 import K from "kefir"
-import * as R from "ramda"
+import * as D from "kefir.db"
 import React from "react"
-import * as D from "selfdb"
 import Url from "url"
 import Home from "./Home"
 import NotFound from "./NotFound"
@@ -57,8 +57,8 @@ export default (sources, key) => {
     D.init(seed),
 
     // Navigation
-    intents.navigateTo$.map(url => R.fn("navigateTo", R.set("url", url))),
-    intents.navigateHistory$.map(url => R.fn("navigateHistory", R.set("url", url))),
+    intents.navigateTo$.map(url => R.fn("navigateTo", R.set2("url", url))),
+    intents.navigateHistory$.map(url => R.fn("navigateHistory", R.set2("url", url))),
 
     // Content
     contentSinks$.map(x => x.action$).flatMapLatest(),

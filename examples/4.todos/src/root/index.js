@@ -1,8 +1,8 @@
+import * as R from "@paqmind/ramda"
 import * as F from "framework"
 import K from "kefir"
-import * as R from "ramda"
+import * as D from "kefir.db"
 import React from "react"
-import * as D from "selfdb"
 import addApp from "../todo-add"
 import indexApp from "../todo-index"
 

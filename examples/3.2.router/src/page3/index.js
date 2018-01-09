@@ -1,5 +1,5 @@
+import * as R from "@paqmind/ramda"
 import * as F from "framework"
-import * as R from "ramda"
 import K from "kefir"
 import React from "react"
 
@@ -19,8 +19,8 @@ export default F.withLifecycle((sources, key) => {
   })
 
   let action$ = K.merge([
-    intents.inc$.map(_ => R.over("page3", R.inc)),
-    intents.dec$.map(_ => R.over("page3", R.dec)),
+    intents.inc$.map(_ => R.over2("page3", R.inc)),
+    intents.dec$.map(_ => R.over2("page3", R.dec)),
   ])
 
   let Component = F.connect(

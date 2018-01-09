@@ -1,7 +1,7 @@
+import * as R from "@paqmind/ramda"
 import * as F from "framework"
 import K from "kefir"
-import * as R from "ramda"
-import * as D from "selfdb"
+import * as D from "kefir.db"
 import UndoRedo from "./UndoRedo"
 
 export default (sources, key) => {

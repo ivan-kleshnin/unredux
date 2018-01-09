@@ -1,7 +1,7 @@
+import * as R from "@paqmind/ramda"
 import * as F from "framework"
 import K from "kefir"
-import * as R from "ramda"
-import * as D from "selfdb"
+import * as D from "kefir.db"
 import ProductIndex from "./ProductIndex"
 
 export let seed = {
@@ -41,9 +41,9 @@ export default (sources, key) => {
   let action$ = K.merge([
     intents.buy$.map(id => function buy(state) {
       if (id in state.cartPicks) {
-        return R.over(["cartPicks", id], R.inc, state)
+        return R.over2(["cartPicks", id], R.inc, state)
       } else {
-        return R.set(["cartPicks", id], 1, state)
+        return R.set2(["cartPicks", id], 1, state)
       }
     })
   ])

@@ -1,7 +1,7 @@
-import * as R from "ramda"
+import * as R from "@paqmind/ramda"
 import K from "kefir"
+import * as D from "kefir.db"
 import React from "react"
-import * as D from "selfdb"
 import * as F from "framework"
 
 export default (sources, key) => {

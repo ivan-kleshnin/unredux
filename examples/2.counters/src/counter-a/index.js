@@ -1,7 +1,7 @@
+import * as R from "@paqmind/ramda"
 import * as F from "framework"
-import * as R from "ramda"
+import * as D from "kefir.db"
 import React from "react"
-import * as D from "selfdb"
 
 export default (sources, key) => {
   let intents = {

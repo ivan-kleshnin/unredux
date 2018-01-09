@@ -1,5 +1,5 @@
+import * as R from "@paqmind/ramda"
 import * as F from "framework"
-import * as R from "ramda"
 import React from "react"
 
 export default (sources, key) => {

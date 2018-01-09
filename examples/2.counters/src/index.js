@@ -1,5 +1,5 @@
+import * as R from "@paqmind/ramda"
 import K from "kefir"
-import * as R from "ramda"
 import React from "react"
 import ReactDOM from "react-dom"
 import {APP_KEY} from "./meta"
@@ -12,7 +12,7 @@ let sources = {
 }
 
 let sinks = app(
-  R.over("state$", x => x.toProperty(), sources),
+  R.over2("state$", x => x.toProperty(), sources),
   APP_KEY
 )
 

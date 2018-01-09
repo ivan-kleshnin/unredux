@@ -1,5 +1,5 @@
+import * as R from "@paqmind/ramda"
 import * as F from "framework"
-import * as R from "ramda"
 import K from "kefir"
 import React from "react"
 

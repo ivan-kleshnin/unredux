@@ -1,9 +1,9 @@
+import * as R from "@paqmind/ramda"
 import A from "axios"
 import * as F from "framework"
 import K from "kefir"
-import * as R from "ramda"
+import * as D from "kefir.db"
 import React from "react"
-import * as D from "selfdb"
 import productIndex from "../product-index"
 import CartIndex from "./CartIndex"
 
@@ -45,13 +45,13 @@ export default (sources, key) => {
         return K.never()
       })
       .map(products => function afterFetchProducts(state) {
-        return R.set("products", products, state)
+        return R.set2("products", products, state)
       }),
 
     // Cart actions
     intents.cartInc$.map(id => function cartInc(state) {
       if (state.products[id].inventory > state.cartPicks[id]) {
-        return R.over(["cartPicks", id], R.inc, state)
+        return R.over2(["cartPicks", id], R.inc, state)
       } else {
         return state
       }
@@ -59,7 +59,7 @@ export default (sources, key) => {
 
     intents.cartDec$.map(id => function cartDec(state) {
       if (state.cartPicks[id] > 0) {
-        return R.over(["cartPicks", id], R.dec, state)
+        return R.over2(["cartPicks", id], R.dec, state)
       } else {
         return state
       }
@@ -67,17 +67,17 @@ export default (sources, key) => {
 
     intents.cartCheckout$.map(_ => function checkout(state) {
       return R.pipe(
-        R.over("products", (products) => {
+        R.over2("products", (products) => {
           return R.map(product => {
             if (product.id in state.cartPicks) {
               let n = state.cartPicks[product.id]
-              return R.over("inventory", R.flip(R.subtract)(n), product)
+              return R.over2("inventory", R.flip(R.subtract)(n), product)
             } else {
               return product
             }
           }, products)
         }),
-        R.set("cartPicks", {}),
+        R.set2("cartPicks", {}),
       )(state)
     }),
 

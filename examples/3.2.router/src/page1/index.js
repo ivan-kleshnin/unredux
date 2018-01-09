@@ -1,8 +1,8 @@
+import * as R from "@paqmind/ramda"
 import * as F from "framework"
-import * as R from "ramda"
 import K from "kefir"
+import * as D from "kefir.db"
 import React from "react"
-import * as D from "selfdb"
 
 // Decorate app with `F.withLifecycle` to handle lifecycle events declaratively (`sources.Component`)
 export default F.withLifecycle((sources, key) => {

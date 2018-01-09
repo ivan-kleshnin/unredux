@@ -1,7 +1,7 @@
+import * as R from "@paqmind/ramda"
 import * as F from "framework"
 import K from "kefir"
-import * as R from "ramda"
-import * as D from "selfdb"
+import * as D from "kefir.db"
 import * as M from "../models"
 import TodoIndex from "./TodoIndex"
 
@@ -34,7 +34,7 @@ export default (sources, key) => {
       } else if (filter == "active") {
         filterFn = M.isActive
       }
-      return R.set("filterFn", filterFn)
+      return R.set2("filterFn", filterFn)
     }),
   ).$
 
@@ -53,7 +53,7 @@ export default (sources, key) => {
   )
 
   let action$ = K.merge([
-    intents.toggleTodo$.map(id => R.over(["todos", id, "completed"], R.not)),
+    intents.toggleTodo$.map(id => R.over2(["todos", id, "completed"], R.not)),
   ])
 
   let Component = F.connect(

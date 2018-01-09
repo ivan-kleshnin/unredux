@@ -17,5 +17,5 @@ export default function PostDetail({loading, post}) {
 
 PostDetail.propTypes = {
   loading: PT.bool,
-  post: PT.object.isRequired,
+  post: PT.object,
 }

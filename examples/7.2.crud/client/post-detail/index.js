@@ -31,10 +31,8 @@ export default (sources, key) => {
     fetchEnd$
       .thru(B.postFetchModel(baseLens)),
 
-    // ...D.isServer ? [
-      fetchStart$.map(_ => R.set(["_loading", key], true)),
-      fetchEnd$.delay(1).map(_ => R.set(["_loading", key], false)),
-    // ] : []
+    fetchStart$.map(_ => R.set(["_loading", key], true)),
+    fetchEnd$.delay(1).map(_ => R.set(["_loading", key], false)),
   ])
 
   return {Component, action$}

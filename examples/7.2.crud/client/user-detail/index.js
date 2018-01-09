@@ -6,11 +6,6 @@ import React from "react"
 import * as B from "../blueprints"
 import UserDetail from "./UserDetail"
 
-// SEED
-export let seed = {
-  _loading: false,
-}
-
 export default (sources, key) => {
   let {params} = sources.props
   let baseLens = ["users", params.id]
@@ -36,10 +31,8 @@ export default (sources, key) => {
     fetchEnd$
       .thru(B.postFetchModel(baseLens)),
 
-    // ...D.isServer ? [
-      fetchStart$.map(_ => R.set(["_loading", key], true)),
-      fetchEnd$.delay(1).map(_ => R.set(["_loading", key], false)),
-    // ] : []
+    fetchStart$.map(_ => R.set(["_loading", key], true)),
+    fetchEnd$.delay(1).map(_ => R.set(["_loading", key], false)),
   ])
 
   return {Component, action$}

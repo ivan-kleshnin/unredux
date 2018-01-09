@@ -121,11 +121,6 @@ export default (sources, key) => {
         return {input, errors}
       }
     }),
-
-    D.ifBrowser(
-      fetchStart$.filter(R.isNotEmpty).map(_ => R.set(["_loading"], true)),
-      fetchEnd$.filter(R.isNotEmpty).delay(1).map(_ => R.set(["_loading"], false)),
-    ),
   ).$
 
   // COMPONENT
@@ -142,10 +137,8 @@ export default (sources, key) => {
     fetchEnd$
       .thru(B.postFetchModel(baseLens)),
 
-    // ...D.isServer ? [
-      fetchStart$.map(_ => R.set(["_loading", key], true)),
-      fetchEnd$.delay(1).map(_ => R.set(["_loading", key], false)),
-    // ] : [],
+    fetchStart$.map(_ => R.set(["_loading", key], true)),
+    fetchEnd$.delay(1).map(_ => R.set(["_loading", key], false)),
 
     form$.sampledBy(intents.submit$).flatMapConcat(form => {
       let postForm

@@ -7,41 +7,35 @@ let head = () => `
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"/>
   </head>`
 
-export let layout200 = ({appHTML, state}) => {
-  return `
-    <!DOCTYPE html>
-    <html lang="en">
-      ${head()}
-      <body>
-        <div id="root">${appHTML}</div>
-        <script id="rootState">
-          window.state = ${JSON.stringify(state, null, 2)}
-        </script>
-        <script src="/public/bundle.js"></script>
-      </body>
-    </html>`
-}
+export let layout200 = ({appKey, appHTML, state}) => `
+  <!DOCTYPE html>
+  <html lang="en">
+    ${head()}
+    <body>
+      <div id="${appKey}">${appHTML}</div>
+      <script id="rootState">
+        window["${appKey}"].state = ${JSON.stringify(state, null, 2)}
+      </script>
+      <script src="/public/bundle.js"></script>
+    </body>
+  </html>`
 
-export let layout404 = () => {
-  return `
-    <!DOCTYPE html>
-    <html lang="en">
-      ${head()}
-      <body>
-        <h1>Not Found</h1>
-        <div>Page not found</div>
-      </body>
-    </html>`
-}
+export let layout404 = () => `
+  <!DOCTYPE html>
+  <html lang="en">
+    ${head()}
+    <body>
+      <h1>Not Found</h1>
+      <div>Page not found</div>
+    </body>
+  </html>`
 
-export let layout500 = (err) => {
-  return `
-    <!DOCTYPE html>
-    <html lang="en">
-      ${head()}
-      <body>
-        <h1>Server Error</h1>
-        <div>${err.message}</div>
-      </body>
-    </html>`
-}
+export let layout500 = (err) => `
+  <!DOCTYPE html>
+  <html lang="en">
+    ${head()}
+    <body>
+      <h1>Server Error</h1>
+      <div>${err.message}</div>
+    </body>
+  </html>`

@@ -4,6 +4,7 @@ import * as D from "selfdb"
 import * as R from "ramda"
 import React from "react"
 import {makeFilterFn, makeSortFn} from "common/home"
+import {appKey} from "../meta"
 import * as B from "../blueprints"
 import PostIndex from "./PostIndex"
 
@@ -18,7 +19,6 @@ export let seed = {
     publishDateTo: "",
   },
   sort: "+id",
-  _loading: false,
 }
 
 export default (sources, key) => {
@@ -51,15 +51,18 @@ export default (sources, key) => {
   }
 
   // FETCH
-  let fetchStart$ = B
-    .prefetchIds(baseLens)
-    .flatMapConcat(requiredIds => {
-      return sources.state$.take(1).map(R.view(baseLens)).map(presentIds => {
-        return R.difference(requiredIds, presentIds)
-      })
-    })
+  let fetchStart$ = do {
+    if (D.isBrowser && key in window[appKey].state._loading) { // If there was SSR, skip,
+      delete window[appKey].state._loading[key]                // but only once.
+      K.never()
+    } else {
+      K.constant(true)
+    }
+  }
 
   let fetchEnd$ = fetchStart$
+    .thru(B.fetchIds(baseLens))
+    .thru(B.postFetchIds(baseLens, sources.state$))
     .thru(B.fetchModels(baseLens))
 
   // STATE
@@ -77,11 +80,6 @@ export default (sources, key) => {
     intents.changeFilterPublishDateTo$.map(x => R.set(["filters", "publishDateTo"], x)),
 
     intents.changeSort$.map(x => R.set("sort", x)),
-
-    // D.ifBrowser(
-    //   fetchStart$.filter(R.isNotEmpty).map(_ => R.set(["_loading"], true)),
-    //   fetchEnd$.filter(R.isNotEmpty).delay(1).map(_ => R.set(["_loading"], false)),
-    // ),
   ).$
 
   let posts$ = D.derive(
@@ -115,10 +113,8 @@ export default (sources, key) => {
     fetchEnd$
       .thru(B.postFetchModels(baseLens)),
 
-    // ...D.isServer ? [
-      fetchStart$.map(_ => R.set(["_loading", key], true)),
-      fetchEnd$.delay(1).map(_ => R.set(["_loading", key], false)),
-    // ] : []
+    fetchStart$.map(_ => R.set(["_loading", key], true)),
+    fetchEnd$.delay(1).map(_ => R.set(["_loading", key], false)),
   ])
 
   return {Component, action$}

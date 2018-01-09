@@ -26,7 +26,7 @@ export default (sources, key) => {
     .deriveOne(sources.state$, ["url"])
     .map(url => {
       let {mask, params, payload: app} = router.doroute(url)
-      app = F.isolate(app, key + mask.replace(/^\//, "."), ["DOM", "Component"])
+      app = F.isolate(app, key + mask, ["DOM", "Component"])
       let sinks = app({...sources, props: {mask, params, router}})
       return R.merge({action$: K.never()}, sinks)
     })

@@ -44,8 +44,8 @@ let configs = {
   resolve: {
     modules: [
       Path.resolve(__dirname, "node_modules"),
-      Path.resolve(Path.resolve(__dirname, "../../vendors")),
-      Path.resolve(Path.resolve(__dirname, "../../node_modules")),
+      Path.resolve(__dirname, "../../vendors"),
+      Path.resolve(__dirname, "../../node_modules"),
     ],
   },
   plugins: [

@@ -16,6 +16,7 @@
     "kefir": "git+https://github.com/ivan-kleshnin/kefir.git",
     "kefir.db": "^0.1.1",
     "nanoid": "^1.0.1",
+    "pathz": "^0.9.0",
     "prop-types": "^15.6.0",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
@@ -24,6 +25,7 @@
     "source-map-support": "^0.5.0",
     "tcomb": "^3.2.24",
     "tcomb-validation": "^3.4.1",
+    "urlz": "^0.3.0",
     "webpack": "^3.8.1"
   },
   "babel": {

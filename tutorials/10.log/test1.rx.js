@@ -2,8 +2,8 @@
 
 import A from "assert"
 import {Observable as O} from "rxjs"
-import * as R from "../../vendors/ramda"
-import * as D from "../../vendors/selfdb"
+import * as R from "@paqmind/ramda"
+import * as D from "kefir.db"
 
 let seed = {counter: 0}
 

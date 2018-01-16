@@ -1,7 +1,7 @@
 import A from "axios"
 import BodyParser from "body-parser"
 import Cors from "cors"
-import Path from "path"
+import P from "pathz"
 import Express, {unless} from "./express"
 import mocksRoutes from "./mocks"
 import apiPostsRoutes from "./api/posts"
@@ -30,7 +30,7 @@ app.use(BodyParser.json({
 }))
 
 // STATIC
-app.use("/public", Express.static(Path.resolve(__dirname, "../public")))
+app.use("/public", Express.static(P.resolve(__dirname, "../public")))
 
 // MOCKS
 app.use("/mocks", mocksRoutes)

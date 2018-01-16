@@ -17,6 +17,7 @@ export let seed = {
 }
 
 export default (sources, key) => {
+  // ROUTING
   let contentSinks$ = D.deriveOne(
     sources.state$.map(s => s.url),
     (url) => {
@@ -36,6 +37,7 @@ export default (sources, key) => {
     }
   )
 
+  // INTENTS
   let intents = {
     navigateTo$: sources.DOM.from("a").listen("click")
       .map(ee => (ee.event.preventDefault(), ee))
@@ -61,7 +63,7 @@ export default (sources, key) => {
     intents.navigateHistory$.map(url => R.fn("navigateHistory", R.set2("url", url))),
 
     // Content
-    contentSinks$.map(x => x.action$).flatMapLatest(),
+    contentSinks$.flatMapLatest(x => x.action$),
   ).$
 
   let Component = F.connect(

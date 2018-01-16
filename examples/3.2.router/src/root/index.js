@@ -3,7 +3,7 @@ import * as F from "framework"
 import K from "kefir"
 import * as D from "kefir.db"
 import React from "react"
-import Url from "url"
+import U from "urlz"
 import router from "../router"
 
 export let seed = {
@@ -13,34 +13,44 @@ export let seed = {
 }
 
 export default (sources, key) => {
-  let contentSinks$ = D.deriveOne(
-    sources.state$.map(s => s.url),
-    (url) => {
+  // ROUTING
+  let contentSinks$ = D
+    .deriveOne(sources.state$, ["url"])
+    .map(url => {
+      url = U.pathname(url)
       let {mask, params, payload: app} = router.doroute(url)
-      app = F.isolate(app, key + mask.replace(/^\//, "."), ["DOM", "Component"])
+      app = F.isolate(app, key + mask, ["DOM", "Component"])
       let sinks = app({...sources, props: {mask, params, router}})
       return R.merge({action$: K.never()}, sinks)
-    }
-  )
+    })
 
+  // INTENTS
   let intents = {
     navigateTo$: sources.DOM.from("a").listen("click")
-      .map(ee => (ee.event.preventDefault(), ee))
-      .map(ee => ee.element.href)
-      .map(url => {
-        url = Url.parse(url).pathname
-        window.history.pushState({}, "", url)
-        return url
+      .flatMapConcat(ee => {
+        let urlObj = U.parse(ee.element.href)
+        if (urlObj.protocol && urlObj.host != document.location.host) {
+          // External link
+          return K.never()
+        } else {
+          // Internal link
+          ee.event.preventDefault()
+          window.history.pushState({}, "", urlObj.relHref)
+          window.scrollTo(0, 0)
+          return K.constant(urlObj.relHref)
+        }
       }),
 
     navigateHistory$: K.fromEvents(window, "popstate")
-      .map(data => document.location.pathname)
+      .map(data => U.relHref(document.location.href)),
   }
 
+  // STATE
   let state$ = D.run(
     () => D.makeStore({}),
     D.withLog({key}),
   )(
+    // Init
     D.init(seed),
 
     // Navigation
@@ -48,7 +58,7 @@ export default (sources, key) => {
     intents.navigateHistory$.map(url => R.fn("navigateHistory", R.set2("url", url))),
 
     // Content
-    contentSinks$.map(x => x.action$).flatMapLatest(),
+    contentSinks$.flatMapLatest(x => x.action$),
   ).$
 
   let Component = F.connect(
@@ -64,11 +74,13 @@ export default (sources, key) => {
         <p>
           <a href="/">Home</a>
           {" "}
-          <a href="/page1">Page 1</a>
+          <a href="/page1#foo">Page 1</a>
           {" "}
-          <a href="/page2">Page 2</a>
+          <a href="/page2?x=X">Page 2</a>
           {" "}
-          <a href="/page3">Page 3</a>
+          <a href="/page3?x=X#foo">Page 3</a>
+          {" "}
+          <a href="https://github.com">GitHub.com</a>
           {" "}
           <a href="/not-found">Not Found</a>
         </p>

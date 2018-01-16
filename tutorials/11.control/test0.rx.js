@@ -1,8 +1,8 @@
 // TODO port to Kefir
 
 import {Observable as O} from "rxjs"
-import * as R from "../../vendors/ramda"
-import * as D from "../../vendors/selfdb"
+import * as R from "@paqmind/ramda"
+import * as D from "kefir.db"
 
 let seed = {x1: 0, x2: 0}
 

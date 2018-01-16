@@ -5,13 +5,11 @@ import Loading from "../common/Loading"
 export default function UserDetail({loading, user}) {
   return <div>
     <h1>User Detail</h1>
-    {do {if (loading) {
-      <Loading/>
-    } else {
-      <pre>
+    {loading
+      ? <Loading/>
+      : <pre>
         {JSON.stringify(user, null, 2)}
-      </pre>
-    }}}
+      </pre>}
   </div>
 }
 

@@ -5,13 +5,11 @@ import Loading from "../common/Loading"
 export default function PostDetail({loading, post}) {
   return <div>
     <h1>Post Detail</h1>
-    {do {if (loading) {
-      <Loading/>
-    } else {
-      <pre>
+    {loading
+      ? <Loading/>
+      : <pre>
         {JSON.stringify(post, null, 2)}
-      </pre>
-    }}}
+      </pre>}
   </div>
 }
 

@@ -7,10 +7,9 @@ export default function PostForm({loading, form}) {
   let {input = {}, errors = {}} = form
   return <form>
     <h1>Edit Post</h1>
-    {do {if (loading) {
-      <Loading/>
-    } else {
-      <div>
+    {loading
+      ? <Loading/>
+      : <div>
         <div>
           <div>{errors.title}</div>
           <label>
@@ -44,8 +43,7 @@ export default function PostForm({loading, form}) {
         </div>
 
         <button type="submit">Submit</button>
-      </div>
-    }}}
+      </div>}
   </form>
 }
 

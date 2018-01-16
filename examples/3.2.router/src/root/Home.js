@@ -1,4 +1,5 @@
 import React from "react"
 
-export default (props) =>
-  <div>The beginning...</div>
+export default function Home(props) {
+  return <div>The beginning...</div>
+}

@@ -10,6 +10,7 @@ import page1App from "../page1"
 import page2App from "../page2"
 import page3App from "../page3"
 
+// SEED
 export let seed = {
   url: document.location.pathname,
   // page1, page2 use their own states (for the sake of demonstration)
@@ -52,10 +53,12 @@ export default (sources, key) => {
       .map(data => document.location.pathname)
   }
 
+  // STATE
   let state$ = D.run(
     () => D.makeStore({}),
     D.withLog({key}),
   )(
+    // Init
     D.init(seed),
 
     // Navigation
@@ -66,6 +69,7 @@ export default (sources, key) => {
     contentSinks$.flatMapLatest(x => x.action$),
   ).$
 
+  // COMPONENT
   let Component = F.connect(
     {
       url: D.deriveOne(state$, ["url"]),

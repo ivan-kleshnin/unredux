@@ -6,6 +6,7 @@ import React from "react"
 import U from "urlz"
 import router from "../router"
 
+// SEED
 export let seed = {
   url: document.location.pathname,
   // page1, page2 use their own states (for the sake of demonstration)
@@ -31,24 +32,32 @@ export default (sources, key) => {
         let urlObj = U.parse(ee.element.href)
         if (urlObj.protocol && urlObj.host != document.location.host) {
           // External link
+          console.log("! external link")
           return K.never()
         } else {
-          // Internal link
-          ee.event.preventDefault()
+          // App link
+          if (urlObj.pathname == document.location.pathname) {
+            // Anchor link
+            console.log("! anchor link")
+          } else {
+            // Page link
+            console.log("! page link")
+            ee.event.preventDefault()
+            window.scrollTo(0, 0)
+          }
           window.history.pushState({}, "", urlObj.relHref)
-          window.scrollTo(0, 0)
           return K.constant(urlObj.relHref)
         }
       }),
 
     navigateHistory$: K.fromEvents(window, "popstate")
-      .map(data => U.relHref(document.location.href)),
+      .map(data => U.relHref(document.location.href)), // TODO scroll to hash (how?!)
   }
 
   // STATE
   let state$ = D.run(
     () => D.makeStore({}),
-    D.withLog({key}),
+    // D.withLog({key}),
   )(
     // Init
     D.init(seed),
@@ -61,6 +70,7 @@ export default (sources, key) => {
     contentSinks$.flatMapLatest(x => x.action$),
   ).$
 
+  // COMPONENT
   let Component = F.connect(
     {
       url: D.deriveOne(state$, ["url"]),

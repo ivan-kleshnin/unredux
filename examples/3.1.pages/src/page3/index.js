@@ -3,12 +3,20 @@ import * as F from "framework"
 import K from "kefir"
 import React from "react"
 
-export default (sources, key) => {
+// Decorate app with `F.withLifecycle` to handle lifecycle events declaratively (`sources.Component`)
+export default F.withLifecycle((sources, key) => {
   let intents = {
     // unsubscribed on state unsubscribe which happens on willUnmount
     inc$: sources.DOM.fromKey("inc").listen("click").map(R.always(true)),
     dec$: sources.DOM.fromKey("dec").listen("click").map(R.always(true)),
   }
+
+  sources.Component.willMount$.take(1).observe(() => {
+    console.log("Page3.app: Component.willMount$")
+  })
+  sources.Component.willUnmount$.take(1).observe(() => {
+    console.log("Page3.app: Component.willUnmount$")
+  })
 
   let action$ = K.merge([
     intents.inc$.map(_ => R.inc),
@@ -25,4 +33,4 @@ export default (sources, key) => {
   )
 
   return {action$, Component}
-}
+})

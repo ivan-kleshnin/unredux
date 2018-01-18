@@ -3,7 +3,7 @@ import * as F from "framework"
 import K from "kefir"
 import * as D from "kefir.db"
 import React from "react"
-import Url from "url"
+import U from "urlz"
 import MainMenu from "../common/MainMenu"
 import router from "../router"
 
@@ -25,6 +25,7 @@ export default (sources, key) => {
   let contentSinks$ = D
     .deriveOne(sources.state$, ["url"])
     .map(url => {
+      url = U.pathname(url)
       let {mask, params, payload: app} = router.doroute(url)
       app = F.isolate(app, key + mask, ["DOM", "Component"])
       let sinks = app({...sources, props: {mask, params, router}})
@@ -34,17 +35,29 @@ export default (sources, key) => {
   // INTENTS
   let intents = {
     navigateTo$: sources.DOM.from("a").listen("click")
-      .map(ee => (ee.event.preventDefault(), ee))
-      .map(ee => ee.element.href)
-      .map(url => {
-        url = Url.parse(url).pathname
-        window.history.pushState({}, "", url)
-        return url
+      .flatMapConcat(ee => {
+        let urlObj = U.parse(ee.element.href)
+        if (urlObj.protocol && urlObj.host != document.location.host) {
+          // External link
+          return K.never()
+        } else {
+          // App link
+          if (urlObj.pathname == document.location.pathname) {
+            // Anchor link
+            // do nothing
+          } else {
+            // Page link
+            ee.event.preventDefault()
+            window.scrollTo(0, 0)
+          }
+          window.history.pushState({}, "", urlObj.relHref)
+          return K.constant(urlObj.relHref)
+        }
       }),
 
     navigateHistory$: D.isBrowser
       ? K.fromEvents(window, "popstate")
-          .map(data => document.location.pathname)
+          .map(data => U.relHref(document.location.href)) // TODO scroll to hash (how?!)
       : K.never()
   }
 

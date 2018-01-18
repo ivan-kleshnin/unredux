@@ -4,24 +4,16 @@ import K from "kefir"
 import * as D from "kefir.db"
 import React from "react"
 
-// Decorate app with `F.withLifecycle` to handle lifecycle events declaratively (`sources.Component`)
-export default F.withLifecycle((sources, key) => {
+export default (sources, key) => {
   let intents = {
     // unsubscribed on state unsubscribe which happens on willUnmount
     inc$: sources.DOM.fromKey("inc").listen("click").map(R.always(true)),
     dec$: sources.DOM.fromKey("dec").listen("click").map(R.always(true)),
   }
 
-  sources.Component.willMount$.take(1).observe(() => {
-    console.log("Page1.app: Component.willMount$")
-  })
-  sources.Component.willUnmount$.take(1).observe(() => {
-    console.log("Page1.app: Component.willUnmount$")
-  })
-
   let state$ = D.run(
     () => D.makeStore({}),
-    D.withLog({key}),
+    // D.withLog({key}),
     D.withMemoryPersistence({key}),
   )(
     D.init(0),
@@ -39,4 +31,4 @@ export default F.withLifecycle((sources, key) => {
   )
 
   return {Component}
-})
+}

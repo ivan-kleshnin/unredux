@@ -12,7 +12,7 @@ export let seed = {
   // DOCUMENT
   url: "",
 
-  // TABLES
+  // DATA
   posts: {},
   users: {},
 

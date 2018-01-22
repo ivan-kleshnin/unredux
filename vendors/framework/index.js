@@ -1,9 +1,9 @@
+import * as R from "@paqmind/ramda"
 import K from "kefir"
-import {isBrowser, isServer} from "kefir.db"
+import * as D from "kefir.db"
 import React from "react"
 import Route from "route-parser"
-import Url from "url"
-import * as R from "@paqmind/ramda"
+import U from "urlz"
 import nanoid from "nanoid"
 
 export let fromDOMEvent = (appSelector) => {
@@ -26,7 +26,7 @@ export let fromDOMEvent = (appSelector) => {
         }
       },
       listen: (eventName, options={}) => {
-        if (isBrowser) {
+        if (D.isBrowser) {
           return K.fromEvents(document.querySelector(appSelector), eventName) // , options TODO
           .throttle(10)
           .flatten(event => {
@@ -65,8 +65,25 @@ export let connect = (streamsToProps, ComponentToWrap) => {
       let props$ = K.combine(streamsToProps)
         .throttle(10, {leading: false, trailing: true})
 
-      if (isServer)
+      if (D.isServer) {
+        /**
+         * componentWillMount should be triggered after the state is formed so `props$ = props$.take(1)`
+         * doesn't limit client to have only 1 state update. Example SSR usage:
+         *
+         * sinks.state$
+         *   .throttle(10)
+         *   .skipDuplicates(R.equals)
+         *   .skipWhile(s => R.any(Boolean, R.values(s._loading))) // !!! consumes N events
+         *   .merge(timeoutError(500))
+         *   .take(1)       // !!! !consume a single event
+         *   .takeErrors(1) // ^^^
+         *   .observe(state => {
+         *    let appHTML = ReactDOMServer.renderToString(<sinks.Component/>) // !!! initiates componentWillMount
+         *     res.send(layout200({appKey, appHTML, state, project}))
+         *   })
+         */
         props$ = props$.take(1)
+      }
 
       this.sb = props$.observe(data => {
         this.setState(data)
@@ -195,7 +212,7 @@ export let makeRouter = (routes) => {
 
   // doroute :: String -> {mask :: String, params :: Object, payload :: any)
   let doroute = (url) => {
-    url = Url.parse(url).pathname
+    url = U.pathname(url)
     for (let [route, payload] of routes) {
       let match = route.match(url)
       if (match) {

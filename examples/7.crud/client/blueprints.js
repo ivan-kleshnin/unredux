@@ -3,6 +3,57 @@ import A from "axios"
 import K from "kefir"
 
 // HTTP and stuff //////////////////////////////////////////////////////////////////////////////////
+let loadingBP = BP.modelLoading(key, baseLens)
+let fetch = loadingBP.makeFetch(sources)
+let actions = loadingBP.makeActions(fetch)
+
+export let modelLoading = (key, modelLens) => {
+  let makeFetch = (sources) => {
+    let fetch = {}
+    fetch.start$ = sources.state$
+      .map(s => {
+        let model = R.view2(modelLens, s) || {}
+        return {
+          needModel: R.isEmpty(foo),
+        }
+      })
+      .filter(anyObj)
+      .skipDuplicates(R.equals)
+
+    fetch.end$ = fetch.start$
+      .flatMapConcat(({needFoo, needBar, needBaz}) => {
+        return K.fromPromiseObj({
+          maybeFoo: needFoo
+            ? A.get(`/api/${modelLens[0]}/${modelLens[1]}/`).then(resp => resp.data.models[baseLens[1]]).catch(R.id)
+            : Promise.resolve(null),
+        })
+      })
+    return fetch
+  }
+
+  let makeActions = (fetch) => {
+    return [
+      fetch.end$.map(({maybeModel}) => {
+        return function afterGET(state) {
+          return R.pipe(
+            maybeModel == null || maybeModel instanceof Error
+              ? R.id
+              : R.set2(fooLens, maybeFoo),
+          )(state)
+        }
+      }),
+
+      fetch.start$.map(R.K(R.set2(loadingLens, true))),
+      fetch.end$.delay(1).map(R.K(R.set2(loadingLens, false))),
+    ]
+  }
+
+  return {
+    makeIntents,
+    makeActions
+  }
+}
+
 
 export let fetchIds = (baseLens) => $ => {
   return $.flatMapConcat(_ => K

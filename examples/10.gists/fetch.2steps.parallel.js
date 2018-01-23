@@ -16,23 +16,19 @@
  */
 
 function Promise_allObj(obj) {
-  let keys = R.keys(obj)
-  let resolveP, rejectP
-  let rs = []
-  for (let k of keys) {
-    let p = obj[k]
-    p
-      .catch(rejectP)
-      .then(v => {
-        rs.push([k, v])
-        if (rs.length == keys.length) {
-          resolveP(R.fromPairs(rs))
-        }
-    })
-  }
   return new Promise((resolve, reject) => {
-    resolveP = resolve
-    rejectP = reject
+    let rs = {}
+    let keys = R.keys(obj)
+    for (let k of keys) {
+      obj[k]
+        .catch(reject)
+        .then(v => {
+          rs.push([k, v])
+          if (rs.length == keys.length) {
+            resolve(R.fromPairs(rs))
+          }
+      })
+    }
   })
 }
 

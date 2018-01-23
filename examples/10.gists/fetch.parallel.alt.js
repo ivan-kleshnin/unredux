@@ -13,16 +13,16 @@ let fetchStart = {
 
 let fetchEnd = {
   foo$: fetchStart.foo$
-    .flatMapConcat(needFoo => {
-      return K.fromPromise(needFoo
+    .flatMapConcat(need => {
+      return K.fromPromise(need
         ? A.get(`???`).then(resp => resp["???"]).catch(R.id)
         : nullP
       )
     }),
 
   bar$: fetchStart.bar$
-    .flatMapConcat(needBar => {
-      return K.fromPromise(needBar
+    .flatMapConcat(need => {
+      return K.fromPromise(need
         ? A.get(`???`).then(resp => resp["???"]).catch(R.id)
         : nullP
       )
@@ -30,26 +30,26 @@ let fetchEnd = {
 }
 
 // ACTIONS
-fetchEnd.foo$.map(maybeFoo => {
+fetchEnd.foo$.map(data => {
   return function afterGET(state) {
-    return maybeFoo == null || maybeFoo instanceof Error
+    return data == null || data instanceof Error
       ? state
-      : R.set2(fooLens, maybeFoo, state)
+      : R.set2(fooLens, data, state)
   }
 })
 
-fetchEnd.bar$.map(maybeBar => {
+fetchEnd.bar$.map(data => {
   return function afterGET(state) {
-    return maybeBar == null || maybeBar instanceof Error
+    return data == null || data instanceof Error
       ? state
-      : R.set2(barLens, maybeBar, state)
+      : R.set2(barLens, data, state)
   }
 })
 
 let actions$ = K.merge([
   K.constant(R.set2(loadingLens, 0)),
-  R.merge(R.values(fetchStart)).map(R.K(R.over2(loadingLens, R.inc))),
-  R.merge(R.values(fetchEnd)).delay(1).map(R.K(R.over2(loadingLens, R.dec))),
+  K.merge(R.values(fetchStart)).map(R.K(R.over2(loadingLens, R.inc))),
+  K.merge(R.values(fetchEnd)).delay(1).map(R.K(R.over2(loadingLens, R.dec))),
 ])
 
 // state._loading.appName = 0

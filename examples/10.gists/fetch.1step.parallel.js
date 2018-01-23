@@ -22,9 +22,7 @@ function Promise_allObj(obj) {
   for (let k of keys) {
     let p = obj[k]
     p
-      .catch(e => {
-        rejectP(e)
-      })
+      .catch(rejectP)
       .then(v => {
         rs.push([k, v])
         if (rs.length == keys.length) {

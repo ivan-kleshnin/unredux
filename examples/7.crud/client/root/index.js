@@ -25,7 +25,6 @@ export default (sources, key) => {
   let contentSinks$ = D
     .deriveOne(sources.state$, ["url"])
     .map(url => {
-      url = U.pathname(url)
       let {mask, params, payload: app} = router.doroute(url)
       app = F.isolate(app, key + mask, ["DOM", "Component"])
       let sinks = app({...sources, props: {mask, params, router}})
@@ -35,20 +34,21 @@ export default (sources, key) => {
   // INTENTS
   let intents = {
     navigateTo$: sources.DOM.from("a").listen("click")
+      .filter(ee => !ee.element.dataset.ui)
       .flatMapConcat(ee => {
         let urlObj = U.parse(ee.element.href)
         if (urlObj.protocol && urlObj.host != document.location.host) {
           // External link
           return K.never()
         } else {
-          // App link
-          if (urlObj.pathname == document.location.pathname) {
+          // Internal link
+          if (urlObj.pathname == document.location.pathname && urlObj.hash) {
             // Anchor link
-            // do nothing
+            // do nothing, rely on default browser behavior
           } else {
-            // Page link
-            ee.event.preventDefault()
-            window.scrollTo(0, 0)
+            // Page link or Reset-Anchor link (foo#hash -> foo)
+            ee.event.preventDefault() // take control on browser
+            window.scrollTo(0, 0)     //
           }
           window.history.pushState({}, "", urlObj.relHref)
           return K.constant(urlObj.relHref)

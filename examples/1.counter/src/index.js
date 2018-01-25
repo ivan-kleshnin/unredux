@@ -1,8 +1,9 @@
+import * as F from "framework"
 import K from "kefir"
 import React from "react"
 import ReactDOM from "react-dom"
+import "shims"
 import {APP_KEY} from "./meta"
-import * as F from "framework"
 import app from "./root"
 
 let sources = {

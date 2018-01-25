@@ -1,4 +1,5 @@
 import * as R from "@paqmind/ramda"
+import A from "axios"
 import * as F from "framework"
 import K from "kefir"
 import * as D from "kefir.db"
@@ -46,8 +47,10 @@ export default (sources, key) => {
     () => D.makeStore({}),
     // D.withLog({key}),
   )(
+    // Init
     D.init(seed),
 
+    // Form
     intents.changeTitle$.map(x => R.set2(["input", "title"], x)),
     intents.changeTitle$.debounce(200).map(x => {
       let res = validate(x, T.PostForm.meta.props.title)
@@ -80,19 +83,21 @@ export default (sources, key) => {
         : R.set2(["errors", "isPublished"], res.firstError().message)
     }),
 
-    // Resets
-    intents.submit$.delay(1).map(_ => (form) => {
-      let res = validate(form.input, T.PostForm)
-      if (res.isValid()) {
-        return seed
-      } else {
-        let errors = R.reduce((z, key) => {
-          let e = R.find(e => R.equals(e.path, [key]), res.errors)
-          return e ? R.set2(key, e.message, z) : z
-        }, {}, R.keys(form.input))
-        return R.set2("errors", errors, form)
-      }
-    }),
+    // Reset on submit
+    intents.submit$
+      .delay(1)
+      .map(_ => ({input}) => {
+        let res = validate(input, T.PostForm)
+        if (res.isValid()) {
+          return seed
+        } else {
+          let errors = R.reduce((z, key) => {
+            let e = R.find(e => R.equals(e.path, [key]), res.errors)
+            return e ? R.set2(key, e.message, z) : z
+          }, {}, R.keys(input))
+          return {input, errors}
+        }
+      }),
   ).$
 
   // COMPONENT
@@ -104,19 +109,29 @@ export default (sources, key) => {
       <PostForm input={form.input} errors={form.errors}/>
   )
 
-  // ACTION (external)
+  // ACTION
   let action$ = K.merge([
-    form$.sampledBy(intents.submit$).flatMapConcat(form => {
-      let postForm
-      try {
-        postForm = T.PostForm(form.input)
-      } catch (e) {
-        return K.never()
-      }
-      return K.constant(postForm)
-    })
-    .thru(B.createModel(baseLens))
-    .thru(B.postCreateModel(baseLens))
+    form$
+      .sampledBy(intents.submit$)
+      .flatMapConcat(form => {
+        let postForm
+        try {
+          postForm = T.PostForm(form.input)
+        } catch (e) {
+          return K.never()
+        }
+        return K.constant(postForm)
+      })
+      .flatMapConcat(form => K.fromPromise(
+        A.post(`/api/${baseLens[0]}/`, form)
+         .then(resp => resp.data.model)
+         .catch(R.id)
+      ))
+      .map(maybeModel => function afterPOST(state) {
+        return maybeModel instanceof Error
+          ? state
+          : R.set2([...baseLens, maybeModel.id], maybeModel, state)
+      }),
   ])
 
   return {Component, action$}

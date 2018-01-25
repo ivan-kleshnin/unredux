@@ -100,8 +100,8 @@ export default function PostIndex({loading, index, posts}) {
 }
 
 PostIndex.propTypes = {
-  loading: PT.bool,
-  index: PT.object.isRequired,
-  posts: PT.arrayOf(PostItem.propTypes.post).isRequired,
+  loading: PT.bool.isRequired,
+  index: PT.object,
+  posts: PT.arrayOf(PostItem.propTypes.post),
 }
 

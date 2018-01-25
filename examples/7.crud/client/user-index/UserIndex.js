@@ -86,8 +86,8 @@ export default function UserIndex({loading, index, users}) {
 }
 
 UserIndex.propTypes = {
-  loading: PT.bool,
-  index: PT.object.isRequired,
-  users: PT.arrayOf(UserItem.propTypes.user).isRequired,
+  loading: PT.bool.isRequired,
+  index: PT.object,
+  users: PT.arrayOf(UserItem.propTypes.user),
 }
 

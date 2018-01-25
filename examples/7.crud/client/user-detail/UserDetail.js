@@ -14,6 +14,6 @@ export default function UserDetail({loading, user}) {
 }
 
 UserDetail.propTypes = {
-  loading: PT.bool,
+  loading: PT.bool.isRequired,
   user: PT.object,
 }

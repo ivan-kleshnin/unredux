@@ -1,4 +1,5 @@
 import * as R from "@paqmind/ramda"
+import A from "axios"
 import * as F from "framework"
 import K from "kefir"
 import * as D from "kefir.db"
@@ -9,30 +10,48 @@ import UserDetail from "./UserDetail"
 export default (sources, key) => {
   let {params} = sources.props
   let baseLens = ["users", params.id]
+  let loadingLens = ["_loading", key]
 
-  // FETCH
-  let fetchStart$ = sources.state$
-    .filter(s => !R.view2(baseLens, s))
+  let loading$ = D.deriveOne(sources.state$, loadingLens).map(Boolean)
+  let user$ = D.deriveOne(sources.state$, baseLens)
 
-  let fetchEnd$ = fetchStart$
-    .thru(B.fetchModel(baseLens))
+  // INTENTS
+  let intents = {
+    fetch: {
+      base$: user$.filter(R.not),
+    }
+  }
+
+  // FETCHES
+  let fetches = {
+    base$: intents.fetch.base$
+      .flatMapConcat(_ => K.fromPromise(
+        A.get(`/api/${baseLens[0]}/${baseLens[1]}/`)
+         .then(resp => resp.data.models[baseLens[1]])
+         .catch(R.id)
+      )),
+  }
 
   // COMPONENT
   let Component = F.connect(
     {
-      loading: D.deriveOne(sources.state$, ["_loading", key]),
-      user: D.deriveOne(sources.state$, baseLens),
+      loading: loading$,
+      user: user$,
     },
     UserDetail
   )
 
-  // ACTION (external)
+  // ACTION
   let action$ = K.merge([
-    fetchEnd$
-      .thru(B.postFetchModel(baseLens)),
+    fetches.base$
+      .map(maybeModel => function afterGET(state) {
+        return maybeModel instanceof Error
+          ? state
+          : R.set2(baseLens, maybeModel, state)
+      }),
 
-    fetchStart$.map(_ => R.set2(["_loading", key], true)),
-    fetchEnd$.delay(1).map(_ => R.set2(["_loading", key], false)),
+    K.merge(R.values(intents.fetch)).map(R.K(R.over2(loadingLens, B.safeInc))),
+    K.merge(R.values(fetches)).delay(1).map(R.K(R.over2(loadingLens, B.safeDec))),
   ])
 
   return {Component, action$}

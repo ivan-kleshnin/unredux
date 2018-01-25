@@ -1,4 +1,5 @@
 import * as R from "@paqmind/ramda"
+import A from "axios"
 import * as F from "framework"
 import K from "kefir"
 import * as D from "kefir.db"
@@ -23,6 +24,10 @@ export let seed = {
 export default (sources, key) => {
   let {params} = sources.props
   let baseLens = ["posts", params.id]
+  let loadingLens = ["_loading", key]
+
+  let loading$ = D.deriveOne(sources.state$, loadingLens).map(Boolean)
+  let post$ = D.deriveOne(sources.state$, baseLens)
 
   // INTENTS
   let intents = {
@@ -44,22 +49,31 @@ export default (sources, key) => {
     submit$: sources.DOM.from("form").listen("submit")
       .map(ee => (ee.event.preventDefault(), ee))
       .map(R.always(true)),
+
+    fetch: {
+      base$: post$.filter(R.not),
+    }
   }
 
-  // FETCH
-  let fetchStart$ = sources.state$
-    .filter(s => !R.view2(baseLens, s))
-
-  let fetchEnd$ = fetchStart$
-    .thru(B.fetchModel(baseLens))
+  // FETCHES
+  let fetches = {
+    base$: intents.fetch.base$
+      .flatMapConcat(_ => K.fromPromise(
+        A.get(`/api/${baseLens[0]}/${baseLens[1]}/`)
+         .then(resp => resp.data.models[baseLens[1]])
+         .catch(R.id)
+      )),
+  }
 
   // STATE
   let form$ = D.run(
     () => D.makeStore({}),
     // D.withLog({key}),
   )(
+    // Init
     D.init(seed),
 
+    // Form
     intents.changeTitle$.map(x => R.set2(["input", "title"], x)),
     intents.changeTitle$.debounce(200).map(x => {
       let res = validate(x, T.PostForm.meta.props.title)
@@ -100,57 +114,73 @@ export default (sources, key) => {
         : R.set2(["errors", "publishDate"], res.firstError().message)
     }),
 
-    // Resets
-    sources.state$.map(R.view2(["posts", params.id])).filter(Boolean).map(post => function initFromRoot() {
-      let input = {
-        title: post.title,
-        text: post.text,
-        tags: R.join(", ", post.tags),
-        isPublished: post.isPublished,
-        publishDate: post.publishDate,
-      }
-      let res = validate(input, T.PostForm)
-      if (res.isValid()) {
-        let errors = {}
-        return {input, errors}
-      } else {
-        let errors = R.reduce((z, key) => {
-          let e = R.find(e => R.equals(e.path, [key]), res.errors)
-          return e ? R.set2(key, e.message, z) : z
-        }, {}, R.keys(input))
-        return {input, errors}
-      }
-    }),
+    // Follow state model
+    post$
+      .filter(Boolean)
+      .map(post => () => {
+        let input = {
+          title: post.title,
+          text: post.text,
+          tags: R.join(", ", post.tags),
+          isPublished: post.isPublished,
+          publishDate: post.publishDate,
+        }
+        let res = validate(input, T.PostForm)
+        if (res.isValid()) {
+          let errors = {}
+          return {input, errors}
+        } else {
+          let errors = R.reduce((z, key) => {
+            let e = R.find(e => R.equals(e.path, [key]), res.errors)
+            return e ? R.set2(key, e.message, z) : z
+          }, {}, R.keys(input))
+          return {input, errors}
+        }
+      }),
   ).$
 
   // COMPONENT
   let Component = F.connect(
     {
-      loading: D.deriveOne(sources.state$, ["_loading", key]),
+      loading: loading$,
       form: form$,
     },
     PostForm
   )
 
-  // ACTION (external)
+  // ACTION
   let action$ = K.merge([
-    fetchEnd$
-      .thru(B.postFetchModel(baseLens)),
+    fetches.base$
+      .map(maybeModel => function afterGET(state) {
+        return maybeModel instanceof Error
+          ? state
+          : R.set2(baseLens, maybeModel, state)
+      }),
 
-    fetchStart$.map(_ => R.set2(["_loading", key], true)),
-    fetchEnd$.delay(1).map(_ => R.set2(["_loading", key], false)),
+    form$
+      .sampledBy(intents.submit$)
+      .flatMapConcat(form => {
+        let postForm
+        try {
+          postForm = T.PostForm(form.input)
+        } catch (e) {
+          return K.never()
+        }
+        return K.constant(postForm)
+      })
+      .flatMapConcat(form => K.fromPromise(
+        A.put(`/api/${baseLens[0]}/${baseLens[1]}/`, form)
+         .then(resp => resp.data.model)
+         .catch(R.id)
+      ))
+      .map(maybeModel => function afterPUT(state) {
+        return maybeModel instanceof Error
+          ? state
+          : R.set2(baseLens, maybeModel, state)
+      }),
 
-    form$.sampledBy(intents.submit$).flatMapConcat(form => {
-      let postForm
-      try {
-        postForm = T.PostForm(form.input)
-      } catch (e) {
-        return K.never()
-      }
-      return K.constant(postForm)
-    })
-    .thru(B.editModel(baseLens))
-    .thru(B.postEditModel(baseLens))
+    K.merge(R.values(intents.fetch)).map(R.K(R.over2(loadingLens, B.safeInc))),
+    K.merge(R.values(fetches)).delay(1).map(R.K(R.over2(loadingLens, B.safeDec))),
   ])
 
   return {Component, action$}

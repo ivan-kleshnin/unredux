@@ -48,6 +48,6 @@ export default function PostForm({loading, form}) {
 }
 
 PostForm.propTypes = {
-  loading: PT.bool,
+  loading: PT.bool.isRequired,
   form: PT.object,
 }

@@ -1,142 +1,20 @@
 import * as R from "@paqmind/ramda"
 import A from "axios"
 import K from "kefir"
+import * as D from "kefir.db"
+import U from "urlz"
 
-// HTTP and stuff //////////////////////////////////////////////////////////////////////////////////
-let loadingBP = BP.modelLoading(key, baseLens)
-let fetch = loadingBP.makeFetch(sources)
-let actions = loadingBP.makeActions(fetch)
+// Unsorted useful stuff ///////////////////////////////////////////////////////////////////////////
+export let setDocument = R.curry((doc, state) => {
+  return R.set2("document", {
+    title: doc.seoTitle || doc.title || "",
+    description: doc.seoDescription || "",
+    ogType: "website",
+  }, state)
+})
 
-export let modelLoading = (key, modelLens) => {
-  let makeFetch = (sources) => {
-    let fetch = {}
-    fetch.start$ = sources.state$
-      .map(s => {
-        let model = R.view2(modelLens, s) || {}
-        return {
-          needModel: R.isEmpty(foo),
-        }
-      })
-      .filter(anyObj)
-      .skipDuplicates(R.equals)
-
-    fetch.end$ = fetch.start$
-      .flatMapConcat(({needFoo, needBar, needBaz}) => {
-        return K.fromPromiseObj({
-          maybeFoo: needFoo
-            ? A.get(`/api/${modelLens[0]}/${modelLens[1]}/`).then(resp => resp.data.models[baseLens[1]]).catch(R.id)
-            : Promise.resolve(null),
-        })
-      })
-    return fetch
-  }
-
-  let makeActions = (fetch) => {
-    return [
-      fetch.end$.map(({maybeModel}) => {
-        return function afterGET(state) {
-          return R.pipe(
-            maybeModel == null || maybeModel instanceof Error
-              ? R.id
-              : R.set2(fooLens, maybeFoo),
-          )(state)
-        }
-      }),
-
-      fetch.start$.map(R.K(R.set2(loadingLens, true))),
-      fetch.end$.delay(1).map(R.K(R.set2(loadingLens, false))),
-    ]
-  }
-
-  return {
-    makeIntents,
-    makeActions
-  }
-}
-
-
-export let fetchIds = (baseLens) => $ => {
-  return $.flatMapConcat(_ => K
-    .fromPromise(A.get(`/api/${baseLens[0]}/~/id/`))
-    .map(resp => R.pluck("id", resp.data.models))
-  )
-}
-
-export let postFetchIds = (baseLens, state$) => $ => {
-  return $.flatMapConcat(requiredIds => {
-    return state$.take(1)
-      .map(s => R.keys(R.view2(baseLens, s)))
-      .map(presentIds => R.difference(requiredIds, presentIds))
-  })
-}
-
-export let fetchModels = (baseLens) => $ => {
-  return $.flatMapConcat(ids => {
-    return ids.length
-      ? K.fromPromise(A.get(`/api/${baseLens[0]}/${R.join(",", ids)}/`))
-         .map(resp => resp.data.models)
-      : K.constant({})
-  })
-}
-
-export let fetchModel = (baseLens) => $ => {
-  return $.flatMapConcat(_ => K
-    .fromPromise(A.get(`/api/${baseLens[0]}/${baseLens[1]}/`))
-    .map(resp => resp.data.models[baseLens[1]])
-  )
-}
-
-export let postFetchModels = (baseLens) => $ => {
-  return $.map(models => function afterGET(state) {
-    return R.over2(baseLens, R.mergeFlipped(models), state)
-  })
-  .flatMapErrors(err => {
-    console.warn(`Request to "${err.response.config.url}" failed with message "${err.response.status} ${err.response.statusText}"`)
-    return K.never() // TODO add alert box
-  })
-}
-
-export let postFetchModel = (baseLens) => $ => {
-  return $.map(model => function afterGET(state) {
-    return R.set2(baseLens, model, state)
-  })
-  .flatMapErrors(err => {
-    console.warn(`Request to "${err.response.config.url}" failed with message "${err.response.status} ${err.response.statusText}"`)
-    return K.never() // TODO add alert box
-  })
-}
-
-export let createModel = (baseLens) => $ => {
-  return $.flatMapConcat(form => K
-    .fromPromise(A.post(`/api/${baseLens[0]}/`, form))
-    .map(resp => resp.data.model)
-  )
-}
-
-export let postCreateModel = (baseLens) => $ => {
-  return $.map(model => function afterPOST(state) {
-    return R.set2([...baseLens, model.id], model, state)
-  }).flatMapErrors(err => {
-    console.warn(`Request to "${err.response.config.url}" failed with message "${err.response.status} ${err.response.statusText}"`)
-    return K.never() // TODO add alert box
-  })
-}
-
-export let editModel = (baseLens) => $ => {
-  return $.flatMapConcat(form => K
-    .fromPromise(A.put(`/api/${baseLens[0]}/${baseLens[1]}/`, form))
-    .map(resp => resp.data.model)
-  )
-}
-
-export let postEditModel = (baseLens) => $ => {
-  return $.map(model => function afterPUT(state) {
-    return R.set2(baseLens, model, state)
-  }).flatMapErrors(err => {
-    console.warn(`Request to "${err.response.config.url}" failed with message "${err.response.status} ${err.response.statusText}"`)
-    return K.never() // TODO add alert box
-  })
-}
+export let safeInc = R.pipe(R.defaultTo(0), R.inc)
+export let safeDec = R.pipe(R.defaultTo(0), R.dec)
 
 // Forms and stuff /////////////////////////////////////////////////////////////////////////////////
 

@@ -1,4 +1,5 @@
 import * as R from "@paqmind/ramda"
+import A from "axios"
 import * as F from "framework"
 import K from "kefir"
 import * as D from "kefir.db"
@@ -23,6 +24,9 @@ export let seed = {
 export default (sources, key) => {
   let {params} = sources.props
   let baseLens = ["posts"]
+  let loadingLens = ["_loading", key]
+
+  let loading$ = D.deriveOne(sources.state$, loadingLens).map(Boolean)
 
   // INTENTS
   let intents = {
@@ -47,30 +51,54 @@ export default (sources, key) => {
 
     changeSort$: sources.DOM.fromName("sort").listen("click")
       .map(ee => ee.element.value),
-  }
 
-  // FETCH
-  let fetchStart$ = do {
-    if (D.isBrowser && key in window.state._loading) { // If there was SSR, skip,
-      delete window.state._loading[key]                // but only once.
-      K.never()
-    } else {
-      K.constant(true)
+    fetch: {
+      base$: do {
+        if (D.isBrowser && key in window.state._loading) { // If there was SSR, skip,
+          delete window.state._loading[key]                // but only once.
+          K.never()
+        } else {
+          K.constant(true)
+        }
+      }
     }
   }
 
-  let fetchEnd$ = fetchStart$
-    .thru(B.fetchIds(baseLens))
-    .thru(B.postFetchIds(baseLens, sources.state$))
-    .thru(B.fetchModels(baseLens))
+  // FETCHES
+  let fetches = {
+    base$: intents.fetch.base$
+      .flatMapConcat(_ => K.fromPromise(
+        A.get(`/api/${baseLens[0]}/~/id/`)
+         .then(resp => R.pluck("id", resp.data.models))
+         .catch(R.id)
+      ))
+      .flatMapConcat(maybeIds => {
+        return maybeIds instanceof Error
+          ? K.constant(maybeIds)
+          : sources.state$.take(1)
+              .map(s => R.keys(R.view2(baseLens, s)))
+              .map(R.difference(maybeIds))
+              .flatMapConcat(needIds => {
+                return needIds.length
+                  ? K.fromPromise(
+                      A.get(`/api/${baseLens[0]}/${R.join(",", needIds)}/`)
+                       .then(resp => resp.data.models)
+                       .catch(R.id)
+                    )
+                  : K.constant({})
+              })
+      })
+  }
 
   // STATE
   let index$ = D.run(
     () => D.makeStore({}),
     // D.withLog({key}),
   )(
+    // Init
     D.init(seed),
 
+    // Form
     intents.changeFilterId$.map(x => R.set2(["filters", "id"], x)),
     intents.changeFilterTitle$.map(x => R.set2(["filters", "title"], x)),
     intents.changeFilterTags$.map(x => R.set2(["filters", "tags"], x)),
@@ -100,20 +128,24 @@ export default (sources, key) => {
   // COMPONENT
   let Component = F.connect(
     {
-      loading: D.deriveOne(sources.state$, ["_loading", key]),
+      loading: loading$,
       index: index$,
       posts: posts$,
     },
     PostIndex
   )
 
-  // ACTION (external)
+  // ACTION
   let action$ = K.merge([
-    fetchEnd$
-      .thru(B.postFetchModels(baseLens)),
+    fetches.base$
+      .map(maybeModels => function afterGET(state) {
+        return maybeModels instanceof Error
+          ? state
+          : R.over2(baseLens, R.mergeFlipped(maybeModels), state)
+      }),
 
-    fetchStart$.map(_ => R.set2(["_loading", key], true)),
-    fetchEnd$.delay(1).map(_ => R.set2(["_loading", key], false)),
+    K.merge(R.values(intents.fetch)).map(R.K(R.over2(loadingLens, B.safeInc))),
+    K.merge(R.values(fetches)).delay(1).map(R.K(R.over2(loadingLens, B.safeDec))),
   ])
 
   return {Component, action$}

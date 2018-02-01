@@ -119,7 +119,9 @@ export let isolateSources = {
 
   props: R.always,
 
-  DOM: (source, key) => source // source.fromKey(lastKey(key))
+  DOM: (source, key) => source.fromKey(lastKey(key)),
+
+  Component: R.always,
 }
 
 export let isolateSinks = {

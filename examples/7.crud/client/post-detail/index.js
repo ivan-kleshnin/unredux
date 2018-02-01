@@ -41,7 +41,7 @@ export default (sources, key) => {
     PostDetail
   )
 
-  // ACTION
+  // ACTIONS
   let action$ = K.merge([
     fetches.base$
       .map(maybeModel => function afterGET(state) {

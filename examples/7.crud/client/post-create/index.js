@@ -109,7 +109,7 @@ export default (sources, key) => {
       <PostForm input={form.input} errors={form.errors}/>
   )
 
-  // ACTION
+  // ACTIONS
   let action$ = K.merge([
     form$
       .sampledBy(intents.submit$)

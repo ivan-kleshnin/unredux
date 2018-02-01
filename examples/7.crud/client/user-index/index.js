@@ -130,7 +130,7 @@ export default (sources, key) => {
     UserIndex
   )
 
-  // ACTION
+  // ACTIONS
   let action$ = K.merge([
     fetches.base$
       .map(maybeModels => function afterGET(state) {

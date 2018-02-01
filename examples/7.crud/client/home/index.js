@@ -135,7 +135,7 @@ export default (sources, key) => {
     PostIndex
   )
 
-  // ACTION
+  // ACTIONS
   let action$ = K.merge([
     fetches.base$
       .map(maybeModels => function afterGET(state) {

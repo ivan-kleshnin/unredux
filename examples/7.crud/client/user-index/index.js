@@ -25,7 +25,7 @@ export default (sources, key) => {
   let baseLens = ["users"]
   let loadingLens = ["_loading", key]
 
-  let loading$ = D.deriveOne(sources.state$, loadingLens).map(Boolean)
+  let loading$ = D.derive(sources.state$, loadingLens).map(Boolean)
 
   // INTENTS
   let intents = {
@@ -104,7 +104,7 @@ export default (sources, key) => {
     intents.changeSort$.map(x => R.set2("sort", x)),
   ).$
 
-  let users$ = D.derive(
+  let users$ = D.deriveObj(
     {
       table: sources.state$.map(s => s.users),
       index: index$.debounce(200),

@@ -22,7 +22,7 @@ export default (sources, key) => {
     D.init(seed),
   ).$
 
-  let products$ = D.derive(
+  let products$ = D.deriveObj(
     {
       products: sources.state$.map(s => s.products),
       index: index$,

@@ -19,7 +19,7 @@ export let seed = {
 
 export default (sources, key) => {
   // ROUTING
-  let contentSinks$ = D.deriveOne(
+  let contentSinks$ = D.derive(
     sources.state$.map(s => s.url),
     (url) => {
       let sinks
@@ -72,7 +72,7 @@ export default (sources, key) => {
   // COMPONENT
   let Component = F.connect(
     {
-      url: D.deriveOne(state$, ["url"]),
+      url: D.derive(state$, ["url"]),
       Content: contentSinks$.map(x => x.Component),
     },
     ({url, Content}) => {

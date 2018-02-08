@@ -12,8 +12,8 @@ export default (sources, key) => {
   let baseLens = ["users", params.id]
   let loadingLens = ["_loading", key]
 
-  let loading$ = D.deriveOne(sources.state$, loadingLens).map(Boolean)
-  let user$ = D.deriveOne(sources.state$, baseLens)
+  let loading$ = D.derive(sources.state$, loadingLens).map(Boolean)
+  let user$ = D.derive(sources.state$, baseLens)
 
   // INTENTS
   let intents = {

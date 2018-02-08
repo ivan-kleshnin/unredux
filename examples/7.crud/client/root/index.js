@@ -24,7 +24,7 @@ export let seed = {
 export default (sources, key) => {
   let urlLens = ["url"]
 
-  let url$ = D.deriveOne(sources.state$, urlLens)
+  let url$ = D.derive(sources.state$, urlLens)
 
   // ROUTING ---------------------------------------------------------------------------------------
   let contentSinks$ = url$

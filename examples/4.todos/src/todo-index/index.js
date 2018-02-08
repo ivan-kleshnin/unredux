@@ -38,7 +38,7 @@ export default (sources, key) => {
     }),
   ).$
 
-  let todos$ = D.derive(
+  let todos$ = D.deriveObj(
     {
       todos: sources.state$.map(s => s.todos),
       index: state$,

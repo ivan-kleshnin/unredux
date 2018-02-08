@@ -16,7 +16,7 @@ export let seed = {
 export default (sources, key) => {
   // ROUTING
   let contentSinks$ = D
-    .deriveOne(sources.state$, ["url"])
+    .derive(sources.state$, ["url"])
     .map(url => {
       let {mask, params, payload: app} = router.doroute(url)
       app = F.isolate(app, key + mask, ["DOM", "Component"])
@@ -72,7 +72,7 @@ export default (sources, key) => {
   // COMPONENT
   let Component = F.connect(
     {
-      url: D.deriveOne(state$, ["url"]),
+      url: D.derive(state$, ["url"]),
       Content: contentSinks$.map(x => x.Component),
     },
     ({url, Content}) => {

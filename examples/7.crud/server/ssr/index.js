@@ -21,17 +21,22 @@ let router = Express.Router()
 let timeoutError = (delayMs) =>
   K.later(delayMs, K.constantError(new Error("timeout"))).flatMap()
 
+let hasLoadingApps = (state) =>
+  R.any(Boolean, R.values(state._loading))
+
+let toProperty = (x) => x.toProperty().skipDuplicates(R.equals)
+
 router.get("/*", (req, res, next) => {
   /*if (req.query.noAPP) { TODO special layout, useful for debugging as SSR can be a PITA to test
     res.send(layout200cut({
+      appKey,
       appHTML: "",
       state: {},
       project,
     }))
   } else*/ if (req.query.noSSR) {
-    let {seed} = require("client/root")
-
     res.send(layout200({
+      appKey,
       appHTML: "",
       state: R.merge(seed, {url: req.originalUrl}),
     }))
@@ -42,27 +47,31 @@ router.get("/*", (req, res, next) => {
     }
 
     let sinks = app(
-      R.over2("state$", x => x.toProperty().skipDuplicates(R.equals), sources),
+      R.over2("state$", toProperty, sources),
       appKey
     )
 
     sources.state$.plug(K.constant(R.merge(seed, {url: req.originalUrl})))
 
-    sinks.state$.observe(state => {
-      sources.state$.plug(K.constant(state))
-    })
-
-    sinks.state$
+    let finalState$ = sinks.state$
       .throttle(10)
       .skipDuplicates(R.equals)
-      .skipWhile(s => R.any(Boolean, R.values(s._loading)))
+      .skipWhile(hasLoadingApps)
       .merge(timeoutError(500))
       .take(1)
       .takeErrors(1)
-      .observe(state => {
-        let appHTML = ReactDOMServer.renderToString(<sinks.Component/>)
-        res.send(layout200({appKey, appHTML, state}))
-      }, next)
+      .toProperty()
+
+    sinks.state$.takeUntilBy(finalState$).observe(state => {
+      setImmediate(() => {
+        sources.state$.plug(K.constant(state))
+      })
+    })
+
+    finalState$.observe(state => {
+      let appHTML = ReactDOMServer.renderToString(<sinks.Component/>)
+      res.send(layout200({appKey, appHTML, state}))
+    }, next)
   }
 })
 

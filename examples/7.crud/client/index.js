@@ -6,7 +6,10 @@ import ReactDOM from "react-dom"
 import "shims"
 import {appKey} from "./meta"
 import app from "./root"
+
 import "./index.less"
+
+let toProperty = (x) => x.toProperty().skipDuplicates(R.equals)
 
 let sources = {
   state$: K.pool(),
@@ -14,17 +17,21 @@ let sources = {
 }
 
 let sinks = app(
-  R.over2("state$", x => x.toProperty().skipDuplicates(R.equals), sources),
+  R.over2("state$", toProperty, sources),
   appKey
 )
 
 // With SSR ----------------------------------------------------------------------------------------
-sources.state$.plug(K.constant(R.clone(window.state)))
+if (window.state) {
+  sources.state$.plug(K.constant(R.clone(window.state)))
+}
 // delete window.state <...data keys only...> TODO
 document.querySelector("#rootState").outerHTML = ""
 
 sinks.state$.observe(state => {
-  sources.state$.plug(K.constant(state))
+  setImmediate(() => {
+    sources.state$.plug(K.constant(state))
+  })
 })
 
 ReactDOM.hydrate(<sinks.Component/>, document.getElementById(appKey))

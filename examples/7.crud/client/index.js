@@ -3,6 +3,7 @@ import * as F from "framework"
 import K from "kefir"
 import React from "react"
 import ReactDOM from "react-dom"
+import Q from "querystring"
 import "shims"
 import {appKey} from "./meta"
 import app from "./root"
@@ -11,6 +12,7 @@ import "./index.less"
 
 let toProperty = (x) => x.toProperty().skipDuplicates(R.equals)
 
+// APP RUN -----------------------------------------------------------------------------------------
 let sources = {
   state$: K.pool(),
   DOM: F.fromDOMEvent("#" + appKey),

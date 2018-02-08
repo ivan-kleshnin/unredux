@@ -7,6 +7,7 @@ import U from "urlz"
 // Unsorted useful stuff ///////////////////////////////////////////////////////////////////////////
 export let setDocument = R.curry((doc, state) => {
   return R.set2("document", {
+    url: state.document.url,
     title: doc.seoTitle || doc.title || "",
     description: doc.seoDescription || "",
     ogType: "website",
@@ -15,6 +16,57 @@ export let setDocument = R.curry((doc, state) => {
 
 export let safeInc = R.pipe(R.defaultTo(0), R.inc)
 export let safeDec = R.pipe(R.defaultTo(0), R.dec)
+
+// Navigation //////////////////////////////////////////////////////////////////////////////////////
+export let root = (key) => {
+  let urlLens = ["document", "url"]
+
+  let makeIntents = (sources) => {
+    return {
+      navigateTo$: sources.DOM.from("a").listen("click")
+        .filter(ee => {
+          return !ee.element.dataset.ui // links with `data-ui` will be ignored
+        })
+        .flatMapConcat(ee => {
+          let urlObj = U.parse(ee.element.href)
+
+          if (urlObj.protocol && urlObj.host != document.location.host) {
+            // External link
+            return K.never()
+          } else {
+            // Internal link
+            if (urlObj.pathname == document.location.pathname && urlObj.hash) {
+              // Anchor link
+              // do nothing, rely on default browser behavior
+            } else {
+              // Page link or Reset-Anchor link (foo#hash -> foo)
+              ee.event.preventDefault() // take control on browser
+              window.scrollTo(0, 0)     //
+            }
+            window.history.pushState({}, "", urlObj.relHref)
+            return K.constant(urlObj.relHref)
+          }
+        }),
+
+      navigateHistory$: D.isBrowser
+        ? K.fromEvents(window, "popstate")
+          .map(data => U.relHref(document.location.href)) // TODO scroll to hash (how?!)
+        : K.never(),
+    }
+  }
+
+  let makeActions = (intents) => {
+    return [
+      intents.navigateTo$.map(url => R.fn("navigateTo", R.set2(urlLens, url))),
+      intents.navigateHistory$.map(url => R.fn("navigateHistory", R.set2(urlLens, url))),
+    ]
+  }
+
+  return {
+    makeIntents,
+    makeActions,
+  }
+}
 
 // Forms and stuff /////////////////////////////////////////////////////////////////////////////////
 

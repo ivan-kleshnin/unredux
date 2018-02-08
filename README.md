@@ -61,10 +61,6 @@ Shopping Cart with interactions between "parent" and "child" apps.
 
 CRUD client-server apps showing async data load, caching, SSR, and more.
 
-#### [10. Gists](./examples/10.gists)
-
-Some random useful code gists.
-
 ## Tutorials
 
 #### [1. State](./tutorials/1.state)

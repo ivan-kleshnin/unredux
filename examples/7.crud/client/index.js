@@ -23,12 +23,9 @@ let sinks = app(
   appKey
 )
 
-// With SSR ----------------------------------------------------------------------------------------
 if (window.state) {
   sources.state$.plug(K.constant(R.clone(window.state)))
 }
-// delete window.state <...data keys only...> TODO
-document.querySelector("#rootState").outerHTML = ""
 
 sinks.state$.observe(state => {
   setImmediate(() => {
@@ -36,13 +33,13 @@ sinks.state$.observe(state => {
   })
 })
 
-ReactDOM.hydrate(<sinks.Component/>, document.getElementById(appKey))
+// APP MODES ---------------------------------------------------------------------------------------
+let qs = Q.parse(document.location.search.slice(1))
 
-// Without SSR -------------------------------------------------------------------------------------
-// sources.state$.plug(K.constant(window.state))
-//
-// sinks.state$.observe(state => {
-//   sources.state$.plug(K.constant(state))
-// })
-//
-// ReactDOM.render(<sinks.Component/>, document.getElementById(APP_KEY))
+if (qs.noSSR || qs.noAPP) {
+  ReactDOM.render(<sinks.Component/>, document.getElementById(appKey))
+} else {
+  // delete window.state <...data keys only...> TODO
+  document.querySelector("#rootState").outerHTML = ""
+  ReactDOM.hydrate(<sinks.Component/>, document.getElementById(appKey))
+}

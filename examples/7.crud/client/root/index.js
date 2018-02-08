@@ -6,6 +6,7 @@ import React from "react"
 import U from "urlz"
 import MainMenu from "../common/MainMenu"
 import router from "../router"
+import * as B from "../blueprints"
 
 // SEED
 export let seed = {
@@ -21,9 +22,12 @@ export let seed = {
 }
 
 export default (sources, key) => {
-  // ROUTING
-  let contentSinks$ = D
-    .deriveOne(sources.state$, ["url"])
+  let urlLens = ["url"]
+
+  let url$ = D.deriveOne(sources.state$, urlLens)
+
+  // ROUTING ---------------------------------------------------------------------------------------
+  let contentSinks$ = url$
     .map(url => {
       let {mask, params, payload: app} = router.doroute(url)
       app = F.isolate(app, key + mask, ["DOM", "Component"])
@@ -61,7 +65,7 @@ export default (sources, key) => {
       : K.never()
   }
 
-  // STATE
+  // STATE -----------------------------------------------------------------------------------------
   let state$ = D.run(
     () => D.makeStore({}),
     // D.withLog({key}),
@@ -78,10 +82,10 @@ export default (sources, key) => {
     contentSinks$.flatMapLatest(x => x.action$),
   ).$
 
-  // COMPONENT
+  // COMPONENT -------------------------------------------------------------------------------------
   let Component = F.connect(
     {
-      url: D.deriveOne(state$, ["url"]),
+      url: url$,
       Content: contentSinks$.map(x => x.Component),
     },
     ({url, Content}) => {

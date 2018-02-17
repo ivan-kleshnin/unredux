@@ -55,7 +55,7 @@ router.get("/*", (req, res, next) => {
 
     let finalState$ = sinks.state$
       .throttle(10)
-      .skipDuplicates(R.equals)
+      .skipDuplicates(R.equals) // TODO recheck this line
       .skipWhile(hasLoadingApps)
       .merge(timeoutError(500))
       .take(1)

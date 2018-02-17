@@ -74,10 +74,10 @@ export default (sources, key) => {
           : sources.state$.take(1)
               .map(s => R.keys(R.view2(baseLens, s)))
               .map(R.difference(maybeIds))
-              .flatMapConcat(needIds => {
-                return needIds.length
+              .flatMapConcat(missingIds => {
+                return missingIds.length
                   ? K.fromPromise(
-                      A.get(`/api/${baseLens[0]}/${R.join(",", needIds)}/`)
+                      A.get(`/api/${baseLens[0]}/${R.join(",", missingIds)}/`)
                        .then(resp => resp.data.models)
                        .catch(R.id)
                     )

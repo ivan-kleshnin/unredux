@@ -15,7 +15,14 @@
   "scripts": {
     "start": "NODE_ENV=development nodemon ./server/index.js",
     "postinstall": ". postinstall.sh",
+    "test": "ava tests",
     "webpack": "webpack",
     "webpack-watch": "webpack --watch"
-  }
+  },
+  "ava": {
+    "require": [
+      "@std/esm"
+    ]
+  },
+  "@std/esm": "cjs"
 }

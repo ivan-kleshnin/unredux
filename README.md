@@ -8,6 +8,12 @@ so we decided to codify our own approach. Like CycleJS, it's 100% reactive (decl
 Unlike CycleJS, it doesn't hide effects in drivers. See docs for more details about our motivations
 and design decisions.
 
+Unlike Facebook / Google products, aiming to satisfy enterprise needs, we are and we target smaller
+companies. Down to the *one man bands*. [This](https://github.com/angular/angular) is not a code size
+a single person have time to read. So many tradeoffs here are decided in favor of simplicity.
+
+---
+
 We propose to start with shallow look at **Examples**. If you like what you see there (code layout,
 clarity, etc) – continue with **Tutorials** or **Docs** before you really start digging into how
 Examples work.
@@ -60,6 +66,11 @@ Shopping Cart with interactions between "parent" and "child" apps.
 #### [7. CRUD](./examples/7.crud)
 
 CRUD client-server apps showing async data load, caching, SSR, and more.
+
+#### [8. DDL](./examples/8.ddl)
+
+Dynamic Data Load a-la GraphQL & Relay / Falcor. Unlike those two, it's based on (specified but still)
+REST API.
 
 ## Tutorials
 

@@ -1,0 +1,11 @@
+{
+  "execMap": {
+    "js": "babel-node"
+  },
+  "ext": "js json",
+  "watch": [
+    "common",
+    "server"
+  ],
+  "verbose": true
+}

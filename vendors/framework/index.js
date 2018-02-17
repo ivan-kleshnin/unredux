@@ -51,7 +51,7 @@ export let fromDOMEvent = (appSelector) => {
 
 let handleError = e => console.warn(e)
 
-export let connect = (streamsToProps, ComponentToWrap) => {
+export let connect = (NoDataComponent, LoadingComponent) => (streamsToProps, ComponentToWrap) => {
   class Container extends React.Component {
     constructor(props) {
       super(props)
@@ -63,24 +63,12 @@ export let connect = (streamsToProps, ComponentToWrap) => {
 
     componentWillMount(...args) {
       let props$ = K.combine(streamsToProps)
-        .throttle(10, {leading: false, trailing: true})
+        .debounce(1)
 
       if (D.isServer) {
         /**
          * componentWillMount should be triggered after the state is formed so `props$ = props$.take(1)`
-         * doesn't limit client to have only 1 state update. Example SSR usage:
-         *
-         * sinks.state$
-         *   .throttle(10)
-         *   .skipDuplicates(R.equals)
-         *   .skipWhile(s => R.any(Boolean, R.values(s._loading))) // !!! consumes N events
-         *   .merge(timeoutError(500))
-         *   .take(1)       // !!! !consume a single event
-         *   .takeErrors(1) // ^^^
-         *   .observe(state => {
-         *    let appHTML = ReactDOMServer.renderToString(<sinks.Component/>) // !!! initiates componentWillMount
-         *     res.send(layout200({appKey, appHTML, state, project}))
-         *   })
+         * doesn't limit client to have only 1 state update.
          */
         props$ = props$.take(1)
       }
@@ -99,7 +87,17 @@ export let connect = (streamsToProps, ComponentToWrap) => {
     }
 
     render() {
-      return React.createElement(ComponentToWrap, R.merge(this.props, this.state), this.props.children)
+      // console.log("R.any(R.isNil, this.state):", R.any(R.isNil, R.values(this.state)))
+      // console.log("this.state.loading:", this.state.loading)
+      if (R.any(R.isNil, R.values(this.state))) {
+        if (this.state.loading) {
+          return React.createElement(LoadingComponent)
+        } else {
+          return React.createElement(NoDataComponent)
+        }
+      } else {
+        return React.createElement(ComponentToWrap, R.merge(this.props, this.state), this.props.children)
+      }
     }
   }
 
@@ -131,9 +129,9 @@ export let isolateSinks = {
     })
   },
 
-  state$: R.id, // has to be isolated manually
+  // state$: R.id, // has to be isolated manually
 
-  intents: R.id, // has to be isolated manually
+  // intents: R.id, // has to be isolated manually
 
   Component: (sink, key) => {
     return (props) => <div data-key={lastKey(key)}>

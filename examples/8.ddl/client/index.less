@@ -1,0 +1,62 @@
+// Variables
+@unit: 1.5em;
+
+// Tags
+body {
+  padding: 1em;
+}
+p {
+  margin: 0 0 @unit 0;
+}
+hr {
+  border: none;
+  border-bottom: 1px solid #ddd;
+}
+
+// Components
+.page-header {
+  border-bottom: 1px solid #ddd;
+  nav {
+    margin-bottom: @unit;
+    a {
+      margin-right: 0.75em;
+      &:last-child {
+        margin-right: 0;
+      }
+    }
+  }
+}
+
+// Utils
+.clearfix:after {
+  clear: both;
+  content: "";
+  display: table;
+}
+.pull-left {
+  float: left;
+  margin-right: 1em;
+}
+.pull-right {
+  float: right;
+  margin-left: 1em;
+}
+
+.margin-bottom    { margin-bottom: @unit; }
+.margin-left      { margin-left: @unit; }
+.margin-right     { margin-right: @unit; }
+.margin-top       { margin-top: @unit; }
+.margin-bottom-sm { margin-bottom: @unit * 0.5; }
+.margin-left-sm   { margin-left: @unit * 0.5; }
+.margin-right-sm  { margin-right: @unit * 0.5; }
+.margin-top-sm    { margin-top: @unit * 0.5; }
+.nomargin-bottom  { margin-bottom: 0; }
+.nomargin-left    { margin-left: 0; }
+.nomargin-right   { margin-right: 0; }
+.nomargin-top     { margin-top: 0; }
+
+.text {
+  &.gray {
+    color: #777;
+  }
+}

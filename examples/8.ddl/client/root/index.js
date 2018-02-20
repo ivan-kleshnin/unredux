@@ -1,51 +1,53 @@
 import * as R from "@paqmind/ramda"
 import A from "axios"
-import * as F from "framework"
 import K from "kefir"
 import * as D from "kefir.db"
 import React from "react"
 import U from "urlz"
-import MainMenu from "../common/MainMenu"
-import router from "../router"
 import * as B from "../blueprints"
+import * as F from "../framework"
+import router from "../router"
 import {
   isModelsQuery, isIndexQuery,
   collapseModelsQueries, collapseIndexQueries,
-  whatsMissing,
+  whatAreMissing, whatIsMissing,
 } from "../ddl"
-
-let connect = F.connect(() => "Root.NoData", () => "Root.Loading")
 
 // SEED
 export let seed = {
   // DOCUMENT
-  url: "/posts/f7f169a537/",
+  url: "",
 
   // DATA
-  posts: {
-    "f7f169a537": {id: "f7f169a537", title: "Fluent API debunked"}, //, userId: "94243b11b1"
+  tables: {
+    posts: {
+      // "f7f169a537": {id: "f7f169a537", title: "Fluent API debunked"}, //, userId: "94243b11b1"
+    },
+
+    users: {
+      // "94243b11b1": {id: "94243b11b1"}, // , fullname: "Jack"
+    },
   },
 
-  users: {
-    "94243b11b1": {id: "94243b11b1"}, // , fullname: "Jack"
+  indexes: {
+    // "foo": {},
+    // "bar": {},
   },
 
   // META
-  _loading: {},
+  loading: {},
 }
 
 export default (sources, key) => {
-  let urlLens = ["url"]
-
-  let url$ = D.derive(sources.state$, urlLens)
+  let url$ = D.derive(sources.state$, ["url"])
 
   // ROUTING ---------------------------------------------------------------------------------------
   let contentSinks$ = url$
+    .filter(Boolean)
     .map(url => {
       let {mask, params, payload: app} = router.doroute(url)
-      app = F.isolate(app, key + mask, ["DOM", "Component"])
       let sinks = app({...sources, props: {mask, params, router}})
-      return R.merge({action$: K.never()}, sinks)
+      return R.merge({action$: K.never(), load$: K.never()}, sinks)
     })
 
   // INTENTS
@@ -79,88 +81,103 @@ export default (sources, key) => {
   }
 
   // LOAD
-  /**
-   * idsNeed = {
-   *   posts: {
-   *     ids: ["f7f169a537"],
-   *   },
-   * }
-   *
-   * indexNeed = {
-   *   posts: {
-   *     offset:0, limit: 10,
-   *   },
-   * }
-   */
+  let _load$ = K.pool()
+  let load$ = K.merge([
+    _load$,
+    contentSinks$.flatMapLatest(x => x.load$)
+  ]).filter(R.length) // --mq1--mq2--mq3--iq1-->
 
-  let spread = (xs) => K.sequentially(0, xs)
+  /// Trying to deprecate this /////////////////////////////////////////////////////////////////////
+  // let load$ = contentSinks$.flatMapLatest(x => x.load$).filter(R.length) // --[mq1, mq2]--[mq3]--[iq1]-->
 
-  let load$ = contentSinks$.flatMapLatest(x => x.load$).filter(R.length) // --[mq1, mq2]--[mq3]--[iq1]-->
-
+  // TODO consider removal of this step and requiring to load: --mq1--mq2--mq3--iq1--> instead
   // Spread multiple queries into a stream
-  let rawQuery$ = load$.flatMap(spread) // --mq1--mq2--mq3--iq1-->
+  // let rawQuery$ = load$.flatMap(F.spread) // --mq1--mq2--mq3--iq1-->
+  //////////////////////////////////////////////////////////////////////////////////////////////////
 
-  // Buffer queries for half a second, up to 20 items per buffer
-  let rawModelsQueries$ = rawQuery$.filter(isModelsQuery).bufferWithTimeOrCount(500, 20).filter(R.length) // --[mq1, mq2, mq3]-->
-  let rawIndexQueires$ = rawQuery$.filter(isIndexQuery).bufferWithTimeOrCount(500, 20).filter(R.length)   // --[iq1]-->
+  // Buffer queries for 100ms, up to 20 items per buffer
+  let rawModelsQueries$ = load$.filter(isModelsQuery).bufferWithTimeOrCount(100, 20).filter(R.length) // --[mq1, mq2, mq3]-->
+  let rawIndexQueries$ = load$.filter(isIndexQuery).bufferWithTimeOrCount(100, 20).filter(R.length)   // --[iq1]-->
 
   // Collapse the collapsible queries
   let collapsedModelsQueries$ = rawModelsQueries$.map(collapseModelsQueries) // --[mq1, mq3]-->
-  let collapsedIndexQueries$ = rawIndexQueires$.map(collapseIndexQueries)    // --[iq1]-->
+  let collapsedIndexQueries$ = rawIndexQueries$.map(collapseIndexQueries)    // --[iq1]-->
 
   // Spread all collapsed queries into a stream
-  let modelsQuery$ = collapsedModelsQueries$.flatMap(spread) // --mq1--mq3-->
-  let indexQuery$ = collapsedIndexQueries$.flatMap(spread)   // --iq1-->
+  let modelsQuery$ = collapsedModelsQueries$.flatMap(F.spread) // --mq1--mq3-->
+  let indexQuery$ = collapsedIndexQueries$.flatMap(F.spread)   // --iq1-->
 
   let fetchModelsIntent$ = sources.state$.sampledBy(modelsQuery$, (state, query) => {
-    return whatsMissing([query], state)[0] // TODO ugly API
+    return whatIsMissing(query, state)[0] // TODO ugly API
   }).filter(R.length)
 
   let fetchIndexIntent$ = indexQuery$ // TODO first render after SSR should be prevented here (possibly)
 
-  let fetchModels$ = fetchModelsIntent$.flatMap(([tableName, ids, fields]) => {
-    // TODO fields
+  let fetchModels$ = fetchModelsIntent$.flatMapConcat(query => {
+    let [tableName, ids, fields] = query
     let apiURL = fields.length
        ? `/api/${tableName}/${R.join(",", ids)}/${R.join(",", fields)}/`
        : `/api/${tableName}/${R.join(",", ids)}/`
     return K.fromPromise(
-      A.get(apiURL).then(resp => [tableName, resp.data.models, fields]).catch(R.id)
+      A.get(apiURL)
+        .then(resp => resp.data.models)
+        .catch(R.id)
+        .then(resp => ({query, resp}))
     )
   })
 
-  let fetchIndex$ = fetchIndexIntent$.flatMap(([tableName, cond, fields]) => {
-    // TODO cond
+  let fetchIndex$ = fetchIndexIntent$.flatMapConcat(query => {
+    let [tableName, cond, fields] = query
+    // TODO filters, sort
     let apiURL = fields.length
-      ? `/api/${tableName}/~/${R.join(",", fields)}/`
-      : `/api/${tableName}/~/`
+      ? `/api/${tableName}/${cond.offset}~${cond.limit}/${R.join(",", fields)}/`
+      : `/api/${tableName}/${cond.offset}~${cond.limit}/`
     return K.fromPromise(
-      A.get(apiURL).then(resp => [tableName, R.pluck("id", resp.data.models), fields]).catch(R.id)
+      A.get(apiURL)
+        .then(resp => R.pluck("id", resp.data.models))
+        .catch(R.id)
+        .then(resp => ({query, resp}))
     )
   })
 
   let loadAction$ = K.merge([
-    fetchModelsIntent$.map(([tableName, ..._]) => R.over2(["_loading", tableName], B.safeInc)),
-    fetchModels$.delay(1).map(([tableName, ..._]) => R.over2(["_loading", tableName], B.safeDec)),
+    fetchModelsIntent$.map(([tableName, ..._]) => R.over2(["loading", tableName], B.safeInc)),
+    fetchIndexIntent$.map(([tableName, ..._]) => R.over2(["loading", tableName], B.safeInc)),
 
-    fetchIndexIntent$.map(([tableName, ..._]) => R.over2(["_loading", tableName], B.safeInc)),
-    fetchIndex$.delay(1).map(([tableName, ..._]) => R.over2(["_loading", tableName], B.safeDec)),
-
-    fetchModels$.map(([tableName, maybeModels, _]) => function afterGETAuto(state) {
-      // console.log("afterGETAuto! maybeModels:", maybeModels)
-      if (maybeModels instanceof Error) {
-        return state // you can raise a popup warning here
+    fetchModels$.map(({query, resp}) => function afterModelsGET(state) {
+      let [tableName, ids, fields] = query
+      // console.log("afterModelsGET!")
+      if (resp instanceof Error) {
+        return R.pipe(
+          R.over2(["loading", tableName], B.safeDec),
+          // raise popups here
+        )(state)
       } else {
-        return R.over2(tableName, R.mergeDeepFlipped(maybeModels), state)
+        let models = resp
+        return R.pipe(
+          R.over2(["tables", tableName], R.mergeDeepFlipped(models)),
+          R.over2(["loading", tableName], B.safeDec),
+        )(state)
       }
     }),
 
-    fetchIndex$.map(([tableName, maybeIds, _]) => function afterGETAuto(state) {
-      console.log("maybeIds:", maybeIds)
-      if (maybeIds instanceof Error) {
-        return state // you can raise a popup warning here
+    fetchIndex$.map(({query, resp}) => function afterIndexGET(state) {
+      let [tableName, cond, fields] = query
+      // console.log("afterIndexGET!")
+      if (resp instanceof Error) {
+        return R.pipe(
+          R.over2(["loading", tableName], B.safeDec),
+          // raise popups here
+        )(state)
       } else {
-        let maybeModels = R.fromPairs(R.zip(maybeIds, maybeIds.map(id => ({id}))))
-        return R.over2(tableName, R.mergeDeepFlipped(maybeModels), state)
+        let ids = resp
+        let models = R.fromPairs(R.zip(ids, ids.map(id => ({id}))))
+        // _load$.plug(K.constant([tableName, ids, fields])) // side-effect: auto load initialization!
+        return R.pipe(
+          R.over2(["tables", tableName], R.mergeDeepFlipped(models)),
+          R.over2(["indexes", B.hashIndexQuery(query)], B.updateIndex(cond.offset, ids)),
+          R.over2(["loading", tableName], B.safeDec),
+        )(state)
       }
     })
   ])
@@ -168,11 +185,11 @@ export default (sources, key) => {
   // STATE -----------------------------------------------------------------------------------------
   let state$ = D.run(
     () => D.makeStore({}),
-    // D.withLog({key}),
+    // D.withLog({key, input: false, output: true}),
   )(
     // Init
-    D.init(seed),
-    // D.initAsync(sources.state$),
+    // D.init(seed),
+    D.initAsync(sources.state$),
 
     // Navigation
     intents.navigateTo$.map(url => R.fn("navigateTo", R.set2("url", url))),
@@ -186,19 +203,13 @@ export default (sources, key) => {
   ).$
 
   // COMPONENT -------------------------------------------------------------------------------------
-  let Component = connect(
+  let Component = F.connect2(
     {
       url: url$,
       Content: contentSinks$.map(x => x.Component),
     },
     ({url, Content}) => {
       return <div>
-        <div className="page-header">
-          <p>
-            Current URL: {url}
-          </p>
-          <MainMenu/>
-        </div>
         <div className="page-content">
           <Content/>
         </div>

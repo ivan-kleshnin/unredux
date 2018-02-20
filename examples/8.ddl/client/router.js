@@ -1,27 +1,21 @@
 import * as F from "framework"
 
-// Apps
-import home from "./home" // post-index
-import postDetail from "./post-detail"
-import postCreate from "./post-create"
-import postEdit from "./post-edit"
-
 // Static pages
-import About from "./common/About"
-import Contacts from "./common/Contacts"
+import Home from "./common/Home"
 import NotFound from "./common/NotFound"
 
+// Apps
+import postLazyLoadApp from "./post-lazyload"
+import postDetailApp from "./post-detail"
+
 let routes = [
-  // Apps
-  ["/",                home],
-  ["/posts/create/",   postCreate],
-  ["/posts/edit/:id/", postEdit],
-  ["/posts/:id/",      postDetail],
+  // Indexes
+  ["/posts/lazyload/", postLazyLoadApp],
+  ["/posts/:id/", postDetailApp],
 
   // Static pages
-  ["/about/",    F.lift(About)],
-  ["/contacts/", F.lift(Contacts)],
-  ["/*path",     F.lift(NotFound)],
+  ["/", F.lift(Home)],
+  ["/*path", F.lift(NotFound)],
 ]
 
 export default F.makeRouter(routes)

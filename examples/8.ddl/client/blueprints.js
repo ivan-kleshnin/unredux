@@ -3,6 +3,7 @@ import A from "axios"
 import K from "kefir"
 import * as D from "kefir.db"
 import U from "urlz"
+import {desugarIndexQuery} from "./ddl"
 
 // Unsorted useful stuff ///////////////////////////////////////////////////////////////////////////
 export let setDocument = R.curry((doc, state) => {
@@ -16,6 +17,26 @@ export let setDocument = R.curry((doc, state) => {
 
 export let safeInc = R.pipe(R.defaultTo(0), R.inc)
 export let safeDec = R.pipe(R.defaultTo(0), R.dec)
+
+export let hashIndexQuery = (query) => {
+  query = desugarIndexQuery(query)
+  let [tableName, {filters, sort}] = query
+  return tableName + "." + JSON.stringify(filters) + "." + JSON.stringify(sort) // TODO json-stable-stringify
+}
+
+export let updateIndex = R.curry((offset, ids, index) => {
+  index = index || {}
+  return R.merge(
+    index,
+    R.fromPairs(R.map2((x, i) => [offset + i, x], ids))
+  )
+})
+
+export let indexToArray = R.pipe(
+  R.toPairs,
+  R.sortBy(R.nth(0)),
+  R.map(R.nth(1)),
+)
 
 // Navigation //////////////////////////////////////////////////////////////////////////////////////
 export let root = (key) => {

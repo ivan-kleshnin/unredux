@@ -38,10 +38,10 @@ export let areRangesClose = (range1, range2) => {
 }
 
 // Query -> Boolean
-export let isModelsQuery = (query) => R.is(Array, query[1])
+export let isModelsQuery = (query) => R.is(Array, query) && R.is(Array, query[1])
 
 // Query -> Boolean
-export let isIndexQuery = R.complement(isModelsQuery)
+export let isIndexQuery = (query) => R.is(Array, query) && R.isPlainObj(query[1])
 
 export let defaultIds = R.defaultTo([])
 export let defaultFields = R.defaultTo([])
@@ -191,7 +191,7 @@ export let whatAreMissing = R.curry((queries, state) => {
 
   let missingModelsQueries = R.chain(modelsQuery => {
     let [tableName, ids, fields] = modelsQuery
-    let table = state[tableName] // {"1": {...}, "2": {...} ...}
+    let table = state.tables[tableName] // {"1": {...}, "2": {...} ...}
     return R.filter(R.length, R.map(id => {
       let model = table[id]
       if (fields.length) {

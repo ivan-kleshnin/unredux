@@ -9,8 +9,6 @@ import app, {seed} from "./root"
 
 import "./index.less"
 
-let toProperty = (x) => x.toProperty().skipDuplicates(R.equals)
-
 // APP RUN -----------------------------------------------------------------------------------------
 let sources = {
   state$: K.pool(),
@@ -18,17 +16,17 @@ let sources = {
 }
 
 let sinks = app(
-  R.over2("state$", toProperty, sources),
+  R.over2("state$", (x) => x.toProperty().skipDuplicates(), sources),
   appKey
 )
 
-sources.state$.plug(K.constant(seed))
-
-sinks.state$.observe(state => {
+sinks.state$.skip(1).observe(state => {
   setImmediate(() => {
     sources.state$.plug(K.constant(state))
   })
 })
+
+sources.state$.plug(K.constant(R.merge(seed, {url: document.location.href})))
 
 // APP MODES ---------------------------------------------------------------------------------------
 // we can delay for some official first state event here

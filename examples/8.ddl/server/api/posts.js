@@ -24,12 +24,14 @@ router.get(
     "/~:limit/:fields/",
   ],
   (req, res) => {
+    console.log("GET", req.originalUrl)
+
     let {params, query} = req
 
     let filterFn = makeFilterFn(R.firstOk([query.filters && JSON.parse(query.filters), {}]))
     let sortFn = makeSortFn(R.firstOk([query.sort, "+id"]))
-    let offset = R.firstOk([params.offset, query.offset, 0])
-    let limit = Math.min(R.firstOk([params.limit, query.limit, 20]), 100)
+    let offset = Number(R.firstOk([params.offset, query.offset, 0]))
+    let limit = Math.min(Number(R.firstOk([params.limit, query.limit, 20])), 100)
     let fields = R.firstOk([params.fields, query.fields, null])
 
     let models = R.pipe(
@@ -45,12 +47,12 @@ router.get(
         : R.id,
     )(models) // :: Array Model
 
-    setTimeout(() => {
+    // setTimeout(() => {
       res.json({
         models: paginatedModels, // :: Array Model
         total: models.length,    // Number
       })
-    }, 1000)
+    // }, 2000)
   }
 )
 
@@ -61,6 +63,8 @@ router.get(
     "/:ids/:fields/",
   ],
   (req, res) => {
+    console.log("GET", req.originalUrl)
+
     let {params, query} = req
     let fields = R.firstOk([params.fields, query.fields, null])
 
@@ -71,11 +75,11 @@ router.get(
         : R.id,
     )(db.posts)
 
-    setTimeout(() => {
+    // setTimeout(() => {
       res.json({
         models // :: Object Model
       })
-    }, 1000)
+    // }, 2000)
   }
 )
 

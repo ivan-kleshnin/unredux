@@ -51,6 +51,8 @@ export let fromDOMEvent = (appSelector) => {
 
 let handleError = e => console.warn(e)
 
+export let spread = (xs) => K.sequentially(0, xs)
+
 export let connect = (NoDataComponent, LoadingComponent) => (streamsToProps, ComponentToWrap) => {
   class Container extends React.Component {
     constructor(props) {
@@ -63,7 +65,7 @@ export let connect = (NoDataComponent, LoadingComponent) => (streamsToProps, Com
 
     componentWillMount(...args) {
       let props$ = K.combine(streamsToProps)
-        .debounce(1)
+        .throttle(20, {leading: false, trailing: true})
 
       if (D.isServer) {
         /**
@@ -87,8 +89,12 @@ export let connect = (NoDataComponent, LoadingComponent) => (streamsToProps, Com
     }
 
     render() {
-      // console.log("R.any(R.isNil, this.state):", R.any(R.isNil, R.values(this.state)))
-      // console.log("this.state.loading:", this.state.loading)
+      console.log(ComponentToWrap.name, this.state)
+
+      if (R.isEmpty(this.state)) {
+        return React.createElement(LoadingComponent)
+      }
+
       if (R.any(R.isNil, R.values(this.state))) {
         if (this.state.loading) {
           return React.createElement(LoadingComponent)

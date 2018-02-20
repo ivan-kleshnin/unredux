@@ -45,12 +45,12 @@ router.get(
         : R.id,
     )(models) // :: Array Model
 
-    setTimeout(() => {
+    // setTimeout(() => {
       res.json({
         models: paginatedModels, // :: Array Model
         total: models.length,    // Number
       })
-    }, 1000)
+    // }, 1000)
   }
 )
 
@@ -71,11 +71,11 @@ router.get(
         : R.id,
     )(db.users)
 
-    setTimeout(() => {
+    // setTimeout(() => {
       res.json({
         models // :: Object Model
       })
-    }, 1000)
+    // }, 1000)
   }
 )
 

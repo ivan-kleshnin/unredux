@@ -15,7 +15,8 @@
       "text": "...",
       "tags": ["reactivity", "rxjs"],
       "isPublished": true,
-      "publishDate": "2016-01-20T00:00:00.000Z"
+      "publishDate": "2016-01-20T00:00:00.000Z",
+      "userId": "94243b11b1"
     },
     "c4f3ce683d": {
       "id": "c4f3ce683d",
@@ -23,7 +24,8 @@
       "text": "...",
       "tags": ["fp", "oop", "typing", "tcomb"],
       "isPublished": true,
-      "publishDate": "2016-10-03T00:00:00.000Z"
+      "publishDate": "2016-10-03T00:00:00.000Z",
+      "userId": "94243b11b1"
     },
     "29f75db034": {
       "id": "29f75db034",
@@ -31,7 +33,8 @@
       "text": "...",
       "tags": ["fp", "partial.lenses"],
       "isPublished": true,
-      "publishDate": "2017-03-23T00:00:00.000Z"
+      "publishDate": "2017-03-23T00:00:00.000Z",
+      "userId": "94243b11b1"
     },
     "93524ebe5b": {
       "id": "93524ebe5b",
@@ -39,7 +42,8 @@
       "text": "...",
       "tags": ["industry"],
       "isPublished": true,
-      "publishDate": "2017-09-25T00:00:00.000Z"
+      "publishDate": "2017-09-25T00:00:00.000Z",
+      "userId": "94243b11b1"
     },
     "cd1e3b11cb": {
       "id": "cd1e3b11cb",
@@ -47,7 +51,8 @@
       "text": "...",
       "tags": ["industry"],
       "isPublished": false,
-      "publishDate": null
+      "publishDate": null,
+      "userId": "94243b11b1"
     }
   },
   "users": {

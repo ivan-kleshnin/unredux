@@ -67,7 +67,7 @@ CRUD client-server apps showing async data load, caching, SSR, and more.
 
 #### [8. DDL](./examples/8.ddl)
 
-Dynamic Data Load, lightweight alternative to GraphQL+Relay / Falcor.
+Declarative Data Load, lightweight alternative to GraphQL+Relay / Falcor.
 
 **Notable differences**:
 1. Unlike both it's REST API based (avoiding vendor lock-in on Backend).

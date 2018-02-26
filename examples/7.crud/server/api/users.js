@@ -27,8 +27,8 @@ router.get(
 
     let filterFn = makeFilterFn(R.firstOk([query.filters && JSON.parse(query.filters), {}]))
     let sortFn = makeSortFn(R.firstOk([query.sort, "+id"]))
-    let offset = R.firstOk([params.offset, query.offset, 0])
-    let limit = Math.min(R.firstOk([params.limit, query.limit, 20]), 100)
+    let offset = Number(R.firstOk([params.offset, query.offset, 0]))
+    let limit = Math.min(Number(R.firstOk([params.limit, query.limit, 20])), 100)
     let fields = R.firstOk([params.fields, query.fields, null])
 
     let models = R.pipe(

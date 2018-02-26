@@ -1,16 +1,14 @@
 # Unredux
 
+**WIP**, repo name is temporary.
+
 This repo features a number of realistic apps built without (frontend) frameworks. We use a dataflow
 similar to [CycleJS](https://cycle.js.org/) built on [Kefir](https://kefirjs.github.io) and [React](https://facebook.github.io/react/).
 
 We weren't happy with clunky imperative architectures Redux, VueJS, MobX, and GrapQL apps end up with,
 so we decided to codify our own approach. Like CycleJS, it's 100% reactive (declarative in time!).
-Unlike CycleJS, it doesn't hide effects in drivers. See docs for more details about our motivations
+Unlike CycleJS, it doesn't hide side-effects in drivers. See docs for more details about our motivations
 and design decisions.
-
-Unlike Facebook / Google products, aiming to satisfy enterprise needs, we are and we target smaller
-companies. Down to the *one man bands*. [This](https://github.com/angular/angular) is not a code size
-a single person have time to read. So many tradeoffs here are decided in favor of simplicity.
 
 ---
 
@@ -23,9 +21,9 @@ simplier and scalable than everything you can hope to build with Redux, VueJS an
 Our main goal is to keep code super tiny and super clean. We hate enterprise and we hope you'll understand
 why after seeing this project.
 
-One more thing. The proposed architecture fits perfectly for **all** interactive apps:
-including static site generator (with watch mode), browser games, console games, etc.
-It's not limited to frontend by no means. We hope to add corresponding examples with time.
+The proposed architecture fits perfectly for **all** interactive apps: including static site generator
+(with watch mode), browser games, console games, etc. It's not limited to frontend by no means. We hope
+to add corresponding examples with time.
 
 ## Docs
 
@@ -69,8 +67,18 @@ CRUD client-server apps showing async data load, caching, SSR, and more.
 
 #### [8. DDL](./examples/8.ddl)
 
-Dynamic Data Load a-la GraphQL & Relay / Falcor. Unlike those two, it's based on (specified but still)
-REST API.
+Dynamic Data Load, lightweight alternative to GraphQL+Relay / Falcor.
+
+**Notable differences**:
+1. Unlike both it's REST API based (avoiding vendor lock-in on Backend).
+2. Unlike both it's fully reactive.
+3. Unlike GraphQL it relies on plain data to describe queries, instead of DSL layer.
+4. Less magic, more boilerplate. Model dependencies are described, not auto-injected.
+5. Small code (currently all about DDL is up to 500LOC).
+6. Validations and Querying are decoupled. Use TsIO, PropTypes, Tcomb or any other dynamic typing
+to describe and validate your models. Avoid vendor lock-in once again.
+
+*Note: it's still highly experimental.*
 
 ## Tutorials
 
@@ -88,7 +96,7 @@ Learn how to use logging middleware.
 
 #### [11. Control](./tutorials/11.control)
 
-*wip*
+*Wip*
 
 ## Usage
 

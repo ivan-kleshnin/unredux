@@ -100,14 +100,14 @@ export let connect = (streamsToProps, ComponentToWrap) => {
   return Container
 }
 
-export let lastKey = R.pipe(R.split("."), R.nth(-1))
+export let lastKey = R.pipe(R.split("."), R.nth(-1), String)
 
 export let isolateSources = {
   state$: (source, key) => source
     .map(x => x[lastKey(key)])
     .skipDuplicates(R.identical),
 
-  props: R.always,
+  props: R.id,
 
   DOM: (source, key) => source.fromKey(lastKey(key)),
 
@@ -116,14 +116,15 @@ export let isolateSources = {
 
 export let isolateSinks = {
   action$: (sink, key) => {
-    return sink.map(command => {
-      return {fn: R.over, args: [lastKey(key), command]}
+    let k = lastKey(key)
+    return sink.map(action => {
+      return R.withName(`over("${k}", ${action.name || "anonymous"})`, R.over2(k, action))
     })
   },
 
-  // state$: R.id, // has to be isolated manually
+  state$: R.id, // has to be isolated manually
 
-  // intents: R.id, // has to be isolated manually
+  intents: R.id, // has to be isolated manually
 
   Component: (sink, key) => {
     return (props) => <div data-key={lastKey(key)}>

@@ -3,8 +3,10 @@ let Fs = require("fs")
 let Path = require("path")
 let Webpack = require("webpack")
 
-let configs = {
+module.exports = {
   devtool: "eval",
+  target: "web",
+
   entry: {
     bundle: "./client/index.js",
   },
@@ -40,10 +42,9 @@ let configs = {
       },
     ],
   },
-  target: "web",
   resolve: {
     modules: [
-      Path.resolve(__dirname, "node_modules"),
+      Path.resolve(__dirname, "./node_modules"),
       Path.resolve(__dirname, "../../vendors"),
       Path.resolve(__dirname, "../../node_modules"),
     ],
@@ -57,5 +58,3 @@ let configs = {
     }),
   ],
 }
-
-module.exports = configs

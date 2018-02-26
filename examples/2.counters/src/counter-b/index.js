@@ -1,6 +1,5 @@
 import * as R from "@paqmind/ramda"
 import * as F from "framework"
-import K from "kefir"
 import * as D from "kefir.db"
 import React from "react"
 
@@ -17,6 +16,7 @@ export default (sources, key) => {
     sources.state$
       ? sources.state$.take(1).map(R.always)
       : D.init(0),
+
     intents.inc$.map(_ => R.inc),
     intents.dec$.map(_ => R.dec),
   ).$

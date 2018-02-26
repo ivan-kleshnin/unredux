@@ -26,7 +26,7 @@
     "tcomb": "^3.2.24",
     "tcomb-validation": "^3.4.1",
     "urlz": "^0.3.1",
-    "webpack": "^3.8.1"
+    "webpack": "^3.11.0"
   },
   "babel": {
     "plugins": [

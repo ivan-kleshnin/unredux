@@ -5,6 +5,7 @@ let folder = JSON.parse(process.env.npm_config_argv).original[1]
 
 module.exports = {
   devtool: "eval",
+  target: "web",
 
   entry: {
     app: `./src/index.js`,
@@ -17,12 +18,16 @@ module.exports = {
   },
   module: {
     rules: [
-      {test: /\.js$/, use: "babel-loader", exclude: /node_modules/},
-    ]
+      {
+        test: /\.js$/,
+        use: "babel-loader",
+        exclude: /node_modules/
+      },
+    ],
   },
   resolve: {
     modules: [
-      Path.resolve(__dirname, "node_modules"),
+      Path.resolve(__dirname, "./node_modules"),
       Path.resolve(__dirname, "../../vendors"),
       Path.resolve(__dirname, "../../node_modules"),
     ],

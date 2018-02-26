@@ -1,8 +1,7 @@
 import * as R from "@paqmind/ramda"
-import K from "kefir"
+import * as F from "framework"
 import * as D from "kefir.db"
 import React from "react"
-import * as F from "framework"
 
 export default (sources, key) => {
   let intents = {
@@ -17,10 +16,11 @@ export default (sources, key) => {
     D.withLog({key}),
   )(
     D.init(0),
-    intents.inc$.map(_ => R.inc),                 // .map(_ => ({fn: R.inc}))
-    intents.dec$.map(_ => R.dec),                 // .map(_ => ({fn: R.dec}))
-    intents.add$.map(v => R.add(v)),              // .map(v => ({fn: R.add, args: [v]}))
-    intents.sub$.map(v => R.flip(R.subtract)(v)), // .map(v => ({fn: R.flip(R.subtract), args: [v]}))
+
+    intents.inc$.map(_ => R.inc),
+    intents.dec$.map(_ => R.dec),
+    intents.add$.map(v => R.add(v)),
+    intents.sub$.map(v => R.flip(R.subtract)(v)),
   ).$
 
   let Component = F.connect(

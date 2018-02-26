@@ -53,7 +53,7 @@ let handleError = e => console.warn(e)
 
 export let spread = (xs) => K.sequentially(0, xs)
 
-export let connect = (NoDataComponent, LoadingComponent) => (streamsToProps, ComponentToWrap) => {
+export let connect = (streamsToProps, ComponentToWrap) => {
   class Container extends React.Component {
     constructor(props) {
       super(props)
@@ -89,21 +89,7 @@ export let connect = (NoDataComponent, LoadingComponent) => (streamsToProps, Com
     }
 
     render() {
-      console.log(ComponentToWrap.name, this.state)
-
-      if (R.isEmpty(this.state)) {
-        return React.createElement(LoadingComponent)
-      }
-
-      if (R.any(R.isNil, R.values(this.state))) {
-        if (this.state.loading) {
-          return React.createElement(LoadingComponent)
-        } else {
-          return React.createElement(NoDataComponent)
-        }
-      } else {
-        return React.createElement(ComponentToWrap, R.merge(this.props, this.state), this.props.children)
-      }
+      return React.createElement(ComponentToWrap, R.merge(this.props, this.state), this.props.children)
     }
   }
 

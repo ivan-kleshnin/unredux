@@ -14,6 +14,7 @@ export default (sources, key) => {
     D.withLog({key}),
   )(
     D.init(0),
+
     intents.inc$.map(_ => R.inc),
     intents.dec$.map(_ => R.dec),
   ).$

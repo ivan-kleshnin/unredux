@@ -3,7 +3,6 @@ import A from "axios"
 import K from "kefir"
 import * as D from "kefir.db"
 import U from "urlz"
-import {desugarIndexQuery} from "./ddl"
 
 // Unsorted useful stuff ///////////////////////////////////////////////////////////////////////////
 export let setDocument = R.curry((doc, state) => {
@@ -17,26 +16,6 @@ export let setDocument = R.curry((doc, state) => {
 
 export let safeInc = R.pipe(R.defaultTo(0), R.inc)
 export let safeDec = R.pipe(R.defaultTo(0), R.dec)
-
-export let hashIndexQuery = (query) => {
-  query = desugarIndexQuery(query)
-  let [tableName, {filters, sort}] = query
-  return tableName + "." + JSON.stringify(filters) + "." + JSON.stringify(sort) // TODO json-stable-stringify
-}
-
-export let updateIndex = R.curry((offset, ids, index) => {
-  index = index || {}
-  return R.merge(
-    index,
-    R.fromPairs(R.map2((x, i) => [offset + i, x], ids))
-  )
-})
-
-export let indexToArray = R.pipe(
-  R.toPairs,
-  R.sortBy(R.nth(0)),
-  R.map(R.nth(1)),
-)
 
 // Navigation //////////////////////////////////////////////////////////////////////////////////////
 export let root = (key) => {
@@ -177,7 +156,314 @@ export let makeIndexActions = (seed, intents) => R.pipe(
   R.concatFlipped(makeSortingActions(seed, intents)),
 )([])
 
-  // return {
-  //   makeIntents, makeActions,
-  // }
-// }
+// type Range = [Number, Number]
+// (Number, Range) -> Boolean
+export let isBetween = (n, range) => {
+  return range[0] <= n && n <= range[1]
+}
+
+// (Array a, Array a) -> Array a
+export let concatUniq = R.pipe(R.concat, R.uniq, R.sortBy(R.id))
+
+// (Range, Range) -> Range
+export let combineRanges = (range1, range2) => {
+  let [leftRange, rightRange] = range1[0] < range2[0]
+    ? [range1, range2]
+    : [range2, range1]
+  let offset = leftRange[0]
+  let limit = Math.max(rightRange[0] + rightRange[1], leftRange[1])
+  return [offset, limit]
+}
+
+// (Range, Range) -> Boolean
+export let areRangesOverlapping = (range1, range2) => {
+  return isBetween(range2[0], range1)
+      || isBetween(range2[1], range1)
+      || isBetween(range1[0], range2)
+      || isBetween(range1[1], range2)
+}
+
+// (Range, Range) -> Boolean
+export let areRangesClose = (range1, range2) => {
+  let [leftRange, rightRange] = range1[0] < range2[0]
+    ? [range1, range2]
+    : [range2, range1]
+  let distanceBetween = Math.abs(rightRange[0] - leftRange[1])
+  let maxSpan = Math.max(range1[1] - range1[0], range2[1] - range2[0])
+  return distanceBetween <= maxSpan
+}
+
+// Query -> Boolean
+export let isModelsQuery = (query) => R.is(Array, query) && R.is(Array, query[1])
+
+// Query -> Boolean
+export let isIndexQuery = (query) => R.is(Array, query) && R.isPlainObj(query[1])
+
+export let defaultIds = R.defaultTo([])
+export let defaultFields = R.defaultTo([])
+export let defaultFilters = R.defaultTo(null)
+export let defaultSort = R.defaultTo(null)
+export let defaultOffset = R.defaultTo(0)
+export let defaultLimit = R.defaultTo(10)
+
+export let desugarModelsQuery = (query) => {
+  return R.pipe(
+    R.when(q => q.length == 2, R.append(null)),
+    R.over2([2], defaultFields),
+    R.over2([2], R.sortBy(R.id)),
+  )(query)
+}
+
+export let desugarIndexQuery = (query) => {
+  return R.pipe(
+    R.over2([1, "filters"], defaultFilters),
+    R.over2([1, "sort"], defaultSort),
+    R.over2([1, "offset"], defaultOffset),
+    R.over2([1, "limit"], defaultLimit),
+  )(query)
+}
+
+export let combineModelsQueries = (q1, q2) => {
+  let [tableName1, ids1, fs1] = q1
+  let [tableName2, ids2, fs2] = q2
+
+  let canCombine = tableName1 == tableName2
+  if (!canCombine) {
+    return null
+  }
+
+  let ids = R.sortBy(R.id, concatUniq(ids1, ids2))
+  let fields = R.sortBy(R.id, concatUniq(fs1, fs2))
+
+  return [tableName1, ids, fields]
+}
+
+export let combineIndexQueries = (q1, q2) => {
+  let [tableName1, cond1] = q1
+  let [tableName2, cond2] = q2
+
+  let canCombine = tableName1 == tableName2
+                && R.equals(cond1.filters, cond2.filters)
+                && cond1.sort == cond2.sort
+                && areRangesClose([cond1.offset, cond1.offset + cond1.limit], [cond2.offset, cond2.offset + cond2.limit])
+
+  if (!canCombine) {
+    return null
+  }
+
+  let {filters, sort} = cond1
+  let [offset, limit] = combineRanges([cond1.offset, cond1.limit], [cond2.offset, cond2.limit])
+
+  return [tableName1, {filters, sort, offset, limit}]
+}
+
+export let collapseModelsQueries = (qs) => {
+  if (!qs.length)
+    return []
+
+  let [q, ..._qs] = qs
+  let result = [q]
+
+  for (let q1 of _qs) {
+    // Try to merge query with one of result queries
+    for (var i = 0; i < result.length; i++) {
+      let q2 = result[i]
+      let qm = combineModelsQueries(q1, q2)
+      if (qm) {
+        result[i] = qm
+        break
+      }
+    }
+    if (i == result.length) {
+      // No merge occured
+      result.push(q1)
+    }
+  }
+
+  return result
+}
+
+export let collapseIndexQueries = (qs) => {
+  if (!qs.length)
+    return []
+
+  let [q, ..._qs] = qs
+  let result = [q]
+
+  for (let q1 of _qs) {
+    // Try to merge query with one of result queries
+    for (var i = 0; i < result.length; i++) {
+      let q2 = result[i]
+      let qm = combineIndexQueries(q1, q2)
+      if (qm) {
+        result[i] = qm
+        break
+      }
+    }
+    if (i == result.length) {
+      // No merge occured
+      result.push(q1)
+    }
+  }
+
+  return result
+}
+
+export let whatIsMissingByMQ = R.curry((state, query) => {
+  let [tableName, ids, fields] = query
+  let table = state.tables[tableName]
+  let missingStuff = R.reduce((z, id) => {
+    let model = table[id]
+    let missingFields = model
+      ? findMissingFields(model, fields)
+      : fields
+    if (!R.isEmpty(missingFields))
+      z[id] = missingFields
+    return z
+  }, {}, ids)
+  let ids2 = R.keys(missingStuff)
+  let fields2 = R.reduce(concatUniq, [], R.values(missingStuff))
+  return R.isEmpty(missingStuff)
+    ? []
+    : [tableName, ids2, fields2]
+})
+
+export let whatIsMissingByIQ = R.curry((state, query) => {
+  let [tableName, cond] = query
+  let indexKey = hashIndexQuery(query)
+  let index = state.indexes[indexKey] || {table: {}, total: 0}
+  let missingRange = findMissingRange(index.table, cond)
+  let cond2 = R.merge(cond, missingRange)
+  return R.isEmpty(missingRange)
+    ? []
+    : [tableName, cond2]
+})
+
+let findMissingFields = (model, fields) => {
+  // TODO flatten model object or unflatten fields to support compound fields
+  let presentFields = R.keys(R.pick(fields, model))
+  return R.difference(fields, presentFields)
+}
+
+let findMissingRange = (table, {offset, limit}) => {
+  let queryOffsets = R.range(offset, offset + limit)
+  let presentOffsets = R.map(Number, R.keys(table))
+  let missingOffsets = R.difference(queryOffsets, presentOffsets)
+  return missingOffsets.length
+    ? {offset: missingOffsets[0], limit: R.nth(-1, missingOffsets) - missingOffsets[0] + 1}
+    : {}
+}
+
+/**
+ * GraphQL-like queries:
+ *   [['posts', ['2'], ['id']],
+ *    ['posts', ['3'], ['id', 'title']]]
+ *  can't be extracted in any DB (I'm aware of) in one query.
+ *  So what you do on backend, is collapse that into:
+ *    [['posts', ['2', '3'], ['id', 'title' ]]]
+ *  which is exactly the query I return from here (after collapse part).
+ *  As were said, GraphQL pushes a lot of complexity into backend.
+ */
+
+export let hashIndexQuery = (query) => {
+  query = desugarIndexQuery(query)
+  let [tableName, {filters, sort}] = query
+  return tableName + "." + JSON.stringify(filters) + "." + JSON.stringify(sort) // TODO json-stable-stringify
+}
+
+export let makeGlobalIndex = R.curry((offset, {ids, total}) => {
+  return {
+    table: R.fromPairs(R.map2((x, i) => [offset + i, x], ids)),
+    total: total,
+  }
+})
+
+export let makePagination = R.curry((offset, limit, {table, total}) => {
+  return {
+    ids: tableToIds(table, R.range(offset, offset + limit)),
+    total,
+    offset,
+    limit,
+  }
+})
+
+export let makeLazyLoad = R.curry((offset, limit, {table, total}) => {
+  return {
+    ids: tableToIds(table, R.range(0, offset + limit)),
+    total,
+    offset,
+    limit,
+  }
+})
+
+export let tableToIds = (table, range) => {
+  return R.chain(o => table[o] ? [table[o]] : [], range)
+}
+
+///
+export let deriveModelsObj = (table$, ids$, validateFn) => {
+  return D.deriveArr(
+    [table$, ids$],
+    (table, ids) => {
+      return R.reduce((z, id) => {
+        let model = table[id]
+        let errors = validateFn(model)
+        if (!errors.length) {
+          z[id] = model
+        }
+        return z
+      }, {}, ids)
+    }
+  )
+}
+
+export let deriveModelsArr = (table$, ids$, validateFn) => {
+  return D.deriveArr(
+    [table$, ids$],
+    (table, ids) => {
+      return R.reduce((z, id) => {
+        let model = table[id]
+        let errors = validateFn(model)
+        if (!errors.length) {
+          z.push(model)
+        }
+        return z
+      }, [], ids)
+    }
+  )
+}
+
+export let deriveModel = (table$, id$, validateFn) => {
+  return D.deriveArr(
+    [table$, id$],
+    (table, id) => {
+      let model = table[id]
+      let errors = validateFn(model)
+      return errors.length ? null : model
+    }
+  )
+}
+
+// TODO refactor
+export let deriveLazyLoad = (indexes$, localIndex$, indexQueryFn) => {
+  return D.deriveArr([indexes$, localIndex$], (indexes, {offset, limit}) => {
+    let query = indexQueryFn({offset, limit})
+    let indexKey = hashIndexQuery(query)
+    let index = indexes[indexKey] || {table: {}, total: 0}
+    return makeLazyLoad(offset, limit, index)
+  })
+}
+
+// TODO more validation examples: propTypes, tcomb, etc.
+export let validate = R.curry((Type, model) => {
+  if (!model) {
+    return ["*"]
+  }
+  let validators = R.toPairs(Type)
+  let errors = R.chain(([field, validator]) => {
+    return validator(model[field])
+      ? []
+      : [field]
+  }, validators)
+  return errors
+})

@@ -1,0 +1,20 @@
+{
+  "posts": {},
+  "users": {
+    "1": {
+      "id": "1",
+      "fullname": "First User",
+      "email": "first@somemail.com"
+    },
+    "2": {
+      "id": "2",
+      "fullname": "Second User",
+      "email": "second@somemail.com"
+    },
+    "3": {
+      "id": "3",
+      "fullname": "Third User",
+      "email": "third@somemail.com"
+    }
+  }
+}

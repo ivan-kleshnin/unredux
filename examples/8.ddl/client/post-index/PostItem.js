@@ -9,5 +9,6 @@ export default function PostItem({post}) {
 }
 
 PostItem.propTypes = {
-  post: PT.object,
+  post: PT.object.isRequired,
+  // user: PT.object.isRequired,
 }

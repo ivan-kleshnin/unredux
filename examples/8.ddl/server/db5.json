@@ -1,0 +1,64 @@
+{
+  "posts": {
+    "1": {
+      "id": "1",
+      "title": "First Post",
+      "userId": "1"
+    },
+    "2": {
+      "id": "2",
+      "title": "Second Post",
+      "userId": "1"
+    },
+    "3": {
+      "id": "3",
+      "title": "Third Post"
+    },
+    "4": {
+      "id": "4",
+      "title": "Fourth Post",
+      "userId": "1"
+    },
+    "5": {
+      "id": "5",
+      "title": "Fifth Post",
+      "userId": "2"
+    },
+    "6": {
+      "id": "6",
+      "title": "Sixth Post"
+    },
+    "7": {
+      "id": "7",
+      "title": "Seventh Post",
+      "userId": "2"
+    },
+    "8": {
+      "id": "8",
+      "title": "Eighth Post",
+      "userId": "3"
+    },
+    "9": {
+      "id": "9",
+      "title": "Nineth Post",
+      "userId": "3"
+    }
+  },
+  "users": {
+    "1": {
+      "id": "1",
+      "fullname": "First User",
+      "email": "first@somemail.com"
+    },
+    "2": {
+      "id": "2",
+      "fullname": "Second User",
+      "email": "second@somemail.com"
+    },
+    "3": {
+      "id": "3",
+      "fullname": "Third User",
+      "email": "third@somemail.com"
+    }
+  }
+}

@@ -1,9 +1,16 @@
 import * as R from "@paqmind/ramda"
-import {makeId} from "common/helpers"
-import {makeFilterFn, makeSortFn} from "common/home"
-import * as T from "common/types"
+import {makeFilterFn, makeSortFn} from "common/user-index"
 import {Router} from "../express"
-import db from "../db.json"
+import db0 from "../db0.json"
+import db1 from "../db1.json"
+import db2 from "../db2.json"
+import db3 from "../db3.json"
+import db4 from "../db4.json"
+import db5 from "../db5.json"
+import db6 from "../db6.json"
+import db7 from "../db7.json"
+
+let db = {0: db0, 1: db1, 2: db2, 3: db3, 4: db4, 5: db5, 6: db6, 7: db7}
 
 let router = Router({
   caseSensitive: true,
@@ -15,28 +22,31 @@ export default router
 // Get users by filter, sort and pagination ========================================================
 router.get(
   [
-    "/",
-    "/~/",
-    "/~/:fields/",
-    "/:offset~:limit/",
-    "/:offset~:limit/:fields/",
-    "/~:limit/",
-    "/~:limit/:fields/",
+    "/:subset/users/",
+    "/:subset/users/~/",
+    "/:subset/users/~/:fields/",
+    "/:subset/users/:offset~:limit/",
+    "/:subset/users/:offset~:limit/:fields/",
+    "/:subset/users/~:limit/",
+    "/:subset/users/~:limit/:fields/",
   ],
   (req, res) => {
+    console.log("GET", req.originalUrl)
+
     let {params, query} = req
+    let db2 = db[dropLetter(params.subset)]
 
     let filterFn = makeFilterFn(R.firstOk([query.filters && JSON.parse(query.filters), {}]))
     let sortFn = makeSortFn(R.firstOk([query.sort, "+id"]))
-    let offset = R.firstOk([params.offset, query.offset, 0])
-    let limit = Math.min(R.firstOk([params.limit, query.limit, 20]), 100)
+    let offset = Number(R.firstOk([params.offset, query.offset, 0]))
+    let limit = Math.min(Number(R.firstOk([params.limit, query.limit, 20])), 100)
     let fields = R.firstOk([params.fields, query.fields, null])
 
     let models = R.pipe(
       R.values,
       R.filter(filterFn),
       R.sort(sortFn),
-    )(db.users) // :: Array Model
+    )(db2.users) // :: Array Model
 
     let paginatedModels = R.pipe(
       R.slice(offset, offset + limit),
@@ -45,23 +55,27 @@ router.get(
         : R.id,
     )(models) // :: Array Model
 
-    // setTimeout(() => {
+    setTimeout(() => {
       res.json({
         models: paginatedModels, // :: Array Model
         total: models.length,    // Number
       })
-    // }, 1000)
+    }, 1000)
   }
 )
 
 // Get user(s) by id(s) ============================================================================
 router.get(
   [
-    "/:ids/",
-    "/:ids/:fields/",
+    "/:subset/users/:ids/",
+    "/:subset/users/:ids/:fields/",
   ],
   (req, res) => {
+    console.log("GET", req.originalUrl)
+
     let {params, query} = req
+    let db2 = db[dropLetter(params.subset)]
+
     let fields = R.firstOk([params.fields, query.fields, null])
 
     let models = R.pipe(
@@ -69,35 +83,14 @@ router.get(
       fields
         ? R.map(R.pick(fields))
         : R.id,
-    )(db.users)
+    )(db2.users)
 
-    // setTimeout(() => {
+    setTimeout(() => {
       res.json({
         models // :: Object Model
       })
-    // }, 1000)
+    }, 1000)
   }
 )
 
-// Create user =====================================================================================
-router.post(
-  "/",
-  (req, res) => {
-    let form = req.body
-    let user
-    try {
-      user = T.User({
-        id: makeId(),
-        fullname: form.fullname,
-        // TODO ...
-      })
-    } catch (err) {
-      return res.status(400).json({error: err.message})
-    }
-    db.users[user.id] = user // TODO persistence
-    res.status(201).json({model: user})
-  }
-)
-
-// Edit user =======================================================================================
-// TODO
+let dropLetter = (s) => /[a-z]$/.test(s) ? R.dropLast(1, s) : s

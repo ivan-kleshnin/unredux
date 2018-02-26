@@ -1,17 +1,21 @@
 import * as R from "@paqmind/ramda"
 import A from "axios"
+import * as F from "framework"
 import K from "kefir"
 import * as D from "kefir.db"
+import {derive} from "kefir.db"
 import React from "react"
+import Route from "route-parser"
 import U from "urlz"
-import * as B from "../blueprints"
-import * as F from "../framework"
-import router from "../router"
 import {
-  isModelsQuery, isIndexQuery,
   collapseModelsQueries, collapseIndexQueries,
-  whatAreMissing, whatIsMissing,
-} from "../ddl"
+  desugarModelsQuery, desugarIndexQuery,
+  isModelsQuery, isIndexQuery,
+  hashIndexQuery, makeGlobalIndex,
+  safeInc, safeDec,
+  whatIsMissingByMQ, whatIsMissingByIQ,
+} from "../blueprints"
+import router from "../router"
 
 // SEED
 export let seed = {
@@ -20,18 +24,45 @@ export let seed = {
 
   // DATA
   tables: {
-    posts: {
-      // "f7f169a537": {id: "f7f169a537", title: "Fluent API debunked"}, //, userId: "94243b11b1"
-    },
+    // Testing scenarios (all isolated from each other)
+    "0a/posts": {},
+    "0a/users": {},
 
-    users: {
-      // "94243b11b1": {id: "94243b11b1"}, // , fullname: "Jack"
-    },
+    "0b/posts": {},
+    "0b/users": {},
+
+    "1a/posts": {},
+    "1a/users": {},
+
+    "2a/posts": {},
+    "2a/users": {},
+
+    "3a/posts": {},
+    "3a/users": {},
+
+    "4a/posts": {},
+    "4a/users": {},
+
+    "4b/posts": {},
+    "4b/users": {},
+
+    "5a/posts": {},
+    "5a/users": {},
+
+    "5b/posts": {},
+    "5b/users": {},
+
+    "6a/posts": {},
+    "6a/users": {},
+
+    "7/posts": {},
+    "7/users": {},
   },
 
   indexes: {
-    // "foo": {},
-    // "bar": {},
+    // e.g.
+    // "posts.null.null": {ids: {}, total: null},
+    // "users.null.null": {ids: {}, total: null},
   },
 
   // META
@@ -46,6 +77,7 @@ export default (sources, key) => {
     .filter(Boolean)
     .map(url => {
       let {mask, params, payload: app} = router.doroute(url)
+      app = F.isolate(app, key + mask, ["DOM", "Component"])
       let sinks = app({...sources, props: {mask, params, router}})
       return R.merge({action$: K.never(), load$: K.never()}, sinks)
     })
@@ -81,23 +113,26 @@ export default (sources, key) => {
   }
 
   // LOAD
-  let _load$ = K.pool()
-  let load$ = K.merge([
-    _load$,
-    contentSinks$.flatMapLatest(x => x.load$)
-  ]).filter(R.length) // --mq1--mq2--mq3--iq1-->
-
-  /// Trying to deprecate this /////////////////////////////////////////////////////////////////////
-  // let load$ = contentSinks$.flatMapLatest(x => x.load$).filter(R.length) // --[mq1, mq2]--[mq3]--[iq1]-->
-
-  // TODO consider removal of this step and requiring to load: --mq1--mq2--mq3--iq1--> instead
-  // Spread multiple queries into a stream
-  // let rawQuery$ = load$.flatMap(F.spread) // --mq1--mq2--mq3--iq1-->
-  //////////////////////////////////////////////////////////////////////////////////////////////////
+  let load$ = contentSinks$.flatMapLatest(x => x.load$).filter(R.length) // --mq1--mq2--mq3--iq1-->
 
   // Buffer queries for 100ms, up to 20 items per buffer
-  let rawModelsQueries$ = load$.filter(isModelsQuery).bufferWithTimeOrCount(100, 20).filter(R.length) // --[mq1, mq2, mq3]-->
-  let rawIndexQueries$ = load$.filter(isIndexQuery).bufferWithTimeOrCount(100, 20).filter(R.length)   // --[iq1]-->
+  let rawModelsQueries$ = load$
+    .filter(isModelsQuery)
+    .map(([tableName, ids, fields]) =>
+      [tableName, R.filter(Boolean, ids), R.filter(Boolean, fields)]
+    )
+    .filter(([tableName, ids, fields]) =>
+      tableName && ids.length && fields.length
+    )
+    .map(desugarModelsQuery)
+    .bufferWithTimeOrCount(100, 20)
+    .filter(R.length) // --[mq1, mq2, mq3]-->
+
+  let rawIndexQueries$ = load$
+    .filter(isIndexQuery)
+    .map(desugarIndexQuery)
+    .bufferWithTimeOrCount(100, 20)
+    .filter(R.length) // --[iq1]-->
 
   // Collapse the collapsible queries
   let collapsedModelsQueries$ = rawModelsQueries$.map(collapseModelsQueries) // --[mq1, mq3]-->
@@ -107,11 +142,9 @@ export default (sources, key) => {
   let modelsQuery$ = collapsedModelsQueries$.flatMap(F.spread) // --mq1--mq3-->
   let indexQuery$ = collapsedIndexQueries$.flatMap(F.spread)   // --iq1-->
 
-  let fetchModelsIntent$ = sources.state$.sampledBy(modelsQuery$, (state, query) => {
-    return whatIsMissing(query, state)[0] // TODO ugly API
-  }).filter(R.length)
+  let fetchModelsIntent$ = sources.state$.sampledBy(modelsQuery$, whatIsMissingByMQ).filter(R.length)
 
-  let fetchIndexIntent$ = indexQuery$ // TODO first render after SSR should be prevented here (possibly)
+  let fetchIndexIntent$ = sources.state$.sampledBy(indexQuery$, whatIsMissingByIQ).filter(R.length)
 
   let fetchModels$ = fetchModelsIntent$.flatMapConcat(query => {
     let [tableName, ids, fields] = query
@@ -127,56 +160,53 @@ export default (sources, key) => {
   })
 
   let fetchIndex$ = fetchIndexIntent$.flatMapConcat(query => {
-    let [tableName, cond, fields] = query
-    // TODO filters, sort
-    let apiURL = fields.length
-      ? `/api/${tableName}/${cond.offset}~${cond.limit}/${R.join(",", fields)}/`
-      : `/api/${tableName}/${cond.offset}~${cond.limit}/`
+    let [tableName, cond] = query
+    let apiURL = `/api/${tableName}/${cond.offset}~${cond.limit}/id/`
     return K.fromPromise(
-      A.get(apiURL)
-        .then(resp => R.pluck("id", resp.data.models))
+      A.get(apiURL, {params: {filters: cond.filters, sort: cond.sort}}) // TODO test
+        .then(({data}) => ({ids: R.pluck("id", data.models), total: data.total}))
         .catch(R.id)
         .then(resp => ({query, resp}))
     )
   })
 
   let loadAction$ = K.merge([
-    fetchModelsIntent$.map(([tableName, ..._]) => R.over2(["loading", tableName], B.safeInc)),
-    fetchIndexIntent$.map(([tableName, ..._]) => R.over2(["loading", tableName], B.safeInc)),
+    fetchModelsIntent$.map(([tableName, ..._]) => R.over2(["loading", tableName], safeInc)),
+    fetchIndexIntent$.map(([tableName, ..._]) => R.over2(["loading", tableName], safeInc)),
 
     fetchModels$.map(({query, resp}) => function afterModelsGET(state) {
       let [tableName, ids, fields] = query
-      // console.log("afterModelsGET!")
       if (resp instanceof Error) {
         return R.pipe(
-          R.over2(["loading", tableName], B.safeDec),
+          R.over2(["loading", tableName], safeDec),
           // raise popups here
         )(state)
       } else {
-        let models = resp
+        let models = resp // R.fromPairs(R.zip(ids, R.map(id => resp[id] || null, ids)))
         return R.pipe(
           R.over2(["tables", tableName], R.mergeDeepFlipped(models)),
-          R.over2(["loading", tableName], B.safeDec),
+          R.over2(["loading", tableName], safeDec),
         )(state)
       }
     }),
 
     fetchIndex$.map(({query, resp}) => function afterIndexGET(state) {
-      let [tableName, cond, fields] = query
+      let [tableName, {offset}, fields] = query
       // console.log("afterIndexGET!")
       if (resp instanceof Error) {
         return R.pipe(
-          R.over2(["loading", tableName], B.safeDec),
+          R.over2(["loading", tableName], safeDec),
           // raise popups here
         )(state)
       } else {
-        let ids = resp
-        let models = R.fromPairs(R.zip(ids, ids.map(id => ({id}))))
-        // _load$.plug(K.constant([tableName, ids, fields])) // side-effect: auto load initialization!
+        let {ids, total} = resp
+        let models = R.fromPairs(R.zip(ids, R.map(id => ({id}), ids)))
+        let indexKey = hashIndexQuery(query)
         return R.pipe(
           R.over2(["tables", tableName], R.mergeDeepFlipped(models)),
-          R.over2(["indexes", B.hashIndexQuery(query)], B.updateIndex(cond.offset, ids)),
-          R.over2(["loading", tableName], B.safeDec),
+          R.over2(["indexes", indexKey], R.defaultTo({table: {}, total: 0})),
+          R.over2(["indexes", indexKey], R.mergeDeepFlipped(makeGlobalIndex(offset, resp))),
+          R.over2(["loading", tableName], safeDec),
         )(state)
       }
     })
@@ -188,7 +218,7 @@ export default (sources, key) => {
     // D.withLog({key, input: false, output: true}),
   )(
     // Init
-    // D.init(seed),
+    D.init(seed),
     D.initAsync(sources.state$),
 
     // Navigation
@@ -203,13 +233,17 @@ export default (sources, key) => {
   ).$
 
   // COMPONENT -------------------------------------------------------------------------------------
-  let Component = F.connect2(
+  let Component = F.connect(
     {
       url: url$,
       Content: contentSinks$.map(x => x.Component),
     },
     ({url, Content}) => {
       return <div>
+        {new Route("/").match(U.pathname(url))
+          ? null
+          : <p><a href="/">Back to Home</a></p>
+        }
         <div className="page-content">
           <Content/>
         </div>

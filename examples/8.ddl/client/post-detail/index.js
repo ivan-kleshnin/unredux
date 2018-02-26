@@ -1,52 +1,47 @@
 import * as R from "@paqmind/ramda"
+import * as F from "framework"
 import K from "kefir"
 import * as D from "kefir.db"
 import React from "react"
-import * as B from "../blueprints"
-import {whatIsMissing} from "../ddl"
-import * as F from "../framework"
+import {deriveModel, validate} from "../blueprints"
 import PostDetail from "./PostDetail"
 
-let deriveLoading = (state$, tableNames) =>
-  K.combine(
-    R.map(tableName => D.derive(state$, ["loading", tableName]), tableNames)
-  ).map(R.any(Boolean)).toProperty()
+let makeScenarios = (subset) => {
+  let Post = {
+    id: R.I,
+    title: R.I,
+    userId: subset.endsWith("b") ? R.K(true) : R.I,
+  }
 
-let deriveModel = (state$, id$, queryFn) => {
-  return D.deriveArr(
-    [state$, id$.delay(1)],
-    (state, id) => {
-      if (id) {
-        let query = queryFn(id)
-        let missing = whatIsMissing(query, state)
-        if (!missing.length) {
-          let tableName = query[0]
-          return state.tables[tableName][id]
-        } else {
-          return null
-        }
-      } else {
-        return null
-      }
-    }
-  ).filter(Boolean)
+  let User = {
+    id: R.I,
+    fullname: R.I,
+    email: R.I,
+  }
+
+  let postModelQuery = (id) => [`${subset}/posts`, [id], R.keys(Post)]
+  let userModelQuery = (id) => [`${subset}/users`, [id], R.keys(User)]
+
+  return {Post, User, postModelQuery, userModelQuery}
 }
-
-let deriveProp = (state$, prop) =>
-  D.derive(state$, R.prop(prop))
-
-let postModelQuery = (id) => ["posts", [id], ["id", "title", "userId"]]
-let userModelQuery = (id) => ["users", [id], ["id", "fullname", "email"]]
 
 export default (sources, key) => {
   let {params} = sources.props
-  let postLens = ["posts", params.id]
+
+  // --- Testing scenarios ---
+  let {Post, User, postModelQuery, userModelQuery} = makeScenarios(params.subset)
+  // ---
 
   // DATA & LOAD
-  let postId$ = K.constant(params.id)
-  let post$ = deriveModel(sources.state$, postId$, postModelQuery)
-  let userId$ = deriveProp(post$, "userId")
-  let user$ = deriveModel(sources.state$, userId$, userModelQuery)
+  let _state$ = sources.state$.throttle(50)
+  let loading$ = D.derive(_state$, "loading")
+  let postsTable$ = D.derive(_state$, ["tables", `${params.subset}/posts`]) // TODO disable R.equals check
+  let usersTable$ = D.derive(_state$, ["tables", `${params.subset}/users`]) // in kefir.db – too expensive?
+
+  let postId$ = K.constant(params.id)                           // :: $ String
+  let post$ = deriveModel(postsTable$, postId$, validate(Post)) // :: $ (Post | null)
+  let userId$ = D.derive(post$, R.prop("userId"))                 // :: $ String
+  let user$ = deriveModel(usersTable$, userId$, validate(User)) // :: $ (User | null)
 
   let load$ = K.merge([
     postId$.map(postModelQuery),
@@ -54,16 +49,14 @@ export default (sources, key) => {
   ])
 
   // COMPONENT
-  let Component = F.connect2(
+  let Component = F.connect(
     {
-      // loading: loading$,
+      loading: loading$,
       post: post$,
       user: user$,
     },
-    PostDetail
+    (props) => <PostDetail subset={params.subset} {...props}/>
   )
 
   return {load$, Component}
 }
-
-// TODO optional fields

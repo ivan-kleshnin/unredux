@@ -47,7 +47,6 @@ module.exports = {
       Path.resolve(__dirname, "node_modules"),
       Path.resolve(__dirname, "../../vendors"),
       Path.resolve(__dirname, "../../node_modules"),
-      Path.resolve(__dirname, "../../../kefir.db/node_modules"), // HACK
     ],
   },
   plugins: [

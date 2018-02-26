@@ -5,13 +5,17 @@ import Home from "./common/Home"
 import NotFound from "./common/NotFound"
 
 // Apps
-import postLazyLoadApp from "./post-lazyload"
+import postIndexApp from "./post-index"
+import postIndex7App from "./post-index7"
 import postDetailApp from "./post-detail"
 
 let routes = [
+  // Details
+  ["/:subset/posts/:id/", postDetailApp],
+
   // Indexes
-  ["/posts/lazyload/", postLazyLoadApp],
-  ["/posts/:id/", postDetailApp],
+  ["/7/posts/", postIndex7App],
+  ["/:subset/posts/", postIndexApp],
 
   // Static pages
   ["/", F.lift(Home)],

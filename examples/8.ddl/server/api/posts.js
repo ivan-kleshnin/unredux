@@ -1,9 +1,16 @@
 import * as R from "@paqmind/ramda"
-import {makeId} from "common/helpers"
-import {makeFilterFn, makeSortFn} from "common/home"
-import * as T from "common/types"
+import {makeFilterFn, makeSortFn} from "common/post-index"
 import {Router} from "../express"
-import db from "../db.json"
+import db0 from "../db0.json"
+import db1 from "../db1.json"
+import db2 from "../db2.json"
+import db3 from "../db3.json"
+import db4 from "../db4.json"
+import db5 from "../db5.json"
+import db6 from "../db6.json"
+import db7 from "../db7.json"
+
+let db = {0: db0, 1: db1, 2: db2, 3: db3, 4: db4, 5: db5, 6: db6, 7: db7}
 
 let router = Router({
   caseSensitive: true,
@@ -15,18 +22,19 @@ export default router
 // Get posts by filters, sort and pagination =======================================================
 router.get(
   [
-    "/",
-    "/~/",
-    "/~/:fields/",
-    "/:offset~:limit/",
-    "/:offset~:limit/:fields/",
-    "/~:limit/",
-    "/~:limit/:fields/",
+    "/:subset/posts/",
+    "/:subset/posts/~/",
+    "/:subset/posts/~/:fields/",
+    "/:subset/posts/:offset~:limit/",
+    "/:subset/posts/:offset~:limit/:fields/",
+    "/:subset/posts/~:limit/",
+    "/:subset/posts/~:limit/:fields/",
   ],
   (req, res) => {
     console.log("GET", req.originalUrl)
 
     let {params, query} = req
+    let db2 = db[dropLetter(params.subset)]
 
     let filterFn = makeFilterFn(R.firstOk([query.filters && JSON.parse(query.filters), {}]))
     let sortFn = makeSortFn(R.firstOk([query.sort, "+id"]))
@@ -36,9 +44,9 @@ router.get(
 
     let models = R.pipe(
       R.values,
-      R.filter(filterFn),
+      R.filter(post => filterFn(post, db2.users[post.userId])),
       R.sort(sortFn),
-    )(db.posts) // :: Array Model
+    )(db2.posts) // :: Array Model
 
     let paginatedModels = R.pipe(
       R.slice(offset, offset + limit),
@@ -47,25 +55,27 @@ router.get(
         : R.id,
     )(models) // :: Array Model
 
-    // setTimeout(() => {
+    setTimeout(() => {
       res.json({
         models: paginatedModels, // :: Array Model
         total: models.length,    // Number
       })
-    // }, 2000)
+    }, 1000)
   }
 )
 
 // Get post(s) by id(s) ============================================================================
 router.get(
   [
-    "/:ids/",
-    "/:ids/:fields/",
+    "/:subset/posts/:ids/",
+    "/:subset/posts/:ids/:fields/",
   ],
   (req, res) => {
     console.log("GET", req.originalUrl)
 
     let {params, query} = req
+    let db2 = db[dropLetter(params.subset)]
+
     let fields = R.firstOk([params.fields, query.fields, null])
 
     let models = R.pipe(
@@ -73,58 +83,14 @@ router.get(
       fields
         ? R.map(R.pick(fields))
         : R.id,
-    )(db.posts)
+    )(db2.posts)
 
-    // setTimeout(() => {
+    setTimeout(() => {
       res.json({
         models // :: Object Model
       })
-    // }, 2000)
+    }, 1000)
   }
 )
 
-// Create post =====================================================================================
-router.post(
-  "/",
-  (req, res) => {
-    let form = req.body
-    let post
-    try {
-      post = T.Post({
-        id: makeId(),
-        title: form.title,
-        text: form.text,
-        tags: T.strToTags(form.tags),
-        isPublished: form.isPublished,
-        publishDate: new Date().toJSON(),
-      })
-    } catch (err) {
-      return res.status(400).json({error: err.message})
-    }
-    db.posts[post.id] = post // TODO persistence
-    res.status(201).json({model: post})
-  }
-)
-
-// Edit post =======================================================================================
-router.put(
-  "/:id/",
-  (req, res) => {
-    let form = req.body
-    let post
-    try {
-      post = T.Post({
-        id: req.params.id,
-        title: form.title,
-        text: form.text,
-        tags: T.strToTags(form.tags),
-        isPublished: form.isPublished,
-        publishDate: new Date().toJSON(),
-      })
-    } catch (err) {
-      return res.status(400).json({error: err.message})
-    }
-    db.posts[post.id] = post // TODO persistence
-    res.status(200).json({model: post})
-  }
-)
+let dropLetter = (s) => /[a-z]$/.test(s) ? R.dropLast(1, s) : s

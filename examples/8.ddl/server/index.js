@@ -37,8 +37,8 @@ app.use("/public", Express.static(P.resolve(__dirname, "../public")))
 app.use("/mocks", mocksRoutes)
 
 // API
-app.use("/api/posts", apiPostsRoutes)
-app.use("/api/users", apiUsersRoutes)
+app.use("/api", apiPostsRoutes)
+app.use("/api", apiUsersRoutes)
 
 // SSR
 app.use(unless(["/public", "/favicon", "/api", "/mocks"], ssrRoutes))

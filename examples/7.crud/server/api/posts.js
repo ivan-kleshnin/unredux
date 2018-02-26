@@ -23,6 +23,8 @@ router.get(
     "/~:limit/:fields/",
   ],
   (req, res) => {
+    console.log("GET", req.originalUrl)
+
     let {params, query} = req
 
     let filterFn = makeFilterFn(R.firstOk([query.filters && JSON.parse(query.filters), {}]))
@@ -35,18 +37,18 @@ router.get(
       R.values,
       R.filter(filterFn),
       R.sort(sortFn),
-    )(db.posts)
+    )(db.posts) // :: Array Model
 
     let paginatedModels = R.pipe(
       R.slice(offset, offset + limit),
       fields
         ? R.map(R.pick(fields))
         : R.id,
-    )(models)
+    )(models) // :: Array Model
 
     res.json({
-      models: paginatedModels,
-      total: models.length,
+      models: paginatedModels, // :: Array Model
+      total: models.length,    // Number
     })
   }
 )
@@ -58,6 +60,8 @@ router.get(
     "/:ids/:fields/",
   ],
   (req, res) => {
+    console.log("GET", req.originalUrl)
+
     let {params, query} = req
     let fields = R.firstOk([params.fields, query.fields, null])
 
@@ -68,7 +72,7 @@ router.get(
         : R.id,
     )(db.posts)
 
-    res.json({models})
+    res.json({models}) // :: Object Model
   }
 )
 

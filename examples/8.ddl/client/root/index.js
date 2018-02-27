@@ -1,9 +1,8 @@
 import * as R from "@paqmind/ramda"
 import A from "axios"
-import * as F from "framework"
+import {connect, derive, isolate, spread} from "framework"
 import K from "kefir"
 import * as D from "kefir.db"
-import {derive} from "kefir.db"
 import React from "react"
 import Route from "route-parser"
 import U from "urlz"
@@ -70,14 +69,14 @@ export let seed = {
 }
 
 export default (sources, key) => {
-  let url$ = D.derive(sources.state$, ["url"])
+  let url$ = derive(sources.state$, "url")
 
   // ROUTING ---------------------------------------------------------------------------------------
   let contentSinks$ = url$
     .filter(Boolean)
     .map(url => {
       let {mask, params, payload: app} = router.doroute(url)
-      app = F.isolate(app, key + mask, ["DOM", "Component"])
+      app = isolate(app, key + mask, ["DOM", "Component"])
       let sinks = app({...sources, props: {mask, params, router}})
       return R.merge({action$: K.never(), load$: K.never()}, sinks)
     })
@@ -113,7 +112,8 @@ export default (sources, key) => {
   }
 
   // LOAD
-  let load$ = contentSinks$.flatMapLatest(x => x.load$).filter(R.length) // --mq1--mq2--mq3--iq1-->
+  let load$ = contentSinks$.flatMapLatest(x => x.load$).filter(R.length)
+    .skipDuplicates(R.equals) // --mq1--mq2--mq3--iq1-->
 
   // Buffer queries for 100ms, up to 20 items per buffer
   let rawModelsQueries$ = load$
@@ -139,8 +139,8 @@ export default (sources, key) => {
   let collapsedIndexQueries$ = rawIndexQueries$.map(collapseIndexQueries)    // --[iq1]-->
 
   // Spread all collapsed queries into a stream
-  let modelsQuery$ = collapsedModelsQueries$.flatMap(F.spread) // --mq1--mq3-->
-  let indexQuery$ = collapsedIndexQueries$.flatMap(F.spread)   // --iq1-->
+  let modelsQuery$ = collapsedModelsQueries$.flatMap(spread) // --mq1--mq3-->
+  let indexQuery$ = collapsedIndexQueries$.flatMap(spread)   // --iq1-->
 
   let fetchModelsIntent$ = sources.state$.sampledBy(modelsQuery$, whatIsMissingByMQ).filter(R.length)
 
@@ -192,7 +192,6 @@ export default (sources, key) => {
 
     fetchIndex$.map(({query, resp}) => function afterIndexGET(state) {
       let [tableName, {offset}, fields] = query
-      // console.log("afterIndexGET!")
       if (resp instanceof Error) {
         return R.pipe(
           R.over2(["loading", tableName], safeDec),
@@ -233,7 +232,7 @@ export default (sources, key) => {
   ).$
 
   // COMPONENT -------------------------------------------------------------------------------------
-  let Component = F.connect(
+  let Component = connect(
     {
       url: url$,
       Content: contentSinks$.map(x => x.Component),

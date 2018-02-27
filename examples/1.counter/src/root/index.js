@@ -1,5 +1,5 @@
 import * as R from "@paqmind/ramda"
-import * as F from "framework"
+import {connect} from "framework"
 import * as D from "kefir.db"
 import React from "react"
 
@@ -23,7 +23,7 @@ export default (sources, key) => {
     intents.sub$.map(v => R.flip(R.subtract)(v)),
   ).$
 
-  let Component = F.connect(
+  let Component = connect(
     {counter: state$},
     ({counter}) =>
       <p>

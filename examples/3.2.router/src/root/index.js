@@ -1,5 +1,5 @@
 import * as R from "@paqmind/ramda"
-import * as F from "framework"
+import {connect, derive, isolate} from "framework"
 import K from "kefir"
 import * as D from "kefir.db"
 import React from "react"
@@ -19,7 +19,7 @@ export default (sources, key) => {
     .derive(sources.state$, ["url"])
     .map(url => {
       let {mask, params, payload: app} = router.doroute(url)
-      app = F.isolate(app, key + mask, ["DOM", "Component"])
+      app = isolate(app, key + mask, ["DOM", "Component"])
       let sinks = app({...sources, props: {mask, params, router}})
       return R.merge({action$: K.never()}, sinks)
     })
@@ -70,9 +70,9 @@ export default (sources, key) => {
   ).$
 
   // COMPONENT
-  let Component = F.connect(
+  let Component = connect(
     {
-      url: D.derive(state$, ["url"]),
+      url: derive(state$, ["url"]),
       Content: contentSinks$.map(x => x.Component),
     },
     ({url, Content}) => {

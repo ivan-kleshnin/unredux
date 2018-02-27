@@ -1,5 +1,5 @@
 import * as R from "@paqmind/ramda"
-import DF from "date-fns"
+import {differenceInYears} from "date-fns"
 import T from "tcomb"
 import {makeId} from "common/helpers"
 import {limitedString} from "./common"
@@ -31,6 +31,6 @@ export let makeUser = (data) => {
 }
 
 export let age = (user) =>
-  DF.differenceInYears(new Date(), new Date(user.birthDate))
+  differenceInYears(new Date(), new Date(user.birthDate))
 
 

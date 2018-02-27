@@ -1,5 +1,5 @@
 import * as R from "@paqmind/ramda"
-import * as F from "framework"
+import {isolate} from "framework"
 import * as D from "kefir.db"
 import React from "react"
 import aApp from "../counter-a"
@@ -24,23 +24,23 @@ export let seed = {
 */
 export default (sources, key) => {
   // Counters A* aren't connected to the root state
-  let a1Sinks = F.isolate(aApp, "a1")({...sources, props: {title: "CounterA1"}})
-  let a2Sinks = F.isolate(aApp, "a2")({...sources, props: {title: "CounterA2"}})
+  let a1Sinks = isolate(aApp, "a1")({...sources, props: {title: "CounterA1"}})
+  let a2Sinks = isolate(aApp, "a2")({...sources, props: {title: "CounterA2"}})
   // a*Sinks :: {Component}
 
   // Counters B* are connected to the root state via `state$` sinks
-  let b1Sinks = F.isolate(bApp, "b1")({...sources, props: {title: "CounterB1"}})
-  let b2Sinks = F.isolate(bApp, "b2")({...sources, props: {title: "CounterB2"}})
+  let b1Sinks = isolate(bApp, "b1")({...sources, props: {title: "CounterB1"}})
+  let b2Sinks = isolate(bApp, "b2")({...sources, props: {title: "CounterB2"}})
   // b*Sinks :: {Component, state$}
 
   // Counters C* are connected to the root state via `action$` sinks
-  let c1Sinks = F.isolate(cApp, "c1")({...sources, props: {title: "CounterC1"}})
-  let c2Sinks = F.isolate(cApp, "c2")({...sources, props: {title: "CounterC2"}})
+  let c1Sinks = isolate(cApp, "c1")({...sources, props: {title: "CounterC1"}})
+  let c2Sinks = isolate(cApp, "c2")({...sources, props: {title: "CounterC2"}})
   // c*Sinks :: {Component, action$}
 
   // Counters D* are connected to the root state via `intents` sinks
-  let d1Sinks = F.isolate(dApp, "d1")({...sources, props: {title: "CounterD1"}})
-  let d2Sinks = F.isolate(dApp, "d2")({...sources, props: {title: "CounterD2"}})
+  let d1Sinks = isolate(dApp, "d1")({...sources, props: {title: "CounterD1"}})
+  let d2Sinks = isolate(dApp, "d2")({...sources, props: {title: "CounterD2"}})
   // d*Sinks :: {Component, intents}
 
   let state$ = D.run(

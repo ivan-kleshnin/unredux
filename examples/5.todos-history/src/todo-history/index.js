@@ -1,5 +1,5 @@
 import * as R from "@paqmind/ramda"
-import * as F from "framework"
+import {connect} from "framework"
 import K from "kefir"
 import * as D from "kefir.db"
 import UndoRedo from "./UndoRedo"
@@ -15,7 +15,7 @@ export default (sources, key) => {
     intents.redo$.map(_ => D.redo),
   ])
 
-  let Component = F.connect(
+  let Component = connect(
     {
       canUndo: sources.state$.map(s => s._flags.canUndo),
       canRedo: sources.state$.map(s => s._flags.canRedo),

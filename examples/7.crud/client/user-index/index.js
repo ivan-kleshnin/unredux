@@ -1,6 +1,6 @@
 import * as R from "@paqmind/ramda"
 import A from "axios"
-import * as F from "framework"
+import {connect, derive, deriveObj} from "framework"
 import K from "kefir"
 import * as D from "kefir.db"
 import React from "react"
@@ -24,8 +24,6 @@ export default (sources, key) => {
   let {params} = sources.props
   let baseLens = ["users"]
   let loadingLens = ["_loading", key]
-
-  let loading$ = D.derive(sources.state$, loadingLens).map(Boolean)
 
   // INTENTS
   let intents = {
@@ -60,7 +58,10 @@ export default (sources, key) => {
     }
   }
 
-  // FETCHES
+  // DATA & LOAD
+  let deriveState = derive(sources.state$.throttle(50))
+  let loading$ = deriveState(loadingLens).map(Boolean)
+
   let fetches = {
     base$: intents.fetch.base$
       .flatMapConcat(_ => K.fromPromise(
@@ -104,7 +105,7 @@ export default (sources, key) => {
     intents.changeSort$.map(x => R.set2("sort", x)),
   ).$
 
-  let users$ = D.deriveObj(
+  let users$ = deriveObj(
     {
       table: sources.state$.map(s => s.users),
       index: index$.debounce(200),
@@ -121,7 +122,7 @@ export default (sources, key) => {
   )
 
   // COMPONENT
-  let Component = F.connect(
+  let Component = connect(
     {
       loading: loading$,
       index: index$,

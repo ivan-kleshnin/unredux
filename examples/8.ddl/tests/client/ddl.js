@@ -194,13 +194,13 @@ test("combineIndexQueries", (t) => {
 
 test("collapseModelsQueries", (t) => {
   t.deepEqual(
-	  collapseModelsQueries([]),
+    collapseModelsQueries([]),
     []
   )
 
-	t.deepEqual(
-	  collapseModelsQueries([
-	    ["posts", ["2", "1"]],
+  t.deepEqual(
+    collapseModelsQueries([
+      ["posts", ["2", "1"]],
       ["posts", ["1", "3"]],
       ["users", ["1", "2"]],
       ["users", ["2", "3"]],
@@ -212,28 +212,28 @@ test("collapseModelsQueries", (t) => {
   )
 
   t.deepEqual(
-	  collapseModelsQueries([
-	    ["posts", ["1"], ["id"]],
+    collapseModelsQueries([
+      ["posts", ["1"], ["id"]],
       ["posts", ["2"], []],
       ["users", ["1", "2"], ["email"]],
       ["users", ["2", "3"], ["name"]],
     ]),
     [
       ["posts", ["1", "2"], []],
-	    ["users", ["1", "2", "3"], ["email", "name"]],
+      ["users", ["1", "2", "3"], ["email", "name"]],
     ]
   )
 })
 
 test("collapseIndexQueries", (t) => {
   t.deepEqual(
-	  collapseIndexQueries([]),
+    collapseIndexQueries([]),
     []
   )
 
   t.deepEqual(
-	  collapseIndexQueries([
-	    ["posts", {}, ["id"]],
+    collapseIndexQueries([
+      ["posts", {}, ["id"]],
       ["posts", {}, []],
       ["users", {}, ["id"]],
       ["users", {}, ["email"]],
@@ -245,8 +245,8 @@ test("collapseIndexQueries", (t) => {
   )
 
   t.deepEqual(
-	  collapseIndexQueries([
-	    ["posts", {offset:  0, limit: 5}],
+    collapseIndexQueries([
+      ["posts", {offset:  0, limit: 5}],
       ["posts", {offset: 90, limit: 10}],
       ["users", {offset:  0, limit: 10}],
       ["users", {offset: 10, limit: 10}],
@@ -259,8 +259,8 @@ test("collapseIndexQueries", (t) => {
   )
 
   t.deepEqual(
-	  collapseIndexQueries([
-	    ["posts", {filters: "foo"}],
+    collapseIndexQueries([
+      ["posts", {filters: "foo"}],
       ["posts", {filters: "bar"}],
       ["users", {filters: "foo", sort: "bar"}],
       ["users", {filters: "foo", sort: "bar"}],
@@ -273,7 +273,7 @@ test("collapseIndexQueries", (t) => {
   )
 
   t.deepEqual(
-	  collapseIndexQueries([
+    collapseIndexQueries([
       ["articles", {}],
       ["users", {}],
       ["articles", {}],

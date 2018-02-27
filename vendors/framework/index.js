@@ -6,6 +6,67 @@ import Route from "route-parser"
 import U from "urlz"
 import nanoid from "nanoid"
 
+// HELPERS =========================================================================================
+let handleError = e => console.warn(e)
+
+let lastKey = R.pipe(R.split("."), R.nth(-1), String)
+
+// ASYNC & REACTIVE ================================================================================
+// Number -> Promise ()
+export let delay = (time) => {
+  return new Promise((resolve) => {
+    setTimeout(resolve, time)
+  })
+}
+
+// Array a -> $ a
+export let spread = (xs) => K.sequentially(0, xs)
+
+export let derive = D.derive
+export let deriveObj = D.deriveObj
+export let deriveArr = D.deriveArr
+
+export let deriveModelsObj = (table$, ids$, validateFn) => {
+  return D.deriveArr(
+    [table$, ids$],
+    (table, ids) => {
+      return R.reduce((z, id) => {
+        let model = table[id]
+        if (validateFn(model)) {
+          z[id] = model
+        }
+        return z
+      }, {}, ids)
+    }
+  )
+}
+
+export let deriveModelsArr = (table$, ids$, validateFn) => {
+  return D.deriveArr(
+    [table$, ids$],
+    (table, ids) => {
+      return R.reduce((z, id) => {
+        let model = table[id]
+        if (validateFn(model)) {
+          z.push(model)
+        }
+        return z
+      }, [], ids)
+    }
+  )
+}
+
+export let deriveModel = (table$, id$, validateFn) => {
+  return D.deriveArr(
+    [table$, id$],
+    (table, id) => {
+      let model = table[id]
+      return validateFn(model) ? model : null
+    }
+  )
+}
+
+// DOM =============================================================================================
 export let fromDOMEvent = (appSelector) => {
   function collectFn(selectors) {
     return {
@@ -49,10 +110,6 @@ export let fromDOMEvent = (appSelector) => {
   return collectFn([appSelector])
 }
 
-let handleError = e => console.warn(e)
-
-export let spread = (xs) => K.sequentially(0, xs)
-
 export let connect = (streamsToProps, ComponentToWrap) => {
   class Container extends React.Component {
     constructor(props) {
@@ -65,7 +122,7 @@ export let connect = (streamsToProps, ComponentToWrap) => {
 
     componentWillMount(...args) {
       let props$ = K.combine(streamsToProps)
-        .throttle(20, {leading: false, trailing: true})
+        .throttle(20, {leading: false})
 
       if (D.isServer) {
         /**
@@ -100,8 +157,7 @@ export let connect = (streamsToProps, ComponentToWrap) => {
   return Container
 }
 
-export let lastKey = R.pipe(R.split("."), R.nth(-1), String)
-
+// APPS ============================================================================================
 export let isolateSources = {
   state$: (source, key) => source
     .map(x => x[lastKey(key)])
@@ -192,8 +248,7 @@ export let withLifecycle = (fn) => {
   })
 }
 
-let inspect = (d) => R.is(String, d) ? `'${d}'` : d
-
+// ROUTING =========================================================================================
 // type Routes = Array (String, Payload)
 
 // makeRouter :: Routes -> {doroute :: Function, unroute :: Function}
@@ -205,24 +260,25 @@ export let makeRouter = (routes) => {
 
   // doroute :: String -> {mask :: String, params :: Object, payload :: any)
   let doroute = (url) => {
-    url = U.pathname(url)
+    url = U.pathname(String(url))
     for (let [route, payload] of routes) {
       let match = route.match(url)
       if (match) {
         return {mask: route.spec, params: match, payload}
       }
     }
-    throw Error(`${inspect(url)} does not match any known route`)
+    throw Error(`'${url}' does not match any known route`)
   }
 
   // unroute :: (String, Params) -> String
   let unroute = (mask, params) => {
+    mask = String(mask)
     for (let [route, payload] of routes) {
       if (route.spec == mask) {
         return route.reverse(params)
       }
     }
-    throw Error(`${inspect(mask)} does not match any known route`)
+    throw Error(`'${mask}' does not match any known route`)
   }
 
   return {doroute, unroute}

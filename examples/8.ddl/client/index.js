@@ -1,5 +1,5 @@
 import * as R from "@paqmind/ramda"
-import * as F from "framework"
+import {fromDOMEvent} from "framework"
 import K from "kefir"
 import React from "react"
 import ReactDOM from "react-dom"
@@ -12,11 +12,11 @@ import "./index.less"
 // APP RUN -----------------------------------------------------------------------------------------
 let sources = {
   state$: K.pool(),
-  DOM: F.fromDOMEvent("#" + appKey),
+  DOM: fromDOMEvent("#" + appKey),
 }
 
 let sinks = app(
-  R.over2("state$", (x) => x.toProperty().skipDuplicates(), sources),
+  R.over2("state$", (x) => x.toProperty(), sources),
   appKey
 )
 

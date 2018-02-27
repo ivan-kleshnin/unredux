@@ -1,6 +1,6 @@
 import * as R from "@paqmind/ramda"
 import A from "axios"
-import * as F from "framework"
+import {connect} from "framework"
 import K from "kefir"
 import * as D from "kefir.db"
 import React from "react"
@@ -90,9 +90,9 @@ export default (sources, key) => {
         if (res.isValid()) {
           return seed
         } else {
-          let errors = R.reduce((z, key) => {
-            let e = R.find(e => R.equals(e.path, [key]), res.errors)
-            return e ? R.set2(key, e.message, z) : z
+          let errors = R.reduce((z, k) => {
+            let err = R.find(e => R.equals(e.path, [k]), res.errors)
+            return err ? R.set2(k, err.message, z) : z
           }, {}, R.keys(input))
           return {input, errors}
         }
@@ -100,7 +100,7 @@ export default (sources, key) => {
   ).$
 
   // COMPONENT
-  let Component = F.connect(
+  let Component = connect(
     {
       form: form$,
     },

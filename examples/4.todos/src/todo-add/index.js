@@ -1,5 +1,5 @@
 import * as R from "@paqmind/ramda"
-import * as F from "framework"
+import {connect} from "framework"
 import K from "kefir"
 import * as D from "kefir.db"
 import * as M from "../models"
@@ -37,7 +37,7 @@ export default (sources, key) => {
     return R.set2(["todos", todo.id], todo)
   })
 
-  let Component = F.connect(
+  let Component = connect(
     {todo: form$},
     TodoForm,
   )

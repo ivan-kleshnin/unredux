@@ -1,5 +1,5 @@
 import * as R from "@paqmind/ramda"
-import * as F from "framework"
+import {connect, deriveObj} from "framework"
 import K from "kefir"
 import * as D from "kefir.db"
 import * as M from "../models"
@@ -38,7 +38,7 @@ export default (sources, key) => {
     }),
   ).$
 
-  let todos$ = D.deriveObj(
+  let todos$ = deriveObj(
     {
       todos: sources.state$.map(s => s.todos),
       index: state$,
@@ -56,7 +56,7 @@ export default (sources, key) => {
     intents.toggleTodo$.map(id => R.over2(["todos", id, "completed"], R.not)),
   ])
 
-  let Component = F.connect(
+  let Component = connect(
     {todos: todos$},
     TodoIndex,
   )

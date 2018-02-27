@@ -92,7 +92,7 @@ router.post(
       return res.status(400).json({error: err.message})
     }
     db.users[user.id] = user // TODO persistence
-    res.status(201).json({model: user})
+    return res.status(201).json({model: user})
   }
 )
 

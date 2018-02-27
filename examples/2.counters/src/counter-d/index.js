@@ -1,5 +1,5 @@
 import * as R from "@paqmind/ramda"
-import * as F from "framework"
+import {connect} from "framework"
 import React from "react"
 
 export default (sources, key) => {
@@ -8,7 +8,7 @@ export default (sources, key) => {
     dec$: sources.DOM.fromKey("dec").listen("click").map(R.always(true)),
   }
 
-  let Component = F.connect(
+  let Component = connect(
     {counter: sources.state$},
     ({counter}) =>
       <p>

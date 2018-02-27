@@ -1,5 +1,5 @@
 import * as R from "@paqmind/ramda"
-import * as F from "framework"
+import {connect, derive, isolate} from "framework"
 import K from "kefir"
 import * as D from "kefir.db"
 import React from "react"
@@ -19,18 +19,18 @@ export let seed = {
 
 export default (sources, key) => {
   // ROUTING
-  let contentSinks$ = D.derive(
+  let contentSinks$ = derive(
     sources.state$.map(s => s.url),
     (url) => {
       let sinks
       if (url == "/") {
         sinks = {Component: Home}
       } else if (url == "/page1") {
-        sinks = F.isolate(page1App, key + ".page1", ["DOM", "Component"])(sources)
+        sinks = isolate(page1App, key + ".page1", ["DOM", "Component"])(sources)
       } else if (url == "/page2") {
-        sinks = F.isolate(page2App, key + ".page2", ["DOM", "Component"])(sources)
+        sinks = isolate(page2App, key + ".page2", ["DOM", "Component"])(sources)
       } else if (url == "/page3") {
-        sinks = F.isolate(page3App, key + ".page3", ["DOM", "Component"])(sources)
+        sinks = isolate(page3App, key + ".page3", ["DOM", "Component"])(sources)
       } else {
         sinks = {Component: NotFound}
       }
@@ -70,9 +70,9 @@ export default (sources, key) => {
   ).$
 
   // COMPONENT
-  let Component = F.connect(
+  let Component = connect(
     {
-      url: D.derive(state$, ["url"]),
+      url: derive(state$, ["url"]),
       Content: contentSinks$.map(x => x.Component),
     },
     ({url, Content}) => {

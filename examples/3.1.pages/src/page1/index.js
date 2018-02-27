@@ -1,11 +1,10 @@
 import * as R from "@paqmind/ramda"
-import * as F from "framework"
-import K from "kefir"
+import {connect, withLifecycle} from "framework"
 import * as D from "kefir.db"
 import React from "react"
 
-// Decorate app with `F.withLifecycle` to handle lifecycle events declaratively (`sources.Component`)
-export default F.withLifecycle((sources, key) => {
+// Decorate app with `withLifecycle` to handle lifecycle events declaratively (`sources.Component`)
+export default withLifecycle((sources, key) => {
   let intents = {
     // unsubscribed on state unsubscribe which happens on willUnmount
     inc$: sources.DOM.fromKey("inc").listen("click").map(R.always(true)),
@@ -29,7 +28,7 @@ export default F.withLifecycle((sources, key) => {
     intents.dec$.map(_ => R.dec),
   ).$
 
-  let Component = F.connect(
+  let Component = connect(
     {counter: state$},
     ({counter}) =>
       <div>

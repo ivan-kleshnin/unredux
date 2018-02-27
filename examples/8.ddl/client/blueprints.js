@@ -1,7 +1,8 @@
 import * as R from "@paqmind/ramda"
 import A from "axios"
 import K from "kefir"
-import * as D from "kefir.db"
+import {derive, deriveArr, deriveObj} from "framework"
+import {isBrowser} from "kefir.db"
 import U from "urlz"
 
 // Unsorted useful stuff ///////////////////////////////////////////////////////////////////////////
@@ -48,7 +49,7 @@ export let root = (key) => {
           }
         }),
 
-      navigateHistory$: D.isBrowser
+      navigateHistory$: isBrowser
         ? K.fromEvents(window, "popstate")
           .map(data => U.relHref(document.location.href)) // TODO scroll to hash (how?!)
         : K.never(),
@@ -309,6 +310,27 @@ export let collapseIndexQueries = (qs) => {
   return result
 }
 
+let findMissingFields = (model, fields) => {
+  // TODO flatten model object or unflatten fields to support compound fields
+  let presentFields = R.keys(R.pick(fields, model))
+  return R.difference(fields, presentFields)
+}
+
+let findMissingRange = (table, {offset, limit}) => {
+  let queryOffsets = R.range(offset, offset + limit)
+  let presentOffsets = R.map(Number, R.keys(table))
+  let missingOffsets = R.difference(queryOffsets, presentOffsets)
+  return missingOffsets.length
+    ? {offset: missingOffsets[0], limit: R.nth(-1, missingOffsets) - missingOffsets[0] + 1}
+    : {}
+}
+
+export let hashIndexQuery = (query) => {
+  query = desugarIndexQuery(query)
+  let [tableName, {filters, sort}] = query
+  return tableName + "." + JSON.stringify(filters) + "." + JSON.stringify(sort) // TODO json-stable-stringify
+}
+
 export let whatIsMissingByMQ = R.curry((state, query) => {
   let [tableName, ids, fields] = query
   let table = state.tables[tableName]
@@ -339,21 +361,6 @@ export let whatIsMissingByIQ = R.curry((state, query) => {
     : [tableName, cond2]
 })
 
-let findMissingFields = (model, fields) => {
-  // TODO flatten model object or unflatten fields to support compound fields
-  let presentFields = R.keys(R.pick(fields, model))
-  return R.difference(fields, presentFields)
-}
-
-let findMissingRange = (table, {offset, limit}) => {
-  let queryOffsets = R.range(offset, offset + limit)
-  let presentOffsets = R.map(Number, R.keys(table))
-  let missingOffsets = R.difference(queryOffsets, presentOffsets)
-  return missingOffsets.length
-    ? {offset: missingOffsets[0], limit: R.nth(-1, missingOffsets) - missingOffsets[0] + 1}
-    : {}
-}
-
 /**
  * GraphQL-like queries:
  *   [['posts', ['2'], ['id']],
@@ -365,18 +372,16 @@ let findMissingRange = (table, {offset, limit}) => {
  *  As were said, GraphQL pushes a lot of complexity into backend.
  */
 
-export let hashIndexQuery = (query) => {
-  query = desugarIndexQuery(query)
-  let [tableName, {filters, sort}] = query
-  return tableName + "." + JSON.stringify(filters) + "." + JSON.stringify(sort) // TODO json-stable-stringify
-}
-
 export let makeGlobalIndex = R.curry((offset, {ids, total}) => {
   return {
     table: R.fromPairs(R.map2((x, i) => [offset + i, x], ids)),
     total: total,
   }
 })
+
+export let tableToIds = (table, range) => {
+  return R.chain(o => table[o] ? [table[o]] : [], range)
+}
 
 export let makePagination = R.curry((offset, limit, {table, total}) => {
   return {
@@ -396,57 +401,9 @@ export let makeLazyLoad = R.curry((offset, limit, {table, total}) => {
   }
 })
 
-export let tableToIds = (table, range) => {
-  return R.chain(o => table[o] ? [table[o]] : [], range)
-}
-
-///
-export let deriveModelsObj = (table$, ids$, validateFn) => {
-  return D.deriveArr(
-    [table$, ids$],
-    (table, ids) => {
-      return R.reduce((z, id) => {
-        let model = table[id]
-        let errors = validateFn(model)
-        if (!errors.length) {
-          z[id] = model
-        }
-        return z
-      }, {}, ids)
-    }
-  )
-}
-
-export let deriveModelsArr = (table$, ids$, validateFn) => {
-  return D.deriveArr(
-    [table$, ids$],
-    (table, ids) => {
-      return R.reduce((z, id) => {
-        let model = table[id]
-        let errors = validateFn(model)
-        if (!errors.length) {
-          z.push(model)
-        }
-        return z
-      }, [], ids)
-    }
-  )
-}
-
-export let deriveModel = (table$, id$, validateFn) => {
-  return D.deriveArr(
-    [table$, id$],
-    (table, id) => {
-      let model = table[id]
-      let errors = validateFn(model)
-      return errors.length ? null : model
-    }
-  )
-}
-
 // TODO refactor
 export let deriveLazyLoad = (indexes$, localIndex$, indexQueryFn) => {
-  return D.deriveArr([indexes$, localIndex$], (indexes, {offset, limit}) => {
+  return deriveArr([indexes$, localIndex$], (indexes, {offset, limit}) => {
     let query = indexQueryFn({offset, limit})
     let indexKey = hashIndexQuery(query)
     let index = indexes[indexKey] || {table: {}, total: 0}
@@ -457,7 +414,7 @@ export let deriveLazyLoad = (indexes$, localIndex$, indexQueryFn) => {
 // TODO more validation examples: propTypes, tcomb, etc.
 export let validate = R.curry((Type, model) => {
   if (!model) {
-    return ["*"]
+    return false
   }
   let validators = R.toPairs(Type)
   let errors = R.chain(([field, validator]) => {
@@ -465,5 +422,5 @@ export let validate = R.curry((Type, model) => {
       ? []
       : [field]
   }, validators)
-  return errors
+  return !errors.length
 })

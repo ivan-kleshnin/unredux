@@ -1,4 +1,4 @@
-import * as F from "framework"
+import {lift, makeRouter} from "framework"
 
 // Apps
 import page1 from "./page1"
@@ -16,8 +16,8 @@ let routes = [
   ["/page3", page3],
 
   // Static pages
-  ["/",      F.lift(Home)],
-  ["/*path", F.lift(NotFound)],
+  ["/",      lift(Home)],
+  ["/*path", lift(NotFound)],
 ]
 
-export default F.makeRouter(routes)
+export default makeRouter(routes)

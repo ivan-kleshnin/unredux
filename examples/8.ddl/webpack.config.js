@@ -1,5 +1,4 @@
 let ExtractTextPlugin = require("extract-text-webpack-plugin")
-let Fs = require("fs")
 let Path = require("path")
 let Webpack = require("webpack")
 

@@ -1,4 +1,4 @@
-import * as F from "framework"
+import {lift, makeRouter} from "framework"
 
 // Apps
 import home from "./home" // post-index
@@ -24,9 +24,9 @@ let routes = [
   ["/users/:id/",      userDetail],
 
   // Static pages
-  ["/about/",    F.lift(About)],
-  ["/contacts/", F.lift(Contacts)],
-  ["/*path",     F.lift(NotFound)],
+  ["/about/",    lift(About)],
+  ["/contacts/", lift(Contacts)],
+  ["/*path",     lift(NotFound)],
 ]
 
-export default F.makeRouter(routes)
+export default makeRouter(routes)

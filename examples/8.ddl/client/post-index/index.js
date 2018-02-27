@@ -1,22 +1,22 @@
 import * as R from "@paqmind/ramda"
-import * as F from "framework"
+import {connect, derive, deriveArr, deriveObj, deriveModelsArr, deriveModelsObj} from "framework"
 import K from "kefir"
 import * as D from "kefir.db"
 import React from "react"
-import {deriveModelsObj, deriveModelsArr, deriveLazyLoad, validate} from "../blueprints"
+import {deriveLazyLoad, validate} from "../blueprints"
 import PostIndex from "./PostIndex"
 
 let makeScenarios = (subset) => {
   let Post = {
-    id: R.I,
-    title: R.I,
+    id: R.id,
+    title: R.id,
     userId: subset.endsWith("b") ? R.K(true) : R.I,
   }
 
   let User = {
-    id: R.I,
-    fullname: R.I,
-    email: R.I,
+    id: R.id,
+    fullname: R.id,
+    email: R.id,
   }
 
   let postIndexQuery = ({offset = 0, limit = 10}) => [`${subset}/posts`, {offset, limit}]
@@ -57,16 +57,16 @@ export default (sources, key) => {
   ).$
 
   // DATA & LOAD
-  let _state$ = sources.state$.throttle(50)
-  let loading$ = D.derive(_state$, "loading")
-  let indexes$ = D.derive(_state$, "indexes")
-  let postsTable$ = D.derive(_state$, ["tables", `${params.subset}/posts`]) // TODO disable R.equals check
-  let usersTable$ = D.derive(_state$, ["tables", `${params.subset}/users`]) // in kefir.db – too expensive?
+  let deriveState = derive(sources.state$.throttle(50))
+  let loading$ = deriveState("loading")
+  let indexes$ = deriveState("indexes")
+  let postsTable$ = deriveState(["tables", `${params.subset}/posts`])
+  let usersTable$ = deriveState(["tables", `${params.subset}/users`])
 
   let index$ = deriveLazyLoad(indexes$, localIndex$, postIndexQuery)  // :: $ (Array String)
-  let postIds$ = D.derive(index$, "ids")                                // :: $ (Array String)
+  let postIds$ = derive(index$, "ids")                                // :: $ (Array String)
   let posts$ = deriveModelsArr(postsTable$, postIds$, validate(Post)) // :: $ (Array Post)
-  let userIds$ = D.derive(posts$, R.pipe(R.pluck("userId"), R.uniq))    // :: $ (Array String)
+  let userIds$ = derive(posts$, R.pipe(R.pluck("userId"), R.uniq))    // :: $ (Array String)
   let users$ = deriveModelsObj(usersTable$, userIds$, validate(User)) // :: $ (Object User)
 
   let load$ = K.merge([
@@ -76,7 +76,7 @@ export default (sources, key) => {
   ])
 
   // COMPONENT
-  let Component = F.connect(
+  let Component = connect(
     {
       loading: loading$,
       index: index$,

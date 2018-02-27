@@ -1,6 +1,6 @@
 import * as R from "@paqmind/ramda"
 import A from "axios"
-import * as F from "framework"
+import {connect} from "framework"
 import K from "kefir"
 import * as D from "kefir.db"
 import React from "react"
@@ -98,7 +98,7 @@ export default (sources, key) => {
     return {products, picks}
   })
 
-  let Cart = F.connect({cart: cart$}, CartIndex)
+  let Cart = connect({cart: cart$}, CartIndex)
 
   let Component = () =>
     <div>

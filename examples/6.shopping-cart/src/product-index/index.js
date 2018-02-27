@@ -1,5 +1,5 @@
 import * as R from "@paqmind/ramda"
-import * as F from "framework"
+import {connect, deriveObj} from "framework"
 import K from "kefir"
 import * as D from "kefir.db"
 import ProductIndex from "./ProductIndex"
@@ -22,7 +22,7 @@ export default (sources, key) => {
     D.init(seed),
   ).$
 
-  let products$ = D.deriveObj(
+  let products$ = deriveObj(
     {
       products: sources.state$.map(s => s.products),
       index: index$,
@@ -48,7 +48,7 @@ export default (sources, key) => {
     })
   ])
 
-  let Component = F.connect(
+  let Component = connect(
     {
       products: products$,
       cartPicks: sources.state$.map(s => s.cartPicks),

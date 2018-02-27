@@ -1,5 +1,5 @@
 import * as R from "@paqmind/ramda"
-import * as F from "framework"
+import {connect} from "framework"
 import K from "kefir"
 import React from "react"
 
@@ -15,7 +15,7 @@ export default (sources, key) => {
     intents.dec$.map(_ => R.over2("page3", R.dec)),
   ])
 
-  let Component = F.connect(
+  let Component = connect(
     {counter: sources.state$.map(s => s.page3)},
     ({counter}) =>
       <div>

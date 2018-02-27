@@ -16,7 +16,7 @@
     "date-fns": "^1.29.0",
     "eslint": "^4.18.1",
     "kefir": "^3.8.1",
-    "kefir.db": "^0.4.0",
+    "kefir.db": "^0.4.2",
     "nanoid": "^1.0.1",
     "pathz": "^0.9.0",
     "prop-types": "^15.6.0",

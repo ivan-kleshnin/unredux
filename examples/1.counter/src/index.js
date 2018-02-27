@@ -1,4 +1,4 @@
-import * as F from "framework"
+import {fromDOMEvent} from "framework"
 import K from "kefir"
 import React from "react"
 import ReactDOM from "react-dom"
@@ -8,7 +8,7 @@ import app from "./root"
 
 let sources = {
   state$: K.pool(),
-  DOM: F.fromDOMEvent("#" + APP_KEY),
+  DOM: fromDOMEvent("#" + APP_KEY),
 }
 
 let sinks = app(sources, APP_KEY)

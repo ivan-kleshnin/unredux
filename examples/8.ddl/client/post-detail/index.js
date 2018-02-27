@@ -1,22 +1,22 @@
 import * as R from "@paqmind/ramda"
-import * as F from "framework"
+import {connect, derive, deriveModel} from "framework"
 import K from "kefir"
 import * as D from "kefir.db"
 import React from "react"
-import {deriveModel, validate} from "../blueprints"
+import {validate} from "../blueprints"
 import PostDetail from "./PostDetail"
 
 let makeScenarios = (subset) => {
   let Post = {
-    id: R.I,
-    title: R.I,
-    userId: subset.endsWith("b") ? R.K(true) : R.I,
+    id: R.id,
+    title: R.id,
+    userId: subset.endsWith("b") ? R.always(true) : R.id,
   }
 
   let User = {
-    id: R.I,
-    fullname: R.I,
-    email: R.I,
+    id: R.id,
+    fullname: R.id,
+    email: R.id,
   }
 
   let postModelQuery = (id) => [`${subset}/posts`, [id], R.keys(Post)]
@@ -33,14 +33,14 @@ export default (sources, key) => {
   // ---
 
   // DATA & LOAD
-  let _state$ = sources.state$.throttle(50)
-  let loading$ = D.derive(_state$, "loading")
-  let postsTable$ = D.derive(_state$, ["tables", `${params.subset}/posts`]) // TODO disable R.equals check
-  let usersTable$ = D.derive(_state$, ["tables", `${params.subset}/users`]) // in kefir.db – too expensive?
+  let deriveState = derive(sources.state$.throttle(50))
+  let loading$ = deriveState("loading")
+  let postsTable$ = deriveState(["tables", `${params.subset}/posts`]) // TODO disable R.equals check
+  let usersTable$ = deriveState(["tables", `${params.subset}/users`]) // in kefir.db – too expensive?
 
   let postId$ = K.constant(params.id)                           // :: $ String
   let post$ = deriveModel(postsTable$, postId$, validate(Post)) // :: $ (Post | null)
-  let userId$ = D.derive(post$, R.prop("userId"))                 // :: $ String
+  let userId$ = derive(post$, R.prop("userId"))               // :: $ String
   let user$ = deriveModel(usersTable$, userId$, validate(User)) // :: $ (User | null)
 
   let load$ = K.merge([
@@ -49,7 +49,7 @@ export default (sources, key) => {
   ])
 
   // COMPONENT
-  let Component = F.connect(
+  let Component = connect(
     {
       loading: loading$,
       post: post$,

@@ -6,7 +6,7 @@ export let makeFilterFn = (filters) => {
       if (!R.contains(filters.id, post.id))
         return false
     }
-    
+
     if (filters.user) {
       if (!R.isNil(filters.user.isActive)) {
         if (!user || user.isActive != filters.user.isActive)

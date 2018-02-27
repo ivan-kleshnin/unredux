@@ -1,4 +1,4 @@
-import * as F from "framework"
+import {lift, makeRouter} from "framework"
 
 // Static pages
 import Home from "./common/Home"
@@ -18,8 +18,8 @@ let routes = [
   ["/:subset/posts/", postIndexApp],
 
   // Static pages
-  ["/", F.lift(Home)],
-  ["/*path", F.lift(NotFound)],
+  ["/", lift(Home)],
+  ["/*path", lift(NotFound)],
 ]
 
-export default F.makeRouter(routes)
+export default makeRouter(routes)

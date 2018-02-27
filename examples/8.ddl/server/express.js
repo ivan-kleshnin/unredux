@@ -1,6 +1,5 @@
 import * as R from "@paqmind/ramda"
-import Express from "express"
-import {Router as _Router} from "express"
+import Express, {Router as _Router} from "express"
 
 export default Express
 

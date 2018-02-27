@@ -1,16 +1,16 @@
 import * as R from "@paqmind/ramda"
 import {makeFilterFn, makeSortFn} from "common/user-index"
 import {Router} from "../express"
-import db0 from "../db0.json"
-import db1 from "../db1.json"
-import db2 from "../db2.json"
-import db3 from "../db3.json"
-import db4 from "../db4.json"
-import db5 from "../db5.json"
-import db6 from "../db6.json"
-import db7 from "../db7.json"
+import _db0 from "../db0.json"
+import _db1 from "../db1.json"
+import _db2 from "../db2.json"
+import _db3 from "../db3.json"
+import _db4 from "../db4.json"
+import _db5 from "../db5.json"
+import _db6 from "../db6.json"
+import _db7 from "../db7.json"
 
-let db = {0: db0, 1: db1, 2: db2, 3: db3, 4: db4, 5: db5, 6: db6, 7: db7}
+let _db = {0: _db0, 1: _db1, 2: _db2, 3: _db3, 4: _db4, 5: _db5, 6: _db6, 7: _db7}
 
 let router = Router({
   caseSensitive: true,
@@ -18,6 +18,8 @@ let router = Router({
 })
 
 export default router
+
+let dropLetter = (s) => /[a-z]$/.test(s) ? R.dropLast(1, s) : s
 
 // Get users by filter, sort and pagination ========================================================
 router.get(
@@ -34,7 +36,7 @@ router.get(
     console.log("GET", req.originalUrl)
 
     let {params, query} = req
-    let db2 = db[dropLetter(params.subset)]
+    let db = _db[dropLetter(params.subset)]
 
     let filterFn = makeFilterFn(R.firstOk([query.filters && JSON.parse(query.filters), {}]))
     let sortFn = makeSortFn(R.firstOk([query.sort, "+id"]))
@@ -46,7 +48,7 @@ router.get(
       R.values,
       R.filter(filterFn),
       R.sort(sortFn),
-    )(db2.users) // :: Array Model
+    )(db.users) // :: Array Model
 
     let paginatedModels = R.pipe(
       R.slice(offset, offset + limit),
@@ -74,7 +76,7 @@ router.get(
     console.log("GET", req.originalUrl)
 
     let {params, query} = req
-    let db2 = db[dropLetter(params.subset)]
+    let db = _db[dropLetter(params.subset)]
 
     let fields = R.firstOk([params.fields, query.fields, null])
 
@@ -83,7 +85,7 @@ router.get(
       fields
         ? R.map(R.pick(fields))
         : R.id,
-    )(db2.users)
+    )(db.users)
 
     setTimeout(() => {
       res.json({
@@ -93,4 +95,4 @@ router.get(
   }
 )
 
-let dropLetter = (s) => /[a-z]$/.test(s) ? R.dropLast(1, s) : s
+

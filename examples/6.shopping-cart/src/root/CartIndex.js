@@ -3,6 +3,14 @@ import React from "react"
 import PT from "prop-types"
 import CartItem from "./CartItem"
 
+let arrToObj = R.pipe(R.map(m => ([m.id, m])), R.fromPairs)
+
+let countTotal = (products, picks) => {
+  return R.reduce((sum, [id, quantity]) => {
+    return sum + (products[id].price * quantity)
+  }, 0, R.toPairs(picks))
+}
+
 export default function CartIndex({cart}) {
   return <div data-key="cart">
     <h3>Your Cart</h3>
@@ -26,12 +34,4 @@ CartIndex.propTypes = {
     products: PT.arrayOf(CartItem.propTypes.product).isRequired,
     picks: PT.objectOf(PT.number).isRequired,
   }),
-}
-
-let arrToObj = R.pipe(R.map(m => ([m.id, m])), R.fromPairs)
-
-let countTotal = (products, picks) => {
-  return R.reduce((sum, [id, quantity]) => {
-    return sum + (products[id].price * quantity)
-  }, 0, R.toPairs(picks))
 }

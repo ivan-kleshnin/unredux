@@ -1,7 +1,7 @@
 // Ignore assets in SSR
 import * as R from "@paqmind/ramda"
 import Express from "express"
-import * as F from "framework"
+import {fromDOMEvent} from "framework"
 import ignoreAssets from "ignore-styles"
 import K from "kefir"
 import React from "react"
@@ -43,7 +43,7 @@ router.get("/*", (req, res, next) => {
   } else {
     let sources = {
       state$: K.pool(),
-      DOM: F.fromDOMEvent("#" + appKey),
+      DOM: fromDOMEvent("#" + appKey),
     }
 
     let sinks = app(

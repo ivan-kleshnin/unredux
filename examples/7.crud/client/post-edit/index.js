@@ -1,6 +1,6 @@
 import * as R from "@paqmind/ramda"
 import A from "axios"
-import * as F from "framework"
+import {connect, derive} from "framework"
 import K from "kefir"
 import * as D from "kefir.db"
 import React from "react"
@@ -26,8 +26,10 @@ export default (sources, key) => {
   let baseLens = ["posts", params.id]
   let loadingLens = ["_loading", key]
 
-  let loading$ = D.derive(sources.state$, loadingLens).map(Boolean)
-  let post$ = D.derive(sources.state$, baseLens)
+  // DATA & LOAD
+  let deriveState = derive(sources.state$.throttle(50))
+  let loading$ = deriveState(loadingLens).map(Boolean)
+  let post$ = deriveState(baseLens)
 
   // INTENTS
   let intents = {
@@ -130,9 +132,9 @@ export default (sources, key) => {
           let errors = {}
           return {input, errors}
         } else {
-          let errors = R.reduce((z, key) => {
-            let e = R.find(e => R.equals(e.path, [key]), res.errors)
-            return e ? R.set2(key, e.message, z) : z
+          let errors = R.reduce((z, k) => {
+            let err = R.find(e => R.equals(e.path, [k]), res.errors)
+            return err ? R.set2(k, err.message, z) : z
           }, {}, R.keys(input))
           return {input, errors}
         }
@@ -140,7 +142,7 @@ export default (sources, key) => {
   ).$
 
   // COMPONENT
-  let Component = F.connect(
+  let Component = connect(
     {
       loading: loading$,
       form: form$,

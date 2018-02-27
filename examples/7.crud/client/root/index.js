@@ -6,7 +6,6 @@ import React from "react"
 import U from "urlz"
 import MainMenu from "../common/MainMenu"
 import router from "../router"
-import * as B from "../blueprints"
 
 // SEED
 export let seed = {

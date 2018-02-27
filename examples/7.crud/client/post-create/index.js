@@ -6,7 +6,6 @@ import * as D from "kefir.db"
 import React from "react"
 import {validate} from "tcomb-validation"
 import * as T from "common/types"
-import * as B from "../blueprints"
 import PostForm from "./PostForm"
 
 // SEED

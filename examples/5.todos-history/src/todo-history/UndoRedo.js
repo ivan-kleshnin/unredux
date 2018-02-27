@@ -11,5 +11,5 @@ export default function UndoRedo({canUndo, canRedo}) {
 
 UndoRedo.propTypes = {
   canUndo: PT.bool.isRequired,
-  canUndo: PT.bool.isRequired,
+  canRedo: PT.bool.isRequired,
 }

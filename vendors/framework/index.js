@@ -68,7 +68,7 @@ export let deriveModel = (table$, id$, validateFn) => {
 
 // DOM =============================================================================================
 export let fromDOMEvent = (appSelector) => {
-  function collectFn(selectors) {
+  let collectFn = function (selectors) {
     return {
       __selectors: selectors,
       from: (selector) => {
@@ -86,7 +86,7 @@ export let fromDOMEvent = (appSelector) => {
           return collectFn([...selectors, `[name="${name}"]`])
         }
       },
-      listen: (eventName, options={}) => {
+      listen: (eventName, options = {}) => {
         if (D.isBrowser) {
           return K.fromEvents(document.querySelector(appSelector), eventName) // , options TODO
           .throttle(10)
@@ -189,7 +189,7 @@ export let isolateSinks = {
   },
 }
 
-export let isolate = (app, appKey=null, types=null) => {
+export let isolate = (app, appKey = null, types = null) => {
   appKey = appKey || nanoid()
   return function App(sources) {
     // Prepare sources

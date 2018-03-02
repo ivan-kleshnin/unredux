@@ -3,7 +3,7 @@ import K from "kefir"
 
 // Lib =============================================================================================
 // We name all functions to keep discoverability via `console.log`
-function makeStore(options) {
+let makeStore = function (options) {
   return function Store(seed, action$) {
     options = R.merge(makeStore.options, options)
 
@@ -29,16 +29,12 @@ let makeAction$ = () => K.sequentially(200, [R.inc, R.inc, R.inc, R.inc, R.inc])
 
 let state1 = makeStore({})(1, makeAction$())
 
-state1.$.observe(s => {
-  console.log("state1:", s)
-})
+state1.$.log("state1$")
 
 setTimeout(() => {
   let state10 = makeStore({})(10, makeAction$())
 
-  state10.$.observe(s => {
-    console.log("state10:", s)
-  })
+  state10.$.log("state10$")
 }, 1200)
 
 /*

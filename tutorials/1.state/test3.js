@@ -4,12 +4,12 @@ import K from "kefir"
 let action$ = K.sequentially(200, [R.inc, R.identity, R.identity, R.identity, R.identity])
 
 let seed = 0
-let state = action$
+let state$ = action$
   .merge(K.constant(seed))
   .scan((state, fn) => fn(state))
   .skipDuplicates() // uses === by default
 
-state.log()
+state$.log("state$")
 
 /*
   Now you're probably thinking "`===` is only a shallow comparison"! – and you're only half correct.

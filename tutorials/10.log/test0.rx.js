@@ -24,14 +24,6 @@ let action$ = O.of
       function addTwo(s) { return R.over("counter", R.add(2), s) },
     ).concatMap(x => O.of(x).delay(200))
   )
-  .concat(O.of
-    (
-      // Commands
-      {fn: R.fn("init", () => seed)},
-      {fn: R.over, args: ["counter", R.inc]},
-      {fn: R.over, args: ["counter", {fn: R.add, args: [2]}]},
-    ).concatMap(x => O.of(x).delay(200))
-  )
 
 let state = D.run(
   () => D.makeStore({}),
@@ -57,17 +49,6 @@ ES5-style functions
   # db = { counter: 1 }
   @ db λ addTwo
   # db = { counter: 3 }
-
-Commands
-  @ db λ init
-  # db = { counter: 0 }
-  @ db λ over('counter', inc)
-  # db = { counter: 1 }
-  @ db λ over('counter', add(2))
-  # db = { counter: 3 }
-
-Commands are the most transparent. Note that they are syntactically longer than ES6, but still
-shorter than ES5 ^_^.
 */
 
 // Next: try testable (external) state modifiers

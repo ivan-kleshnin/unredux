@@ -44,6 +44,6 @@
     "ava": "^0.23.0"
   },
   "scripts": {
-    "lint": "eslint examples/**; eslint vendors/**; eslint tutorials/**"
+    "lint": "eslint examples/**; eslint vendors/**"
   }
 }

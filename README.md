@@ -31,6 +31,12 @@ to add corresponding examples with time.
 * [Reactive or what?](./docs/reactive-or-what.md)
 * [RxJS &rarr; Kefir](./docs/) (Why and How -- TODO)
 
+Also suggested:
+
+* [Kefir docs](kefirjs.github.io/kefir)
+* [Kefir.DB docs](https://github.com/ivan-kleshnin/kefir.db)
+* [CycleJS docs](https://cycle.js.org/getting-started.html#getting-started)
+
 ## Examples
 
 #### [1. Counter](./examples/1.counter)
@@ -79,24 +85,6 @@ Declarative Data Load, lightweight alternative to GraphQL+Relay / Falcor.
 to describe and validate your models. Avoid vendor lock-in once again.
 
 *Note: it's still highly experimental.*
-
-## Tutorials
-
-#### [1. State](./tutorials/1.state)
-
-Getting started with reactive states.
-
-#### [2. Store](./tutorials/2.store)
-
-Let's make a better store abstraction.
-
-#### [10. Logging](./tutorials/10.log)
-
-Learn how to use logging middleware.
-
-#### [11. Control](./tutorials/11.control)
-
-*Wip*
 
 ## Usage
 

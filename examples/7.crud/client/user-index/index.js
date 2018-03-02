@@ -25,6 +25,9 @@ export default (sources, key) => {
   let baseLens = ["users"]
   let loadingLens = ["_loading", key]
 
+  let deriveState = derive(sources.state$.throttle(50))
+  let loading$ = deriveState(loadingLens).map(Boolean)
+
   // INTENTS
   let intents = {
     // DOM
@@ -57,10 +60,6 @@ export default (sources, key) => {
       }
     }
   }
-
-  // DATA & LOAD
-  let deriveState = derive(sources.state$.throttle(50))
-  let loading$ = deriveState(loadingLens).map(Boolean)
 
   let fetches = {
     base$: intents.fetch.base$

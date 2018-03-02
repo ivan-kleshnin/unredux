@@ -26,7 +26,6 @@ export default (sources, key) => {
   let baseLens = ["posts", params.id]
   let loadingLens = ["_loading", key]
 
-  // DATA & LOAD
   let deriveState = derive(sources.state$.throttle(50))
   let loading$ = deriveState(loadingLens).map(Boolean)
   let post$ = deriveState(baseLens)

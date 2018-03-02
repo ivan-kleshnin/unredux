@@ -126,8 +126,8 @@ export let connect = (streamsToProps, ComponentToWrap) => {
 
       if (D.isServer) {
         /**
-         * componentWillMount should be triggered after the state is formed so `props$ = props$.take(1)`
-         * doesn't limit client to have only 1 state update.
+         * `componentWillMount` should be triggered after the state is formed so `props$ = props$.take(1)`
+         * does NOT limit client app on server to a single 1 state update!
          */
         props$ = props$.take(1)
       }

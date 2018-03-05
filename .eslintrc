@@ -53,7 +53,7 @@
   },
 
   "globals": {
-    // e.g. "angular": true
+    "project": true
   },
 
   "plugins": [
@@ -109,7 +109,7 @@
     "accessor-pairs": 2,                    // enforce getter and setter pairs in objects
     "array-callback-return": 2,             // enforce return statements in callbacks of array methods
     "block-scoped-var": 0,                  // enforce the use of variables within the scope they are defined
-    "class-methods-use-this": 2,            // enforce that class methods utilize this
+    "class-methods-use-this": 0,            // enforce that class methods utilize this
     "complexity": 2,                        // enforce a maximum cyclomatic complexity allowed in a program
     "consistent-return": 0,                 // require return statements to either always or never specify values
     "curly": 0,                             // enforce consistent brace style for all control statements
@@ -125,7 +125,7 @@
     "no-else-return": 0,                    // disallow else blocks after return statements in if statements
     "no-empty-function": 0,                 // disallow empty functions
     "no-empty-pattern": 2,                  // disallow empty destructuring patterns
-    "no-eq-null": 2,                        // disallow null comparisons without type-checking operators
+    "no-eq-null": 0,                        // disallow null comparisons without type-checking operators
     "no-eval": 2,                           // disallow the use of eval()
     "no-extend-native": 2,                  // disallow extending native types
     "no-extra-bind": 2,                     // disallow unnecessary calls to .bind()
@@ -136,7 +136,7 @@
     "no-implicit-coercion": 2,              // disallow shorthand type conversions
     "no-implicit-globals": 2,               // disallow variable and function declarations in the global scope
     "no-implied-eval": 2,                   // disallow the use of eval()-like methods
-    "no-invalid-this": 2,                   // disallow this keywords outside of classes or class-like objects
+    "no-invalid-this": 0,                   // disallow this keywords outside of classes or class-like objects
     "no-iterator": 2,                       // disallow the use of the __iterator__ property
     "no-labels": 2,                         // disallow labeled statements
     "no-lone-blocks": 2,                    // disallow unnecessary nested blocks
@@ -161,7 +161,7 @@
     "no-sequences": 0,                      // disallow comma operators
     "no-throw-literal": 2,                  // disallow throwing literals as exceptions
     "no-unmodified-loop-condition": 2,      // disallow unmodified loop conditions
-    "no-unused-expressions": 2,             // disallow unused expressions
+    "no-unused-expressions": 0,             // disallow unused expressions
     "no-unused-labels": 2,                  // disallow unused labels
     "no-useless-call": 2,                   // disallow unnecessary calls to .call() and .apply()
     "no-useless-concat": 2,                 // disallow unnecessary concatenation of literals or template literals
@@ -186,7 +186,7 @@
     "no-delete-var": 2,                     // disallow deleting variables
     "no-label-var": 2,                      // disallow labels that share a name with a variable
     "no-restricted-globals": 2,             // disallow specified global variables
-    "no-shadow": 2,                         // disallow variable declarations from shadowing variables declared in the outer scope
+    "no-shadow": 0,                         // disallow variable declarations from shadowing variables declared in the outer scope
     "no-shadow-restricted-names": 2,        // disallow identifiers from shadowing restricted names
     "no-undef": 2,                          // disallow the use of undeclared variables unless mentioned in /*global */ comments
     "no-undef-init": 2,                     // disallow initializing variables to undefined
@@ -211,7 +211,7 @@
     "array-bracket-newline": 0,             // enforce linebreaks after opening and before closing array brackets
     "array-bracket-spacing": 0,             // enforce consistent spacing inside array brackets
     "array-element-newline": 0,             // enforce line breaks after each array element
-    "block-spacing": 2,                     // disallow or enforce spaces inside of blocks after opening block and before closing block
+    "block-spacing": 0,                     // disallow or enforce spaces inside of blocks after opening block and before closing block
     "brace-style": 0,                       // enforce consistent brace style for blocks
     "camelcase": 0,                         // enforce camelcase naming convention
     "capitalized-comments": 0,              // enforce or disallow capitalization of the first letter of a comment
@@ -224,7 +224,7 @@
     "func-call-spacing": 0,                 // require or disallow spacing between function identifiers and their invocations
     "func-name-matching": 0,                // require function names to match the name of the variable or property to which they are assigned
     "func-names": 0,                        // require or disallow named function expressions
-    "func-style": [2, "expression"],        // enforce the consistent use of either function declarations or expressions
+    "func-style": 0,                        // enforce the consistent use of either function declarations or expressions
     "function-paren-newline": 0,            // enforce consistent line breaks inside function parentheses
     "id-blacklist": 2,                      // disallow specified identifiers
     "id-length": 0,                         // enforce minimum and maximum identifier lengths
@@ -255,7 +255,7 @@
     "no-continue": 2,                       // disallow continue statements
     "no-inline-comments": 0,                // disallow inline comments after code
     "no-lonely-if": 0,                      // disallow if statements as the only statement in else blocks
-    "no-mixed-operators": 2,                // disallow mixed binary operators
+    "no-mixed-operators": 0,                // disallow mixed binary operators
     "no-mixed-spaces-and-tabs": 0,          // disallow mixed spaces and tabs for indentation
     "no-multi-assign": 2,                   // disallow use of chained assignment expressions
     "no-multiple-empty-lines": 2,           // disallow multiple empty lines
@@ -285,7 +285,7 @@
     "require-jsdoc": 0,                     // require JSDoc comments
     "semi": 0,                              // require or disallow semicolons instead of ASI
     "semi-spacing": 2,                      // enforce consistent spacing before and after semicolons
-    "semi-style": 2,                        // enforce location of semicolons
+    "semi-style": 0,                        // enforce location of semicolons
     "sort-keys": 0,                         // require object keys to be sorted
     "sort-vars": 0,                         // require variables within the same declaration block to be sorted
     "space-before-blocks": 2,               // enforce consistent spacing before blocks

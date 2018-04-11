@@ -71,12 +71,15 @@ export let fromDOMEvent = (appSelector) => {
   let collectFn = function (selectors) {
     return {
       __selectors: selectors,
+
       from: (selector) => {
         return collectFn([...selectors, selector])
       },
+
       fromKey: (key) => {
         return collectFn([...selectors, `[data-key="${key}"]`])
       },
+
       fromName: (name) => {
         if (R.startsWith("^", name)) {
           return collectFn([...selectors, `[name^="${R.drop(1, name)}"]`])
@@ -86,6 +89,7 @@ export let fromDOMEvent = (appSelector) => {
           return collectFn([...selectors, `[name="${name}"]`])
         }
       },
+
       listen: (eventName, options = {}) => {
         if (D.isBrowser) {
           return K.fromEvents(document.querySelector(appSelector), eventName) // , options TODO
@@ -107,6 +111,7 @@ export let fromDOMEvent = (appSelector) => {
       }
     }
   }
+
   return collectFn([appSelector])
 }
 

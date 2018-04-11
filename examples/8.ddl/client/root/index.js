@@ -71,7 +71,7 @@ export let seed = {
 export default (sources, key) => {
   let url$ = derive(sources.state$, "url")
 
-  // ROUTING ---------------------------------------------------------------------------------------
+  // ROUTING
   let contentSinks$ = url$
     .filter(Boolean)
     .map(url => {
@@ -84,20 +84,25 @@ export default (sources, key) => {
   // INTENTS
   let intents = {
     navigateTo$: sources.DOM.from("a").listen("click")
-      .filter(ee => !ee.element.dataset.ui)
+      .filter(ee => !ee.element.dataset.ui) // skip <a data-ui .../> links
       .flatMapConcat(ee => {
         let urlObj = U.parse(ee.element.href)
         if (urlObj.protocol && urlObj.host != document.location.host) {
           // External link
           return K.never()
-        } else {
+        }
+        else if (ee.event.shiftKey || navigator.platform.match("Mac") ? ee.event.metaKey : ee.event.ctrlKey) {
+          // Holding Shift or Ctrl/Cmd
+          return K.never()
+        }
+        else {
           // Internal link
           if (urlObj.pathname == document.location.pathname && urlObj.hash) {
             // Anchor link
             // do nothing, rely on default browser behavior
           } else {
             // Page link or Reset-Anchor link (foo#hash -> foo)
-            ee.event.preventDefault() // take control on browser
+            ee.event.preventDefault() // take control of browser
             window.scrollTo(0, 0)     //
           }
           window.history.pushState({}, "", urlObj.relHref)
@@ -211,7 +216,7 @@ export default (sources, key) => {
     })
   ])
 
-  // STATE -----------------------------------------------------------------------------------------
+  // STATE
   let state$ = D.run(
     () => D.makeStore({}),
     // D.withLog({key, input: false, output: true}),
@@ -231,7 +236,7 @@ export default (sources, key) => {
     loadAction$,
   ).$
 
-  // COMPONENT -------------------------------------------------------------------------------------
+  // COMPONENT
   let Component = connect(
     {
       url: url$,

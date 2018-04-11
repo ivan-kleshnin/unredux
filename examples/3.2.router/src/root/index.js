@@ -14,9 +14,11 @@ export let seed = {
 }
 
 export default (sources, key) => {
+  let url$ = derive(sources.state$, ["url"])
+
   // ROUTING
-  let contentSinks$ = D
-    .derive(sources.state$, ["url"])
+  let contentSinks$ = url$
+    .filter(Boolean)
     .map(url => {
       let {mask, params, payload: app} = router.doroute(url)
       app = isolate(app, key + mask, ["DOM", "Component"])
@@ -27,22 +29,30 @@ export default (sources, key) => {
   // INTENTS
   let intents = {
     navigateTo$: sources.DOM.from("a").listen("click")
+      .filter(ee => !ee.element.dataset.ui) // skip <a data-ui .../> links
       .flatMapConcat(ee => {
         let urlObj = U.parse(ee.element.href)
         if (urlObj.protocol && urlObj.host != document.location.host) {
           // External link
           console.log("! external link")
           return K.never()
-        } else {
-          // App link
-          if (urlObj.pathname == document.location.pathname) {
+        }
+        else if (ee.event.shiftKey || navigator.platform.match("Mac") ? ee.event.metaKey : ee.event.ctrlKey) {
+          // Holding Shift or Ctrl/Cmd
+          console.log("! new tab/window")
+          return K.never()
+        }
+        else {
+          // Internal link
+          if (urlObj.pathname == document.location.pathname && urlObj.hash) {
             // Anchor link
             console.log("! anchor link")
+            // do nothing, rely on default browser behavior
           } else {
-            // Page link
+            // Page link or Reset-Anchor link (foo#hash -> foo)
             console.log("! page link")
-            ee.event.preventDefault()
-            window.scrollTo(0, 0)
+            ee.event.preventDefault() // take control of browser
+            window.scrollTo(0, 0)     //
           }
           window.history.pushState({}, "", urlObj.relHref)
           return K.constant(urlObj.relHref)

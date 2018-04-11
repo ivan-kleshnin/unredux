@@ -18,10 +18,12 @@ export let seed = {
 }
 
 export default (sources, key) => {
+  let url$ = derive(sources.state$, ["url"])
+
   // ROUTING
-  let contentSinks$ = derive(
-    sources.state$.map(s => s.url),
-    (url) => {
+  let contentSinks$ = url$
+    .filter(Boolean)
+    .map(url => {
       let sinks
       if (url == "/") {
         sinks = {Component: Home}

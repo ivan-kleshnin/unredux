@@ -1,3 +1,4 @@
+import * as R from "@paqmind/ramda"
 import {makeRouter} from "framework"
 
 // Static pages

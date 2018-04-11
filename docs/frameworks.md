@@ -234,7 +234,7 @@ Many CycleJS drivers rely on side-effects in `main`:
 
 **[CycleDOM](https://cycle.js.org/api/dom.html)**
 
-```
+```js
 function main(sources) {
   DOMSource.select('input').events('keydown', { // side-effect!
     preventDefault: true

@@ -1,4 +1,4 @@
-import {lift, makeRouter} from "framework"
+import {makeRouter} from "framework"
 
 // Static pages
 import Home from "./common/Home"
@@ -18,8 +18,8 @@ let routes = [
   ["/:subset/posts/", postIndexApp],
 
   // Static pages
-  ["/", lift(Home)],
-  ["/*path", lift(NotFound)],
+  ["/", R.always({Component: Home})],
+  ["/*path", R.always({Component: NotFound})], // for SSR: {action$: K.constant(/* set state.document.notFound = true or whatever */)}
 ]
 
 export default makeRouter(routes)

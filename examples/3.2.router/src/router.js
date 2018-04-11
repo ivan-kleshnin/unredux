@@ -1,4 +1,4 @@
-import {lift, makeRouter} from "framework"
+import {makeRouter} from "framework"
 
 // Apps
 import page1 from "./page1"
@@ -16,8 +16,8 @@ let routes = [
   ["/page3", page3],
 
   // Static pages
-  ["/",      lift(Home)],
-  ["/*path", lift(NotFound)],
+  ["/",      R.always({Component: Home})],
+  ["/*path", R.always({Component: NotFound})], // for SSR: {action$: K.constant(/* set state.document.notFound = true or whatever */)}
 ]
 
 export default makeRouter(routes)

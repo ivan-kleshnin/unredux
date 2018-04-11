@@ -40,7 +40,7 @@ export default (sources, key) => {
 
   let postId$ = K.constant(params.id)                           // :: $ String
   let post$ = deriveModel(postsTable$, postId$, validate(Post)) // :: $ (Post | null)
-  let userId$ = derive(post$, R.prop("userId"))               // :: $ String
+  let userId$ = derive(post$, R.prop("userId"))                 // :: $ String
   let user$ = deriveModel(usersTable$, userId$, validate(User)) // :: $ (User | null)
 
   let load$ = K.merge([

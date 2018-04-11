@@ -222,12 +222,6 @@ export let isolate = (app, appKey = null, types = null) => {
   }
 }
 
-export let lift = (Component) => {
-  return (sources) => ({
-    Component: Component,
-  })
-}
-
 export let withLifecycle = (fn) => {
   return R.withName(fn.name, (sources, key) => {
     sources = R.merge(sources, {

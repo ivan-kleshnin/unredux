@@ -1,4 +1,4 @@
-import {lift, makeRouter} from "framework"
+import {makeRouter} from "framework"
 
 // Apps
 import home from "./home" // post-index
@@ -24,9 +24,9 @@ let routes = [
   ["/users/:id/",      userDetail],
 
   // Static pages
-  ["/about/",    lift(About)],
-  ["/contacts/", lift(Contacts)],
-  ["/*path",     lift(NotFound)],
+  ["/about/",    R.always({Component: About})],
+  ["/contacts/", R.always({Component: Contacts})],
+  ["/*path",     R.always({Component: NotFound})], // for SSR: {action$: K.constant(/* set state.document.notFound = true or whatever */)}
 ]
 
 export default makeRouter(routes)

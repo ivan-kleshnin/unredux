@@ -228,3 +228,35 @@ best as Controller and passive part is modelled the best as Reactor. With our ap
 **reactivity** where it fits the best (DOM + DOM events) and **control** where it fits the best
 (HTTP + optimistic updates).
 
+#### Update
+
+Many CycleJS drivers rely on side-effects in `main`:
+
+**[CycleDOM](https://cycle.js.org/api/dom.html)**
+
+```
+function main(sources) {
+  DOMSource.select('input').events('keydown', { // side-effect!
+    preventDefault: true
+  })
+
+  ...
+}
+```
+
+**[Cyclic-Router](https://github.com/cyclejs-community/cyclic-router)**
+
+```js
+function main(sources) {
+  const match$ = sources.router.define({ // side-effect!
+    '/': HomeComponent,
+    '/other': OtherComponent
+  });
+
+  ...
+}
+```
+
+Just a few picks of many... Which proves that `main` won't be a pure function in most CycleJS apps,
+so why bother with drivers?! There actually were quite a few [discussions](https://github.com/cyclejs/cyclejs/issues/)
+about common terms redefined in CycleJS. The argument of "our own vision" prevailed.

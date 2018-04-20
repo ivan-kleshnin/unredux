@@ -1,10 +1,9 @@
-import * as R from "@paqmind/ramda"
 import {connect, withLifecycle} from "framework"
 import K from "kefir"
 import React from "react"
 
 // Decorate app with `withLifecycle` to handle lifecycle events declaratively (`sources.Component`)
-export default withLifecycle((sources, key) => {
+export default withLifecycle((sources, {key}) => {
   let intents = {
     // unsubscribed on state unsubscribe which happens on willUnmount
     inc$: sources.DOM.fromKey("inc").listen("click").map(R.always(true)),

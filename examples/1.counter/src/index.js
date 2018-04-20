@@ -1,20 +1,27 @@
-import {fromDOMEvent} from "framework"
-import K from "kefir"
+import {fromDOMEvent, poolProp} from "framework"
 import React from "react"
 import ReactDOM from "react-dom"
 import "shims"
-import {APP_KEY} from "./meta"
 import app from "./root"
 
+let APP_KEY = "root"
+
+// Prepare sources
 let sources = {
-  state$: K.pool(),
   DOM: fromDOMEvent("#" + APP_KEY),
+  state$: poolProp(),
 }
 
-let sinks = app(sources, APP_KEY)
+// Prepare props
+let props = {
+  key: APP_KEY,
+}
 
-sinks.state$.observe(state =>
-  sources.state$.plug(K.constant(state))
-)
+// Run app to get sinks
+let sinks = app(sources, props)
 
+// Cycle the root state
+sinks.state$.observe(sources.state$.plug)
+
+// Render the Component sink
 ReactDOM.render(<sinks.Component/>, document.getElementById(APP_KEY))

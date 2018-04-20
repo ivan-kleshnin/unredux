@@ -1,4 +1,3 @@
-import * as R from "@paqmind/ramda"
 import {makeFilterFn, makeSortFn} from "common/post-index"
 import {Router} from "../express"
 import _db0 from "../db0.json"

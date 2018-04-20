@@ -66,9 +66,26 @@ export let deriveModel = (table$, id$, validateFn) => {
   )
 }
 
+export let poolProp = () => {
+  let pool = K.pool()
+  let prop = pool.toProperty()
+  prop.plug = (x) => {
+    if (x instanceof K.Property) {
+      pool.plug(x)
+    }
+    else if (x instanceof K.Stream || x instanceof K.Observable) {
+      throw Error("can't handle stateless stream, use property instead")
+    }
+    else {
+      pool.plug(K.constant(x))
+    }
+  }
+  return prop
+}
+
 // DOM =============================================================================================
 export let fromDOMEvent = (appSelector) => {
-  let collectFn = function (selectors) {
+  let collectFn = (selectors) => {
     return {
       __selectors: selectors,
 
@@ -129,7 +146,7 @@ export let connect = (streamsToProps, ComponentToWrap) => {
       let props$ = K.combine(streamsToProps)
         .throttle(20, {leading: false})
 
-      if (D.isServer) {
+      if (!D.isBrowser) {
         /**
          * `componentWillMount` should be triggered after the state is formed so `props$ = props$.take(1)`
          * does NOT limit client app on server to a single 1 state update!
@@ -168,24 +185,16 @@ export let isolateSources = {
     .map(x => x[lastKey(key)])
     .skipDuplicates(R.identical),
 
-  props: R.id,
-
   DOM: (source, key) => source.fromKey(lastKey(key)),
-
-  Component: R.always,
 }
 
 export let isolateSinks = {
-  action$: (sink, key) => {
+  action$: (sink$, key) => {
     let k = lastKey(key)
-    return sink.map(action => {
+    return sink$.map(action => {
       return R.withName(`over("${k}", ${action.name || "anonymous"})`, R.over2(k, action))
     })
   },
-
-  state$: R.id, // has to be isolated manually
-
-  intents: R.id, // has to be isolated manually
 
   Component: (sink, key) => {
     return (props) => <div data-key={lastKey(key)}>
@@ -194,31 +203,39 @@ export let isolateSinks = {
   },
 }
 
+export let defaultSources = {} // TODO
+
+export let defaultSinks = {
+  action$: K.never(),
+
+  load$: K.never(),
+
+  Component: () => null,
+}
+
 export let isolate = (app, appKey = null, types = null) => {
   appKey = appKey || nanoid()
-  return function App(sources) {
+  return (sources, props) => {
     // Prepare sources
     let isolatedSources = R.mapObjIndexed(
-      (source, type) => !types || R.contains(type, types)
+      (source, type) => (!types || R.contains(type, types)) && isolateSources[type]
         ? isolateSources[type](source, appKey)
         : source,
-      sources
+      R.merge(defaultSources, sources)
     )
-    let properSources = R.merge({}, isolatedSources)
 
-    // Run app (unredux component)
-    let sinks = app(properSources, appKey)
+    // Run app
+    let sinks = app(isolatedSources, {...props, key: appKey})
 
     // Prepare sinks
     let isolatedSinks = R.mapObjIndexed(
-      (sink, type) => !types || R.contains(type, types)
+      (sink, type) => (!types || R.contains(type, types)) && isolateSinks[type]
         ? isolateSinks[type](sink, appKey)
         : sink,
-      sinks
+      R.merge(defaultSinks, sinks)
     )
-    let properSinks = R.merge({}, isolatedSinks)
 
-    return properSinks
+    return isolatedSinks
   }
 }
 
@@ -248,6 +265,7 @@ export let withLifecycle = (fn) => {
 }
 
 // ROUTING =========================================================================================
+
 // type Routes = Array (String, Payload)
 
 // makeRouter :: Routes -> {doroute :: Function, unroute :: Function}
@@ -281,4 +299,75 @@ export let makeRouter = (routes) => {
   }
 
   return {doroute, unroute}
+}
+
+export let withRoute = R.curry((options, app) => {
+  options = R.merge(withRoute.options, options)
+
+  let router = makeRouter(options.routes)
+
+  return (sources, props) => {
+    let navigateTo$ = sources.DOM.from("a").listen("click")
+      .filter(ee => !ee.element.dataset.ui) // skip <a data-ui .../> links
+      .flatMapConcat(ee => {
+          let urlObj = U.parse(ee.element.href)
+          if (urlObj.protocol && urlObj.host != document.location.host) {
+            // External link
+            return K.never()
+          }
+          else if (ee.event.shiftKey || navigator.platform.match("Mac") ? ee.event.metaKey : ee.event.ctrlKey) {
+            // Holding Shift or Ctrl/Cmd
+            return K.never()
+          }
+          else {
+            // Internal link
+            if (urlObj.pathname == document.location.pathname && urlObj.hash) {
+              // Anchor link
+              // do nothing, rely on default browser behavior
+            } else {
+              // Page link or Reset-Anchor link (foo#hash -> foo)
+              ee.event.preventDefault() // take control of browser
+              window.scrollTo(0, 0)     //
+            }
+            window.history.pushState({}, "", urlObj.relHref)
+            return K.constant(urlObj.relHref)
+          }
+        })
+
+    let navigateHistory$ = D.isBrowser
+      ? K.fromEvents(window, "popstate")
+          .map(data => U.relHref(document.location.href)) // TODO scroll to hash (how?!)
+      : K.never()
+
+    let route$ = K
+      .merge([
+        K.constant(props.url),
+        navigateTo$,
+        navigateHistory$,
+      ])
+      .map(url => {
+        let {mask, params, payload: app} = router.doroute(url)
+        return {url, mask, params, app}
+      })
+      .toProperty()
+
+    let page$ = route$.map(({mask, params, app}) => {
+      let app2 = isolate(app, props.key + mask, ["DOM", "Component"])
+
+      return app2({
+        ...sources,
+      }, {
+        ...props,
+        mask,
+        params,
+        router
+      })
+    }).toProperty()
+
+    return app({...sources, route$, page$}, {...props, router})
+  }
+})
+
+withRoute.options = {
+  routes: [],
 }

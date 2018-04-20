@@ -1,4 +1,3 @@
-import * as R from "@paqmind/ramda"
 import {connect, derive, deriveModel} from "framework"
 import K from "kefir"
 import * as D from "kefir.db"
@@ -25,9 +24,7 @@ let makeScenarios = (subset) => {
   return {Post, User, postModelQuery, userModelQuery}
 }
 
-export default (sources, key) => {
-  let {params} = sources.props
-
+export default (sources, {key, params}) => {
   // --- Testing scenarios ---
   let {Post, User, postModelQuery, userModelQuery} = makeScenarios(params.subset)
   // ---

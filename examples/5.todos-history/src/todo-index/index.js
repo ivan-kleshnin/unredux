@@ -1,8 +1,7 @@
-import * as R from "@paqmind/ramda"
 import {connect, deriveObj} from "framework"
 import K from "kefir"
 import * as D from "kefir.db"
-import * as M from "../models"
+import {isCompleted, isActive} from "../models"
 import TodoIndex from "./TodoIndex"
 
 export let seed = {
@@ -10,7 +9,7 @@ export let seed = {
   sortFn: R.ascend(R.prop("addedAt")),
 }
 
-export default (sources, key) => {
+export default (sources, {key}) => {
   let intents = {
     toggleTodo$: sources.DOM.fromKey("item").listen("click")
       .map(ee => ee.element.dataset.val),
@@ -27,23 +26,23 @@ export default (sources, key) => {
     D.init(seed),
 
     // Updates
-    intents.setFilter$.map(filter => {
+    intents.setFilter$.map(filter => function setFilter(state) {
       let filterFn = R.id
       if (filter == "completed") {
-        filterFn = M.isCompleted
+        filterFn = isCompleted
       } else if (filter == "active") {
-        filterFn = M.isActive
+        filterFn = isActive
       }
-      return R.set2("filterFn", filterFn)
+      return R.set2("filterFn", filterFn, state)
     }),
   ).$
 
   let todos$ = deriveObj(
     {
-      todos: sources.state$.map(s => s.todos),
       index: state$,
+      todos: sources.state$.map(s => s.todos),
     },
-    ({todos, index}) => {
+    ({index, todos}) => {
       return R.pipe(
         R.values,
         R.filter(index.filterFn),
@@ -53,7 +52,9 @@ export default (sources, key) => {
   )
 
   let action$ = K.merge([
-    intents.toggleTodo$.map(id => R.over2(["todos", id, "completed"], R.not)),
+    intents.toggleTodo$.map(id => function toggleTodo(state) {
+      return R.over2(["todos", id, "completed"], R.not, state)
+    }),
   ])
 
   let Component = connect(

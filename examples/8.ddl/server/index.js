@@ -8,16 +8,12 @@ import mocksRoutes from "./mocks"
 import apiPostsRoutes from "./api/posts"
 import apiUsersRoutes from "./api/users"
 import ssrRoutes from "./ssr"
-import {layout404, layout500} from "./ssr/layout"
 
 let app = Express()
 
 app.set("port", process.env.PORT || 8080)
 
 A.defaults.baseURL = "http://localhost:" + app.get("port")
-
-app.enable("strict routing") // does not work, broken in Express :(
-app.enable("case sensitive routing")
 
 app.use(Cors())
 
@@ -45,12 +41,12 @@ app.use(unless(["/public", "/favicon", "/api", "/mocks"], ssrRoutes))
 
 // ERROR HANDLERS
 app.use((req, res, next) => {
-  res.status(404).send(layout404())
+  res.status(404).send("Not Found") // Serve "public/errors/404.html" here
 })
 
 app.use((err, req, res, next) => {
   console.error(err)
-  res.status(500).send(layout500(err))
+  res.status(500).send("Server Error") // Serve "public/errors/500.html" here
 })
 
 let server = app.listen(app.get("port"), () => {

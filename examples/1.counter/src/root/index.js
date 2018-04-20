@@ -1,9 +1,8 @@
-import * as R from "@paqmind/ramda"
 import {connect} from "framework"
 import * as D from "kefir.db"
 import React from "react"
 
-export default (sources, key) => {
+export default (sources, {key}) => {
   let intents = {
     inc$: sources.DOM.fromKey("inc").listen("click").map(R.always(true)),
     dec$: sources.DOM.fromKey("dec").listen("click").map(R.always(true)),

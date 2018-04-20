@@ -1,5 +1,4 @@
-import * as R from "@paqmind/ramda"
-import {connect, derive, isolate} from "framework"
+import {connect, isolate} from "framework"
 import K from "kefir"
 import * as D from "kefir.db"
 import React from "react"
@@ -12,34 +11,11 @@ import page3App from "../page3"
 
 // SEED
 export let seed = {
-  url: document.location.pathname,
   // page1, page2 use their own states (for the sake of demonstration)
   page3: 0,
 }
 
-export default (sources, key) => {
-  let url$ = derive(sources.state$, ["url"])
-
-  // ROUTING
-  let contentSinks$ = url$
-    .filter(Boolean)
-    .map(url => {
-      let sinks
-      if (url == "/") {
-        sinks = {Component: Home}
-      } else if (url == "/page1") {
-        sinks = isolate(page1App, key + ".page1", ["DOM", "Component"])(sources)
-      } else if (url == "/page2") {
-        sinks = isolate(page2App, key + ".page2", ["DOM", "Component"])(sources)
-      } else if (url == "/page3") {
-        sinks = isolate(page3App, key + ".page3", ["DOM", "Component"])(sources)
-      } else {
-        sinks = {Component: NotFound}
-      }
-      return R.merge({action$: K.never()}, sinks)
-    }
-  )
-
+export default (sources, {key, url}) => {
   // INTENTS
   let intents = {
     navigateTo$: sources.DOM.from("a").listen("click")
@@ -55,6 +31,29 @@ export default (sources, key) => {
       .map(data => document.location.pathname)
   }
 
+  let url$ = K.merge([
+    K.constant(url),
+    intents.navigateTo$,
+    intents.navigateHistory$,
+  ]).toProperty()
+
+  // ROUTING
+  let page$ = url$
+    .map(url => {
+      if (url == "/") {
+        return {Component: Home, action$: K.never()}
+      } else if (url == "/page1") {
+        return isolate(page1App, key + ".page1", ["DOM", "Component"])(sources)
+      } else if (url == "/page2") {
+        return isolate(page2App, key + ".page2", ["DOM", "Component"])(sources)
+      } else if (url == "/page3") {
+        return isolate(page3App, key + ".page3", ["DOM", "Component"])(sources)
+      } else {
+        return {Component: NotFound, action$: K.never()}
+      }
+    }
+  ).toProperty()
+
   // STATE
   let state$ = D.run(
     () => D.makeStore({}),
@@ -63,25 +62,21 @@ export default (sources, key) => {
     // Init
     D.init(seed),
 
-    // Navigation
-    intents.navigateTo$.map(url => R.fn("navigateTo", R.set2("url", url))),
-    intents.navigateHistory$.map(url => R.fn("navigateHistory", R.set2("url", url))),
-
-    // Content
-    contentSinks$.flatMapLatest(x => x.action$),
+    // Page
+    page$.flatMapLatest(R.view2("action$")),
   ).$
 
   // COMPONENT
   let Component = connect(
     {
-      url: derive(state$, ["url"]),
-      Content: contentSinks$.map(x => x.Component),
+      url: url$,
+      page: page$,
     },
-    ({url, Content}) => {
+    ({url, page}) => {
       return <div>
-        <p>
-          Current URL: {url}
-        </p>
+        <p>{`
+          URL: ${url}
+        `}</p>
         <p>
           <a href="/">Home</a>
           {" "}
@@ -94,7 +89,7 @@ export default (sources, key) => {
           <a href="/not-found">Not Found</a>
         </p>
         <hr/>
-        <Content/>
+        <page.Component/>
       </div>
     }
   )

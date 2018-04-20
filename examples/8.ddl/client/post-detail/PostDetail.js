@@ -1,4 +1,3 @@
-import * as R from "@paqmind/ramda"
 import PT from "prop-types"
 import React from "react"
 import Loading from "../common/Loading"

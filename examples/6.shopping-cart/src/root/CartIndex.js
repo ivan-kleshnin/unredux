@@ -1,4 +1,3 @@
-import * as R from "@paqmind/ramda"
 import React from "react"
 import PT from "prop-types"
 import CartItem from "./CartItem"

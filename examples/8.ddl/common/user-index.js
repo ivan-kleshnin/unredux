@@ -1,5 +1,3 @@
-import * as R from "@paqmind/ramda"
-
 export let makeFilterFn = (filters) => {
   return (user) => {
     if (filters.id) {

@@ -1,4 +1,3 @@
-import * as R from "@paqmind/ramda"
 import test from "ava"
 import {
   isBetween, combineRanges,

@@ -1,1 +1,1 @@
-export let appKey = "root"
+export let APP_KEY = "root"

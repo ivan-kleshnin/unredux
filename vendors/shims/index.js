@@ -1,7 +1,17 @@
-import "setimmediate"
+import * as R from "@paqmind/ramda"
 import K from "kefir"
+import "setimmediate"
 
-// Temporal fix of https://github.com/kefirjs/kefir/issues/265
+////////////////////////////////////////////////////////////////////////////////////////////////////
+global.R = R
+
+R.chain2 = R.addIndex(R.chain)
+R.reduce2 = R.addIndex(R.reduce)
+
+R.takeUntil = R.curry((fn, xs) => R.takeWhile(R.complement(fn), xs))
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+// Temporal fix for https://github.com/kefirjs/kefir/issues/265
 K.fromPromise = function fromPromise(promise) {
   let called = false
 

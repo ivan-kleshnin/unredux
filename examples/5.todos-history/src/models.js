@@ -1,4 +1,3 @@
-import * as R from "@paqmind/ramda"
 import nanoid from "nanoid"
 
 export let makeTodo = (data) => {

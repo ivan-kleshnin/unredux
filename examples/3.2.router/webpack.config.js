@@ -1,8 +1,6 @@
 let Webpack = require("webpack")
 let Path = require("path")
 
-let folder = JSON.parse(process.env.npm_config_argv).original[1]
-
 module.exports = {
   devtool: "eval",
   target: "web",
@@ -33,6 +31,9 @@ module.exports = {
     ],
   },
   plugins: [
+    new Webpack.ProvidePlugin({
+      "R": "@paqmind/ramda",
+    }),
     new Webpack.DefinePlugin({
       // Disable "React DevTools Download" console log
       // https://github.com/facebook/react/issues/3877
@@ -40,4 +41,3 @@ module.exports = {
     }),
   ],
 }
-

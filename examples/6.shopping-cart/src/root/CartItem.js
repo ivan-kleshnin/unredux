@@ -1,4 +1,3 @@
-import * as R from "@paqmind/ramda"
 import React from "react"
 import PT from "prop-types"
 
@@ -21,7 +20,6 @@ export default function CartItem({product, quantity}) {
   </p>
 }
 
-// TODO replace with Tcomb types?! (tcomb-to-proptypes library is available)
 CartItem.propTypes = {
   product: PT.shape({
     title: PT.string.isRequired,

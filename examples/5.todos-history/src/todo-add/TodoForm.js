@@ -5,7 +5,7 @@ export default function TodoForm({todo}) {
   return <form>
     <input name="text" value={todo.text}/>
     {" "}
-    <button type="submit">Add Todo</button>
+    <button type="submit" disabled={todo.text == ""}>Add Todo</button>
   </form>
 }
 

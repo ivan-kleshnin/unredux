@@ -1,95 +1,40 @@
-import * as R from "@paqmind/ramda"
-import {connect, derive, isolate} from "framework"
-import K from "kefir"
+import {connect, withRoute} from "framework"
 import * as D from "kefir.db"
 import React from "react"
-import U from "urlz"
-import router from "../router"
+import routes from "../routes"
 
 // SEED
 export let seed = {
-  url: document.location.pathname,
   // page1, page2 use their own states (for the sake of demonstration)
   page3: 0,
 }
 
-export default (sources, key) => {
-  let url$ = derive(sources.state$, ["url"])
-
-  // ROUTING
-  let contentSinks$ = url$
-    .filter(Boolean)
-    .map(url => {
-      let {mask, params, payload: app} = router.doroute(url)
-      app = isolate(app, key + mask, ["DOM", "Component"])
-      let sinks = app({...sources, props: {mask, params, router}})
-      return R.merge({action$: K.never()}, sinks)
-    })
-
-  // INTENTS
-  let intents = {
-    navigateTo$: sources.DOM.from("a").listen("click")
-      .filter(ee => !ee.element.dataset.ui) // skip <a data-ui .../> links
-      .flatMapConcat(ee => {
-        let urlObj = U.parse(ee.element.href)
-        if (urlObj.protocol && urlObj.host != document.location.host) {
-          // External link
-          console.log("! external link")
-          return K.never()
-        }
-        else if (ee.event.shiftKey || navigator.platform.match("Mac") ? ee.event.metaKey : ee.event.ctrlKey) {
-          // Holding Shift or Ctrl/Cmd
-          console.log("! new tab/window")
-          return K.never()
-        }
-        else {
-          // Internal link
-          if (urlObj.pathname == document.location.pathname && urlObj.hash) {
-            // Anchor link
-            console.log("! anchor link")
-            // do nothing, rely on default browser behavior
-          } else {
-            // Page link or Reset-Anchor link (foo#hash -> foo)
-            console.log("! page link")
-            ee.event.preventDefault() // take control of browser
-            window.scrollTo(0, 0)     //
-          }
-          window.history.pushState({}, "", urlObj.relHref)
-          return K.constant(urlObj.relHref)
-        }
-      }),
-
-    navigateHistory$: K.fromEvents(window, "popstate")
-      .map(data => U.relHref(document.location.href)), // TODO scroll to hash (how?!)
-  }
-
+let app = (sources, {key}) => {
   // STATE
   let state$ = D.run(
     () => D.makeStore({}),
-    // D.withLog({key}),
+    D.withLog({key}),
   )(
     // Init
     D.init(seed),
 
-    // Navigation
-    intents.navigateTo$.map(url => R.fn("navigateTo", R.set2("url", url))),
-    intents.navigateHistory$.map(url => R.fn("navigateHistory", R.set2("url", url))),
-
-    // Content
-    contentSinks$.flatMapLatest(x => x.action$),
+    // Page
+    sources.page$.flatMapLatest(R.view2("action$")),
   ).$
 
   // COMPONENT
   let Component = connect(
     {
-      url: derive(state$, ["url"]),
-      Content: contentSinks$.map(x => x.Component),
+      route: sources.route$,
+      page: sources.page$,
     },
-    ({url, Content}) => {
+    ({route, page}) => {
       return <div>
-        <p>
-          Current URL: {url}
-        </p>
+        <pre>{`
+          URL: ${route.url}
+          route.mask: ${route.mask}
+          route.params: ${JSON.stringify(route.params)}
+        `}</pre>
         <p>
           <a href="/">Home</a>
           {" "}
@@ -104,10 +49,16 @@ export default (sources, key) => {
           <a href="/not-found">Not Found</a>
         </p>
         <hr/>
-        <Content/>
+        <page.Component/>
       </div>
     }
   )
 
   return {state$, Component}
 }
+
+export default R.pipe(
+  withRoute({
+    routes,
+  }),
+)(app)

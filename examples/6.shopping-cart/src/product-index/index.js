@@ -1,4 +1,3 @@
-import * as R from "@paqmind/ramda"
 import {connect, deriveObj} from "framework"
 import K from "kefir"
 import * as D from "kefir.db"
@@ -9,7 +8,7 @@ export let seed = {
   sortFn: R.ascend(R.prop("id")),
 }
 
-export default (sources, key) => {
+export default (sources, {key}) => {
   let intents = {
     buy$: sources.DOM.fromKey("productIndex").fromKey("buy").listen("click")
       .map(ee => ee.element.dataset.val),
@@ -24,12 +23,12 @@ export default (sources, key) => {
 
   let products$ = deriveObj(
     {
-      products: sources.state$.map(s => s.products),
       index: index$,
+      products: sources.state$.map(s => s.products),
     },
-    ({products, index}) => {
+    ({index, products}) => {
       // Implies the case when all products are preloaded or loaded at once,
-      // or when the customer can tolerate reordering of upcoming items.
+      // or when a customer can tolerate reordering of upcoming items.
       return R.pipe(
         R.values,
         R.filter(index.filterFn),

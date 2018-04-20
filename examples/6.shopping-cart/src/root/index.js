@@ -1,4 +1,3 @@
-import * as R from "@paqmind/ramda"
 import A from "axios"
 import {connect} from "framework"
 import K from "kefir"
@@ -7,6 +6,7 @@ import React from "react"
 import productIndex from "../product-index"
 import CartIndex from "./CartIndex"
 
+// SEED
 export let seed = {
   // DB
   products: {},
@@ -17,7 +17,8 @@ export let seed = {
   cartSortFn: R.ascend(R.prop("title")),
 }
 
-export default (sources, key) => {
+export default (sources, {key}) => {
+  // INTENTS
   let intents = {
     cartInc$: sources.DOM.fromKey("cart").fromKey("inc").listen("click")
       .map(ee => ee.element.dataset.val),
@@ -29,23 +30,24 @@ export default (sources, key) => {
       .map(R.always(true)),
   }
 
-  let indexSinks = productIndex(sources, key + ".index")
+  let indexSinks = productIndex(sources, {key: key + ".index"})
 
+  // STATE
   let state$ = D.run(
-    () => D.makeStore({assertFn: R.id}),
+    () => D.makeStore({}),
     D.withLog({key}),
   )(
-    // Init
     D.init(seed),
 
-    K.fromPromise(A.get("./products.json"))
-      .map(resp => resp.data)
-      .mapErrors(err => {
-        console.warn(err) // TODO
-        return K.never()
-      })
-      .map(products => function afterFetchProducts(state) {
-        return R.set2("products", products, state)
+    K.fromPromise(
+      A.get("./products.json")
+        .then(resp => resp.data)
+        .catch(R.id)
+    )
+      .map(maybeData => function afterFetchProducts(state) {
+        return maybeData instanceof Error
+          ? state
+          : R.set2("products", maybeData, state)
       }),
 
     // Cart actions
@@ -100,6 +102,7 @@ export default (sources, key) => {
 
   let Cart = connect({cart: cart$}, CartIndex)
 
+  // COMPONENT
   let Component = () =>
     <div>
       <Cart/>

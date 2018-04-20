@@ -1,6 +1,5 @@
-import * as R from "@paqmind/ramda"
 import A from "axios"
-import {connect, derive, isolate, spread} from "framework"
+import {connect, spread, withRoute} from "framework"
 import K from "kefir"
 import * as D from "kefir.db"
 import React from "react"
@@ -14,12 +13,16 @@ import {
   safeInc, safeDec,
   whatIsMissingByMQ, whatIsMissingByIQ,
 } from "../blueprints"
-import router from "../router"
+import routes from "../routes"
 
 // SEED
 export let seed = {
   // DOCUMENT
-  url: "",
+  document: {
+    title: "",
+    description: "",
+    // ogType ...
+  },
 
   // DATA
   tables: {
@@ -68,56 +71,11 @@ export let seed = {
   loading: {},
 }
 
-export default (sources, key) => {
-  let url$ = derive(sources.state$, "url")
-
-  // ROUTING
-  let contentSinks$ = url$
-    .filter(Boolean)
-    .map(url => {
-      let {mask, params, payload: app} = router.doroute(url)
-      app = isolate(app, key + mask, ["DOM", "Component"])
-      let sinks = app({...sources, props: {mask, params, router}})
-      return R.merge({action$: K.never(), load$: K.never()}, sinks)
-    })
-
-  // INTENTS
-  let intents = {
-    navigateTo$: sources.DOM.from("a").listen("click")
-      .filter(ee => !ee.element.dataset.ui) // skip <a data-ui .../> links
-      .flatMapConcat(ee => {
-        let urlObj = U.parse(ee.element.href)
-        if (urlObj.protocol && urlObj.host != document.location.host) {
-          // External link
-          return K.never()
-        }
-        else if (ee.event.shiftKey || navigator.platform.match("Mac") ? ee.event.metaKey : ee.event.ctrlKey) {
-          // Holding Shift or Ctrl/Cmd
-          return K.never()
-        }
-        else {
-          // Internal link
-          if (urlObj.pathname == document.location.pathname && urlObj.hash) {
-            // Anchor link
-            // do nothing, rely on default browser behavior
-          } else {
-            // Page link or Reset-Anchor link (foo#hash -> foo)
-            ee.event.preventDefault() // take control of browser
-            window.scrollTo(0, 0)     //
-          }
-          window.history.pushState({}, "", urlObj.relHref)
-          return K.constant(urlObj.relHref)
-        }
-      }),
-
-    navigateHistory$: D.isBrowser
-      ? K.fromEvents(window, "popstate")
-          .map(data => U.relHref(document.location.href)) // TODO scroll to hash (how?!)
-      : K.never()
-  }
-
+let app = (sources, {key}) => {
   // LOAD
-  let load$ = contentSinks$.flatMapLatest(x => x.load$).filter(R.length)
+  let load$ = sources.page$
+    .flatMapLatest(x => x.load$)
+    .filter(R.length)
     .skipDuplicates(R.equals) // --mq1--mq2--mq3--iq1-->
 
   // Buffer queries for 100ms, up to 20 items per buffer
@@ -223,14 +181,9 @@ export default (sources, key) => {
   )(
     // Init
     D.init(seed),
-    D.initAsync(sources.state$),
 
-    // Navigation
-    intents.navigateTo$.map(url => R.fn("navigateTo", R.set2("url", url))),
-    intents.navigateHistory$.map(url => R.fn("navigateHistory", R.set2("url", url))),
-
-    // Content
-    contentSinks$.flatMapLatest(x => x.action$),
+    // Page
+    sources.page$.flatMapLatest(R.view2("action$")),
 
     // Load
     loadAction$,
@@ -239,17 +192,17 @@ export default (sources, key) => {
   // COMPONENT
   let Component = connect(
     {
-      url: url$,
-      Content: contentSinks$.map(x => x.Component),
+      route: sources.route$,
+      page: sources.page$,
     },
-    ({url, Content}) => {
+    ({route, page}) => {
       return <div>
-        {new Route("/").match(U.pathname(url))
+        {new Route("/").match(U.pathname(route.url))
           ? null
           : <p><a href="/">Back to Home</a></p>
         }
         <div className="page-content">
-          <Content/>
+          <page.Component/>
         </div>
       </div>
     }
@@ -257,3 +210,9 @@ export default (sources, key) => {
 
   return {state$, Component}
 }
+
+export default R.pipe(
+  withRoute({
+    routes,
+  }),
+)(app)

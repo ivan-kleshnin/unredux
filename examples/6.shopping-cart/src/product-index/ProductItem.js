@@ -14,7 +14,6 @@ export default function ProductItem({product, cartQuantity}) {
   </p>
 }
 
-// TODO replace with Tcomb types?! (tcomb-to-proptypes library is available)
 ProductItem.propTypes = {
   product: PT.shape({
     title: PT.string.isRequired,

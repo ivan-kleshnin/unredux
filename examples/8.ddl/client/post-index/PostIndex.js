@@ -1,4 +1,3 @@
-import * as R from "@paqmind/ramda"
 import PT from "prop-types"
 import React from "react"
 import PostItem from "./PostItem"

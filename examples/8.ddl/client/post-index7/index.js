@@ -1,4 +1,3 @@
-import * as R from "@paqmind/ramda"
 import {connect, derive, deriveModelsArr, deriveModelsObj} from "framework"
 import K from "kefir"
 import * as D from "kefir.db"
@@ -33,9 +32,7 @@ export let seed = {
   limit: 5,
 }
 
-export default (sources, key) => {
-  let {params} = sources.props
-
+export default (sources, {key, params}) => {
   // INTENTS
   let intents = {
     loadNext$: sources.DOM.fromKey("loadNext").listen("click").map(R.always(true)),

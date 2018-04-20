@@ -1,10 +1,9 @@
-import * as R from "@paqmind/ramda"
 import {connect} from "framework"
 import K from "kefir"
 import * as D from "kefir.db"
 import UndoRedo from "./UndoRedo"
 
-export default (sources, key) => {
+export default (sources, props) => {
   let intents = {
     undo$: sources.DOM.fromKey("undo").listen("click").map(R.always(true)),
     redo$: sources.DOM.fromKey("redo").listen("click").map(R.always(true)),

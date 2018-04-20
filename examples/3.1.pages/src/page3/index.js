@@ -18,12 +18,12 @@ export default withLifecycle((sources, {key}) => {
   })
 
   let action$ = K.merge([
-    intents.inc$.map(_ => R.inc),
-    intents.dec$.map(_ => R.dec),
+    intents.inc$.map(_ => R.over2("page3", R.inc)),
+    intents.dec$.map(_ => R.over2("page3", R.dec)),
   ])
 
   let Component = connect(
-    {counter: sources.state$},
+    {counter: sources.state$.map(s => s.page3)},
     ({counter}) =>
       <div>
         Page 3: {counter} <button data-key="inc">+1</button> <button data-key="dec">-1</button>

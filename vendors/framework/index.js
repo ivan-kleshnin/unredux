@@ -309,33 +309,44 @@ export let withRoute = R.curry((options, app) => {
     let navigateTo$ = sources.DOM.from("a").listen("click")
       .filter(ee => !ee.element.dataset.ui) // skip <a data-ui .../> links
       .flatMapConcat(ee => {
-          let urlObj = U.parse(ee.element.href)
-          if (urlObj.protocol && urlObj.host != document.location.host) {
-            // External link
-            return K.never()
-          }
-          else if (ee.event.shiftKey || navigator.platform.match("Mac") ? ee.event.metaKey : ee.event.ctrlKey) {
-            // Holding Shift or Ctrl/Cmd
-            return K.never()
+        let urlObj = U.parse(ee.element.href)
+        if (urlObj.protocol && urlObj.host != document.location.host) {
+          // External link
+          return K.never()
+        }
+        else if (ee.event.shiftKey || navigator.platform.match("Mac") ? ee.event.metaKey : ee.event.ctrlKey) {
+          // Holding Shift or Ctrl/Cmd
+          return K.never()
+        }
+        else {
+          // Internal link
+          ee.event.preventDefault() // take control of browser
+          window.history.pushState({}, "", urlObj.relHref)
+          if (urlObj.hash) {
+            let elem = document.getElementById(urlObj.hash.slice(1))
+            if (elem) {
+              elem.scrollIntoView()
+            }
           }
           else {
-            // Internal link
-            if (urlObj.pathname == document.location.pathname && urlObj.hash) {
-              // Anchor link
-              // do nothing, rely on default browser behavior
-            } else {
-              // Page link or Reset-Anchor link (foo#hash -> foo)
-              ee.event.preventDefault() // take control of browser
-              window.scrollTo(0, 0)     //
-            }
-            window.history.pushState({}, "", urlObj.relHref)
-            return K.constant(urlObj.relHref)
+            window.scrollTo(0, 0)
           }
-        })
+          return K.constant(urlObj.relHref)
+        }
+      })
 
     let navigateHistory$ = D.isBrowser
       ? K.fromEvents(window, "popstate")
-          .map(data => U.relHref(document.location.href)) // TODO scroll to hash (how?!)
+          .map(data => {
+            let urlObj = U.parse(document.location.href)
+            if (urlObj.hash) {
+              document.getElementById(urlObj.hash).scrollIntoView()
+            }
+            else {
+              window.scrollTo(0, 0)
+            }
+            return urlObj.relHref
+          })
       : K.never()
 
     let route$ = K
@@ -346,6 +357,7 @@ export let withRoute = R.curry((options, app) => {
       ])
       .diff(null, null)
       .filter(([prevUrl, nextUrl]) => {
+        // TODO account QS
         return !prevUrl || U.pathname(prevUrl) != U.pathname(nextUrl)
       })
       .map(R.nth(1))

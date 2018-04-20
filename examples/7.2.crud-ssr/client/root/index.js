@@ -40,9 +40,9 @@ let app = (sources, {key}) => {
   let Component = connect(
     {
       route: sources.route$,
-      page: sources.page$,
+      Content: sources.page$.map(R.view2("Component")),
     },
-    ({route, page}) => {
+    ({route, Content}) => {
       return <div>
         <div className="page-header">
           <pre>{`
@@ -53,7 +53,7 @@ let app = (sources, {key}) => {
           <MainMenu/>
         </div>
         <div className="page-content">
-          <page.Component/>
+          <Content/>
         </div>
       </div>
     }

@@ -1,4 +1,3 @@
-import * as R from "@paqmind/ramda"
 import K from "kefir"
 import * as D from "kefir.db"
 import React from "react"
@@ -345,6 +344,11 @@ export let withRoute = R.curry((options, app) => {
         navigateTo$,
         navigateHistory$,
       ])
+      .diff(null, null)
+      .filter(([prevUrl, nextUrl]) => {
+        return !prevUrl || U.pathname(prevUrl) != U.pathname(nextUrl)
+      })
+      .map(R.nth(1))
       .map(url => {
         let {mask, params, payload: app} = router.doroute(url)
         return {url, mask, params, app}

@@ -26,9 +26,9 @@ let app = (sources, {key}) => {
   let Component = connect(
     {
       route: sources.route$,
-      page: sources.page$,
+      Content: sources.page$.map(R.view2("Component")),
     },
-    ({route, page}) => {
+    ({route, Content}) => {
       return <div>
         <pre>{`
           URL: ${route.url}
@@ -49,7 +49,7 @@ let app = (sources, {key}) => {
           <a href="/not-found">Not Found</a>
         </p>
         <hr/>
-        <page.Component/>
+        <Content/>
       </div>
     }
   )

@@ -70,9 +70,9 @@ export default (sources, {key, url}) => {
   let Component = connect(
     {
       url: url$,
-      page: page$,
+      Content: page$.map(R.view2("Component")),
     },
-    ({url, page}) => {
+    ({url, Content}) => {
       return <div>
         <p>{`
           URL: ${url}
@@ -89,7 +89,7 @@ export default (sources, {key, url}) => {
           <a href="/not-found">Not Found</a>
         </p>
         <hr/>
-        <page.Component/>
+        <Content/>
       </div>
     }
   )

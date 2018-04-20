@@ -193,16 +193,16 @@ let app = (sources, {key}) => {
   let Component = connect(
     {
       route: sources.route$,
-      page: sources.page$,
+      Content: sources.page$.map(R.view2("Component")),
     },
-    ({route, page}) => {
+    ({route, Content}) => {
       return <div>
         {new Route("/").match(U.pathname(route.url))
           ? null
           : <p><a href="/">Back to Home</a></p>
         }
         <div className="page-content">
-          <page.Component/>
+          <Content/>
         </div>
       </div>
     }

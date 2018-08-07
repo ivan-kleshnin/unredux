@@ -4,13 +4,11 @@ import Loading from "../common/Loading"
 import NotFound from "../common/NotFound"
 import PostItem from "./PostItem"
 import"./index.less"
-import x from "./logo.gif" // In order to Webpack move this file to `public` folder
-
-// console.log("!!!", x) // TODO jac help pls.
+import logo from "./logo.gif" // In order to Webpack move this file to `public` folder
 
 export default function PostIndex({loading, index, posts}) {
   return <div data-key="postIndex">
-    <h1 className="title">Blog <img src="/home/logo.gif"/></h1>
+    <h1 className="title">Blog <img src={logo}/></h1>
     <p>
       <a href="/posts/create/">New Post</a>
     </p>

@@ -17,8 +17,10 @@
     "eslint": "^4.18.1",
     "kefir": "^3.8.1",
     "kefir.db": "^0.4.4",
+    "mini-css-extract-plugin": "^0.4.1",
     "nanoid": "^1.0.1",
     "node-fetch": "^2.2.0",
+    "path-webpack": "0.0.3",
     "pathz": "^0.9.0",
     "prop-types": "^15.6.0",
     "react": "^16.2.0",
@@ -29,7 +31,8 @@
     "tcomb": "^3.2.24",
     "tcomb-validation": "^3.4.1",
     "urlz": "^0.3.1",
-    "webpack": "^3.11.0"
+    "webpack": "^4.16.5",
+    "webpack-cli": "^3.1.0"
   },
   "babel": {
     "plugins": [

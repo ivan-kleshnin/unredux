@@ -1,8 +1,9 @@
-let ExtractTextPlugin = require("extract-text-webpack-plugin")
+let MiniCssExtractPlugin = require("mini-css-extract-plugin")
 let Path = require("path")
 let Webpack = require("webpack")
 
 module.exports = {
+  mode: "development",
   devtool: "eval",
   target: "web",
 
@@ -10,23 +11,26 @@ module.exports = {
     bundle: "./client/index.js",
   },
   output: {
-    pathinfo: true,
-    filename: "[name].js",
     path: Path.resolve("public"),
+    filename: "[name].js",
     publicPath: "/",
   },
   module: {
     rules: [
       {
         test: /\.js$/,
-        use: "babel-loader",
+        use: {
+          loader: "babel-loader",
+        },
         exclude: /node_modules/
       },
       {
-        test: /\.(less(\?.*)?)$/,
-        use: ExtractTextPlugin.extract({
-          use: ["css-loader", "less-loader"]
-        }),
+        test: /\.css|less$/,
+        use: [
+          MiniCssExtractPlugin.loader,
+          "css-loader",
+          "less-loader",
+        ],
       },
       {
         test: /\.(jpg|jpeg|png|gif|svg)(\?v=\d+\.\d+\.\d+)?$/,
@@ -34,20 +38,27 @@ module.exports = {
           loader: "file-loader",
           options: {
             name: "[path][name].[ext]",
-            publicPath: Path.resolve("public"),
-            context: Path.resolve("client"),
           }
         }]
       },
     ],
   },
   resolve: {
+    alias: {
+      path: "path-webpack", // fix broken Webpack polyfill
+    },
+
     modules: [
       Path.resolve(__dirname, "./node_modules"),
       Path.resolve(__dirname, "../../vendors"),
       Path.resolve(__dirname, "../../node_modules"),
     ],
   },
+
+  watchOptions: {
+    ignored: /node_modules/
+  },
+
   plugins: [
     new Webpack.ProvidePlugin({
       "R": "@paqmind/ramda",
@@ -57,6 +68,9 @@ module.exports = {
       // https://github.com/facebook/react/issues/3877
       "__REACT_DEVTOOLS_GLOBAL_HOOK__": "({ isDisabled: true })"
     }),
-    new ExtractTextPlugin("[name].css"),
+     new MiniCssExtractPlugin({
+      filename: "[name].css",
+      chunkFilename: "[name].chunk.css",
+    }),
   ],
 }

@@ -1,4 +1,4 @@
-import {connect, withRoute} from "framework"
+import {connect, withRouting} from "framework"
 import * as D from "kefir.db"
 import React from "react"
 import MainMenu from "../common/MainMenu"
@@ -6,39 +6,32 @@ import routes from "../routes"
 
 // SEED
 export let seed = {
-  // DOCUMENT
-  document: {
-    title: "",
-    description: "",
-    // ogType ...
-  },
-
   // DATA
-  posts: {},
-  users: {},
+  posts: null, // {Post}
+  users: null, // {User}
 
-  // META
-  _loading: {},
+  // LOADING (per-component and per-data loading indicators are HELL to support)
+  loading: 0,
 }
 
 let app = (sources, {key}) => {
   // STATE
   let state$ = D.run(
     () => D.makeStore({}),
-    // D.withLog({key}),
+    D.withLog({key}),
   )(
     // Init
     D.init(seed),
 
     // Page
-    sources.page$.flatMapLatest(R.view2("action$")),
+    sources.page.action$,
   ).$
 
   // COMPONENT
   let Component = connect(
     {
       route: sources.route$,
-      Content: sources.page$.map(R.view2("Component")),
+      Content: sources.page.Component$,
     },
     ({route, Content}) => {
       return <div>
@@ -57,11 +50,11 @@ let app = (sources, {key}) => {
     }
   )
 
-  return {state$, Component}
+  return {state$, route$: sources.route$, Component}
 }
 
 export default R.pipe(
-  withRoute({
+  withRouting({
     routes,
   }),
 )(app)

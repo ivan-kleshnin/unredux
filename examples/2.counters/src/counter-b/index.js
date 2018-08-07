@@ -2,7 +2,7 @@ import {connect} from "framework"
 import * as D from "kefir.db"
 import React from "react"
 
-export default (sources, {key}) => {
+export default (sources, {key, title}) => {
   let intents = {
     inc$: sources.DOM.fromKey("inc").listen("click").map(R.always(true)),
     dec$: sources.DOM.fromKey("dec").listen("click").map(R.always(true)),
@@ -12,9 +12,7 @@ export default (sources, {key}) => {
     () => D.makeStore({}),
     D.withLog({key}),
   )(
-    sources.state$
-      ? sources.state$.take(1).map(R.always)
-      : D.init(0),
+    sources.state$.map(R.prop(key)).take(1).map(R.always),
 
     intents.inc$.map(_ => R.inc),
     intents.dec$.map(_ => R.dec),
@@ -24,7 +22,7 @@ export default (sources, {key}) => {
     {counter: state$},
     ({counter}) =>
       <p>
-        {sources.title}: <span>{counter}</span>
+        {title}: <span>{counter}</span>
         {" "}
         <button data-key="inc">+1</button>
         {" "}

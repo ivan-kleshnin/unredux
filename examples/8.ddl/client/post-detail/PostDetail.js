@@ -1,6 +1,6 @@
 import PT from "prop-types"
 import React from "react"
-import Loading from "../common/Loading"
+import Loading from "common/Loading"
 
 export default function PostDetail({subset, loading, post, user}) {
   return <div data-key="postDetail">

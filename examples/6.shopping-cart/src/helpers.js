@@ -1,10 +1,4 @@
-import {taggedSum} from "daggy"
-import generate from "nanoid/generate"
 // import U from "urlz"
-
-export let makeId = () => generate("0123456789abcdef", 10)
-
-export let arrToObj = R.pipe(R.map(m => ([m.id, m])), R.fromPairs)
 
 // Error with custom data
 export class ErrorX extends Error {
@@ -29,6 +23,11 @@ export class ErrorX extends Error {
 }
 
 export function fetchJSON(url, options = {}) {
+  // SSR support
+  // if (typeof window == "undefined") {
+  //   url = U.withProtocol(global.protocol, U.withHost(global.host, url))
+  // }
+
   options = R.mergeDeep(options, {
     credentials: "same-origin",
     headers: {

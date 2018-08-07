@@ -4,7 +4,7 @@ import K from "kefir"
 import * as D from "kefir.db"
 import React from "react"
 import {makeFilterFn, makeSortFn} from "common/home"
-import * as B from "../blueprints"
+import {safeDec, safeInc} from "../blueprints"
 import PostIndex from "./PostIndex"
 
 // SEED
@@ -131,7 +131,10 @@ export default (sources, {key, params}) => {
       index: index$,
       posts: posts$,
     },
-    PostIndex
+    (props) => {
+      console.log("props:", props)
+      return <PostIndex {...props}/>
+    }
   )
 
   // ACTIONS
@@ -147,8 +150,8 @@ export default (sources, {key, params}) => {
           : R.over2(baseLens, R.mergeFlipped(maybeModels), state)
       }),
 
-    K.merge(R.values(intents.fetch)).map(_ => R.fn("setLoading", R.over2(loadingLens, B.safeInc))),
-    K.merge(R.values(fetches)).delay(1).map(_ => R.fn("unsetLoading", R.over2(loadingLens, B.safeDec))),
+    K.merge(R.values(intents.fetch)).map(_ => R.fn("setLoading", R.over2(loadingLens, safeInc))),
+    K.merge(R.values(fetches)).delay(1).map(_ => R.fn("unsetLoading", R.over2(loadingLens, safeDec))),
   ])
 
   return {Component, action$}

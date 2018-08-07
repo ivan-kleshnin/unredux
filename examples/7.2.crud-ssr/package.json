@@ -16,6 +16,6 @@
     "start": "nodemon ./server/index.js",
     "postinstall": ". postinstall.sh",
     "webpack": "webpack",
-    "webpack-watch": "webpack --watch"
+    "webpackWatch": "webpack --watch"
   }
 }

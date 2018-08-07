@@ -1,29 +1,39 @@
 # Unredux
 
-**WIP**, repo name is temporary.
+Cross-platform experimental microframework (500 lines of code!). *(Name is a temporal placeholder).*
 
-This repo features a number of realistic apps built without (frontend) frameworks. We use a dataflow
-similar to [CycleJS](https://cycle.js.org/) built on [Kefir](https://kefirjs.github.io) and [React](https://facebook.github.io/react/).
+WIP. Highly unstable. Think [CycleJS](https://cycle.js.org/) without drivers built on [Kefir](https://kefirjs.github.io)
+[Kefir.DB][https://github.com/ivan-kleshnin/kefir.db] and [React](https://facebook.github.io/react/).
 
-We weren't happy with clunky imperative architectures Redux, VueJS, MobX, and GrapQL apps end up with,
-so we decided to codify our own approach. Like CycleJS, it's 100% reactive (declarative in time!).
-Unlike CycleJS, it doesn't hide side-effects in drivers. See docs for more details about our motivations
-and design decisions.
+> I'm not happy about the imperative object-oriented approach VueJS and MobX promote. I'm not happy about
+the bundle size of Angular and GraphQL. I'm not happy about the incidental complexity of Redux ecosystem.
+As a freelancer, I want to concentrate on the business logic having a framework which code **one person**
+can **read in one sitting**.
 
----
+#### Features
 
-We propose to start with shallow look at **Examples**. If you like what you see there (code layout,
-clarity, etc) – continue with **Tutorials** or **Docs** before you really start digging into how
-Examples work.
+* CycleJS-like architecture with sources and sinks but without drivers.
+* Reactive dataflow with proactive insertions (where they make sense).
+* Reactive state management (KefirDB) (think Redux with functions instead of actions).
+* Declarative data fetching and auto-persistence (in progress).
+* Full-scale examples: realistic routing, SSR, etc.
 
-Don't expect to understand everything from the first read. But, we ensure you, the end result is much
-simplier and scalable than everything you can hope to build with Redux, VueJS and even CycleJS.
-Our main goal is to keep code super tiny and super clean. We hate enterprise and we hope you'll understand
-why after seeing this project.
+See [docs](./docs) for more details about our motivations and design decisions.
 
-The proposed architecture fits perfectly for **all** interactive apps: including static site generator
-(with watch mode), browser games, console games, etc. It's not limited to frontend by no means. We hope
-to add corresponding examples with time.
+Unredux uses the simplest "components" model (called "apps" here):
+
+```js
+function anyApp(sources, props) {
+  sources      // {state$: streamOfParentStates, DOM: streamOfLocalDOMEvents, ...}
+  ...          // -- your code --
+  return sinks // {Component: reactComponent, action$: streamOfActions, ...}
+}
+```
+
+where sources and sinks are records of streams (`Object <KefirStream>` speaking TypeScript) where keys
+are predefined and correspond to event or effect types.
+
+So "component composition" is just a function and stream composition, nothing extra.
 
 ## Docs
 
@@ -81,14 +91,12 @@ Declarative Data Load, lightweight alternative to GraphQL+Relay / Falcor.
 
 **Notable differences**:
 1. Unlike both it's REST API based (avoiding vendor lock-in on Backend).
-2. Unlike both it's fully reactive.
-3. Unlike GraphQL it relies on plain data to describe queries, instead of DSL layer.
+2. Unlike both it's reactive.
+3. Unlike GraphQL it relies on plain data to describe queries, instead of extra DSL layer.
 4. Less magic, more boilerplate. Model dependencies are described, not auto-injected.
-5. Small code (currently all about DDL is up to 500LOC).
+5. Much smaller code base and bundle size.
 6. Validations and Querying are decoupled. Use TsIO, PropTypes, Tcomb or any other dynamic typing
 to describe and validate your models. Avoid vendor lock-in once again.
-
-*Note: it's still highly experimental.*
 
 ## Usage
 

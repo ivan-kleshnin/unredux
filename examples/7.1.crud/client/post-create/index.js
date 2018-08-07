@@ -1,10 +1,11 @@
-import A from "axios"
 import {connect} from "framework"
 import K from "kefir"
 import * as D from "kefir.db"
 import React from "react"
 import {validate} from "tcomb-validation"
+import {fetchJSON} from "common/helpers"
 import * as T from "common/types"
+import {safeInc, safeDec} from "../blueprints"
 import PostForm from "./PostForm"
 
 // SEED
@@ -20,6 +21,12 @@ export let seed = {
 
 export default (sources, {key}) => {
   let baseLens = ["posts"]
+  let loadingLens = ["_loading", key]
+
+  let setLoading = R.over2(loadingLens, safeInc)
+  let unsetLoading = R.over2(loadingLens, safeDec)
+
+  let loading$ = deriveState(loadingLens).map(Boolean)
 
   // INTENTS
   let intents = {
@@ -102,38 +109,36 @@ export default (sources, {key}) => {
   let Component = connect(
     {
       form: form$,
+      loading: loading$,
     },
-    ({form}) =>
-      <PostForm input={form.input} errors={form.errors}/>
+    PostForm
   )
 
   // ACTIONS
   let action$ = K.merge([
-    K.constant(function initPage(state) {
-      return R.set2(["document", "title"], `Post Create`, state)
-    }),
-
     form$
       .sampledBy(intents.submit$)
-      .flatMapConcat(form => {
-        let postForm
-        try {
-          postForm = T.PostForm(form.input)
-        } catch (e) {
-          return K.never()
+      .filter(form => R.isEmpty(form.errors))
+      .flatMapConcat(form => K.stream(async (emitter) => {
+        // POST data
+        emitter.value(setLoading) // TODO loading term?!
+        let reqResult = await fetchJSON(`/api/${baseLens[0]}/`, {
+          method: "POST",
+          body: form,
+        })
+        emitter.value(unsetLoading)
+        if (reqResult instanceof Error) {
+          console.warn(reqResult.message)
+          return emitter.end() // Set your custom alerts here
         }
-        return K.constant(postForm)
-      })
-      .flatMapConcat(form => K.fromPromise(
-        A.post(`/api/${baseLens[0]}/`, form)
-         .then(resp => resp.data.model)
-         .catch(R.id)
-      ))
-      .map(maybeModel => function afterPOST(state) {
-        return maybeModel instanceof Error
-          ? state
-          : R.set2([...baseLens, maybeModel.id], maybeModel, state)
-      }),
+
+        // Update state
+        let model = reqResult.model
+        emitter.value(function afterFetch(state) {
+          return R.set2([...baseLens, maybeModel.id], model, state)
+        })
+        return emitter.end()
+      })),
   ])
 
   return {Component, action$}

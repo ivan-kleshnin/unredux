@@ -1,8 +1,8 @@
 import PT from "prop-types"
 import React from "react"
+import Loading from "common/Loading"
 import PostItem from "./PostItem"
 import UserItem from "./UserItem"
-import Loading from "../common/Loading"
 
 export default function PostIndex({subset, index, loading, posts, users}) {
   return <div data-key="postIndex">

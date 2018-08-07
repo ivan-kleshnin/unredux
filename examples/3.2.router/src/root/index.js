@@ -1,4 +1,4 @@
-import {connect, withRoute} from "framework"
+import {connect, withRouting} from "framework"
 import * as D from "kefir.db"
 import React from "react"
 import routes from "../routes"
@@ -19,21 +19,23 @@ let app = (sources, {key}) => {
     D.init(seed),
 
     // Page
-    sources.page$.flatMapLatest(R.view2("action$")),
+    sources.page.action$,
   ).$
 
   // COMPONENT
   let Component = connect(
     {
       route: sources.route$,
-      Content: sources.page$.map(R.view2("Component")),
+      Content: sources.page.Component$,
     },
     ({route, Content}) => {
       return <div>
         <pre>{`
           URL: ${route.url}
-          route.mask: ${route.mask}
-          route.params: ${JSON.stringify(route.params)}
+          mask: ${route.mask}
+          params: ${JSON.stringify(route.params)}
+          query: ${JSON.stringify(route.query)}
+          hash: ${JSON.stringify(route.hash)}
         `}</pre>
         <p>
           <a href="/">Home</a>
@@ -54,11 +56,11 @@ let app = (sources, {key}) => {
     }
   )
 
-  return {state$, Component}
+  return {state$, route$: sources.route$, Component}
 }
 
 export default R.pipe(
-  withRoute({
+  withRouting({
     routes,
   }),
 )(app)

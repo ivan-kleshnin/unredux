@@ -54,7 +54,6 @@ router.get("/*", (req, res, next) => {
       .toProperty()
 
     sinks.state$
-      .takeUntilBy(finalState$)
       .observe(sources.state$.plug)
 
     finalState$.observe(state => {

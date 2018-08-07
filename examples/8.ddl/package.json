@@ -17,7 +17,7 @@
     "postinstall": ". postinstall.sh",
     "test": "ava tests",
     "webpack": "webpack",
-    "webpack-watch": "webpack --watch"
+    "webpackWatch": "webpack --watch"
   },
   "ava": {
     "require": [

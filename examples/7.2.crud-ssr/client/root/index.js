@@ -1,4 +1,4 @@
-import {connect, withRoute} from "framework"
+import {connect, withRouting} from "framework"
 import * as D from "kefir.db"
 import React from "react"
 import MainMenu from "../common/MainMenu"
@@ -33,14 +33,14 @@ let app = (sources, {key}) => {
       : D.init(seed),
 
     // Page
-    sources.page$.flatMapLatest(R.view2("action$")),
+    sources.page$.flatMapLatest(sinks => sinks.action$),
   ).$
 
   // COMPONENT
   let Component = connect(
     {
       route: sources.route$,
-      Content: sources.page$.map(R.view2("Component")),
+      Content: sources.page$.map(sinks => sinks.Component),
     },
     ({route, Content}) => {
       return <div>
@@ -63,7 +63,7 @@ let app = (sources, {key}) => {
 }
 
 export default R.pipe(
-  withRoute({
+  withRouting({
     routes,
   }),
 )(app)

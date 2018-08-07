@@ -25,4 +25,6 @@ let sinks = app(sources, props)
 sinks.state$.observe(sources.state$.plug)
 
 // Render the Component sink
-ReactDOM.render(<sinks.Component/>, document.getElementById(APP_KEY))
+sinks.state$.sampledBy(sinks.route$).take(1).observe(state => {
+  ReactDOM.render(<sinks.Component/>, document.getElementById(APP_KEY))
+})

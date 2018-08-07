@@ -1,4 +1,4 @@
-import {connect, isolate} from "framework"
+import {connect, isolateDOM} from "framework"
 import K from "kefir"
 import * as D from "kefir.db"
 import React from "react"
@@ -37,17 +37,26 @@ export default (sources, {key, url}) => {
     intents.navigateHistory$,
   ]).toProperty()
 
-  // ROUTING
+  // ROUTING (MANUAL)
   let page$ = url$
     .map(url => {
       if (url == "/") {
         return {Component: Home, action$: K.never()}
       } else if (url == "/page1") {
-        return isolate(page1App, key + ".page1", ["DOM", "Component"])(sources)
+        return R.merge(
+          {Component: () => null, action$: K.never()},
+          isolateDOM(page1App, key + ".page1")(sources, {})
+        )
       } else if (url == "/page2") {
-        return isolate(page2App, key + ".page2", ["DOM", "Component"])(sources)
+        return R.merge(
+          {Component: () => null, action$: K.never()},
+          isolateDOM(page2App, key + ".page2")(sources, {})
+        )
       } else if (url == "/page3") {
-        return isolate(page3App, key + ".page3", ["DOM", "Component"])(sources)
+        return R.merge(
+          {Component: () => null, action$: K.never()},
+          isolateDOM(page3App, key + ".page3")(sources, {})
+        )
       } else {
         return {Component: NotFound, action$: K.never()}
       }
@@ -63,14 +72,14 @@ export default (sources, {key, url}) => {
     D.init(seed),
 
     // Page
-    page$.flatMapLatest(R.view2("action$")),
+    page$.flatMapLatest(sinks => sinks.action$),
   ).$
 
   // COMPONENT
   let Component = connect(
     {
       url: url$,
-      Content: page$.map(R.view2("Component")),
+      Content: page$.map(sinks => sinks.Component),
     },
     ({url, Content}) => {
       return <div>

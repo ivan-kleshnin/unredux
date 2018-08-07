@@ -1,8 +1,8 @@
-import A from "axios"
-import {connect} from "framework"
+import {connect, isolateDOM} from "framework"
 import K from "kefir"
 import * as D from "kefir.db"
 import React from "react"
+import {fetchJSON} from "../helpers"
 import productIndex from "../product-index"
 import CartIndex from "./CartIndex"
 
@@ -30,7 +30,7 @@ export default (sources, {key}) => {
       .map(R.always(true)),
   }
 
-  let indexSinks = productIndex(sources, {key: key + ".index"})
+  let indexSinks = isolateDOM(productIndex, "index")(sources, {})
 
   // STATE
   let state$ = D.run(
@@ -39,16 +39,23 @@ export default (sources, {key}) => {
   )(
     D.init(seed),
 
-    K.fromPromise(
-      A.get("./products.json")
-        .then(resp => resp.data)
-        .catch(R.id)
-    )
-      .map(maybeData => function afterFetchProducts(state) {
-        return maybeData instanceof Error
-          ? state
-          : R.set2("products", maybeData, state)
-      }),
+    // Data load
+    K.stream(async (emitter) => {
+      let reqResult = await fetchJSON("./products.json")
+      if (reqResult instanceof Error) {
+        console.warn(dataOrError.message) // Set your custom alerts here
+        // if (maybeData.errors) {
+        //   console.warn(maybeData.errors)
+        // }
+        return emitter.end()
+      }
+
+      let data = reqResult
+      emitter.value(function afterFetch(state) {
+        return R.set2("products", data, state)
+      })
+      emitter.end()
+    }),
 
     // Cart actions
     intents.cartInc$.map(id => function cartInc(state) {

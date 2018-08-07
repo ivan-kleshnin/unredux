@@ -2,7 +2,7 @@ import {connect} from "framework"
 import K from "kefir"
 import React from "react"
 
-export default (sources, {key}) => {
+export default (sources, {key, title}) => {
   let intents = {
     inc$: sources.DOM.fromKey("inc").listen("click").map(R.always(true)),
     dec$: sources.DOM.fromKey("dec").listen("click").map(R.always(true)),
@@ -17,7 +17,7 @@ export default (sources, {key}) => {
     {counter: sources.state$},
     ({counter}) =>
       <p>
-        {sources.title}: <span>{counter}</span>
+        {title}: <span>{counter}</span>
         {" "}
         <button data-key="inc">+1</button>
         {" "}

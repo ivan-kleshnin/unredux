@@ -1,6 +1,6 @@
 import PT from "prop-types"
 import React from "react"
-import Loading from "../common/Loading"
+import Loading from "common/Loading"
 import UserItem from "./UserItem"
 
 export default function UserIndex({loading, index, users}) {

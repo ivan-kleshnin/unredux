@@ -1,3 +1,4 @@
+import {isolateDOM} from "framework"
 import * as D from "kefir.db"
 import React from "react"
 import addApp from "../todo-add"
@@ -16,22 +17,14 @@ export default (sources, {key}) => {
       .map(R.always(true)),
   }
 
-  /*
-  Non-isolated apps are aware of root sources:
-    * they see the root state and can modify it
-    * they see all DOM events
-    * name clashing cases has to prevented by a programmer
-  Such apps are fine as parts of a bigger app, but not as libraries.
-  */
-  // Nested apps, different keys are used for logging purposes.
-  let addSinks = addApp(sources, {key: "add"})
-  let indexSinks = indexApp(sources, {key: "index"})
+  let addSinks = isolateDOM(addApp, "add")(sources, {})
+  let indexSinks = isolateDOM(indexApp, "index")(sources, {})
 
   // STATE
   let state$ = D.run(
     () => D.makeStore({}),
     D.withLog({key}),
-    D.withLocalStoragePersistence({key: "4.todos." + key}),
+    D.withLocalStoragePersistence({key: "4.todos.root"}),
   )(
     D.init(seed),
 

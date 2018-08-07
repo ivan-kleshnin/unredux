@@ -49,9 +49,6 @@ module.exports = {
     ],
   },
   plugins: [
-    new Webpack.ProvidePlugin({
-      "R": "@paqmind/ramda",
-    }),
     new Webpack.DefinePlugin({
       // Disable "React DevTools Download" console log
       // https://github.com/facebook/react/issues/3877

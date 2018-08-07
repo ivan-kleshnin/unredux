@@ -1,6 +1,6 @@
 import PT from "prop-types"
 import React from "react"
-import Loading from "../common/Loading"
+import Loading from "common/Loading"
 import PostItem from "./PostItem"
 
 // In order to Webpack move this file to `public` folder

@@ -1,6 +1,6 @@
-import {connect, withRouting} from "framework"
 import * as D from "kefir.db"
 import React from "react"
+import {connect, withRouting} from "vendors/framework"
 import MainMenu from "../common/MainMenu"
 import routes from "../routes"
 
@@ -14,33 +14,31 @@ export let seed = {
   },
 
   // DATA
-  posts: {},
-  users: {},
+  posts: null, // :: {Post}
+  users: null, // :: {User}
 
-  // META
-  _loading: {},
+  // LOADING (per-component and per-data loading indicators are HELL to support)
+  loading: 0,
 }
 
 let app = (sources, {key}) => {
   // STATE
   let state$ = D.run(
     () => D.makeStore({}),
-    // D.withLog({key}),
+    D.withLog({key}),
   )(
     // Init
-    D.isBrowser
-      ? D.init(R.clone(window.state))
-      : D.init(seed),
+    D.initAsync(sources.state$), // start from serverSeed
 
     // Page
-    sources.page$.flatMapLatest(sinks => sinks.action$),
+    sources.page.action$,
   ).$
 
   // COMPONENT
   let Component = connect(
     {
       route: sources.route$,
-      Content: sources.page$.map(sinks => sinks.Component),
+      Content: sources.page.Component$,
     },
     ({route, Content}) => {
       return <div>

@@ -1,6 +1,6 @@
 import A from "axios"
 import K from "kefir"
-import {derive, deriveArr, deriveObj} from "framework"
+import {derive, deriveArr, deriveObj} from "vendors/framework"
 import {isBrowser} from "kefir.db"
 import U from "urlz"
 

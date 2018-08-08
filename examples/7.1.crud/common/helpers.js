@@ -1,6 +1,4 @@
-import {taggedSum} from "daggy"
 import generate from "nanoid/generate"
-// import U from "urlz"
 
 export let makeId = () => generate("0123456789abcdef", 10)
 

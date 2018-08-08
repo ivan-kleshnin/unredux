@@ -8,10 +8,13 @@ import postDetail from "./post-detail"
 
 // Static pages
 import About from "./common/About"
-import Contacts from "./common/Contacts"
 import NotFound from "./common/NotFound"
 
 export default [
+  // Load on-demand like this:
+  // ["/", () => import(/* webpackChunkName: "home" */"./home").then(module => module.default)],
+  // (needs an additional Webpack setup we omit here)
+
   // Apps
   ["/",                () => Promise.resolve(home)],
   ["/posts/create/",   () => Promise.resolve(postCreate)],
@@ -20,8 +23,9 @@ export default [
 
   // Static pages
   ["/about/",    () => Promise.resolve(() => ({Component: About}))],
-  ["/contacts/", () => Promise.resolve(() => ({Component: Contacts}))],
 
   // Not found
-  ["/*path", () => Promise.resolve(() => ({Component: NotFound}))],
+  ["/*path", () => Promise.resolve(() => ({
+    Component: NotFound,
+  }))],
 ]

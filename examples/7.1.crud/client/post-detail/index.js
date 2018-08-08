@@ -1,4 +1,4 @@
-import {connect, derive} from "framework"
+import {connect, derive} from "vendors/framework"
 import K from "kefir"
 import React from "react"
 import {fetchJSON} from "common/helpers"

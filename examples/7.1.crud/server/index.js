@@ -1,7 +1,7 @@
 import BodyParser from "body-parser"
 import Cors from "cors"
 import P from "pathz"
-import "shims"
+import "vendors/shims"
 import {APP_KEY} from "client/meta"
 import Express, {unless} from "./express"
 import mocksRoutes from "./mocks"

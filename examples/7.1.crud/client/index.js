@@ -1,15 +1,15 @@
-import {fromDOMEvent, poolProp} from "framework"
 import React from "react"
 import ReactDOM from "react-dom"
-import "shims"
+import "vendors/shims"
+import {fromDOMEvent, poolProp} from "vendors/framework"
 import {APP_KEY} from "./meta"
-import app from "./root"
+import app, {seed} from "./root"
 import "./index.less"
 
 // Prepare sources
 let sources = {
   DOM: fromDOMEvent("#" + APP_KEY),
-  state$: poolProp(),
+  state$: poolProp(seed),
 }
 
 // Prepare props
@@ -24,7 +24,7 @@ let sinks = app(sources, props)
 // Cycle the root state
 sinks.state$.observe(sources.state$.plug)
 
-// Render the Component sink
 sinks.state$.sampledBy(sinks.route$).take(1).observe(state => {
+  // Render the Component sink
   ReactDOM.render(<sinks.Component/>, document.getElementById(APP_KEY))
 })

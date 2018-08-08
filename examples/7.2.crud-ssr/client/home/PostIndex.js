@@ -1,15 +1,14 @@
 import PT from "prop-types"
 import React from "react"
-import Loading from "common/Loading"
+import Loading from "../common/Loading"
+import NotFound from "../common/NotFound"
 import PostItem from "./PostItem"
-
-// In order to Webpack move this file to `public` folder
 import "./index.less"
-import "./logo.gif"
+import logo from "./logo.gif"
 
 export default function PostIndex({loading, index, posts}) {
   return <div data-key="postIndex">
-    <h1 className="title">Blog <img src="/public/home/logo.gif"/></h1>
+    <h1 className="title">Blog <img src={logo}/></h1>
     <p>
       <a href="/posts/create/">New Post</a>
     </p>
@@ -79,28 +78,26 @@ export default function PostIndex({loading, index, posts}) {
         <button name="sort" value={index.sort == "+publishDate" ? "-publishDate" : "+publishDate"}>
           {index.sort == "+publishDate" ? <span><b>&uarr; Publish Date</b></span> :
            index.sort == "-publishDate" ? <span><b>&darr; Publish Date</b></span> :
-                                          <span>&uarr; Publish date</span>
-          }
+                                          <span>&uarr; Publish date</span>}
         </button>
       </div>
     </div>
-    {loading
-      ? <Loading/>
-      : <div className="margin-top">
+    {posts
+      ? <div className="margin-top">
           {posts.length
             ? posts.map(post =>
                 <PostItem key={post.id} post={post}/>
               )
-            : <p><i>No posts available.</i></p>
-          }
+            : <p><i>No data yet.</i></p>}
         </div>
-    }
+      : loading
+          ? <Loading/>
+          : <p><i>No data yet.</i></p>}
   </div>
 }
 
 PostIndex.propTypes = {
-  loading: PT.bool.isRequired,
   index: PT.object,
   posts: PT.arrayOf(PostItem.propTypes.post),
+  loading: PT.bool.isRequired,
 }
-

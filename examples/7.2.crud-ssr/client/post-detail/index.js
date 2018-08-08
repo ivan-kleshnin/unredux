@@ -1,59 +1,57 @@
-import A from "axios"
-import {connect, derive} from "framework"
+import {connect, derive} from "vendors/framework"
 import K from "kefir"
 import React from "react"
-import * as B from "../blueprints"
+import {fetchJSON} from "common/helpers"
+import {incLoading, decLoading} from "../blueprints"
 import PostDetail from "./PostDetail"
 
 export default (sources, {key, params}) => {
   let baseLens = ["posts", params.id]
-  let loadingLens = ["_loading", key]
+  let loadingLens = ["loading"]
 
   let deriveState = derive(sources.state$.throttle(50))
-  let loading$ = deriveState(loadingLens).map(Boolean)
   let post$ = deriveState(baseLens)
-
-  // INTENTS
-  let intents = {
-    fetch: {
-      base$: post$.filter(R.not),
-    }
-  }
-
-  // FETCHES
-  let fetches = {
-    base$: intents.fetch.base$
-      .flatMapConcat(_ => K.fromPromise(
-        A.get(`/api/${baseLens[0]}/${baseLens[1]}/`)
-         .then(resp => resp.data.models[baseLens[1]])
-         .catch(R.id)
-      )),
-  }
+  let loading$ = deriveState(loadingLens).map(Boolean)
 
   // COMPONENT
   let Component = connect(
     {
-      loading: loading$,
       post: post$,
+      loading: loading$,
     },
     PostDetail
   )
 
   // ACTIONS
   let action$ = K.merge([
+    post$.filter(R.not).flatMapConcat(_ => K.stream(async (emitter) => {
+      emitter.value(function fetchStarted(state) {
+        return incLoading(state)
+      })
+
+      let reqResult = await fetchJSON(`/api/posts/${params.id}/`)
+      if (reqResult instanceof Error) {
+        console.warn(reqResult.message)
+        emitter.value(function fetchFailed(state) {
+          // + Set your custom alerts here
+          return decLoading(state)
+        })
+      } else {
+        let post = reqResult.models[params.id]
+        emitter.value(function fetchSucceeded(state) {
+          return R.pipe(
+            R.set2(["posts", post.id], post),
+            decLoading,
+          )(state)
+        })
+      }
+
+      return emitter.end()
+    })),
+
     K.constant(function initPage(state) {
       return R.set2(["document", "title"], `Post ${params.id}`, state)
     }),
-
-    fetches.base$
-      .map(maybeModel => function afterGET(state) {
-        return maybeModel instanceof Error
-          ? state
-          : R.set2(baseLens, maybeModel, state)
-      }),
-
-    K.merge(R.values(intents.fetch)).map(_ => R.fn("setLoading", R.over2(loadingLens, B.safeInc))),
-    K.merge(R.values(fetches)).delay(1).map(_ => R.fn("unsetLoading", R.over2(loadingLens, B.safeDec))),
   ])
 
   return {Component, action$}

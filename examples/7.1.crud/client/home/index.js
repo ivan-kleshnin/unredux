@@ -1,4 +1,4 @@
-import {connect, derive, deriveObj} from "framework"
+import {connect, derive, deriveObj} from "vendors/framework"
 import K from "kefir"
 import * as D from "kefir.db"
 import React from "react"
@@ -107,6 +107,9 @@ export default (sources, {key, params}) => {
         return !posts || R.keys(posts).length < 12
       })
       .flatMapConcat(posts => K.stream(async (emitter) => {
+        // We intentionally use special loading strategy here to demonstrate how 2+ requests will
+        // interoperate. Check 8.dll example for more conventional fetching and caching approach.
+        // Here we always fetch ids and then models if necessary.
         emitter.value(function fetchStarted(state) {
           return incLoading(state)
         })

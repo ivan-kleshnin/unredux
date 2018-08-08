@@ -1,10 +1,10 @@
-import A from "axios"
-import {connect, derive, deriveObj} from "framework"
+import {connect, derive, deriveObj} from "vendors/framework"
 import K from "kefir"
 import * as D from "kefir.db"
 import React from "react"
+import {fetchJSON} from "common/helpers"
 import {makeFilterFn, makeSortFn} from "common/home"
-import {safeDec, safeInc} from "../blueprints"
+import {incLoading, decLoading} from "../blueprints"
 import PostIndex from "./PostIndex"
 
 // SEED
@@ -22,9 +22,10 @@ export let seed = {
 
 export default (sources, {key, params}) => {
   let baseLens = ["posts"]
-  let loadingLens = ["_loading", key]
+  let loadingLens = ["loading"]
 
   let deriveState = derive(sources.state$.throttle(50))
+  let posts$ = deriveState(baseLens)
   let loading$ = deriveState(loadingLens).map(Boolean)
 
   // INTENTS
@@ -50,43 +51,6 @@ export default (sources, {key, params}) => {
 
     changeSort$: sources.DOM.fromName("sort").listen("click")
       .map(ee => ee.element.value),
-
-    fetch: {
-      base$: do {
-        if (D.isBrowser && key in window.state._loading) { // If there was SSR, skip,
-          delete window.state._loading[key]                // but only once.
-          K.never()
-        } else {
-          K.constant(true)
-        }
-      }
-    }
-  }
-
-  // FETCHES
-  let fetches = {
-    base$: intents.fetch.base$
-      .flatMapConcat(_ => K.fromPromise(
-        A.get(`/api/${baseLens[0]}/~/id/`)
-         .then(resp => R.pluck("id", resp.data.models))
-         .catch(R.id)
-      ))
-      .flatMapConcat(maybeIds => {
-        return maybeIds instanceof Error
-          ? K.constant(maybeIds)
-          : sources.state$.take(1)
-              .map(s => R.keys(R.view2(baseLens, s)))
-              .map(R.difference(maybeIds))
-              .flatMapConcat(missingIds => {
-                return missingIds.length
-                  ? K.fromPromise(
-                      A.get(`/api/${baseLens[0]}/${R.join(",", missingIds)}/`)
-                       .then(resp => resp.data.models)
-                       .catch(R.id)
-                    )
-                  : K.constant({})
-              })
-      })
   }
 
   // STATE
@@ -108,12 +72,13 @@ export default (sources, {key, params}) => {
     intents.changeSort$.map(x => R.set2("sort", x)),
   ).$
 
-  let posts$ = deriveObj(
+  let indexPosts$ = deriveObj(
     {
       index: index$.debounce(200),
-      table: sources.state$.map(s => s.posts),
+      table: posts$,
     },
     ({index, table}) => {
+      if (!table) return null
       let filterFn = makeFilterFn(index.filters)
       let sortFn = makeSortFn(index.sort)
       return R.pipe(
@@ -127,31 +92,69 @@ export default (sources, {key, params}) => {
   // COMPONENT
   let Component = connect(
     {
-      loading: loading$,
       index: index$,
-      posts: posts$,
+      posts: indexPosts$,
+      loading: loading$,
     },
-    (props) => {
-      console.log("props:", props)
-      return <PostIndex {...props}/>
-    }
+    PostIndex
   )
 
   // ACTIONS
   let action$ = K.merge([
+    posts$
+      .filter(posts => {
+        // Use local `offset` and `limit` here to detect missing posts
+        return !posts || R.keys(posts).length < 12
+      })
+      .flatMapConcat(posts => K.stream(async (emitter) => {
+        // We intentionally use special loading strategy here to demonstrate how 2+ requests will
+        // interoperate. Check 8.dll example for more conventional fetching and caching approach.
+        // Here we always fetch ids and then models if necessary.
+        emitter.value(function fetchStarted(state) {
+          return incLoading(state)
+        })
+
+        let reqResult = await fetchJSON(`/api/posts/~/id/`)
+        if (reqResult instanceof Error) {
+          console.warn(reqResult.message)
+          emitter.value(function fetchFailed(state) {
+            // + Set your custom alerts here
+            return decLoading(state)
+          })
+        } else {
+          let ids = R.pluck("id", reqResult.models)
+          let missingIds = R.difference(ids, R.keys(posts))
+          if (missingIds.length) {
+            let reqResult2 = await fetchJSON(`/api/posts/${R.join(",", missingIds)}/`)
+            if (reqResult2 instanceof Error) {
+              console.warn(reqResult2.message)
+              // + Set your custom alerts here
+              emitter.value(function fetchFailed(state) {
+                return decLoading(state)
+              })
+            } else {
+              let {models: posts, total} = reqResult2
+              emitter.value(function fetchSucceeded(state) {
+                return R.pipe(
+                  R.over2(["posts"], R.mergeFlipped(posts)),
+                  decLoading,
+                )(state)
+                // TODO total
+              })
+            }
+          } else {
+            emitter.value(function fetchSucceeded(state) {
+              return decLoading(state)
+            })
+          }
+        }
+
+        return emitter.end()
+      })),
+
     K.constant(function initPage(state) {
       return R.set2(["document", "title"], `Home`, state)
     }),
-
-    fetches.base$
-      .map(maybeModels => function afterGET(state) {
-        return maybeModels instanceof Error
-          ? state
-          : R.over2(baseLens, R.mergeFlipped(maybeModels), state)
-      }),
-
-    K.merge(R.values(intents.fetch)).map(_ => R.fn("setLoading", R.over2(loadingLens, safeInc))),
-    K.merge(R.values(fetches)).delay(1).map(_ => R.fn("unsetLoading", R.over2(loadingLens, safeDec))),
   ])
 
   return {Component, action$}

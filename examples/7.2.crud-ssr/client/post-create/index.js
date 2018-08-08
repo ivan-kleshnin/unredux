@@ -1,9 +1,9 @@
-import A from "axios"
-import {connect} from "framework"
+import {connect} from "vendors/framework"
 import K from "kefir"
 import * as D from "kefir.db"
 import React from "react"
 import {validate} from "tcomb-validation"
+import {fetchJSON} from "common/helpers"
 import * as T from "common/types"
 import PostForm from "./PostForm"
 

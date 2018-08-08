@@ -4,11 +4,6 @@ import "setimmediate"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 global.R = R
-
-R.chain2 = R.addIndex(R.chain)
-R.reduce2 = R.addIndex(R.reduce)
-
-R.takeUntil = R.curry((fn, xs) => R.takeWhile(R.complement(fn), xs))
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // Temporal fix for https://github.com/kefirjs/kefir/issues/265
@@ -41,4 +36,8 @@ K.fromPromise = function fromPromise(promise) {
   })
 
   return result.toProperty().setName("fromPromise")
+}
+
+K.fromProperty = function fromProperty(prop$) {
+  return K.merge([K.later(0, prop$.take(1)).flatMap(), prop$.skip(1)])
 }

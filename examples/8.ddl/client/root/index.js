@@ -1,5 +1,5 @@
 import A from "axios"
-import {connect, spread, withRouting} from "framework"
+import {connect, spread, withRouting} from "vendors/framework"
 import K from "kefir"
 import * as D from "kefir.db"
 import React from "react"

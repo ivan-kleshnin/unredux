@@ -1,8 +1,8 @@
-import {fromDOMEvent, poolProp} from "framework"
+import {fromDOMEvent, poolProp} from "vendors/framework"
 import Q from "querystring"
 import React from "react"
 import ReactDOM from "react-dom"
-import "shims"
+import "vendors/shims"
 import {APP_KEY} from "./meta"
 import app from "./root"
 

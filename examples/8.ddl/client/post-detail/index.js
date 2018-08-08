@@ -1,4 +1,4 @@
-import {connect, derive, deriveModel} from "framework"
+import {connect, derive, deriveModel} from "vendors/framework"
 import K from "kefir"
 import * as D from "kefir.db"
 import React from "react"

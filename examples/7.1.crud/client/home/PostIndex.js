@@ -3,8 +3,8 @@ import React from "react"
 import Loading from "../common/Loading"
 import NotFound from "../common/NotFound"
 import PostItem from "./PostItem"
-import"./index.less"
-import logo from "./logo.gif" // In order to Webpack move this file to `public` folder
+import "./index.less"
+import logo from "./logo.gif"
 
 export default function PostIndex({loading, index, posts}) {
   return <div data-key="postIndex">
@@ -88,10 +88,11 @@ export default function PostIndex({loading, index, posts}) {
             ? posts.map(post =>
                 <PostItem key={post.id} post={post}/>
               )
-            : <p><i>No data.</i></p>}
+            : <p><i>No data yet.</i></p>}
         </div>
-      : loading ? <Loading/> : <NotFound/>}
-      {/* need something more generic than <NotFound/> here */}
+      : loading
+          ? <Loading/>
+          : <p><i>No data yet.</i></p>}
   </div>
 }
 

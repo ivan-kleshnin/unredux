@@ -412,6 +412,8 @@ export let withRouting = R.curry((options, app) => {
     return {
       ...sinks,
 
+      route$,
+
       effect$: K.merge([
         // app effects
         sinks.effect$ || K.never(),
@@ -420,7 +422,7 @@ export let withRouting = R.curry((options, app) => {
         page$.flatMapLatest(p => p.effect$ || K.never()),
 
         // app2 url -> effects
-        page$.flatMapLatest(p => p.url$).delay(1).map(url => function plugUrl() {
+        page$.flatMapLatest(p => p.url$ || K.never()).delay(1).map(url => function plugUrl() {
           urlPool$.plug(url)
         }),
       ]),

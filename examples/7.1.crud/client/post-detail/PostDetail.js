@@ -1,7 +1,6 @@
 import PT from "prop-types"
 import React from "react"
 import Loading from "../common/Loading"
-import NotFound from "../common/NotFound"
 
 export default function PostDetail({post, loading}) {
   return <div>
@@ -10,8 +9,7 @@ export default function PostDetail({post, loading}) {
       ? <pre>
           {JSON.stringify(post, null, 2)}
         </pre>
-      : loading ? <Loading/> : <NotFound/>}
-      {/* need something more generic than <NotFound/> here */}
+      : loading ? <Loading/> : <p>No data yet.</p>}
   </div>
 }
 

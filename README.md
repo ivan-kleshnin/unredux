@@ -2,38 +2,38 @@
 
 Cross-platform experimental microframework (500 lines of code!). *(Name is a temporal placeholder).*
 
-WIP. Highly unstable. Think [CycleJS](https://cycle.js.org/) without drivers built on [Kefir](https://kefirjs.github.io)
-[Kefir.DB][https://github.com/ivan-kleshnin/kefir.db] and [React](https://facebook.github.io/react/).
+WIP. Highly unstable. Think [CycleJS](https://cycle.js.org/) without drivers built on [Kefir](https://kefirjs.github.io),
+[Kefir.DB](https://github.com/ivan-kleshnin/kefir.db), and [React](https://facebook.github.io/react/).
 
 > I'm not happy about the imperative object-oriented approach VueJS and MobX promote. I'm not happy about
 the bundle size of Angular and GraphQL. I'm not happy about the incidental complexity of Redux ecosystem.
-As a freelancer, I want to concentrate on the business logic having a framework which code **one person**
+As a freelancer, I want to concentrate on the business logic using a framework which code **one person**
 can **read in one sitting**.
 
 #### Features
 
 * CycleJS-like architecture with sources and sinks but without drivers.
-* Reactive dataflow with proactive insertions (where they make sense).
-* Reactive state management (KefirDB) (think Redux with functions instead of actions).
-* Declarative data fetching and auto-persistence (in progress).
+* Reactive dataflow with proactive insertions.
+* Reactive state management (think Redux with functions instead of actions).
 * Full-scale examples: realistic routing, SSR, etc.
+* Declarative data fetching and auto-persistence (in progress).
 
-See [docs](./docs) for more details about our motivations and design decisions.
-
-Unredux uses the simplest "components" model (called "apps" here):
+Component model is as simple as possible (components are called apps here to differentiate them from
+React components):
 
 ```js
 function anyApp(sources, props) {
-  sources      // {state$: streamOfParentStates, DOM: streamOfLocalDOMEvents, ...}
+  sources      // {state$: streamOfStates, DOM: streamOfLocalDOMEvents, ...}
   ...          // -- your code --
   return sinks // {Component: reactComponent, action$: streamOfActions, ...}
 }
 ```
 
-where sources and sinks are records of streams (`Object <KefirStream>` speaking TypeScript) where keys
-are predefined and correspond to event or effect types.
+where sources and sinks are records of streams (`Object <KefirStream>` speaking TypeScript), where keys
+are predefined and correspond to event or effect types (a complex sentece but it describes everything
+about the component model – try to do that for another framework).
 
-So "component composition" is just a function and stream composition, nothing extra.
+Component "composition" is just a function and stream composition, nothing fancy.
 
 ## Docs
 
@@ -87,16 +87,16 @@ Previous example extended with SSR.
 
 #### [8. DDL](./examples/8.ddl)
 
-Declarative Data Load, lightweight alternative to GraphQL+Relay / Falcor.
+Declarative Data Load, lightweight alternative to **GraphQL+Relay** / **Falcor**.
 
 **Notable differences**:
-1. Unlike both it's REST API based (avoiding vendor lock-in on Backend).
-2. Unlike both it's reactive.
+1. Unlike both (GraphQL / Falcor) it's REST API based (avoiding vendor lock-in on Backend).
+2. It's more reactive and declarative where it makes sense with clear fallback paths.
 3. Unlike GraphQL it relies on plain data to describe queries, instead of extra DSL layer.
 4. Less magic, more boilerplate. Model dependencies are described, not auto-injected.
 5. Much smaller code base and bundle size.
 6. Validations and Querying are decoupled. Use TsIO, PropTypes, Tcomb or any other dynamic typing
-to describe and validate your models. Avoid vendor lock-in once again.
+to describe and validate your models. Avoiding vendor lock-in again.
 
 ## Usage
 

@@ -1,11 +1,12 @@
-import {connect} from "vendors/framework"
 import K from "kefir"
 import * as D from "kefir.db"
 import React from "react"
 import {validate} from "tcomb-validation"
+import {connect} from "vendors/framework"
 import {fetchJSON} from "common/helpers"
 import * as T from "common/types"
-import PostForm from "./PostForm"
+import {incLoading, decLoading} from "../blueprints"
+import Form from "./Form"
 
 // SEED
 export let seed = {
@@ -14,12 +15,13 @@ export let seed = {
     text: "",
     tags: "",
     isPublished: false,
+    publishDate: "",
   },
   errors: {},
 }
 
 export default (sources, {key}) => {
-  let baseLens = ["posts"]
+  let baseLens = "posts"
 
   // INTENTS
   let intents = {
@@ -34,6 +36,9 @@ export default (sources, {key}) => {
 
     changeIsPublished$: sources.DOM.fromName("isPublished").listen("click")
       .map(ee => ee.element.checked),
+
+    changePublishDate$: sources.DOM.fromName("publishDate").listen("input")
+      .map(ee => ee.element.value),
 
     submit$: sources.DOM.from("form").listen("submit")
       .map(ee => (ee.event.preventDefault(), ee))
@@ -81,59 +86,74 @@ export default (sources, {key}) => {
         : R.set2(["errors", "isPublished"], res.firstError().message)
     }),
 
+    intents.changePublishDate$.map(x => R.set2(["input", "publishDate"], x)),
+    intents.changePublishDate$.debounce(200).map(x => {
+      console.log("x:", x)
+      let res = validate(x, T.PostForm.meta.props.publishDate)
+      return res.isValid()
+        ? R.unset2(["errors", "publishDate"])
+        : R.set2(["errors", "publishDate"], res.firstError().message)
+    }),
+
+    // Validate on submit
+    intents.submit$
+      .map(_ => (state) => {
+        let errors = {}
+        let res = validate(state.input, T.PostForm)
+        if (!res.isValid()) {
+          errors = R.reduce((z, k) => {
+            let err = R.find(e => R.equals(e.path, [k]), res.errors)
+            return err ? R.set2(k, err.message, z) : z
+          }, {}, R.keys(state.input))
+        }
+        return R.merge(state, {errors})
+      }),
+
     // Reset on submit
     intents.submit$
       .delay(1)
-      .map(_ => ({input}) => {
-        let res = validate(input, T.PostForm)
-        if (res.isValid()) {
-          return seed
-        } else {
-          let errors = R.reduce((z, k) => {
-            let err = R.find(e => R.equals(e.path, [k]), res.errors)
-            return err ? R.set2(k, err.message, z) : z
-          }, {}, R.keys(input))
-          return {input, errors}
-        }
+      .filter(form => R.isEmpty(form.errors))
+      .map(_ => (state) => {
+        return R.merge(state, seed)
       }),
   ).$
 
   // COMPONENT
-  let Component = connect(
-    {
-      form: form$,
-    },
-    ({form}) =>
-      <PostForm input={form.input} errors={form.errors}/>
-  )
+  let Component = connect({form: form$}, Form)
 
   // ACTIONS
   let action$ = K.merge([
-    K.constant(function initPage(state) {
-      return R.set2(["document", "title"], `Post Create`, state)
-    }),
-
     form$
       .sampledBy(intents.submit$)
-      .flatMapConcat(form => {
-        let postForm
-        try {
-          postForm = T.PostForm(form.input)
-        } catch (e) {
-          return K.never()
+      .filter(form => R.isEmpty(form.errors))
+      .flatMapConcat(form => K.stream(async (emitter) => {
+        emitter.value(function fetchStarted(state) {
+          return incLoading(state)
+        })
+
+        let reqResult = await fetchJSON(`/api/${baseLens}/`, {
+          method: "POST",
+          body: form.input,
+        })
+
+        if (reqResult instanceof Error) {
+          console.warn(reqResult.message)
+          emitter.value(function fetchFailed(state) {
+            // + Set your custom alerts here
+            return decLoading(state)
+          })
+        } else {
+          let post = reqResult.model // Update after POST (can contain new data)
+          emitter.value(function afterFetch(state) {
+            return R.pipe(
+              R.set2([baseLens, post.id], post),
+              decLoading,
+            )(state)
+          })
         }
-        return K.constant(postForm)
-      })
-      .flatMapConcat(form => K.fromPromise(
-        A.post(`/api/${baseLens[0]}/`, form)
-         .then(resp => resp.data.model)
-         .catch(R.id)
-      ))
-      .map(maybeModel => function afterPOST(state) {
-        return maybeModel instanceof Error
-          ? state
-          : R.set2([...baseLens, maybeModel.id], maybeModel, state)
-      }),
+
+        return emitter.end()
+      })),
   ])
 
   return {Component, action$}

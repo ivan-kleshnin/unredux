@@ -1,12 +1,13 @@
-import {connect, derive} from "vendors/framework"
+import DT from "date-fns"
 import K from "kefir"
 import * as D from "kefir.db"
 import React from "react"
 import {validate} from "tcomb-validation"
+import {connect, derive} from "vendors/framework"
 import {fetchJSON} from "common/helpers"
 import * as T from "common/types"
-import {addLoading, removeLoading} from "../blueprints"
-import PostForm from "./PostForm"
+import {incLoading, decLoading} from "../blueprints"
+import Form from "./Form"
 
 // SEED
 export let seed = {
@@ -22,10 +23,8 @@ export let seed = {
 
 export default (sources, {key, params}) => {
   let baseLens = ["posts", params.id]
-  let loadingLens = ["_loading", key]
 
   let deriveState = derive(sources.state$.throttle(50))
-  let loading$ = deriveState(loadingLens).map(Boolean)
   let post$ = deriveState(baseLens)
 
   // INTENTS
@@ -102,81 +101,101 @@ export default (sources, {key, params}) => {
     // Follow state model
     post$
       .filter(Boolean)
-      .map(post => _ => {
+      .map(post => state => {
+        // Model -> Form formatting
         let input = {
-          title: post.title,
-          text: post.text,
+          ...post,
           tags: R.join(", ", post.tags),
-          isPublished: post.isPublished,
-          publishDate: post.publishDate,
+          publishDate: DT.format(post.publishDate, "YYYY-MM-DD"),
         }
         let res = validate(input, T.PostForm)
         if (res.isValid()) {
           let errors = {}
-          return {input, errors}
+          return R.merge(state, {input, errors})
         } else {
           let errors = R.reduce((z, k) => {
             let err = R.find(e => R.equals(e.path, [k]), res.errors)
             return err ? R.set2(k, err.message, z) : z
           }, {}, R.keys(input))
-          return {input, errors}
+          return R.merge(state, {input, errors})
         }
+      }),
+
+    // Validate on submit
+    intents.submit$
+      .map(_ => (state) => {
+        let errors = {}
+        let res = validate(state.input, T.PostForm)
+        if (!res.isValid()) {
+          errors = R.reduce((z, k) => {
+            let err = R.find(e => R.equals(e.path, [k]), res.errors)
+            return err ? R.set2(k, err.message, z) : z
+          }, {}, R.keys(state.input))
+        }
+        return R.merge(state, {errors})
       }),
   ).$
 
   // COMPONENT
-  let Component = connect(
-    {
-      form: form$,
-      loading: loading$,
-    },
-    PostForm
-  )
+  let Component = connect({form: form$}, Form)
 
   // ACTIONS
   let action$ = K.merge([
-    post$.filter(R.not).flatMapConcat(_ => K.stream(async (emitter) => {
-      // GET data
-      emitter.value(addLoading)
-      let reqResult = await fetchJSON(`/api/${baseLens.join("/")}/`)
-      if (reqResult instanceof Error) {
-        console.warn(reqResult.message)
-        emitter.value(removeLoading)
-        return emitter.end() // Set your custom alerts here
-      }
+    post$
+      .filter(R.not)
+      .flatMapConcat(_ => K.stream(async (emitter) => {
+        emitter.value(function fetchStarted(state) {
+          return incLoading(state)
+        })
 
-      // Update state
-      let model = reqResult.models[params.id]
-      emitter.value(function afterFetch(state) {
-        return R.set2(baseLens, model, state)
-      })
+        let reqResult = await fetchJSON(`/api/${baseLens.join("/")}/`)
+        if (reqResult instanceof Error) {
+          console.warn(reqResult.message)
+          emitter.value(function fetchFailed(state) {
+            // + Set your custom alerts here
+            return decLoading(state)
+          })
+        } else {
+          let post = reqResult.models[params.id]
+          emitter.value(function fetchSucceeded(state) {
+            return R.pipe(
+              R.set2(baseLens, post),
+              decLoading,
+            )(state)
+          })
+        }
 
-      emitter.value(removeLoading)
-      return emitter.end()
-    })),
+        return emitter.end()
+      })),
 
     form$
       .sampledBy(intents.submit$)
       .filter(form => R.isEmpty(form.errors))
       .flatMapConcat(form => K.stream(async (emitter) => {
-        // PUT data
-        emitter.value(addLoading) // TODO loading term?!
+        emitter.value(function fetchStarted(state) {
+          return incLoading(state)
+        })
+
         let reqResult = await fetchJSON(`/api/${baseLens.join("/")}/`, {
           method: "PUT",
-          body: form,
+          body: form.input,
         })
-        emitter.value(removeLoading)
 
         if (reqResult instanceof Error) {
           console.warn(reqResult.message)
-          return emitter.end() // Set your custom alerts here
+          emitter.value(function fetchFailed(state) {
+            // + Set your custom alerts here
+            return decLoading(state)
+          })
+        } else {
+          let post = reqResult.model // Update after PUT (can contain new data)
+          emitter.value(function afterFetch(state) {
+            return R.pipe(
+              R.set2(baseLens, post),
+              decLoading,
+            )(state)
+          })
         }
-
-        // Update state
-        let model = reqResult.model
-        emitter.value(function afterFetch(state) {
-          return R.set2(baseLens, model, state)
-        })
 
         return emitter.end()
       })),

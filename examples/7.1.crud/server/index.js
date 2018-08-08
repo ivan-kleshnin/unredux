@@ -6,7 +6,6 @@ import {APP_KEY} from "client/meta"
 import Express, {unless} from "./express"
 import mocksRoutes from "./mocks"
 import apiPostsRoutes from "./api/posts"
-import apiUsersRoutes from "./api/users"
 import {appLayout} from "./templates"
 
 // GLOBALS
@@ -40,7 +39,6 @@ app.use("/mocks", mocksRoutes)
 
 // API
 app.use("/api/posts", apiPostsRoutes)
-app.use("/api/users", apiUsersRoutes)
 
 // CLIENT
 app.get("/*", unless([staticRe], (req, res, next) => {

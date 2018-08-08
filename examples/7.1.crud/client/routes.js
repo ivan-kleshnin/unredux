@@ -3,8 +3,8 @@ import K from "kefir"
 // Apps
 import home from "./home" // post-index
 import postDetail from "./post-detail"
-// import postCreate from "./post-create"
-// import postEdit from "./post-edit"
+import postCreate from "./post-create"
+import postEdit from "./post-edit"
 
 // Static pages
 import About from "./common/About"

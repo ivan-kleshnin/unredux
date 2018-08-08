@@ -24,30 +24,32 @@ export default (sources, {key, params}) => {
 
   // ACTIONS
   let action$ = K.merge([
-    post$.filter(R.not).flatMapConcat(_ => K.stream(async (emitter) => {
-      emitter.value(function fetchStarted(state) {
-        return incLoading(state)
-      })
-
-      let reqResult = await fetchJSON(`/api/posts/${params.id}/`)
-      if (reqResult instanceof Error) {
-        console.warn(reqResult.message)
-        emitter.value(function fetchFailed(state) {
-          // + Set your custom alerts here
-          return decLoading(state)
+    post$
+      .filter(R.not)
+      .flatMapConcat(_ => K.stream(async (emitter) => {
+        emitter.value(function fetchStarted(state) {
+          return incLoading(state)
         })
-      } else {
-        let post = reqResult.models[params.id]
-        emitter.value(function fetchSucceeded(state) {
-          return R.pipe(
-            R.set2(["posts", post.id], post),
-            decLoading,
-          )(state)
-        })
-      }
 
-      return emitter.end()
-    })),
+        let reqResult = await fetchJSON(`/api/${baseLens.join("/")}/`)
+        if (reqResult instanceof Error) {
+          console.warn(reqResult.message)
+          emitter.value(function fetchFailed(state) {
+            // + Set your custom alerts here
+            return decLoading(state)
+          })
+        } else {
+          let post = reqResult.models[params.id]
+          emitter.value(function fetchSucceeded(state) {
+            return R.pipe(
+              R.set2(baseLens, post),
+              decLoading,
+            )(state)
+          })
+        }
+
+        return emitter.end()
+      })),
 
     K.constant(function initPage(state) {
       return R.set2(["document", "title"], `Post ${params.id}`, state)

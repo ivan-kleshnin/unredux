@@ -82,16 +82,18 @@ router.post(
     let form = req.body
     let post
     try {
+      // Realistic API will have a per-field validation here instead...
+      // Form -> Model parsing
       post = T.Post({
         id: makeId(),
         title: form.title,
         text: form.text,
         tags: T.strToTags(form.tags),
         isPublished: form.isPublished,
-        publishDate: new Date().toJSON(),
+        publishDate: new Date(form.publishDate),
       })
     } catch (err) {
-      return res.status(400).json({error: err.message})
+      return res.status(400).json({message: err.message})
     }
     db.posts[post.id] = post // TODO persistence
     res.status(201).json({model: post})
@@ -105,16 +107,18 @@ router.put(
     let form = req.body
     let post
     try {
+      // Realistic API will have a per-field validation here instead...
+      // Form -> Model parsing
       post = T.Post({
         id: req.params.id,
         title: form.title,
         text: form.text,
         tags: T.strToTags(form.tags),
         isPublished: form.isPublished,
-        publishDate: new Date().toJSON(),
+        publishDate: form.publishDate,
       })
     } catch (err) {
-      return res.status(400).json({error: err.message})
+      return res.status(400).json({message: err.message})
     }
     db.posts[post.id] = post // TODO persistence
     res.status(200).json({model: post})

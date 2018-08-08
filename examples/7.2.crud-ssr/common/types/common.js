@@ -7,18 +7,26 @@ export let nullable = (type) => {
   return type
 }
 
-export let dateTime = () => {
-  let Type = T.refinement(
-    T.String,
-    (s) => /\d\d\d\d-\d\d-\d\dT\d\d:\d\d:\d\d\.\d\d\dZ/.test(s)
-  )
-  Type.getValidationErrorMessage = (s) => {
-    if (!s.length) {
-      return "Value is required!"
-    }
-    return "Value is invalid!"
+export let DateString = T.refinement(
+  T.String,
+  (s) => /\d\d\d\d-\d\d-\d\d/.test(s)
+)
+DateString.getValidationErrorMessage = (s) => {
+  if (!s.length) {
+    return "Value is required!"
   }
-  return Type
+  return "Value is invalid!"
+}
+
+export let DateTimeString = T.refinement(
+  T.String,
+  (s) => /\d\d\d\d-\d\d-\d\dT\d\d:\d\d:\d\d\.\d\d\dZ/.test(s)
+)
+DateTimeString.getValidationErrorMessage = (s) => {
+  if (!s.length) {
+    return "Value is required!"
+  }
+  return "Value is invalid!"
 }
 
 export let limitedString = (min, max) => {

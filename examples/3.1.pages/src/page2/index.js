@@ -1,4 +1,4 @@
-import {connect, withLifecycle} from "framework"
+import {connect, withLifecycle} from "vendors/framework"
 import * as D from "kefir.db"
 import React from "react"
 

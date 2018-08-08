@@ -1,4 +1,4 @@
-import {connect} from "framework"
+import {connect} from "vendors/framework"
 import * as D from "kefir.db"
 import React from "react"
 

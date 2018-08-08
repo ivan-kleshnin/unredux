@@ -1,7 +1,7 @@
-import {fromDOMEvent, poolProp} from "framework"
+import {fromDOMEvent, poolProp} from "vendors/framework"
+import "vendors/shims"
 import React from "react"
 import ReactDOM from "react-dom"
-import "shims"
 import app from "./root"
 
 let APP_KEY = "root"

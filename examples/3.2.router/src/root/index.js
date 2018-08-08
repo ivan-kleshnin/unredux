@@ -1,4 +1,4 @@
-import {connect, withRouting} from "framework"
+import {connect, withRouting} from "vendors/framework"
 import * as D from "kefir.db"
 import React from "react"
 import routes from "../routes"

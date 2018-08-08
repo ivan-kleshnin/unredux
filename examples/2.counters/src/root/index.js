@@ -1,4 +1,4 @@
-import {isolateDOM, isolateState} from "framework"
+import {isolateDOM, isolateState} from "vendors/framework"
 import K from "kefir"
 import * as D from "kefir.db"
 import React from "react"

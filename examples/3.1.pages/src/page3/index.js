@@ -1,4 +1,4 @@
-import {connect, withLifecycle} from "framework"
+import {connect, withLifecycle} from "vendors/framework"
 import K from "kefir"
 import React from "react"
 

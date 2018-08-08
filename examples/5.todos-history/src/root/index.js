@@ -1,4 +1,4 @@
-import {isolateDOM} from "framework"
+import {isolateDOM} from "vendors/framework"
 import * as D from "kefir.db"
 import React from "react"
 import addApp from "../todo-add"

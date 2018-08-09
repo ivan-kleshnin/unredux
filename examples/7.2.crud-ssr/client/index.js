@@ -1,4 +1,5 @@
 import Q from "querystring"
+import K from "kefir"
 import React from "react"
 import ReactDOM from "react-dom"
 import "vendors/shims"
@@ -8,12 +9,12 @@ import app, {seed} from "./root"
 import "./index.less"
 
 let qs = Q.parse(document.location.search.slice(1))
-let noSSR = "noSSR" in qs
+let ssr = !("noSSR" in qs)
 
 // Prepare sources
 let sources = {
   DOM: fromDOMEvent("#" + APP_KEY),
-  state$: poolProp(noSSR ? seed : window.state),
+  state$: poolProp(ssr ? window[APP_KEY].state : seed),
 }
 
 // Prepare props
@@ -28,38 +29,36 @@ let sinks = app(sources, props)
 // Cycle the root state
 sinks.state$.observe(sources.state$.plug)
 
-// TODO move to withRouting?!
-derive(sinks.state$, "document").observe(doc => {
-  // Effects
+// Side-effects
+K.combine([sinks.route$, derive(sinks.state$, "document")]).observe(([route, doc]) => {
   document.title = doc.title
-  // descriptionElem.setAttribute("content", doc.description || "")
-})
-
-sinks.route$.observe(route => {
-  // Other possible effects
-  // ogUrlElem.setAttribute("content", (document.location.origin + route.url) || "")
+  // Other possibilities:
+  // if (descriptionElem) {
+  //   descriptionElem.setAttribute("content", doc.description || "")
+  // }
+  // if (ogUrlElem) {
+  //   ogUrlElem.setAttribute("content", (document.location.origin + route.url) || "")
+  // }
   // if (window.ga) {
   //   window.ga("set", "page", route.url)
   //   window.ga("send", "pageview")
   // }
 })
 
-sinks.effect$.observe(fn => {
-  // Effects
-  fn()
-})
+// Run the other effects
+sinks.effect$.observe(fn => { fn() })
 
+// Start rendering the state on the first route
 sinks.state$.sampledBy(sinks.route$).take(1).observe(state => {
-  // Check rendering modes
-  if (noSSR) {
-    // Render the Component sink
-    ReactDOM.render(<sinks.Component/>, document.getElementById(APP_KEY))
-  } else {
+  if (ssr) {
     // Reset window.state
-    delete window.state
+    delete window[APP_KEY].state
     // Remove state DOM node
     document.querySelector(`#${APP_KEY}-state`).outerHTML = ""
     // Hydrate the Component sink
     ReactDOM.hydrate(<sinks.Component/>, document.getElementById(APP_KEY))
+  } else {
+    // Render the Component sink
+    ReactDOM.render(<sinks.Component/>, document.getElementById(APP_KEY))
   }
 })

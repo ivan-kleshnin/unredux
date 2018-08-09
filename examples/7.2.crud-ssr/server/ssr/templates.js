@@ -13,7 +13,7 @@ export let appLayout = ({appKey, appHTML, state, url}) => {
     <body>
       <div id="${appKey}">${appHTML}</div>
       <script id="${appKey}-state">
-        window.state = ${JSON.stringify(state, null, 2)}
+        window["${appKey}"].state = ${JSON.stringify(state, null, 2)}
       </script>
       <script src="/bundle.js"></script>
     </body>

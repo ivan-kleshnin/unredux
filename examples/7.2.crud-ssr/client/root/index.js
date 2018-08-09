@@ -61,7 +61,5 @@ let app = (sources, {key}) => {
 }
 
 export default R.pipe(
-  withRouting({
-    routes,
-  }),
+  withRouting({routes}),
 )(app)

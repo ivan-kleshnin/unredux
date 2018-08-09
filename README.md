@@ -1,16 +1,27 @@
 # Unredux
 
-Cross-platform experimental **microframework** (500 lines of code + libraries!).
+An experimental set of tools for cross-platform **framework-less** development (500 lines of core + libraries!).
+Framework-less approach assumes you are willing to assemble the final thing yourself, buying more
+control and flexibility at the cost of additional boilerplate.
 
-WIP. Highly unstable. Think [CycleJS](https://cycle.js.org/) without drivers built on [Kefir](https://kefirjs.github.io),
+Think [CycleJS](https://cycle.js.org/) without drivers built on [Kefir](https://kefirjs.github.io),
 [Kefir.DB](https://github.com/ivan-kleshnin/kefir.db), and [React](https://facebook.github.io/react/).
+Unredux is compatible with React ecosystem (except `ReactRouter` and some other high-level stuff
+replaced with a stream-based code here).
 
-*Note: name is a temporary dummy thing.*
+WIP. Highly unstable. *Name is a temporary dummy thing.*
 
-> I'm not happy about the imperative object-oriented approach VueJS and MobX promote. I'm not happy about
-the bundle size of Angular and GraphQL. I'm not happy about the incidental complexity of Redux ecosystem.
-As a freelancer, I want to concentrate on the business logic using a framework which code **one person**
-can **read in one sitting**.
+Most frameworks allow you to override important stuff with options. Yet this approach is naturally
+limited as option objects simply ain't expressive enough to compete with a real code. As soon as your
+app's assumptions are different from that of a framework (a reasonable guess), you start tweaking stuff
+here and there, adding more and more ugly hacks in the process. In our experience, the best solution
+is often a framework removal.
+
+If you don't like the imperative, object-oriented approach VueJS and MobX promote. If you are not
+satisfied with the bundle size, complexity and vendor locks of Angular and GraphQL. If you are sick
+of Redux ecosystem and willing to concentrate on the business logic – here's a solution.
+
+Unlike those titles, you can read the **whole code** of Unredux in **one sitting**.
 
 #### Features
 
@@ -35,7 +46,9 @@ where sources and sinks are records of streams (`Object <KefirStream>` speaking 
 are predefined and correspond to event or effect types (a complex sentece but it describes everything
 about the component model – try to do that for another framework).
 
-Component "composition" is just a function and stream composition, nothing fancy.
+Component "composition" is just a function and stream composition, nothing fancy. And as it's not
+a framework you can mix and swap stuff without a problem. For example, we use complex stateful React
+components like DnD and some unique jQuery plugins together with this architecture in production.
 
 ## Docs
 

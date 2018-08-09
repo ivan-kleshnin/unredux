@@ -30,22 +30,21 @@ let sinks = app(sources, props)
 sinks.state$.observe(sources.state$.plug)
 
 // Side-effects
-K.combine([sinks.route$, derive(sinks.state$, "document")]).observe(([route, doc]) => {
+K.combine([sinks.route$], [derive(sinks.state$, "document")]).observe(([route, doc]) => {
   document.title = doc.title
   // Other possibilities:
-  // if (descriptionElem) {
-  //   descriptionElem.setAttribute("content", doc.description || "")
-  // }
-  // if (ogUrlElem) {
-  //   ogUrlElem.setAttribute("content", (document.location.origin + route.url) || "")
-  // }
+  // descriptionElem.setAttribute("content", doc.description || "")
+  // ogTitleElem.setAttribute("content", doc.title || "")
+  // ogTypeElem.setAttribute("content", doc.ogType || "")
+  // ogUrlElem.setAttribute("content", document.location.origin + route.url)
+  // ogImageElem.setAttribute("content", document.location.origin + doc.ogImage)
+  // ogDescriptionElem.setAttribute("content", doc.description || "")
   // if (window.ga) {
   //   window.ga("set", "page", route.url)
   //   window.ga("send", "pageview")
   // }
 })
 
-// Run the other effects
 sinks.effect$.observe(fn => { fn() })
 
 // Start rendering the state on the first route

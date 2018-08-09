@@ -37,7 +37,7 @@ K.combine([sinks.route$], [derive(sinks.state$, "document")]).observe(([route, d
   // ogTitleElem.setAttribute("content", doc.title || "")
   // ogTypeElem.setAttribute("content", doc.ogType || "")
   // ogUrlElem.setAttribute("content", document.location.origin + route.url)
-  // ogImageElem.setAttribute("content", document.location.origin + doc.ogImage)
+  // ogImageElem.setAttribute("content", doc.ogImage ? document.location.origin + doc.ogImage : "")
   // ogDescriptionElem.setAttribute("content", doc.description || "")
   // if (window.ga) {
   //   window.ga("set", "page", route.url)

@@ -7,7 +7,7 @@ import PostDetail from "./PostDetail"
 
 export default (sources, {key, params}) => {
   let baseLens = ["posts", params.id]
-  let loadingLens = ["loading"]
+  let loadingLens = "loading"
 
   let deriveState = derive(sources.state$.throttle(50))
   let post$ = deriveState(baseLens)

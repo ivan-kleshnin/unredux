@@ -22,7 +22,7 @@ export let seed = {
 
 export default (sources, {key, params}) => {
   let baseLens = ["posts"]
-  let loadingLens = ["loading"]
+  let loadingLens = "loading"
 
   let deriveState = derive(sources.state$.throttle(50))
   let posts$ = deriveState(baseLens)

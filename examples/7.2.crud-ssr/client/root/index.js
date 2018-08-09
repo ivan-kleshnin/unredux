@@ -25,7 +25,7 @@ let app = (sources, {key}) => {
   // STATE
   let state$ = D.run(
     () => D.makeStore({}),
-    D.withLog({key}),
+    // D.withLog({key}),
   )(
     // Init
     D.initAsync(sources.state$), // start from serverSeed

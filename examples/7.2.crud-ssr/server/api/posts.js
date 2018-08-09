@@ -115,7 +115,7 @@ router.put(
         text: form.text,
         tags: T.strToTags(form.tags),
         isPublished: form.isPublished,
-        publishDate: form.publishDate,
+        publishDate: new Date(form.publishDate),
       })
     } catch (err) {
       return res.status(400).json({message: err.message})

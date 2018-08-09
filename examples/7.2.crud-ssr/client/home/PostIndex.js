@@ -4,11 +4,11 @@ import Loading from "../common/Loading"
 import NotFound from "../common/NotFound"
 import PostItem from "./PostItem"
 import "./index.less"
-import logo from "./logo.gif"
+import "./logo.gif" // can't use import value on SSR?!
 
 export default function PostIndex({loading, index, posts}) {
   return <div data-key="postIndex">
-    <h1 className="title">Blog <img src={logo}/></h1>
+    <h1 className="title">Blog <img src="/client/home/logo.gif"/></h1>
     <p>
       <a href="/posts/create/">New Post</a>
     </p>

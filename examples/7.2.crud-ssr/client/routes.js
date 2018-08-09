@@ -27,6 +27,7 @@ export default [
   // Not found
   ["/*path", () => Promise.resolve(() => ({
     Component: NotFound,
+
     action$: K.constant(function notFound(state) {
       return R.set2(["document", "title"], "Not Found", state)
     })

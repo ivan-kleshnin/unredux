@@ -20,7 +20,6 @@ let sources = {
 let props = {
   key: APP_KEY,
   url: document.location.href.replace(document.location.origin, ""),
-  noSSR: noSSR,
 }
 
 // Run app to get sinks

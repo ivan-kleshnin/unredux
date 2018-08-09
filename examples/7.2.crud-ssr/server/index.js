@@ -6,7 +6,6 @@ import "vendors/shims"
 import Express, {unless} from "./express"
 import mocksRoutes from "./mocks"
 import apiPostsRoutes from "./api/posts"
-import apiUsersRoutes from "./api/users"
 import ssrRoutes from "./ssr"
 
 // GLOBALS
@@ -41,7 +40,6 @@ app.use("/mocks", mocksRoutes)
 
 // API
 app.use("/api/posts", apiPostsRoutes)
-app.use("/api/users", apiUsersRoutes)
 
 // CLIENT
 app.use(unless([staticRe], ssrRoutes))

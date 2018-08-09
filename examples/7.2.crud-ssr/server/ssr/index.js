@@ -16,7 +16,7 @@ let timeoutError = (delayMs) =>
   K.later(delayMs, K.constantError(new Error("timeout"))).flatMap()
 
 let hasLoadingApps = (state) =>
-  R.any(Boolean, R.values(state._loading))
+  R.any(Boolean, R.values(state.loading))
 
 router.get("/*", (req, res, next) => {
   let canonicalUrl = `${req.protocol}://${global.host}${req.originalUrl}`

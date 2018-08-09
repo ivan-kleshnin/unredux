@@ -24,6 +24,7 @@ let sinks = app(sources, props)
 // Cycle the root state
 sinks.state$.observe(sources.state$.plug)
 
+// Start rendering the state on the first route
 sinks.state$.sampledBy(sinks.route$).take(1).observe(state => {
   // Render the Component sink
   ReactDOM.render(<sinks.Component/>, document.getElementById(APP_KEY))

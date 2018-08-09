@@ -88,7 +88,6 @@ export default (sources, {key}) => {
 
     intents.changePublishDate$.map(x => R.set2(["input", "publishDate"], x)),
     intents.changePublishDate$.debounce(200).map(x => {
-      console.log("x:", x)
       let res = validate(x, T.PostForm.meta.props.publishDate)
       return res.isValid()
         ? R.unset2(["errors", "publishDate"])

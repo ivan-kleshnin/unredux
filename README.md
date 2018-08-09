@@ -1,11 +1,11 @@
 # Unredux
 
-Cross-platform experimental microframework (500 lines of code + libraries!).
+Cross-platform experimental **microframework** (500 lines of code + libraries!).
 
 WIP. Highly unstable. Think [CycleJS](https://cycle.js.org/) without drivers built on [Kefir](https://kefirjs.github.io),
 [Kefir.DB](https://github.com/ivan-kleshnin/kefir.db), and [React](https://facebook.github.io/react/).
 
-*(Name is a temporary dummy thing).*
+*Note: name is a temporary dummy thing.*
 
 > I'm not happy about the imperative object-oriented approach VueJS and MobX promote. I'm not happy about
 the bundle size of Angular and GraphQL. I'm not happy about the incidental complexity of Redux ecosystem.

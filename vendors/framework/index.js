@@ -1,10 +1,9 @@
+import QS from "querystring"
 import K from "kefir"
 import * as D from "kefir.db"
 import React from "react"
 import Route from "route-parser"
 import U from "urlz"
-import QS from "querystring"
-import nanoid from "nanoid"
 
 // HELPERS =========================================================================================
 let handleError = e => console.warn(e)
@@ -94,7 +93,7 @@ export let pool = () => {
 
 export let poolProp = (seed) => {
   let pool = K.pool()
-  let prop = pool.filter(R.notNil).toProperty()
+  let prop = pool.filter(R.notNil).skipDuplicates().toProperty()
   prop.plug = (x) => {
     if (x instanceof K.Property) {
       pool.plug(x)
@@ -104,7 +103,7 @@ export let poolProp = (seed) => {
       pool.plug(K.constant(x))
     }
   }
-  pool.plug(K.constant(R.clone(seed)))
+  pool.plug(K.constant(seed))
   return prop
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -162,10 +161,7 @@ export let connect = (streamsToProps, ComponentToWrap) => {
   class Container extends React.Component {
     constructor(props) {
       super(props)
-
       this.state = {}
-
-      Container.constructor$.plug(props)
     }
 
     componentWillMount(...args) {
@@ -198,14 +194,13 @@ export let connect = (streamsToProps, ComponentToWrap) => {
     }
   }
 
-  Container.constructor$ = pool()
   Container.willMount$ = pool()
   Container.willUnmount$ = pool()
 
   return Container
 }
 
-// APPS ============================================================================================
+// ISOLATORS =======================================================================================
 export let isolateDOM = R.curry((app, key) => {
   return function (sources, props) {
     let sinks = app({
@@ -239,15 +234,17 @@ export let isolateState = R.curry((app, key) => {
   }
 })
 
-export let withLifecycle = (fn) => {
-  return R.withName(fn.name, (sources, key) => {
+// DECORATORS ======================================================================================
+export let withLifecycle = R.curry((options, app) => {
+  options = R.merge(withLifecycle.options, options)
+  return function appLifecycle(sources, props) {
     sources = R.merge(sources, {
       Component: {
         willMount$: pool(),
         willUnmount$: pool(),
       }
     })
-    let sinks = fn(sources, key)
+    let sinks = app(sources, props)
     if (sinks.Component) {
       if (sinks.Component.willMount$) {
         sinks.Component.willMount$.take(1).observe(
@@ -263,15 +260,15 @@ export let withLifecycle = (fn) => {
       }
     }
     return sinks
-  })
-}
+  }
+})
 
-// ROUTING =========================================================================================
+withLifecycle.options = {}
 
 // type Routes = Array (String, Payload)
 
 // makeRouter :: Routes -> {doroute :: Function, unroute :: Function}
-export let makeRouter = (routes) => {
+let makeRouter = (routes) => {
   routes = R.map(
     ([mask, payload]) => [new Route(mask), payload],
     routes
@@ -305,10 +302,8 @@ export let makeRouter = (routes) => {
 
 export let withRouting = R.curry((options, app) => {
   options = R.merge(withRouting.options, options)
-
   let router = makeRouter(options.routes)
-
-  return (sources, props) => {
+  return function appRouting(sources, props) {
     let intents = {
       navigateTo$: sources.DOM.from("a").listen("click")
         .filter(ee => {
@@ -421,7 +416,7 @@ export let withRouting = R.curry((options, app) => {
         // app2 effects
         page$.flatMapLatest(p => p.effect$ || K.never()),
 
-        // app2 url -> effects
+        // app2 url ~> effects
         page$.flatMapLatest(p => p.url$ || K.never()).delay(1).map(url => function plugUrl() {
           urlPool$.plug(url)
         }),
